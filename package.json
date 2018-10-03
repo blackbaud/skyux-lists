@@ -1,0 +1,51 @@
+{
+  "name": "@skyux/sample",
+  "version": "3.0.0-alpha.x",
+  "description": "SKY UX Sample",
+  "main": "bundles/bundle.umd.js",
+  "module": "index.ts",
+  "engines": {
+    "node": ">=8.11.1"
+  },
+  "scripts": {
+    "build": "skyux build-public-library",
+    "skyux": "skyux",
+    "start": "skyux serve --hmr",
+    "test": "skyux test --coverage library --logFormat none",
+    "test:visual": "skyux e2e --logFormat none"
+  },
+  "keywords": [],
+  "author": "Blackbaud",
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/blackbaud/skyux-sample.git"
+  },
+  "bugs": {
+    "url": "https://github.com/blackbaud/skyux-sample/issues"
+  },
+  "homepage": "https://github.com/blackbaud/skyux-sample#readme",
+  "peerDependencies": {},
+  "dependencies": {},
+  "devDependencies": {
+    "@angular/animations": "4.3.6",
+    "@angular/common": "4.3.6",
+    "@angular/compiler": "4.3.6",
+    "@angular/compiler-cli": "4.3.6",
+    "@angular/core": "4.3.6",
+    "@angular/forms": "4.3.6",
+    "@angular/http": "4.3.6",
+    "@angular/platform-browser": "4.3.6",
+    "@angular/platform-browser-dynamic": "4.3.6",
+    "@angular/router": "4.3.6",
+    "@blackbaud/skyux": "2.26.0",
+    "@blackbaud/skyux-builder": "1.24.0",
+    "@skyux-sdk/builder-plugin-skyux": "1.0.0-rc.0",
+    "core-js": "2.4.1",
+    "rxjs": "5.4.3",
+    "ts-node": "3.0.4",
+    "tslint": "5.2.0",
+    "typescript": "2.3.2",
+    "zone.js": "0.8.10"
+  }
+}
