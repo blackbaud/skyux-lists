@@ -1,7 +1,7 @@
 {
-  "name": "@skyux/sample",
+  "name": "@skyux/lists",
   "version": "3.0.0-alpha.x",
-  "description": "SKY UX Sample",
+  "description": "SKY UX Lists",
   "main": "bundles/bundle.umd.js",
   "module": "index.ts",
   "engines": {
@@ -19,21 +19,23 @@
   "license": "ISC",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/blackbaud/skyux-sample.git"
+    "url": "git+https://github.com/blackbaud/skyux-lists.git"
   },
   "bugs": {
-    "url": "https://github.com/blackbaud/skyux-sample/issues"
+    "url": "https://github.com/blackbaud/skyux-lists/issues"
   },
-  "homepage": "https://github.com/blackbaud/skyux-sample#readme",
+  "homepage": "https://github.com/blackbaud/skyux-lists#readme",
   "peerDependencies": {
     "@angular/common": "^4.3.6",
     "@angular/core": "^4.3.6",
-    "@skyux/animations": "^3.0.0-rc.0",
+    "@angular/platform-browser": "^4.3.6",
+    "@skyux/animations": ">=3.0.0-rc.0",
     "@skyux/core": "^3.1.0",
-    "@skyux/forms": "^3.0.0-rc.0",
-    "@skyux/indicators": "^3.0.0-rc.1",
+    "@skyux/forms": ">=3.0.0-rc.0",
+    "@skyux/indicators": ">=3.0.0-rc.1",
     "@skyux/i18n": "^3.0.1",
-    "@skyux/popovers": "^3.0.0-rc.0"
+    "@skyux/popovers": ">=3.0.0-rc.0",
+    "rxjs": "^5.4.3"
   },
   "dependencies": {},
   "devDependencies": {
@@ -49,7 +51,7 @@
     "@angular/router": "4.3.6",
     "@blackbaud/skyux": "2.26.0",
     "@blackbaud/skyux-builder": "1.24.0",
-    "@skyux/animations": "^3.0.0-rc.0",
+    "@skyux/animations": "3.0.0-rc.0",
     "@skyux/forms": "3.0.0-rc.0",
     "@skyux/indicators": "3.0.0-rc.1",
     "@skyux/popovers": "3.0.0-rc.0",
