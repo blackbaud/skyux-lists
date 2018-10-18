@@ -33,7 +33,7 @@
     "@skyux/core": "^3.1.0",
     "@skyux/forms": "^3.0.0-rc.0",
     "@skyux/indicators": "^3.0.0-rc.1",
-    "@skyux/i18n": "^3.0.1",
+    "@skyux/i18n": "^3.2.0",
     "@skyux/popovers": "^3.0.0-rc.0"
   },
   "dependencies": {},
