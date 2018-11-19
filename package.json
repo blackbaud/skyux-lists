@@ -23,9 +23,9 @@
   },
   "homepage": "https://github.com/blackbaud/skyux-lists#readme",
   "peerDependencies": {
-    "@angular/common": "^4.3.6",
-    "@angular/core": "^4.3.6",
-    "@angular/platform-browser": "^4.3.6",
+    "@angular/common": ">=4.3.6",
+    "@angular/core": ">=4.3.6",
+    "@angular/platform-browser": ">=4.3.6",
     "@skyux/animations": "^3.0.0-rc.0",
     "@skyux/core": "^3.1.0",
     "@skyux/forms": "^3.0.0-rc.0",
@@ -35,8 +35,8 @@
   },
   "dependencies": {},
   "devDependencies": {
-    "@blackbaud/skyux": "2.28.1",
-    "@blackbaud/skyux-builder": "1.28.0",
+    "@blackbaud/skyux": "2.30.0",
+    "@blackbaud/skyux-builder": "1.29.0",
     "@skyux-sdk/builder-plugin-skyux": "1.0.0-rc.5"
   }
 }
