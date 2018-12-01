@@ -175,6 +175,7 @@ describe('Repeater item component', () => {
     it('should select items based on input', fakeAsync(() => {
       let fixture = TestBed.createComponent(RepeaterTestComponent);
       let cmp: RepeaterTestComponent = fixture.componentInstance;
+      cmp.expandMode = 'single';
       cmp.lastItemSelected = true;
 
       fixture.detectChanges();
@@ -282,6 +283,7 @@ describe('Repeater item component', () => {
     it('should select items based on input', fakeAsync(() => {
       let fixture = TestBed.createComponent(RepeaterTestComponent);
       let cmp: RepeaterTestComponent = fixture.componentInstance;
+      cmp.expandMode = 'multiple';
       cmp.lastItemSelected = true;
 
       fixture.detectChanges();
@@ -421,6 +423,7 @@ describe('Repeater item component', () => {
     it('should select items based on input', fakeAsync(() => {
       let fixture = TestBed.createComponent(RepeaterTestComponent);
       let cmp: RepeaterTestComponent = fixture.componentInstance;
+      cmp.expandMode = 'none';
       cmp.lastItemSelected = true;
 
       fixture.detectChanges();
