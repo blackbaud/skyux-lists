@@ -47,6 +47,7 @@ describe('Repeater', () => {
   it('should match previous repeater screenshot in max-width container', (done) => {
     SkyHostBrowser.get('visual/repeater');
     SkyHostBrowser.setWindowBreakpoint('lg');
+    SkyHostBrowser.scrollTo('#screenshot-repeater-max-width');
     expect('#screenshot-repeater-max-width').toMatchBaselineScreenshot(done, {
       screenshotName: 'screenshot-repeater-max-width'
     });
