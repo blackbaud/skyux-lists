@@ -43,4 +43,12 @@ describe('Repeater', () => {
       screenshotName: 'repeater-multiple'
     });
   });
+
+  it('should match previous repeater screenshot in max-width container', (done) => {
+    SkyHostBrowser.get('visual/repeater');
+    SkyHostBrowser.setWindowBreakpoint('lg');
+    expect('#screenshot-repeater-max-width').toMatchBaselineScreenshot(done, {
+      screenshotName: 'screenshot-repeater-max-width'
+    });
+  });
 });

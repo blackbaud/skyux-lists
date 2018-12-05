@@ -58,3 +58,29 @@
     </sky-repeater-item>
   </sky-repeater>
 </div>
+
+
+<div id="screenshot-repeater-max-width">
+  <div class="sky-repeater-max-width">
+    <sky-repeater [expandMode]="'multiple'">
+      <sky-repeater-item [isExpanded]="true">
+        <sky-repeater-item-title>Title 1</sky-repeater-item-title>
+        <sky-repeater-item-content>
+          <pre class="unbroken-long">
+            <code>
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsa, sint amet. Fugiat sit,adipisci accusantium debitis alias necessitatibus porro nobis, sed veniam, natus enim hic nisi officia quas dolor magni?
+            </code>
+          </pre>
+      </sky-repeater-item-content>
+      </sky-repeater-item>
+      <sky-repeater-item [isExpanded]="false">
+        <sky-repeater-item-title>Title 2</sky-repeater-item-title>
+        <sky-repeater-item-content>Content 2</sky-repeater-item-content>
+      </sky-repeater-item>
+      <sky-repeater-item [isExpanded]="true">
+        <sky-repeater-item-title>Title 3</sky-repeater-item-title>
+        <sky-repeater-item-content>Content 3</sky-repeater-item-content>
+      </sky-repeater-item>
+    </sky-repeater>
+  </div>
+</div>
