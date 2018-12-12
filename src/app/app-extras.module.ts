@@ -17,9 +17,13 @@ import {
 import {
   SkyRepeaterModule
 } from './public/modules/repeater';
+import {
+  SkyDropdownModule
+} from '@skyux/popovers/modules/dropdown';
 
 @NgModule({
   imports: [
+    SkyDropdownModule,
     SkyFilterModule,
     SkyInfiniteScrollModule,
     SkyPagingModule,
@@ -27,6 +31,7 @@ import {
     SkySortModule
   ],
   exports: [
+    SkyDropdownModule,
     SkyFilterModule,
     SkyInfiniteScrollModule,
     SkyPagingModule,

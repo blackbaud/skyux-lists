@@ -43,4 +43,22 @@ describe('Repeater', () => {
       screenshotName: 'repeater-multiple'
     });
   });
+
+  it('should match previous repeater screenshot with a context menu', (done) => {
+    SkyHostBrowser.get('visual/repeater');
+    SkyHostBrowser.setWindowBreakpoint('lg');
+    SkyHostBrowser.scrollTo('#screenshot-repeater-context-menu');
+    expect('#screenshot-repeater-context-menu').toMatchBaselineScreenshot(done, {
+      screenshotName: 'repeater-context-menu'
+    });
+  });
+
+  it('should match previous repeater screenshot when selectable', (done) => {
+    SkyHostBrowser.get('visual/repeater');
+    SkyHostBrowser.setWindowBreakpoint('lg');
+    SkyHostBrowser.scrollTo('#screenshot-repeater-selectable');
+    expect('#screenshot-repeater-selectable').toMatchBaselineScreenshot(done, {
+      screenshotName: 'repeater-selectable'
+    });
+  });
 });
