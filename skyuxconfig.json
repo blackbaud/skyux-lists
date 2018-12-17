@@ -8,6 +8,11 @@
   "plugins": [
     "@skyux-sdk/builder-plugin-skyux"
   ],
+  "app": {
+    "styles": [
+      "src/app/visual-styles.scss"
+    ]
+  },
   "testSettings": {
     "e2e": {
       "browserSet": "speedy"
