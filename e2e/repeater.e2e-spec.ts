@@ -52,7 +52,7 @@ describe('Repeater', () => {
       screenshotName: 'screenshot-repeater-max-width'
     });
   });
-  
+
   it('should match previous repeater screenshot with a context menu', (done) => {
     SkyHostBrowser.get('visual/repeater');
     SkyHostBrowser.setWindowBreakpoint('lg');
