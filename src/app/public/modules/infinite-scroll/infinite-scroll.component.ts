@@ -16,6 +16,7 @@ import 'rxjs/add/operator/takeWhile';
 import {
   SkyInfiniteScrollDomAdapterService
 } from './infinite-scroll-dom-adapter.service';
+import { Subject } from 'rxjs/Subject';
 // #endregion
 
 @Component({
@@ -36,6 +37,8 @@ export class SkyInfiniteScrollComponent implements OnInit, OnDestroy {
 
   public isWaiting = false;
 
+  private ngUnsubscribe = new Subject<void>();
+
   constructor(
     private changeDetector: ChangeDetectorRef,
     private elementRef: ElementRef,
@@ -45,24 +48,28 @@ export class SkyInfiniteScrollComponent implements OnInit, OnDestroy {
   public ngOnInit(): void {
     // The user has scrolled to the infinite scroll element.
     this.domAdapter.scrollTo(this.elementRef)
-      .takeWhile(() => this.enabled)
+      .takeUntil(this.ngUnsubscribe)
       .subscribe(() => {
-        if (!this.isWaiting) {
+        if (!this.isWaiting && this.enabled) {
           this.notifyScrollEnd();
         }
       });
 
     // New items have been loaded into the parent element.
     this.domAdapter.parentChanges(this.elementRef)
-      .takeWhile(() => this.enabled)
+      .takeUntil(this.ngUnsubscribe)
       .subscribe(() => {
-        this.isWaiting = false;
-        this.changeDetector.markForCheck();
+        if (this.isWaiting) {
+          this.isWaiting = false;
+          this.changeDetector.markForCheck();
+        }
       });
   }
 
   public ngOnDestroy(): void {
     this.enabled = false;
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
   }
 
   public startInfiniteScrollLoad(): void {
