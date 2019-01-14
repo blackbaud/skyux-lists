@@ -1,6 +1,36 @@
+<h2>
+  Contained scroll:
+</h2>
 <div
   class="app-screenshot"
   id="screenshot-infinite-scroll"
+  style="position: relative; overflow-y: auto; height: 220px;"
+>
+  <sky-repeater>
+    <sky-repeater-item *ngFor="let item of firstList">
+      <sky-repeater-item-title>
+        Title {{ item }}
+      </sky-repeater-item-title>
+      <sky-repeater-item-content>
+        Content {{ item }}
+      </sky-repeater-item-content>
+    </sky-repeater-item>
+  </sky-repeater>
+  <sky-infinite-scroll
+    [enabled]="true"
+    (scrollEnd)="addToFirst()"
+  >
+  </sky-infinite-scroll>
+</div>
+
+<br>
+<hr>
+<h2>
+  Disabled:
+</h2>
+<div
+  class="app-screenshot"
+  id="screenshot-infinite-scroll-nobutton"
 >
   <sky-repeater>
     <sky-repeater-item>
@@ -21,32 +51,16 @@
     </sky-repeater-item>
   </sky-repeater>
   <sky-infinite-scroll
-    [enabled]="true"
-  >
-  </sky-infinite-scroll>
-</div>
-
-<div
-  class="app-screenshot"
-  id="screenshot-infinite-scroll-nobutton"
->
-  <sky-repeater>
-    <sky-repeater-item *ngFor="let item of firstList">
-      <sky-repeater-item-title>
-        Title {{ item }}
-      </sky-repeater-item-title>
-      <sky-repeater-item-content>
-        Content {{ item }}
-      </sky-repeater-item-content>
-    </sky-repeater-item>
-  </sky-repeater>
-  <sky-infinite-scroll
     [enabled]="false"
-    (scrollEnd)="addToFirst()"
   >
   </sky-infinite-scroll>
 </div>
 
+<br>
+<hr>
+<h2>
+  Window scroll:
+</h2>
 <div
   class="app-screenshot"
   id="screenshot-infinite-scroll-wait"
@@ -69,7 +83,7 @@
 </div>
 <button
   class="sky-btn"
-  style="position: fixed; bottom: 5px; right: 5px;"
+  style="position: fixed; bottom: 5px; right: 5px; z-index: 1000;"
   [ngClass]="{
     'sky-btn-primary': secondEnabled,
     'sky-btn-default': !secondEnabled

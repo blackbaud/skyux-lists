@@ -17,12 +17,16 @@ export class InfiniteScrollVisualComponent {
   public secondEnabled = true;
 
   public addToFirst() {
-    this.firstList.push(this.firstList.length);
-    this.firstList.push(this.firstList.length);
+    setTimeout(() => {
+      this.firstList.push(this.firstList.length);
+      this.firstList.push(this.firstList.length);
+    }, 1000);
   }
 
   public addToSecond() {
-    this.secondList.push(this.secondList.length);
-    this.secondList.push(this.secondList.length);
+    setTimeout(() => {
+      this.secondList.push(this.secondList.length);
+      this.secondList.push(this.secondList.length);
+    }, 1000);
   }
 }
