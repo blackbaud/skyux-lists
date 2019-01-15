@@ -19,6 +19,7 @@ describe('Infinite Scroll', () => {
   it('should match previous infinite scroll screenshot when hasMore is false', (done) => {
     SkyHostBrowser.get('visual/infinite-scroll');
     SkyHostBrowser.setWindowBreakpoint('lg');
+    SkyHostBrowser.scrollTo('#screenshot-infinite-scroll-nobutton');
     expect('#screenshot-infinite-scroll-nobutton').toMatchBaselineScreenshot(done, {
       screenshotName: 'infinite-scroll-nobutton'
     });
