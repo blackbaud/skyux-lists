@@ -11,12 +11,15 @@ import {
   Output
 } from '@angular/core';
 
+import {
+  Subject
+} from 'rxjs/Subject';
+
 import 'rxjs/add/operator/takeWhile';
 
 import {
   SkyInfiniteScrollDomAdapterService
 } from './infinite-scroll-dom-adapter.service';
-import { Subject } from 'rxjs/Subject';
 // #endregion
 
 @Component({
