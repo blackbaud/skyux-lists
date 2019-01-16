@@ -15,4 +15,14 @@ export class InfiniteScrollVisualComponent {
   ];
 
   public secondEnabled = true;
+
+  public addToSecond() {
+    setTimeout(() => {
+      this.secondList.push(this.secondList.length);
+      this.secondList.push(this.secondList.length);
+      this.secondList.push(this.secondList.length);
+      this.secondList.push(this.secondList.length);
+      this.secondList.push(this.secondList.length);
+    }, 1000);
+  }
 }

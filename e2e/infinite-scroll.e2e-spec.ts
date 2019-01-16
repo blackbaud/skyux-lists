@@ -11,6 +11,7 @@ describe('Infinite Scroll', () => {
   it('should match previous infinite scroll screenshot', (done) => {
     SkyHostBrowser.get('visual/infinite-scroll');
     SkyHostBrowser.setWindowBreakpoint('lg');
+    SkyHostBrowser.scrollTo('#screenshot-infinite-scroll');
     expect('#screenshot-infinite-scroll').toMatchBaselineScreenshot(done, {
       screenshotName: 'infinite-scroll'
     });
@@ -28,8 +29,9 @@ describe('Infinite Scroll', () => {
   it('should match previous infinite scroll screenshot in wait mode', (done) => {
     SkyHostBrowser.get('visual/infinite-scroll');
     SkyHostBrowser.setWindowBreakpoint('lg');
-    element(by.css('#screenshot-infinite-scroll-wait .sky-btn')).click();
-    expect('#screenshot-infinite-scroll-wait').toMatchBaselineScreenshot(done, {
+    SkyHostBrowser.scrollTo('#screenshot-infinite-scroll');
+    element(by.css('#screenshot-infinite-scroll .sky-btn')).click();
+    expect('#screenshot-infinite-scroll').toMatchBaselineScreenshot(done, {
       screenshotName: 'infinite-scroll-wait'
     });
   });
