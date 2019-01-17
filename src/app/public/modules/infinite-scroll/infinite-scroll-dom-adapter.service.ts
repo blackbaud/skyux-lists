@@ -9,7 +9,9 @@ import {
 import {
   Observable
 } from 'rxjs/Observable';
+
 import 'rxjs/add/observable/fromEvent';
+import 'rxjs/add/operator/filter';
 
 import {
   Subject
@@ -54,24 +56,18 @@ export class SkyInfiniteScrollDomAdapterService implements OnDestroy {
    * is visible (or scrolled to) within its scrollable parent container.
    * @param elementRef The infinite scroll element reference.
    */
-  public scrollTo(elementRef: ElementRef): Observable<void> {
+  public scrollTo(elementRef: ElementRef): Observable<any> {
     const parent = this.findScrollableParent(elementRef.nativeElement);
 
-    Observable
+    return Observable
       .fromEvent(parent, 'scroll')
       .takeUntil(this.ngUnsubscribe)
-      .subscribe(() => {
-        const isInView = this.isElementScrolledInView(
+      .filter(() => {
+        return this.isElementScrolledInView(
           elementRef.nativeElement,
           parent
         );
-
-        if (isInView) {
-          this._scrollTo.emit();
-        }
-      });
-
-    return this._scrollTo;
+    });
   }
 
   private createObserver(element: any): void {
