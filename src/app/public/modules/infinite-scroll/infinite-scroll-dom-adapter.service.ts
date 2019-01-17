@@ -28,7 +28,6 @@ export class SkyInfiniteScrollDomAdapterService implements OnDestroy {
   private observer: MutationObserver;
 
   private _parentChanges = new EventEmitter<void>();
-  private _scrollTo = new EventEmitter<void>();
 
   constructor(
     private windowRef: SkyWindowRefService
@@ -36,7 +35,6 @@ export class SkyInfiniteScrollDomAdapterService implements OnDestroy {
 
   public ngOnDestroy(): void {
     this._parentChanges.complete();
-    this._scrollTo.complete();
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
   }
