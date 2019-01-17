@@ -54,7 +54,7 @@ export class SkyInfiniteScrollDomAdapterService implements OnDestroy {
    * is visible (or scrolled to) within its scrollable parent container.
    * @param elementRef The infinite scroll element reference.
    */
-  public scrollTo(elementRef: ElementRef): Observable<any> {
+  public scrollTo(elementRef: ElementRef): Observable<void> {
     const parent = this.findScrollableParent(elementRef.nativeElement);
 
     return Observable
@@ -65,7 +65,7 @@ export class SkyInfiniteScrollDomAdapterService implements OnDestroy {
           elementRef.nativeElement,
           parent
         );
-    });
+    }).map(() => undefined); // Change to void return type
   }
 
   private createObserver(element: any): void {
