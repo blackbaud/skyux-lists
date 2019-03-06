@@ -1,7 +1,9 @@
 import {
   ChangeDetectorRef,
   Component,
-  Input
+  Input,
+  Output,
+  EventEmitter
 } from '@angular/core';
 
 import {
@@ -68,6 +70,10 @@ export class SkyRepeaterItemComponent {
     }
   }
 
+  /** Emits an event when the repeater item is expanded or collapsed. The emitted value will be true if the repeater item was expanded. */
+  @Output()
+  public expansionStateChanged: EventEmitter<boolean> = new EventEmitter();
+
   private _isCollapsible = true;
 
   private _isExpanded = true;
@@ -103,6 +109,7 @@ export class SkyRepeaterItemComponent {
 
       this.repeaterService.onItemCollapseStateChange(this);
       this.slideForExpanded(animate);
+      this.expansionStateChanged.emit(this._isExpanded);
       this.changeDetector.markForCheck();
     }
   }

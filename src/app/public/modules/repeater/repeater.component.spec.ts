@@ -197,6 +197,29 @@ describe('Repeater item component', () => {
         expect(fixture.nativeElement).toBeAccessible();
       });
     }));
+
+    it('should fire expansionStateChanged when an item is expanded', fakeAsync(() => {
+      let fixture = TestBed.createComponent(RepeaterTestComponent);
+      let cmp: RepeaterTestComponent = fixture.componentInstance;
+      cmp.expandMode = 'single';
+
+      fixture.detectChanges();
+      tick();
+
+      let wasExpanded = false;
+      let repeaterItems = cmp.repeater.items.toArray();
+
+      repeaterItems[2].expansionStateChanged.subscribe(
+        (isExpanded: boolean) => wasExpanded = isExpanded
+      );
+
+      cmp.lastItemExpanded = true;
+
+      fixture.detectChanges();
+      tick();
+
+      expect(wasExpanded).toBe(true);
+    }));
   });
 
   describe('with expand mode of "multiple"', () => {
