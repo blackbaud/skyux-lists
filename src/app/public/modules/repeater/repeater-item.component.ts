@@ -116,9 +116,9 @@ export class SkyRepeaterItemComponent implements OnDestroy {
       this._isExpanded = value;
 
       if (this._isExpanded) {
-        this.expand.next();
+        this.expand.emit();
       } else {
-        this.collapse.next();
+        this.collapse.emit();
       }
 
       this.repeaterService.onItemCollapseStateChange(this);
