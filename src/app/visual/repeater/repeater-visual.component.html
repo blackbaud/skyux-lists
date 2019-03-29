@@ -1,5 +1,31 @@
 <div
   class="app-screenshot"
+  id="screenshot-repeater-with-inline-form"
+>
+  <sky-repeater>
+    <sky-repeater-item *ngFor="let index of [0,1,2]"
+      [inlineFormTemplate]="myInlineForm"
+      [showInlineForm]="activeInlineFormId === index"
+      (inlineFormClose)="activeInlineFormId = undefined"
+    >
+      <sky-repeater-item-title>
+        Title {{ index }}
+      </sky-repeater-item-title>
+      <sky-repeater-item-content>
+        Note {{ index }}
+        <button
+          class="sky-btn sky-btn-link sky-no-focus"
+          (click)="activeInlineFormId = index"
+        >
+          [ edit ]
+        </button>
+      </sky-repeater-item-content>
+    </sky-repeater-item>
+  </sky-repeater>
+</div>
+
+<div
+  class="app-screenshot"
   id="screenshot-repeater"
 >
   <sky-repeater>
@@ -148,3 +174,31 @@
   </sky-repeater>
 </div>
 
+<ng-template #myInlineForm>
+  <div class="sky-form-group">
+    <label
+      class="sky-control-label"
+      for="demo-input-1"
+    >
+      Title
+    </label>
+    <input
+      id="demo-input-1"
+      class="sky-form-control"
+      type="text"
+    />
+  </div>
+  <div class="sky-form-group">
+    <label
+      class="sky-control-label"
+      for="demo-input-2"
+    >
+      Note
+    </label>
+    <input
+      id="demo-input-2"
+      class="sky-form-control"
+      type="text"
+    />
+  </div>
+</ng-template>

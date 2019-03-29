@@ -6,6 +6,10 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SkyChevronModule } from '@skyux/indicators/modules/chevron';
 import { SkyLogModule } from '@skyux/core/modules/log';
 
+import {
+  SkyInlineFormModule
+} from '@skyux/inline-forms';
+
 import { SkyRepeaterItemContentComponent } from './repeater-item-content.component';
 import { SkyRepeaterItemContextMenuComponent } from './repeater-item-context-menu.component';
 import { SkyRepeaterItemTitleComponent } from './repeater-item-title.component';
@@ -37,7 +41,8 @@ import {
     SkyLogModule,
     SkyCheckboxModule,
     SkyI18nModule,
-    SkyListsResourcesModule
+    SkyListsResourcesModule,
+    SkyInlineFormModule
   ],
   exports: [
     SkyRepeaterComponent,
