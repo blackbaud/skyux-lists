@@ -6,7 +6,7 @@
   }"
 >
 
-  <ng-container>
+  <ng-container *ngIf="inlineFormTemplate">
     <sky-inline-form
       [showForm]="showInlineForm"
       [template]="inlineFormTemplate"
@@ -17,10 +17,10 @@
     </sky-inline-form>
   </ng-container>
 
-  <!-- <ng-container *ngIf="!inlineFormTemplate">
+  <ng-container *ngIf="!inlineFormTemplate">
     <ng-container *ngTemplateOutlet="skyRepeaterItemLeft"></ng-container>
     <ng-container *ngTemplateOutlet="skyRepeaterItemRight"></ng-container>
-  </ng-container> -->
+  </ng-container>
 
 </div>
 
