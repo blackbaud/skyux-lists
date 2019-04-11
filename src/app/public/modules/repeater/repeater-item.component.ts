@@ -26,11 +26,11 @@ import {
 
 import {
   SkyInlineFormCloseArgs
-} from '@skyux/inline-forms';
+} from '@skyux/inline-form';
 
 import {
   SkyInlineFormConfig
-} from '@skyux/inline-forms/modules/inline-form/types';
+} from '@skyux/inline-form';
 
 let nextId: number = 0;
 

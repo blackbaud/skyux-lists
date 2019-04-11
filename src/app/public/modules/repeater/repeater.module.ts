@@ -8,7 +8,7 @@ import { SkyLogModule } from '@skyux/core/modules/log';
 
 import {
   SkyInlineFormModule
-} from '@skyux/inline-forms';
+} from '@skyux/inline-form';
 
 import { SkyRepeaterItemContentComponent } from './repeater-item-content.component';
 import { SkyRepeaterItemContextMenuComponent } from './repeater-item-context-menu.component';
