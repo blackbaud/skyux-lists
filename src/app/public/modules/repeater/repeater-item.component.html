@@ -12,8 +12,8 @@
       [template]="inlineFormTemplate"
       (close)="onInlineFormClose($event)"
     >
-    <ng-container *ngTemplateOutlet="skyRepeaterItemLeft"></ng-container>
-    <ng-container *ngTemplateOutlet="skyRepeaterItemRight"></ng-container>
+      <ng-container *ngTemplateOutlet="skyRepeaterItemLeft"></ng-container>
+      <ng-container *ngTemplateOutlet="skyRepeaterItemRight"></ng-container>
     </sky-inline-form>
   </ng-container>
 
@@ -24,7 +24,9 @@
 
 </div>
 
-<ng-template #skyRepeaterItemLeft>
+<ng-template
+  #skyRepeaterItemLeft
+>
   <div class="sky-repeater-item-left">
     <sky-checkbox
       *ngIf="selectable"
@@ -44,7 +46,9 @@
   </div>
 </ng-template>
 
-<ng-template #skyRepeaterItemRight>
+<ng-template
+  #skyRepeaterItemRight
+>
   <div class="sky-repeater-item-right">
     <header
         class="sky-repeater-item-header"
