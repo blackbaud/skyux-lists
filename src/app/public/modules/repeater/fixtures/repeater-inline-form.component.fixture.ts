@@ -4,6 +4,10 @@ import {
 } from '@angular/core';
 
 import {
+  SkyInlineFormCloseArgs
+} from '@skyux/inline-form';
+
+import {
   SkyRepeaterComponent
 } from '../repeater.component';
 
@@ -15,17 +19,12 @@ export class RepeaterInlineFormFixtureComponent {
   @ViewChild(SkyRepeaterComponent)
   public repeater: SkyRepeaterComponent;
 
-  public showContextMenu: boolean;
+  public showInlineForm = false;
 
-  public removeLastItem: boolean;
+  public inlineFormCloseArgs: SkyInlineFormCloseArgs;
 
-  public expandMode = 'single';
-
-  public lastItemExpanded: boolean;
-
-  public lastItemSelected = false;
-
-  public onCollapse(): void {}
-
-  public onExpand(): void {}
+  public onInlineFormClose(inlineFormCloseArgs: SkyInlineFormCloseArgs): void {
+    this.inlineFormCloseArgs = inlineFormCloseArgs;
+    this.showInlineForm = false;
+  }
 }

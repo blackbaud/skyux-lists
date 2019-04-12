@@ -180,6 +180,7 @@
               >
                 <button
                   class="sky-btn sky-btn-link sky-no-focus sky-demo-btn-edit"
+                  type="button"
                   (click)="activeInlineFormId = item.id"
                 >
                   <sky-icon
@@ -198,30 +199,36 @@
       </sky-repeater-item-content>
 
 
-      <ng-template #myInlineForm>
-        <div class="sky-form-group">
+      <ng-template
+        #myInlineForm
+      >
+        <div
+          class="sky-form-group"
+        >
           <label
             class="sky-control-label"
-            for="demo-input-1"
+            for="inline-form-title"
           >
             Title
           </label>
           <input
-            id="demo-input-1"
+            id="inline-form-title"
             class="sky-form-control"
             type="text"
             [(ngModel)]="item.title"
           />
         </div>
-        <div class="sky-form-group">
+        <div
+          class="sky-form-group"
+        >
           <label
             class="sky-control-label"
-            for="demo-input-2"
+            for="inline-form-note"
           >
             Note
           </label>
           <input
-            id="demo-input-2"
+            id="inline-form-note"
             class="sky-form-control"
             type="text"
             [(ngModel)]="item.note"

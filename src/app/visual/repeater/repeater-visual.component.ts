@@ -1,5 +1,10 @@
-import { Component } from '@angular/core';
-import { SkyInlineFormCloseArgs } from '@skyux/inline-form';
+import {
+  Component
+} from '@angular/core';
+
+import {
+  SkyInlineFormCloseArgs
+} from '@skyux/inline-form';
 
 @Component({
   selector: 'repeater-visual',
