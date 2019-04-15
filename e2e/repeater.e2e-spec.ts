@@ -7,6 +7,7 @@ describe('Repeater', () => {
   it('should match the baseline sort screenshot', (done) => {
     SkyHostBrowser.get('visual/sort');
     SkyHostBrowser.setWindowBreakpoint('lg');
+    SkyHostBrowser.scrollTo('#screenshot-sort-full');
     expect('#screenshot-sort-full').toMatchBaselineScreenshot(done, {
       screenshotName: 'sort'
     });
@@ -15,6 +16,7 @@ describe('Repeater', () => {
   it('should match previous repeater screenshot', (done) => {
     SkyHostBrowser.get('visual/repeater');
     SkyHostBrowser.setWindowBreakpoint('lg');
+    SkyHostBrowser.scrollTo('#screenshot-repeater');
     expect('#screenshot-repeater').toMatchBaselineScreenshot(done, {
       screenshotName: 'repeater'
     });
@@ -23,6 +25,7 @@ describe('Repeater', () => {
   it('should match previous repeater screenshot when all are collapsed', (done) => {
     SkyHostBrowser.get('visual/repeater');
     SkyHostBrowser.setWindowBreakpoint('lg');
+    SkyHostBrowser.scrollTo('#screenshot-repeater-collapsed');
     expect('#screenshot-repeater-collapsed').toMatchBaselineScreenshot(done, {
       screenshotName: 'repeater-collapsed'
     });
@@ -31,6 +34,7 @@ describe('Repeater', () => {
   it('should match previous repeater screenshot in single mode', (done) => {
     SkyHostBrowser.get('visual/repeater');
     SkyHostBrowser.setWindowBreakpoint('lg');
+    SkyHostBrowser.scrollTo('#screenshot-repeater-single');
     expect('#screenshot-repeater-single').toMatchBaselineScreenshot(done, {
       screenshotName: 'repeater-single'
     });
@@ -39,6 +43,7 @@ describe('Repeater', () => {
   it('should match previous repeater screenshot in multiple mode', (done) => {
     SkyHostBrowser.get('visual/repeater');
     SkyHostBrowser.setWindowBreakpoint('lg');
+    SkyHostBrowser.scrollTo('#screenshot-repeater-multiple');
     expect('#screenshot-repeater-multiple').toMatchBaselineScreenshot(done, {
       screenshotName: 'repeater-multiple'
     });

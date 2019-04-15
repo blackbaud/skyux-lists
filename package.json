@@ -31,12 +31,14 @@
     "@skyux/animations": "^3.0.0",
     "@skyux/forms": "^3.0.0",
     "@skyux/indicators": "^3.0.0",
-    "@skyux/popovers": "^3.0.0"
+    "@skyux/popovers": "^3.0.0",
+    "@skyux/inline-form": "^3.0.0-rc.0"
   },
   "dependencies": {},
   "devDependencies": {
     "@blackbaud/skyux": "2.42.0",
     "@blackbaud/skyux-builder": "1.31.1",
-    "@skyux-sdk/builder-plugin-skyux": "1.0.0-rc.6"
+    "@skyux-sdk/builder-plugin-skyux": "1.0.0-rc.6",
+    "@skyux/inline-form": "3.0.0-rc.0"
   }
 }
