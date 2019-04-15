@@ -538,7 +538,7 @@ describe('Repeater item component', () => {
 
   describe('with inline-form', () => {
     let fixture: ComponentFixture<RepeaterInlineFormFixtureComponent>;
-    let el: any;
+    let el: HTMLElement;
     let component: RepeaterInlineFormFixtureComponent;
 
     beforeEach(() => {
@@ -580,7 +580,8 @@ describe('Repeater item component', () => {
         fixture.detectChanges();
 
         expect(component.inlineFormCloseArgs).toBeUndefined();
-        el.querySelector('.sky-inline-form-footer .sky-btn-primary').click();
+        const button = el.querySelector('.sky-inline-form-footer .sky-btn-primary') as HTMLElement;
+        button.click();
 
         expect(component.inlineFormCloseArgs).not.toBeUndefined();
         expect(component.inlineFormCloseArgs.reason).toBe('done');
