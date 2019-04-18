@@ -16,6 +16,10 @@
       flex: 1 0 auto;
       width: 100%;
     }
+
+    ::ng-deep .sky-slide-dissolve-last {
+      padding-top:10px;
+    }
   }
 }
 
