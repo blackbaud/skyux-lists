@@ -1,7 +1,8 @@
 @import "~@skyux/theme/scss/mixins";
 
 .sky-filter-inline {
-  background-color: $sky-background-color-neutral-light;
+  background-color: #fff;
   display: flex;
   align-items: center;
+  border-bottom: 1px solid $sky-border-color-neutral-medium;
 }
