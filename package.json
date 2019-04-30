@@ -1,6 +1,6 @@
 {
   "name": "@skyux/lists",
-  "version": "3.2.2-alpha.0",
+  "version": "3.2.1",
   "description": "SKY UX Lists",
   "main": "bundles/bundle.umd.js",
   "module": "index.ts",
@@ -36,7 +36,7 @@
   },
   "dependencies": {},
   "devDependencies": {
-    "@blackbaud/skyux": "2.48.1",
+    "@blackbaud/skyux": "2.48.2",
     "@blackbaud/skyux-builder": "1.33.1",
     "@skyux-sdk/builder-plugin-skyux": "1.0.0"
   }
