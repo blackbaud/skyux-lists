@@ -597,8 +597,8 @@ describe('Repeater item component', () => {
 
         const buttons = el.querySelectorAll('.sky-inline-form-footer button') as NodeListOf<HTMLElement>;
 
-        expect(buttons[0].innerText).toEqual('Foo');
-        expect(buttons[1].innerText).toEqual('Bar');
+        expect(buttons[0].innerText.trim()).toEqual('Foo');
+        expect(buttons[1].innerText.trim()).toEqual('Bar');
       });
     }));
 
