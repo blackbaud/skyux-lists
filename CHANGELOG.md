@@ -1,4 +1,4 @@
-# 3.3.1 (2019-06-25)
+# 3.3.1 (2019-06-26)
 
 - Fixed the filter summary component to have correct spacing between filter summary items. [#42](https://github.com/blackbaud/skyux-lists/pull/42)
 
