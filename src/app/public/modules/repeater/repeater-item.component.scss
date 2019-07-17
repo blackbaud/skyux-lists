@@ -21,6 +21,13 @@
       padding-top:10px;
     }
   }
+
+  &.sky-repeater-item-active {
+    background-color: #eeeeef;
+    color: #212327;
+    padding-left: 6px;
+    border-left: 4px solid #00b4f1;
+  }
 }
 
 .sky-repeater-item-left {

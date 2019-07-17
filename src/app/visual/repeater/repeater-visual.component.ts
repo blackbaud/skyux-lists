@@ -15,6 +15,10 @@ import {
 })
 export class RepeaterVisualComponent {
 
+  public activeId = 1;
+
+  public activeInlineFormId: number;
+
   public customConfig: SkyInlineFormConfig = {
     buttonLayout: SkyInlineFormButtonLayout.Custom,
     buttons: [
@@ -45,8 +49,6 @@ export class RepeaterVisualComponent {
       fund: 'General 2019 Fund'
     }
   ];
-
-  public activeInlineFormId: number;
 
   public onCollapse(): void {
     console.log('Collapsed.');

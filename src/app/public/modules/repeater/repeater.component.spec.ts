@@ -536,6 +536,31 @@ describe('Repeater item component', () => {
     }));
   });
 
+  it('should add and remove active css class when isActive value changes', fakeAsync(() => {
+    let fixture = TestBed.createComponent(RepeaterTestComponent);
+    let cmp: RepeaterTestComponent = fixture.componentInstance;
+    let el = fixture.nativeElement;
+    fixture.detectChanges();
+    tick();
+
+    let activeRepeaterItem = el.querySelectorAll('.sky-repeater-item-active');
+    expect(activeRepeaterItem.length).toBe(0);
+
+    cmp.isActive = true;
+    fixture.detectChanges();
+    tick();
+
+    activeRepeaterItem = el.querySelectorAll('.sky-repeater-item-active');
+    expect(activeRepeaterItem.length).toBe(1);
+
+    cmp.isActive = false;
+    fixture.detectChanges();
+    tick();
+
+    activeRepeaterItem = el.querySelectorAll('.sky-repeater-item-active');
+    expect(activeRepeaterItem.length).toBe(0);
+  }));
+
   describe('with inline-form', () => {
     let fixture: ComponentFixture<RepeaterInlineFormFixtureComponent>;
     let el: HTMLElement;

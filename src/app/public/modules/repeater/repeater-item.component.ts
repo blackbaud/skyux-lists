@@ -59,6 +59,9 @@ export class SkyRepeaterItemComponent implements OnDestroy {
   }
 
   @Input()
+  public isActive: boolean = false;
+
+  @Input()
   public showInlineForm: boolean = false;
 
   @Input()
