@@ -38,31 +38,6 @@ let nextId: number = 0;
   animations: [skyAnimationSlide]
 })
 export class SkyRepeaterItemComponent implements OnDestroy {
-  public contentId: string = `sky-radio-content-${++nextId}`;
-
-  public get isExpanded(): boolean {
-    return this._isExpanded;
-  }
-
-  @Input()
-  public set isExpanded(value: boolean) {
-    this.updateForExpanded(value, true);
-  }
-
-  public get isSelected(): boolean {
-    return this._isSelected;
-  }
-
-  @Input()
-  public set isSelected(value: boolean) {
-    this._isSelected = value;
-  }
-
-  @Input()
-  public isActive: boolean = false;
-
-  @Input()
-  public showInlineForm: boolean = false;
 
   @Input()
   public inlineFormConfig: SkyInlineFormConfig;
@@ -70,11 +45,32 @@ export class SkyRepeaterItemComponent implements OnDestroy {
   @Input()
   public inlineFormTemplate: TemplateRef<any>;
 
-  @Output()
-  public inlineFormClose = new EventEmitter<SkyInlineFormCloseArgs>();
+  @Input()
+  public isActive: boolean = false;
+
+  @Input()
+  public set isExpanded(value: boolean) {
+    this.updateForExpanded(value, true);
+  }
+
+  public get isExpanded(): boolean {
+    return this._isExpanded;
+  }
+
+  @Input()
+  public set isSelected(value: boolean) {
+    this._isSelected = value;
+  }
+
+  public get isSelected(): boolean {
+    return this._isSelected;
+  }
 
   @Input()
   public selectable: boolean = false;
+
+  @Input()
+  public showInlineForm: boolean = false;
 
   @Output()
   public collapse = new EventEmitter<void>();
@@ -82,11 +78,11 @@ export class SkyRepeaterItemComponent implements OnDestroy {
   @Output()
   public expand = new EventEmitter<void>();
 
-  public slideDirection: string;
+  @Output()
+  public inlineFormClose = new EventEmitter<SkyInlineFormCloseArgs>();
 
-  public get isCollapsible(): boolean {
-    return this._isCollapsible;
-  }
+  public contentId: string = `sky-radio-content-${++nextId}`;
+
   public set isCollapsible(value: boolean) {
     if (this.isCollapsible !== value) {
       this._isCollapsible = value;
@@ -97,6 +93,12 @@ export class SkyRepeaterItemComponent implements OnDestroy {
       }
     }
   }
+
+  public get isCollapsible(): boolean {
+    return this._isCollapsible;
+  }
+
+  public slideDirection: string;
 
   private _isCollapsible = true;
 
