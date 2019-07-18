@@ -16,10 +16,6 @@ import {
 } from '@skyux-sdk/testing';
 
 import {
-  SkyLibResourcesService
-} from '@skyux/i18n';
-
-import {
   PagingTestComponent
 } from './fixtures/paging.component.fixture';
 
