@@ -16,10 +16,6 @@ import {
 } from '@skyux-sdk/testing';
 
 import {
-  SkyLibResourcesTestService
-} from '@skyux/i18n/testing';
-
-import {
   SkyLibResourcesService
 } from '@skyux/i18n';
 
@@ -43,12 +39,6 @@ describe('Paging component', () => {
       ],
       imports: [
         SkyPagingModule
-      ],
-      providers: [
-        {
-          provide: SkyLibResourcesService,
-          useClass: SkyLibResourcesTestService
-        }
       ]
     });
 
