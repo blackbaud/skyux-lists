@@ -24,7 +24,7 @@
   class="app-screenshot sky-margin-stacked-default"
   id="screenshot-repeater-with-active-item"
 >
-  <h3>Repeater with isActive enabled on click</h3>
+  <h3>Repeater with activeIndex enabled on click</h3>
   <sky-repeater
     [activeIndex]="activeIndex"
   >
@@ -50,6 +50,12 @@
     (click)="addItem()"
   >
     Add new item
+  </button>
+  <button
+    type="button"
+    (click)="activeIndex = undefined"
+  >
+    Undefined active
   </button>
 </div>
 

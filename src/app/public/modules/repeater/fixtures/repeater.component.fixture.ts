@@ -13,9 +13,9 @@ import {
 })
 export class RepeaterTestComponent {
 
-  public expandMode = 'single';
+  public activeIndex: number = undefined;
 
-  public isActive = false;
+  public expandMode = 'single';
 
   public lastItemExpanded: boolean;
 

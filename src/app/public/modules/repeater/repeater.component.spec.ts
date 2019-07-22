@@ -536,30 +536,56 @@ describe('Repeater item component', () => {
     }));
   });
 
-  it('should add and remove active css class when isActive value changes', fakeAsync(() => {
-    let fixture = TestBed.createComponent(RepeaterTestComponent);
-    let cmp: RepeaterTestComponent = fixture.componentInstance;
-    let el = fixture.nativeElement;
-    fixture.detectChanges();
-    tick();
+  describe('with activeIndex', () => {
+    let fixture: ComponentFixture<RepeaterTestComponent>;
+    let cmp: RepeaterTestComponent;
+    let el: any;
 
-    let activeRepeaterItem = el.querySelectorAll('.sky-repeater-item-active');
-    expect(activeRepeaterItem.length).toBe(0);
+    beforeEach(() => {
+      fixture = TestBed.createComponent(RepeaterTestComponent);
+      cmp = fixture.componentInstance;
+      el = fixture.nativeElement;
+    });
 
-    cmp.isActive = true;
-    fixture.detectChanges();
-    tick();
+    function getItems(): HTMLElement[] {
+      return el.querySelectorAll('.sky-repeater-item');
+    }
 
-    activeRepeaterItem = el.querySelectorAll('.sky-repeater-item-active');
-    expect(activeRepeaterItem.length).toBe(1);
+    it('should show active item if activeIndex is set on init', fakeAsync(() => {
+      cmp.activeIndex = 0;
+      fixture.detectChanges();
+      tick();
+      fixture.detectChanges();
+      tick();
 
-    cmp.isActive = false;
-    fixture.detectChanges();
-    tick();
+      let activeRepeaterItem = el.querySelectorAll('.sky-repeater-item-active');
+      expect(activeRepeaterItem.length).toBe(1);
+    }));
 
-    activeRepeaterItem = el.querySelectorAll('.sky-repeater-item-active');
-    expect(activeRepeaterItem.length).toBe(0);
-  }));
+    it('should add and remove active css class when activeIndex value changes', fakeAsync(() => {
+      fixture.detectChanges();
+      tick();
+
+      let activeRepeaterItem = el.querySelectorAll('.sky-repeater-item-active');
+      expect(activeRepeaterItem.length).toBe(0);
+
+      cmp.activeIndex = 0;
+      fixture.detectChanges();
+      tick();
+
+      const items = getItems();
+      activeRepeaterItem = el.querySelectorAll('.sky-repeater-item-active');
+      expect(activeRepeaterItem.length).toBe(1);
+      expect(items[0]).toHaveCssClass('sky-repeater-item-active');
+
+      cmp.activeIndex = undefined;
+      fixture.detectChanges();
+      tick();
+
+      activeRepeaterItem = el.querySelectorAll('.sky-repeater-item-active');
+      expect(activeRepeaterItem.length).toBe(0);
+    }));
+  });
 
   describe('with inline-form', () => {
     let fixture: ComponentFixture<RepeaterInlineFormFixtureComponent>;

@@ -20,34 +20,23 @@ export class SkyRepeaterService {
 
   public items: BehaviorSubject<Array<SkyRepeaterItemComponent>> = new BehaviorSubject<Array<SkyRepeaterItemComponent>>([]);
 
-  public activateItem(item: SkyRepeaterItemComponent): void {
-    this.items.take(1).subscribe(items => {
-      const index = items.indexOf(item);
-      if (index > -1) {
-        this.activeItemId.next(item.itemId);
-      }
-    });
-  }
-
   public activateItemByIndex(index: number): void {
-    this.items.take(1).subscribe(items => {
-      const activeItem = items[index];
-      if (activeItem) {
-        this.activeItemId.next(activeItem.itemId);
-      }
-    });
+    if (index === undefined) {
+      this.activeItemId.next(undefined);
+    } else {
+      this.items.take(1).subscribe(items => {
+        const activeItem = items[index];
+        if (activeItem) {
+          this.activeItemId.next(activeItem.itemId);
+        }
+      });
+    }
   }
 
   public addItem(item: SkyRepeaterItemComponent): void {
     this.items.take(1).subscribe((currentItems) => {
-      // let lastTabIndex = this.getLastItemIndex(currentItems);
-      // if (currentItems && (lastTabIndex || lastTabIndex === 0)) {
-      //   item.itemId = lastTabIndex + 1;
-      // }
       currentItems.push(item);
       this.items.next(currentItems);
-      console.log('add item. new array:');
-      console.log(currentItems);
     });
   }
 
@@ -78,31 +67,5 @@ export class SkyRepeaterService {
 
   public onItemCollapseStateChange(item: SkyRepeaterItemComponent): void {
     this.itemCollapseStateChange.emit(item);
-  }
-
-  private getLastItemIndex(tabs: Array<SkyRepeaterItemComponent>): number {
-    // let result: any = undefined;
-    // for (let i = 0; i < tabs.length; i++) {
-    //   if (typeof tabs[i].itemId === 'number' &&
-    //     (result === undefined || result < tabs[i].itemId)) {
-    //     result = tabs[i].itemId;
-    //   }
-    // }
-    return tabs.length;
-  }
-
-  private getItemByIndex(index: number, items: Array<SkyRepeaterItemComponent>) {
-    return items[index];
-    // for (let i = 0, n = items.length; i < n; i++) {
-    //   let item = items[i];
-    //   if (item.itemId === index) {
-    //     return item;
-    //   }
-    // }
-    // return undefined;
-  }
-
-  private getIndexByItem(items: Array<SkyRepeaterItemComponent>, item: SkyRepeaterItemComponent): number {
-    return items.indexOf(item);
   }
 }

@@ -146,15 +146,9 @@ export class SkyRepeaterItemComponent implements OnDestroy {
       this.repeaterService.activeItemId
         .takeUntil(this.ngUnsubscribe)
         .subscribe((id: string) => {
-          if (id) {
-            this.active = this.itemId === id;
-            this.changeDetector.markForCheck();
-          }
+          this.active = this.itemId === id;
+          this.changeDetector.markForCheck();
         });
-
-      if (this.active) {
-        this.repeaterService.activateItem(this);
-      }
     });
   }
 
