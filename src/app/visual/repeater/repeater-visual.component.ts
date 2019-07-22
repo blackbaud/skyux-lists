@@ -8,6 +8,8 @@ import {
   SkyInlineFormConfig
 } from '@skyux/inline-form';
 
+let nextItemId: number = 0;
+
 @Component({
   selector: 'repeater-visual',
   templateUrl: './repeater-visual.component.html',
@@ -15,7 +17,7 @@ import {
 })
 export class RepeaterVisualComponent {
 
-  public activeId = 1;
+  public activeIndex: number = 2;
 
   public activeInlineFormId: number;
 
@@ -31,24 +33,50 @@ export class RepeaterVisualComponent {
 
   public items = [
     {
-      id: '1',
+      id: 1,
       title: '2018 Gala',
       note: '2018 Gala for friends and family',
       fund: 'General 2018 Fund'
     },
     {
-      id: '2',
+      id: 'abba',
       title: '2018 Special event',
       note: 'Special event',
       fund: '2018 Special Events Fund'
     },
     {
-      id: '3',
+      id: 'dabba',
+      title: '2019 Gala',
+      note: '2019 Gala for friends and family',
+      fund: 'General 2019 Fund'
+    },
+    {
+      id: 99,
+      title: '2019 Gala',
+      note: '2019 Gala for friends and family',
+      fund: 'General 2019 Fund'
+    },
+    {
+      id: 123,
       title: '2019 Gala',
       note: '2019 Gala for friends and family',
       fund: 'General 2019 Fund'
     }
   ];
+
+  public deleteItem(index: any) {
+    this.items.splice(index, 1);
+  }
+
+  public addItem() {
+    const newItem = {
+      id: nextItemId++,
+      title: 'New record ' + nextItemId,
+      note: 'This is a new record',
+      fund: 'General 2019 Fund'
+    };
+    this.items.push(newItem);
+  }
 
   public onCollapse(): void {
     console.log('Collapsed.');

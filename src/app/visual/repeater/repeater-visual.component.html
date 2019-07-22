@@ -1,4 +1,4 @@
-<div
+<!-- <div
   class="app-screenshot sky-margin-stacked-default"
   id="screenshot-repeater"
 >
@@ -18,32 +18,42 @@
       <sky-repeater-item-content>Content 2</sky-repeater-item-content>
     </sky-repeater-item>
   </sky-repeater>
-</div>
+</div> -->
 
 <div
   class="app-screenshot sky-margin-stacked-default"
   id="screenshot-repeater-with-active-item"
 >
   <h3>Repeater with isActive enabled on click</h3>
-  <sky-repeater>
-    <sky-repeater-item
-      [isActive]="activeId === 1"
-      (click)="activeId = 1"
+  <sky-repeater
+    [activeIndex]="activeIndex"
+  >
+    <sky-repeater-item *ngFor="let item of items; let i = index"
+      (click)="activeIndex = i"
     >
-      <sky-repeater-item-title>Title 1</sky-repeater-item-title>
-      <sky-repeater-item-content>Content 1</sky-repeater-item-content>
-    </sky-repeater-item>
-    <sky-repeater-item
-      [isActive]="activeId === 2"
-      (click)="activeId = 2"
-    >
-      <sky-repeater-item-title>Title 2</sky-repeater-item-title>
-      <sky-repeater-item-content>Content 2</sky-repeater-item-content>
+      <sky-repeater-item-title>
+        {{ item.title }}
+      </sky-repeater-item-title>
+      <sky-repeater-item-content>
+        {{ item.note }}
+        <button
+          type="button"
+          (click)="deleteItem(i)"
+        >
+          Delete
+        </button>
+      </sky-repeater-item-content>
     </sky-repeater-item>
   </sky-repeater>
+  <button
+    type="button"
+    (click)="addItem()"
+  >
+    Add new item
+  </button>
 </div>
 
-<div
+<!-- <div
   class="app-screenshot sky-margin-stacked-default"
   id="screenshot-repeater-collapsed"
 >
@@ -263,4 +273,4 @@
     </sky-repeater-item>
   </sky-repeater>
 
-</div>
+</div> -->

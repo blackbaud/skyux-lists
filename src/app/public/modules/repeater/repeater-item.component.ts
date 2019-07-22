@@ -29,7 +29,9 @@ import {
   SkyRepeaterService
 } from './repeater.service';
 
-let nextId: number = 0;
+let nextContentId: number = 0;
+
+let nextItemId: number = 0;
 
 @Component({
   selector: 'sky-repeater-item',
@@ -44,9 +46,6 @@ export class SkyRepeaterItemComponent implements OnDestroy {
 
   @Input()
   public inlineFormTemplate: TemplateRef<any>;
-
-  @Input()
-  public isActive: boolean = false;
 
   @Input()
   public set isExpanded(value: boolean) {
@@ -81,7 +80,9 @@ export class SkyRepeaterItemComponent implements OnDestroy {
   @Output()
   public inlineFormClose = new EventEmitter<SkyInlineFormCloseArgs>();
 
-  public contentId: string = `sky-radio-content-${++nextId}`;
+  public active: boolean = false;
+
+  public contentId: string = `sky-radio-content-${++nextContentId}`;
 
   public set isCollapsible(value: boolean) {
     if (this.isCollapsible !== value) {
@@ -97,6 +98,8 @@ export class SkyRepeaterItemComponent implements OnDestroy {
   public get isCollapsible(): boolean {
     return this._isCollapsible;
   }
+
+  public itemId: string = `sky-repeater-item-${++nextItemId}`;
 
   public slideDirection: string;
 
@@ -118,12 +121,30 @@ export class SkyRepeaterItemComponent implements OnDestroy {
     this.collapse.complete();
     this.expand.complete();
     this.inlineFormClose.complete();
+    this.repeaterService.destroyItem(this);
   }
 
   public headerClick() {
     if (this.isCollapsible) {
       this.updateForExpanded(!this.isExpanded, true);
     }
+  }
+
+  public initializeItemIndex(): void {
+    setTimeout(() => {
+      this.repeaterService.addItem(this);
+      // TODO???
+      // this.repeaterService.activeItemIndex.subscribe((id: any) => {
+      //   if (id) {
+      //     this.active = this.itemId === id;
+      //   }
+      //   this.changeDetector.markForCheck();
+      // });
+
+      // if (this.active) {
+      //   this.repeaterService.activateItem(this);
+      // }
+    });
   }
 
   public chevronDirectionChange(direction: string) {

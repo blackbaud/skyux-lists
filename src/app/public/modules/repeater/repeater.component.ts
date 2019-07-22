@@ -3,8 +3,13 @@ import {
   Component,
   ContentChildren,
   Input,
-  QueryList
+  QueryList,
+  OnChanges,
+  OnDestroy,
+  SimpleChanges
 } from '@angular/core';
+
+import 'rxjs/add/operator/distinctUntilChanged';
 
 import {
   SkyRepeaterItemComponent
@@ -17,9 +22,14 @@ import {
 @Component({
   selector: 'sky-repeater',
   styleUrls: ['./repeater.component.scss'],
-  templateUrl: './repeater.component.html'
+  templateUrl: './repeater.component.html',
+  providers: [SkyRepeaterService]
 })
-export class SkyRepeaterComponent implements AfterContentInit {
+export class SkyRepeaterComponent implements AfterContentInit, OnChanges, OnDestroy {
+
+  @Input()
+  public activeIndex: number;
+
   @Input()
   public set expandMode(value: string) {
     this._expandMode = value;
@@ -35,7 +45,9 @@ export class SkyRepeaterComponent implements AfterContentInit {
 
   private _expandMode = 'none';
 
-  constructor(private repeaterService: SkyRepeaterService) {
+  constructor(
+    private repeaterService: SkyRepeaterService
+  ) {
     this.repeaterService.itemCollapseStateChange.subscribe((item: SkyRepeaterItemComponent) => {
       if (this.expandMode === 'single' && item.isExpanded) {
         this.items.forEach((otherItem) => {
@@ -50,6 +62,39 @@ export class SkyRepeaterComponent implements AfterContentInit {
   }
 
   public ngAfterContentInit() {
+    // initialize each item's index (in case items are instantiated out of order).
+    this.items.forEach(item => item.initializeItemIndex());
+    this.items.changes.subscribe((change: QueryList<SkyRepeaterItemComponent>) => {
+      this.repeaterService.items
+        .take(1)
+        .subscribe(currentItems => {
+          change
+            .filter(item => currentItems.indexOf(item) < 0)
+            .forEach(item => item.initializeItemIndex());
+      });
+    });
+
+      // If activeIndex has been set, call service to activate the appropriate item.
+      if (this.activeIndex || this.activeIndex === 0) {
+        this.repeaterService.activateItemByIndex(this.activeIndex);
+      }
+
+      // Watch for changes to the activeIndex and activate the appropriate item.
+      this.repeaterService.activeItemIndex
+        .distinctUntilChanged()
+        .subscribe((index) => {
+          // HACK: Not selecting the active item in a timeout causes an error.
+          // https://github.com/angular/angular/issues/6005
+          setTimeout(() => {
+            if (index !== this.activeIndex) {
+              this.activeIndex = index;
+            }
+            this.items.forEach((item, i) => {
+              item.active = i === index ? true : false;
+            });
+          });
+      });
+
     // HACK: Not updating for expand mode in a timeout causes an error.
     // https://github.com/angular/angular/issues/6005
     this.items.changes.subscribe(() => {
@@ -61,6 +106,16 @@ export class SkyRepeaterComponent implements AfterContentInit {
     setTimeout(() => {
       this.updateForExpandMode();
     }, 0);
+  }
+
+  public ngOnChanges(changes: SimpleChanges): void {
+    if (changes['activeIndex'] && changes['activeIndex'].currentValue !== changes['activeIndex'].previousValue) {
+      this.repeaterService.activateItemByIndex(this.activeIndex);
+    }
+  }
+
+  public ngOnDestroy(): void {
+    this.repeaterService.destroy();
   }
 
   private updateForExpandMode(itemAdded?: SkyRepeaterItemComponent) {
