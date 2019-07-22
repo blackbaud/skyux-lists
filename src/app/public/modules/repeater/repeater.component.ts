@@ -74,27 +74,29 @@ export class SkyRepeaterComponent implements AfterContentInit, OnChanges, OnDest
       });
     });
 
-      // If activeIndex has been set, call service to activate the appropriate item.
+    // If activeIndex has been set, call service to activate the appropriate item.
+    setTimeout(() => {
       if (this.activeIndex || this.activeIndex === 0) {
         this.repeaterService.activateItemByIndex(this.activeIndex);
       }
+    });
 
-      // Watch for changes to the activeIndex and activate the appropriate item.
-      this.repeaterService.activeItemId
-        .distinctUntilChanged()
-        .subscribe((activeItemId) => {
-          // HACK: Not selecting the active item in a timeout causes an error.
-          // https://github.com/angular/angular/issues/6005
-          setTimeout(() => {
-            const activeItem = this.items.find(item => {
-              return item.itemId === activeItemId;
-            });
-            const activeIndex = this.items.toArray().indexOf(activeItem);
-            if (activeIndex !== this.activeIndex) {
-              this.activeIndex = activeIndex;
-            }
+    // Watch for changes to the activeIndex and activate the appropriate item.
+    this.repeaterService.activeItemId
+      .distinctUntilChanged()
+      .subscribe((activeItemId) => {
+        // HACK: Not selecting the active item in a timeout causes an error.
+        // https://github.com/angular/angular/issues/6005
+        setTimeout(() => {
+          const activeItem = this.items.find(item => {
+            return item.itemId === activeItemId;
           });
-      });
+          const activeIndex = this.items.toArray().indexOf(activeItem);
+          if (activeIndex !== this.activeIndex) {
+            this.activeIndex = activeIndex;
+          }
+        });
+    });
 
     // HACK: Not updating for expand mode in a timeout causes an error.
     // https://github.com/angular/angular/issues/6005
