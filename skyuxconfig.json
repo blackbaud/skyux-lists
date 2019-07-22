@@ -1,16 +1,15 @@
 {
+  "$schema": "./node_modules/@skyux/config/skyuxconfig-schema.json",
   "name": "skyux-lists",
   "mode": "easy",
   "compileMode": "aot",
-  "skyuxModules": [
-    "SkyErrorModule"
-  ],
   "plugins": [
     "@skyux-sdk/builder-plugin-skyux"
   ],
   "app": {
     "styles": [
-      "src/app/visual-styles.scss"
+      "src/app/visual-styles.scss",
+      "@skyux/theme/css/sky.css"
     ]
   },
   "testSettings": {
