@@ -12,6 +12,10 @@ import {
 import 'rxjs/add/operator/distinctUntilChanged';
 
 import {
+  Subject
+} from 'rxjs/Subject';
+
+import {
   SkyRepeaterItemComponent
 } from './repeater-item.component';
 
@@ -43,46 +47,53 @@ export class SkyRepeaterComponent implements AfterContentInit, OnChanges, OnDest
   @ContentChildren(SkyRepeaterItemComponent)
   public items: QueryList<SkyRepeaterItemComponent>;
 
+  private ngUnsubscribe = new Subject<void>();
+
   private _expandMode = 'none';
 
   constructor(
     private repeaterService: SkyRepeaterService
   ) {
-    this.repeaterService.itemCollapseStateChange.subscribe((item: SkyRepeaterItemComponent) => {
-      if (this.expandMode === 'single' && item.isExpanded) {
-        this.items.forEach((otherItem) => {
-          if (otherItem !== item && otherItem.isExpanded) {
-            otherItem.isExpanded = false;
-          }
-        });
-      }
-    });
+    this.repeaterService.itemCollapseStateChange
+      .takeUntil(this.ngUnsubscribe)
+      .subscribe((item: SkyRepeaterItemComponent) => {
+        if (this.expandMode === 'single' && item.isExpanded) {
+          this.items.forEach((otherItem) => {
+            if (otherItem !== item && otherItem.isExpanded) {
+              otherItem.isExpanded = false;
+            }
+          });
+        }
+      });
 
     this.updateForExpandMode();
   }
 
   public ngAfterContentInit() {
-    // initialize each item's index (in case items are instantiated out of order).
-    this.items.forEach(item => item.initializeItemIndex());
-    this.items.changes.subscribe((change: QueryList<SkyRepeaterItemComponent>) => {
-      this.repeaterService.items
-        .take(1)
-        .subscribe(currentItems => {
-          change
-            .filter(item => currentItems.indexOf(item) < 0)
-            .forEach(item => item.initializeItemIndex());
+    // Initialize each item's index (in case items are instantiated out of order).
+    this.items.forEach(item => item.initializeItem());
+    this.items.changes
+      .takeUntil(this.ngUnsubscribe)
+      .subscribe((change: QueryList<SkyRepeaterItemComponent>) => {
+        this.repeaterService.items
+          .take(1)
+          .subscribe(currentItems => {
+            change
+              .filter(item => currentItems.indexOf(item) < 0)
+              .forEach(item => item.initializeItem());
+        });
       });
-    });
 
-    // If activeIndex has been set, call service to activate the appropriate item.
+    // If activeIndex has been set on init, call service to activate the appropriate item.
     setTimeout(() => {
       if (this.activeIndex || this.activeIndex === 0) {
         this.repeaterService.activateItemByIndex(this.activeIndex);
       }
     });
 
-    // Watch for changes to the activeIndex and activate the appropriate item.
+    // Watch for changes on the service's activeItemId and activate the appropriate item.
     this.repeaterService.activeItemId
+      .takeUntil(this.ngUnsubscribe)
       .distinctUntilChanged()
       .subscribe((activeItemId) => {
         // HACK: Not selecting the active item in a timeout causes an error.
@@ -100,11 +111,13 @@ export class SkyRepeaterComponent implements AfterContentInit, OnChanges, OnDest
 
     // HACK: Not updating for expand mode in a timeout causes an error.
     // https://github.com/angular/angular/issues/6005
-    this.items.changes.subscribe(() => {
-      setTimeout(() => {
-        this.updateForExpandMode(this.items.last);
-      }, 0);
-    });
+    this.items.changes
+      .takeUntil(this.ngUnsubscribe)
+      .subscribe(() => {
+        setTimeout(() => {
+          this.updateForExpandMode(this.items.last);
+        }, 0);
+      });
 
     setTimeout(() => {
       this.updateForExpandMode();
@@ -119,6 +132,9 @@ export class SkyRepeaterComponent implements AfterContentInit, OnChanges, OnDest
 
   public ngOnDestroy(): void {
     this.repeaterService.destroy();
+
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
   }
 
   private updateForExpandMode(itemAdded?: SkyRepeaterItemComponent) {
