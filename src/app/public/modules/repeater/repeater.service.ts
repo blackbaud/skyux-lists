@@ -14,7 +14,7 @@ import {
 @Injectable()
 export class SkyRepeaterService {
 
-  public activeItemIndex: BehaviorSubject<any> = new BehaviorSubject(undefined);
+  public activeItemId: BehaviorSubject<string> = new BehaviorSubject(undefined);
 
   public itemCollapseStateChange = new EventEmitter<SkyRepeaterItemComponent>();
 
@@ -24,14 +24,17 @@ export class SkyRepeaterService {
     this.items.take(1).subscribe(items => {
       const index = items.indexOf(item);
       if (index > -1) {
-        this.activeItemIndex.next(index);
+        this.activeItemId.next(item.itemId);
       }
     });
   }
 
   public activateItemByIndex(index: number): void {
-    this.items.take(1).subscribe(() => {
-      this.activeItemIndex.next(index);
+    this.items.take(1).subscribe(items => {
+      const activeItem = items[index];
+      if (activeItem) {
+        this.activeItemId.next(activeItem.itemId);
+      }
     });
   }
 
@@ -50,19 +53,18 @@ export class SkyRepeaterService {
 
   public destroyItem(item: SkyRepeaterItemComponent): void {
     this.items.take(1).subscribe((items) => {
-      const index = items.indexOf(item);
-      if (index > -1) {
+      const indexOfDestroyedItem = items.indexOf(item);
+      if (indexOfDestroyedItem > -1) {
         if (item.active) {
-          // Try selecting the next tab first.
-          // If there's no next tab, try selecting the previous one.
-          let newActiveItem = items[index + 1] || items[index - 1];
+          // Try selecting the next item first.
+          // If there's no next item, try selecting the previous one.
+          let newActiveItem = items[indexOfDestroyedItem + 1] || items[indexOfDestroyedItem - 1];
           /*istanbul ignore else */
           if (newActiveItem) {
-            const newIndex = items.indexOf(newActiveItem);
-            this.activeItemIndex.next(newIndex);
+            this.activeItemId.next(newActiveItem.itemId);
           }
         }
-        items.splice(index, 1);
+        items.splice(indexOfDestroyedItem, 1);
       }
       this.items.next(items);
     });
@@ -70,7 +72,7 @@ export class SkyRepeaterService {
 
   public destroy(): void {
     this.items.complete();
-    this.activeItemIndex.complete();
+    this.activeItemId.complete();
     this.itemCollapseStateChange.complete();
   }
 

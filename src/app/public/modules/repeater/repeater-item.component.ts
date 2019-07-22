@@ -134,16 +134,16 @@ export class SkyRepeaterItemComponent implements OnDestroy {
     setTimeout(() => {
       this.repeaterService.addItem(this);
       // TODO???
-      // this.repeaterService.activeItemIndex.subscribe((id: any) => {
-      //   if (id) {
-      //     this.active = this.itemId === id;
-      //   }
-      //   this.changeDetector.markForCheck();
-      // });
+      this.repeaterService.activeItemId.subscribe((id: string) => {
+        if (id) {
+          this.active = this.itemId === id;
+        }
+        this.changeDetector.markForCheck();
+      });
 
-      // if (this.active) {
-      //   this.repeaterService.activateItem(this);
-      // }
+      if (this.active) {
+        this.repeaterService.activateItem(this);
+      }
     });
   }
 

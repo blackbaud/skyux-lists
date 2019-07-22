@@ -80,18 +80,19 @@ export class SkyRepeaterComponent implements AfterContentInit, OnChanges, OnDest
       }
 
       // Watch for changes to the activeIndex and activate the appropriate item.
-      this.repeaterService.activeItemIndex
+      this.repeaterService.activeItemId
         .distinctUntilChanged()
-        .subscribe((index) => {
+        .subscribe((activeItemId) => {
           // HACK: Not selecting the active item in a timeout causes an error.
           // https://github.com/angular/angular/issues/6005
           setTimeout(() => {
-            if (index !== this.activeIndex) {
-              this.activeIndex = index;
-            }
-            this.items.forEach((item, i) => {
-              item.active = i === index ? true : false;
+            const activeItem = this.items.find(item => {
+              return item.itemId === activeItemId;
             });
+            const activeIndex = this.items.toArray().indexOf(activeItem);
+            if (activeIndex !== this.activeIndex) {
+              this.activeIndex = activeIndex;
+            }
           });
       });
 
