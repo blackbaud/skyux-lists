@@ -1,4 +1,4 @@
-<!-- <div
+<div
   class="app-screenshot sky-margin-stacked-default"
   id="screenshot-repeater"
 >
@@ -18,13 +18,13 @@
       <sky-repeater-item-content>Content 2</sky-repeater-item-content>
     </sky-repeater-item>
   </sky-repeater>
-</div> -->
+</div>
 
 <div
   class="app-screenshot sky-margin-stacked-default"
   id="screenshot-repeater-with-active-item"
 >
-  <h3>Repeater with activeIndex enabled on click</h3>
+  <h3>Repeater with activeIndex set on click</h3>
   <sky-repeater
     [activeIndex]="activeIndex"
   >
@@ -40,7 +40,7 @@
           type="button"
           (click)="deleteItem(i)"
         >
-          Delete
+          Delete me
         </button>
       </sky-repeater-item-content>
     </sky-repeater-item>
@@ -55,11 +55,11 @@
     type="button"
     (click)="activeIndex = undefined"
   >
-    Undefined active
+    Set activeIndex to undefined
   </button>
 </div>
 
-<!-- <div
+<div
   class="app-screenshot sky-margin-stacked-default"
   id="screenshot-repeater-collapsed"
 >
@@ -279,4 +279,4 @@
     </sky-repeater-item>
   </sky-repeater>
 
-</div> -->
+</div>

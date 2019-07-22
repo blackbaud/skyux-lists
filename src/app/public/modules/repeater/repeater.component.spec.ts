@@ -573,9 +573,9 @@ describe('Repeater item component', () => {
       fixture.detectChanges();
       tick();
 
-      const items = getItems();
       activeRepeaterItem = el.querySelectorAll('.sky-repeater-item-active');
       expect(activeRepeaterItem.length).toBe(1);
+      const items = getItems();
       expect(items[0]).toHaveCssClass('sky-repeater-item-active');
 
       cmp.activeIndex = undefined;

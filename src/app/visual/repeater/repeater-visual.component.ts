@@ -17,7 +17,7 @@ let nextItemId: number = 0;
 })
 export class RepeaterVisualComponent {
 
-  public activeIndex: number = 2;
+  public activeIndex = 0;
 
   public activeInlineFormId: number;
 
@@ -39,13 +39,12 @@ export class RepeaterVisualComponent {
       fund: 'General 2018 Fund'
     },
     {
-      id: 'abba',
+      id: 'foobar',
       title: '2018 Special event',
       note: 'Special event',
       fund: '2018 Special Events Fund'
     },
     {
-      id: 'dabba',
       title: '2019 Gala',
       note: '2019 Gala for friends and family',
       fund: 'General 2019 Fund'
@@ -73,7 +72,7 @@ export class RepeaterVisualComponent {
       id: nextItemId++,
       title: 'New record ' + nextItemId,
       note: 'This is a new record',
-      fund: 'General 2019 Fund'
+      fund: 'New fund'
     };
     this.items.push(newItem);
   }
