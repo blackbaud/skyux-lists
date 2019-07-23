@@ -75,13 +75,9 @@ export class SkyRepeaterComponent implements AfterContentInit, OnChanges, OnDest
     this.items.changes
       .takeUntil(this.ngUnsubscribe)
       .subscribe((change: QueryList<SkyRepeaterItemComponent>) => {
-        this.repeaterService.items
-          .take(1)
-          .subscribe(currentItems => {
-            change
-              .filter(item => currentItems.indexOf(item) < 0)
-              .forEach(item => item.initializeItem());
-        });
+        change
+          .filter(item => this.repeaterService.items.indexOf(item) < 0)
+          .forEach(item => item.initializeItem());
       });
 
     // If activeIndex has been set on init, call service to activate the appropriate item.

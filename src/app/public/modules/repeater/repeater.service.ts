@@ -18,49 +18,40 @@ export class SkyRepeaterService {
 
   public itemCollapseStateChange = new EventEmitter<SkyRepeaterItemComponent>();
 
-  public items: BehaviorSubject<Array<SkyRepeaterItemComponent>> = new BehaviorSubject<Array<SkyRepeaterItemComponent>>([]);
+  public items: Array<SkyRepeaterItemComponent> = new Array<SkyRepeaterItemComponent>();
 
   public activateItemByIndex(index: number): void {
     if (index === undefined) {
       this.activeItemId.next(undefined);
     } else {
-      this.items.take(1).subscribe(items => {
-        const activeItem = items[index];
+        const activeItem = this.items[index];
         if (activeItem) {
           this.activeItemId.next(activeItem.itemId);
         }
-      });
     }
   }
 
   public addItem(item: SkyRepeaterItemComponent): void {
-    this.items.take(1).subscribe((currentItems) => {
-      currentItems.push(item);
-      this.items.next(currentItems);
-    });
+    this.items.push(item);
   }
 
   public destroyItem(item: SkyRepeaterItemComponent): void {
-    this.items.take(1).subscribe((items) => {
-      const indexOfDestroyedItem = items.indexOf(item);
-      if (indexOfDestroyedItem > -1) {
-        if (item.active) {
-          // Try selecting the next item first.
-          // If there's no next item, try selecting the previous one.
-          let newActiveItem = items[indexOfDestroyedItem + 1] || items[indexOfDestroyedItem - 1];
-          /*istanbul ignore else */
-          if (newActiveItem) {
-            this.activeItemId.next(newActiveItem.itemId);
-          }
+    const indexOfDestroyedItem = this.items.indexOf(item);
+    if (indexOfDestroyedItem > -1) {
+      if (item.active) {
+        // Try selecting the next item first.
+        // If there's no next item, try selecting the previous one.
+        let newActiveItem = this.items[indexOfDestroyedItem + 1] || this.items[indexOfDestroyedItem - 1];
+        /*istanbul ignore else */
+        if (newActiveItem) {
+          this.activeItemId.next(newActiveItem.itemId);
         }
-        items.splice(indexOfDestroyedItem, 1);
       }
-      this.items.next(items);
-    });
+      this.items.splice(indexOfDestroyedItem, 1);
+    }
   }
 
   public destroy(): void {
-    this.items.complete();
     this.activeItemId.complete();
     this.itemCollapseStateChange.complete();
   }
