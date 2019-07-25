@@ -63,11 +63,25 @@ export class RepeaterVisualComponent {
     }
   ];
 
-  public deleteItem(index: any) {
+  public deleteItem(index: any): void {
     this.items.splice(index, 1);
+
+    // If active item is removed, try selecting the next item.
+    // If there's not one, try selecting the previous one.
+    if (index === this.activeIndex) {
+      this.activeIndex = undefined;
+      setTimeout(() => {
+        if (this.items[index]) {
+          this.activeIndex = index;
+        } else if (this.items[index - 1]) {
+          this.activeIndex = index - 1;
+        }
+      });
+    }
+
   }
 
-  public addItem() {
+  public addItem(): void {
     const newItem = {
       id: nextItemId++,
       title: 'New record ' + nextItemId,
@@ -90,5 +104,9 @@ export class RepeaterVisualComponent {
     this.activeInlineFormId = undefined;
 
     // Form handling would go here
+  }
+
+  public onItemClick(index: number): void {
+    this.activeIndex = index;
   }
 }

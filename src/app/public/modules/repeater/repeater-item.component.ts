@@ -36,8 +36,6 @@ import {
 
 let nextContentId: number = 0;
 
-let nextItemId: number = 0;
-
 @Component({
   selector: 'sky-repeater-item',
   styleUrls: ['./repeater-item.component.scss'],
@@ -104,8 +102,6 @@ export class SkyRepeaterItemComponent implements OnDestroy, OnInit {
     return this._isCollapsible;
   }
 
-  public itemId: string = `sky-repeater-item-${++nextItemId}`;
-
   public slideDirection: string;
 
   private ngUnsubscribe = new Subject<void>();
@@ -127,12 +123,12 @@ export class SkyRepeaterItemComponent implements OnDestroy, OnInit {
   public ngOnInit(): void {
     setTimeout(() => {
       this.repeaterService.registerItem(this);
-      this.repeaterService.activeItemId
+      this.repeaterService.activeItemChange
         .takeUntil(this.ngUnsubscribe)
-        .subscribe((id: string) => {
-          this.isActive = this.itemId === id;
+        .subscribe((item: SkyRepeaterItemComponent) => {
+          this.isActive = this === item;
           this.changeDetector.markForCheck();
-        });
+      });
     });
   }
 

@@ -11,6 +11,8 @@ import {
 
 import 'rxjs/add/operator/distinctUntilChanged';
 
+import 'rxjs/add/operator/skip';
+
 import {
   Subject
 } from 'rxjs/Subject';
@@ -75,24 +77,6 @@ export class SkyRepeaterComponent implements AfterContentInit, OnChanges, OnDest
       if (this.activeIndex || this.activeIndex === 0) {
         this.repeaterService.activateItemByIndex(this.activeIndex);
       }
-    });
-
-    // Watch for changes on the service's activeItemId and activate the appropriate item.
-    this.repeaterService.activeItemId
-      .takeUntil(this.ngUnsubscribe)
-      .distinctUntilChanged()
-      .subscribe((activeItemId) => {
-        // HACK: Not selecting the active item in a timeout causes an error.
-        // https://github.com/angular/angular/issues/6005
-        setTimeout(() => {
-          const activeItem = this.items.find(item => {
-            return item.itemId === activeItemId;
-          });
-          const activeIndex = this.items.toArray().indexOf(activeItem);
-          if (activeIndex !== this.activeIndex) {
-            this.activeIndex = activeIndex;
-          }
-        });
     });
 
     // HACK: Not updating for expand mode in a timeout causes an error.
