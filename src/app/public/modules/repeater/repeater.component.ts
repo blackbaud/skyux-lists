@@ -9,8 +9,6 @@ import {
   SimpleChanges
 } from '@angular/core';
 
-import 'rxjs/add/operator/distinctUntilChanged';
-
 import {
   Subject
 } from 'rxjs/Subject';
