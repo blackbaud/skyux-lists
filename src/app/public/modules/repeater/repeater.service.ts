@@ -1,6 +1,7 @@
 import {
   EventEmitter,
-  Injectable
+  Injectable,
+  OnDestroy
 } from '@angular/core';
 
 import {
@@ -12,13 +13,18 @@ import {
 } from './repeater-item.component';
 
 @Injectable()
-export class SkyRepeaterService {
+export class SkyRepeaterService implements OnDestroy {
 
   public activeItemId: BehaviorSubject<string> = new BehaviorSubject(undefined);
 
   public itemCollapseStateChange = new EventEmitter<SkyRepeaterItemComponent>();
 
-  public items: Array<SkyRepeaterItemComponent> = new Array<SkyRepeaterItemComponent>();
+  public items: SkyRepeaterItemComponent[] = [];
+
+  public ngOnDestroy(): void {
+    this.activeItemId.complete();
+    this.itemCollapseStateChange.complete();
+  }
 
   public activateItemByIndex(index: number): void {
     if (index === undefined) {
@@ -31,14 +37,14 @@ export class SkyRepeaterService {
     }
   }
 
-  public addItem(item: SkyRepeaterItemComponent): void {
+  public registerItem(item: SkyRepeaterItemComponent): void {
     this.items.push(item);
   }
 
-  public destroyItem(item: SkyRepeaterItemComponent): void {
+  public unregisterItem(item: SkyRepeaterItemComponent): void {
     const indexOfDestroyedItem = this.items.indexOf(item);
     if (indexOfDestroyedItem > -1) {
-      if (item.active) {
+      if (item.isActive) {
         // Try selecting the next item first.
         // If there's no next item, try selecting the previous one.
         let newActiveItem = this.items[indexOfDestroyedItem + 1] || this.items[indexOfDestroyedItem - 1];
@@ -49,11 +55,6 @@ export class SkyRepeaterService {
       }
       this.items.splice(indexOfDestroyedItem, 1);
     }
-  }
-
-  public destroy(): void {
-    this.activeItemId.complete();
-    this.itemCollapseStateChange.complete();
   }
 
   public onItemCollapseStateChange(item: SkyRepeaterItemComponent): void {

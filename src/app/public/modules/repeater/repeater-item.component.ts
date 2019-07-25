@@ -4,6 +4,7 @@ import {
   EventEmitter,
   Input,
   OnDestroy,
+  OnInit,
   Output,
   TemplateRef
 } from '@angular/core';
@@ -43,7 +44,7 @@ let nextItemId: number = 0;
   templateUrl: './repeater-item.component.html',
   animations: [skyAnimationSlide]
 })
-export class SkyRepeaterItemComponent implements OnDestroy {
+export class SkyRepeaterItemComponent implements OnDestroy, OnInit {
 
   @Input()
   public inlineFormConfig: SkyInlineFormConfig;
@@ -84,9 +85,9 @@ export class SkyRepeaterItemComponent implements OnDestroy {
   @Output()
   public inlineFormClose = new EventEmitter<SkyInlineFormCloseArgs>();
 
-  public active: boolean = false;
-
   public contentId: string = `sky-radio-content-${++nextContentId}`;
+
+  public isActive: boolean = false;
 
   public set isCollapsible(value: boolean) {
     if (this.isCollapsible !== value) {
@@ -123,6 +124,18 @@ export class SkyRepeaterItemComponent implements OnDestroy {
     this.slideForExpanded(false);
   }
 
+  public ngOnInit(): void {
+    setTimeout(() => {
+      this.repeaterService.registerItem(this);
+      this.repeaterService.activeItemId
+        .takeUntil(this.ngUnsubscribe)
+        .subscribe((id: string) => {
+          this.isActive = this.itemId === id;
+          this.changeDetector.markForCheck();
+        });
+    });
+  }
+
   public ngOnDestroy(): void {
     this.collapse.complete();
     this.expand.complete();
@@ -131,25 +144,13 @@ export class SkyRepeaterItemComponent implements OnDestroy {
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
 
-    this.repeaterService.destroyItem(this);
+    this.repeaterService.unregisterItem(this);
   }
 
   public headerClick(): void {
     if (this.isCollapsible) {
       this.updateForExpanded(!this.isExpanded, true);
     }
-  }
-
-  public initializeItem(): void {
-    setTimeout(() => {
-      this.repeaterService.addItem(this);
-      this.repeaterService.activeItemId
-        .takeUntil(this.ngUnsubscribe)
-        .subscribe((id: string) => {
-          this.active = this.itemId === id;
-          this.changeDetector.markForCheck();
-        });
-    });
   }
 
   public chevronDirectionChange(direction: string): void {

@@ -70,16 +70,6 @@ export class SkyRepeaterComponent implements AfterContentInit, OnChanges, OnDest
   }
 
   public ngAfterContentInit() {
-    // Initialize each item's index (in case items are instantiated out of order).
-    this.items.forEach(item => item.initializeItem());
-    this.items.changes
-      .takeUntil(this.ngUnsubscribe)
-      .subscribe((change: QueryList<SkyRepeaterItemComponent>) => {
-        change
-          .filter(item => this.repeaterService.items.indexOf(item) < 0)
-          .forEach(item => item.initializeItem());
-      });
-
     // If activeIndex has been set on init, call service to activate the appropriate item.
     setTimeout(() => {
       if (this.activeIndex || this.activeIndex === 0) {
@@ -127,8 +117,6 @@ export class SkyRepeaterComponent implements AfterContentInit, OnChanges, OnDest
   }
 
   public ngOnDestroy(): void {
-    this.repeaterService.destroy();
-
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
   }
