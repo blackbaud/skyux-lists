@@ -11,8 +11,6 @@ import {
 
 import 'rxjs/add/operator/distinctUntilChanged';
 
-import 'rxjs/add/operator/skip';
-
 import {
   Subject
 } from 'rxjs/Subject';
