@@ -4,21 +4,21 @@ import {
 } from '@skyux-sdk/e2e';
 
 describe('Repeater', () => {
-  it('should match the baseline sort screenshot', (done) => {
-    SkyHostBrowser.get('visual/sort');
-    SkyHostBrowser.setWindowBreakpoint('lg');
-    SkyHostBrowser.scrollTo('#screenshot-sort-full');
-    expect('#screenshot-sort-full').toMatchBaselineScreenshot(done, {
-      screenshotName: 'sort'
-    });
-  });
-
   it('should match previous repeater screenshot', (done) => {
     SkyHostBrowser.get('visual/repeater');
     SkyHostBrowser.setWindowBreakpoint('lg');
     SkyHostBrowser.scrollTo('#screenshot-repeater');
     expect('#screenshot-repeater').toMatchBaselineScreenshot(done, {
       screenshotName: 'repeater'
+    });
+  });
+
+  it('should match previous repeater screenshot when an item is active', (done) => {
+    SkyHostBrowser.get('visual/repeater');
+    SkyHostBrowser.setWindowBreakpoint('lg');
+    SkyHostBrowser.scrollTo('#screenshot-repeater-with-active-item');
+    expect('#screenshot-repeater-with-active-item').toMatchBaselineScreenshot(done, {
+      screenshotName: 'repeater-with-active-item'
     });
   });
 
