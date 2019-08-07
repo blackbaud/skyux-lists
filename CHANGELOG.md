@@ -1,6 +1,6 @@
 # 3.4.1 (2019-08-07)
 
-- Fixed the repeater item component to properly align selction checkboxes and context menus. [#55](https://github.com/blackbaud/skyux-lists/pull/55)
+- Fixed the repeater item component to properly align selection checkboxes and context menus. [#55](https://github.com/blackbaud/skyux-lists/pull/55)
 - Fixed the repeater item component to not show the collapse chevron when then the item cannot collapse. [#56](https://github.com/blackbaud/skyux-lists/pull/56)
 
 # 3.4.0 (2019-07-26)
