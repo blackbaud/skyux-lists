@@ -1,12 +1,14 @@
 import {
   ChangeDetectorRef,
   Component,
+  ElementRef,
   EventEmitter,
   Input,
   OnDestroy,
   OnInit,
   Output,
-  TemplateRef
+  TemplateRef,
+  ViewChild
 } from '@angular/core';
 
 import {
@@ -33,6 +35,10 @@ import {
 import {
   SkyRepeaterService
 } from './repeater.service';
+
+import {
+  SkyRepeaterAdapterService
+} from './repeater-adapter.service';
 
 let nextContentId: number = 0;
 
@@ -72,6 +78,9 @@ export class SkyRepeaterItemComponent implements OnDestroy, OnInit {
   public selectable: boolean = false;
 
   @Input()
+  public draggable: boolean = false;
+
+  @Input()
   public showInlineForm: boolean = false;
 
   @Output()
@@ -83,9 +92,12 @@ export class SkyRepeaterItemComponent implements OnDestroy, OnInit {
   @Output()
   public inlineFormClose = new EventEmitter<SkyInlineFormCloseArgs>();
 
-  public contentId: string = `sky-radio-content-${++nextContentId}`;
+  public contentId: string = `sky-repeater-item-content-${++nextContentId}`;
 
   public isActive: boolean = false;
+
+  @ViewChild('grabHandle', { read: ElementRef })
+  private grabHandle: ElementRef;
 
   public set isCollapsible(value: boolean) {
     if (this.isCollapsible !== value) {
@@ -105,6 +117,7 @@ export class SkyRepeaterItemComponent implements OnDestroy, OnInit {
   }
 
   public slideDirection: string;
+  public keyboardDraggingEnabled: boolean = false;
 
   private ngUnsubscribe = new Subject<void>();
 
@@ -117,7 +130,9 @@ export class SkyRepeaterItemComponent implements OnDestroy, OnInit {
   constructor(
     private repeaterService: SkyRepeaterService,
     private changeDetector: ChangeDetectorRef,
-    private logService: SkyLogService
+    private logService: SkyLogService,
+    private adapterService: SkyRepeaterAdapterService,
+    private elementRef: ElementRef
   ) {
     this.slideForExpanded(false);
   }
@@ -130,7 +145,7 @@ export class SkyRepeaterItemComponent implements OnDestroy, OnInit {
         .subscribe((item: SkyRepeaterItemComponent) => {
           this.isActive = this === item;
           this.changeDetector.markForCheck();
-      });
+        });
     });
   }
 
@@ -143,6 +158,7 @@ export class SkyRepeaterItemComponent implements OnDestroy, OnInit {
     this.ngUnsubscribe.complete();
 
     this.repeaterService.unregisterItem(this);
+    console.log('hit');
   }
 
   public headerClick(): void {
@@ -182,6 +198,36 @@ export class SkyRepeaterItemComponent implements OnDestroy, OnInit {
 
   public onInlineFormClose(inlineFormCloseArgs: SkyInlineFormCloseArgs): void {
     this.inlineFormClose.emit(inlineFormCloseArgs);
+  }
+
+  public moveToTop(event: Event): void {
+    event.stopPropagation();
+    this.adapterService.moveItemUp(this.elementRef, true);
+  }
+
+  public handleKeyboardEvent(event: KeyboardEvent): void {
+    let key = event.key.toLowerCase();
+    if (key === ' ') {
+      this.keyboardDraggingEnabled = !this.keyboardDraggingEnabled;
+      event.stopPropagation();
+    } else {
+      if (this.keyboardDraggingEnabled && key.startsWith('arrow')) {
+        let direction = event.key.toLowerCase().replace('arrow', '');
+        if (direction === 'up') {
+          this.adapterService.moveItemUp(this.elementRef);
+          this.grabHandle.nativeElement.focus();
+          this.keyboardDraggingEnabled = true;
+        } else if (direction === 'down') {
+          this.adapterService.moveItemDown(this.elementRef);
+          this.grabHandle.nativeElement.focus();
+          this.keyboardDraggingEnabled = true;
+        }
+      }
+    }
+  }
+
+  public handleBlurEvent(event: any): void {
+    this.keyboardDraggingEnabled = false;
   }
 
   private slideForExpanded(animate: boolean): void {
