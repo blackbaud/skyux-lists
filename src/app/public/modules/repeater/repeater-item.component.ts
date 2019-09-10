@@ -24,6 +24,10 @@ import {
 } from '@skyux/forms';
 
 import {
+  SkyLibResourcesService
+} from '@skyux/i18n';
+
+import {
   SkyInlineFormCloseArgs,
   SkyInlineFormConfig
 } from '@skyux/inline-form';
@@ -118,7 +122,9 @@ export class SkyRepeaterItemComponent implements OnDestroy, OnInit {
 
   public slideDirection: string;
   public keyboardDraggingEnabled: boolean = false;
+  public reorderState: string;
 
+  private reorderStateDescription: string;
   private ngUnsubscribe = new Subject<void>();
 
   private _isCollapsible = true;
@@ -132,9 +138,14 @@ export class SkyRepeaterItemComponent implements OnDestroy, OnInit {
     private changeDetector: ChangeDetectorRef,
     private logService: SkyLogService,
     private adapterService: SkyRepeaterAdapterService,
-    private elementRef: ElementRef
+    private elementRef: ElementRef,
+    private resourceService: SkyLibResourcesService
   ) {
     this.slideForExpanded(false);
+
+    this.resourceService.getString('skyux_repeater_item_reorder_instructions').subscribe(reorderString => {
+      this.reorderStateDescription = reorderString;
+    });
   }
 
   public ngOnInit(): void {
@@ -209,25 +220,38 @@ export class SkyRepeaterItemComponent implements OnDestroy, OnInit {
     let key = event.key.toLowerCase();
     if (key === ' ') {
       this.keyboardDraggingEnabled = !this.keyboardDraggingEnabled;
-      event.stopPropagation();
-    } else {
-      if (this.keyboardDraggingEnabled && key.startsWith('arrow')) {
-        let direction = event.key.toLowerCase().replace('arrow', '');
-        if (direction === 'up') {
-          this.adapterService.moveItemUp(this.elementRef);
-          this.grabHandle.nativeElement.focus();
-          this.keyboardDraggingEnabled = true;
-        } else if (direction === 'down') {
-          this.adapterService.moveItemDown(this.elementRef);
-          this.grabHandle.nativeElement.focus();
-          this.keyboardDraggingEnabled = true;
-        }
+
+      if (this.keyboardDraggingEnabled) {
+        this.reorderState = this.reorderStateDescription;
+      } else {
+        this.reorderState = undefined;
       }
+
+      event.stopPropagation();
+    } else if (key === 'esc') {
+      this.keyboardDraggingEnabled = false;
+      this.reorderState = undefined;
+
+      event.stopPropagation();
+    } else if (this.keyboardDraggingEnabled && key.startsWith('arrow')) {
+      let direction = event.key.toLowerCase().replace('arrow', '');
+      if (direction === 'up') {
+        this.adapterService.moveItemUp(this.elementRef);
+        this.grabHandle.nativeElement.focus();
+        this.keyboardDraggingEnabled = true;
+      } else if (direction === 'down') {
+        this.adapterService.moveItemDown(this.elementRef);
+        this.grabHandle.nativeElement.focus();
+        this.keyboardDraggingEnabled = true;
+      }
+
+      event.stopPropagation();
     }
   }
 
   public handleBlurEvent(event: any): void {
     this.keyboardDraggingEnabled = false;
+    this.reorderState = undefined;
   }
 
   private slideForExpanded(animate: boolean): void {
