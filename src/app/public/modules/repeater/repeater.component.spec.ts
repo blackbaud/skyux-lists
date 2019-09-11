@@ -8,7 +8,8 @@ import {
 } from '@angular/core/testing';
 
 import {
-  expect
+  expect,
+  SkyAppTestUtility
 } from '@skyux-sdk/testing';
 
 import {
@@ -659,6 +660,103 @@ describe('Repeater item component', () => {
 
         expect(component.inlineFormCloseArgs).not.toBeUndefined();
         expect(component.inlineFormCloseArgs.reason).toBe('done');
+      });
+    }));
+  });
+
+  describe('with draggability', () => {
+    let fixture: ComponentFixture<RepeaterTestComponent>;
+    let cmp: RepeaterTestComponent;
+    let el: any;
+
+    beforeEach(() => {
+      fixture = TestBed.createComponent(RepeaterTestComponent);
+      cmp = fixture.componentInstance;
+      el = fixture.nativeElement;
+      fixture.detectChanges();
+      cmp.draggable = true;
+    });
+
+    it('should move an item to the top via the "Top" button', fakeAsync(() => {
+      fixture.detectChanges();
+      tick();
+      fixture.detectChanges();
+      let items = el.querySelectorAll('sky-repeater-item');
+      const itemToTest = items[1];
+      el.querySelectorAll('.sky-repeater-item-reorder-top')[1].click();
+      fixture.detectChanges();
+      tick();
+      fixture.detectChanges();
+
+      expect(el.querySelectorAll('sky-repeater-item')[0]).toBe(itemToTest);
+    }));
+
+    it('should not move the top item via the "Top" button', fakeAsync(() => {
+      fixture.detectChanges();
+      tick();
+      fixture.detectChanges();
+      let items = el.querySelectorAll('sky-repeater-item');
+      const itemToTest = items[0];
+      el.querySelectorAll('.sky-repeater-item-reorder-top')[0].click();
+      fixture.detectChanges();
+      tick();
+      fixture.detectChanges();
+
+      expect(el.querySelectorAll('sky-repeater-item')[0]).toBe(itemToTest);
+    }));
+
+    it('should move an item up via keyboard controls', fakeAsync(() => {
+      fixture.detectChanges();
+      tick();
+      fixture.detectChanges();
+      let items = el.querySelectorAll('sky-repeater-item');
+      const itemToTest = items[1];
+      const itemDragHandle = el.querySelectorAll('.sky-repeater-item-grab-handle')[1];
+      SkyAppTestUtility.fireDomEvent(itemDragHandle, 'keydown', { keyboardEventInit: { key: ' '}});
+      fixture.detectChanges();
+      SkyAppTestUtility.fireDomEvent(itemDragHandle, 'keydown', { keyboardEventInit: { key: 'arrowUp'}});
+      fixture.detectChanges();
+      SkyAppTestUtility.fireDomEvent(itemDragHandle, 'keydown', { keyboardEventInit: { key: ' '}});
+      fixture.detectChanges();
+      expect(el.querySelectorAll('sky-repeater-item')[0]).toBe(itemToTest);
+    }));
+
+    it('should move an item down via keyboard controls', fakeAsync(() => {
+      fixture.detectChanges();
+      tick();
+      fixture.detectChanges();
+      let items = el.querySelectorAll('sky-repeater-item');
+      const itemToTest = items[1];
+      const itemDragHandle = el.querySelectorAll('.sky-repeater-item-grab-handle')[1];
+      SkyAppTestUtility.fireDomEvent(itemDragHandle, 'keydown', { keyboardEventInit: { key: ' '}});
+      fixture.detectChanges();
+      SkyAppTestUtility.fireDomEvent(itemDragHandle, 'keydown', { keyboardEventInit: { key: 'arrowDown'}});
+      fixture.detectChanges();
+      SkyAppTestUtility.fireDomEvent(itemDragHandle, 'keydown', { keyboardEventInit: { key: ' '}});
+      fixture.detectChanges();
+      expect(el.querySelectorAll('sky-repeater-item')[2]).toBe(itemToTest);
+    }));
+
+    it('should not move an item down via keyboard controls if it is the last item', fakeAsync(() => {
+      fixture.detectChanges();
+      tick();
+      fixture.detectChanges();
+      let items = el.querySelectorAll('sky-repeater-item');
+      const itemToTest = items[2];
+      const itemDragHandle = el.querySelectorAll('.sky-repeater-item-grab-handle')[2];
+      SkyAppTestUtility.fireDomEvent(itemDragHandle, 'keydown', { keyboardEventInit: { key: ' '}});
+      fixture.detectChanges();
+      SkyAppTestUtility.fireDomEvent(itemDragHandle, 'keydown', { keyboardEventInit: { key: 'arrowDown'}});
+      fixture.detectChanges();
+      SkyAppTestUtility.fireDomEvent(itemDragHandle, 'keydown', { keyboardEventInit: { key: ' '}});
+      fixture.detectChanges();
+      expect(el.querySelectorAll('sky-repeater-item')[2]).toBe(itemToTest);
+    }));
+
+    it('should be accessible', async(() => {
+      fixture.detectChanges();
+      fixture.whenStable().then(() => {
+        expect(fixture.nativeElement).toBeAccessible();
       });
     }));
   });

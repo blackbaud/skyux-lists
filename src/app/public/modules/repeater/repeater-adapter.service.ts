@@ -28,7 +28,7 @@ export class SkyRepeaterAdapterService {
     this.moveItem(elementRef, newIndex);
   }
 
-  public moveItemDown(elementRef: ElementRef, bottom = false): void {
+  public moveItemDown(elementRef: ElementRef): void {
     const itemArray = Array.from(this.host.nativeElement.querySelectorAll('sky-repeater-item'));
     const index = itemArray.indexOf(elementRef.nativeElement);
 
@@ -37,10 +37,6 @@ export class SkyRepeaterAdapterService {
     }
 
     let newIndex = index + 1;
-
-    if (bottom) {
-      newIndex = itemArray.length - 1;
-    }
 
     this.moveItem(elementRef, newIndex);
   }

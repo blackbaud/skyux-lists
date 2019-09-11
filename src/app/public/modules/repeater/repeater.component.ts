@@ -174,10 +174,6 @@ export class SkyRepeaterComponent implements AfterContentInit, OnChanges, OnDest
       source.classList.remove('sky-repeater-item-dragging')
     );
 
-    this.dragulaService.drop.subscribe(([, , container]: Array<HTMLElement>) => {
-      console.log('drop');
-    });
-
     this.dragulaService.setOptions('sky-repeater', {
       moves: (el: HTMLElement, container: HTMLElement, handle: HTMLElement) => {
         const target = el.querySelector('.sky-repeater-item-grab-handle');

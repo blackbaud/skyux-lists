@@ -169,7 +169,6 @@ export class SkyRepeaterItemComponent implements OnDestroy, OnInit {
     this.ngUnsubscribe.complete();
 
     this.repeaterService.unregisterItem(this);
-    console.log('hit');
   }
 
   public headerClick(): void {

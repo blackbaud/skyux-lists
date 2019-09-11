@@ -32,21 +32,15 @@
   <div class="sky-repeater-item-left">
     <ng-container *ngIf="draggable">
       <span
-        class="sky-repeater-item-reorder-assistive-text"
-        id="reorder-operation"
-      >
-        {{'skyux_repeater_item_reorder_operation' | skyLibResources}}
-      </span>
-      <span
         aria-live="assertive"
         class="sky-repeater-item-reorder-assistive-text"
-        id="reorder-state"
+        [id]="contentId + '-reorder-state'"
       >
         {{reorderState}}
       </span>
       <button
-        aria-describedby="reorder-operation"
         class="sky-btn sky-tile-tools-control sky-repeater-item-grab-handle"
+        [attr.aria-label]="'skyux_repeater_item_reorder_operation' | skyLibResources"
         (blur)="handleBlurEvent($event)"
         (click)="$event.stopPropagation()"
         (keydown)="handleKeyboardEvent($event)"
@@ -86,7 +80,7 @@
         <ng-content select="sky-repeater-item-title"></ng-content>
       </div>
       <button *ngIf="draggable"
-        class="sky-btn sky-btn-link"
+        class="sky-btn sky-btn-link sky-repeater-item-reorder-top"
         [attr.aria-label]="'skyux_repeater_item_reorder_top' | skyLibResources"
         (click)="moveToTop($event)"
       >
