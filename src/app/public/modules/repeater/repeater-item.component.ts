@@ -125,6 +125,7 @@ export class SkyRepeaterItemComponent implements OnDestroy, OnInit {
   public reorderState: string;
 
   private reorderStateDescription: string;
+  private reorderSteps: number;
   private ngUnsubscribe = new Subject<void>();
 
   private _isCollapsible = true;
@@ -219,6 +220,7 @@ export class SkyRepeaterItemComponent implements OnDestroy, OnInit {
     let key = event.key.toLowerCase();
     if (key === ' ') {
       this.keyboardDraggingEnabled = !this.keyboardDraggingEnabled;
+      this.reorderSteps = 0;
 
       if (this.keyboardDraggingEnabled) {
         this.reorderState = this.reorderStateDescription;
@@ -231,15 +233,23 @@ export class SkyRepeaterItemComponent implements OnDestroy, OnInit {
       this.keyboardDraggingEnabled = false;
       this.reorderState = undefined;
 
+      if (this.reorderSteps < 0) {
+        this.adapterService.moveItemDown(this.elementRef, Math.abs(this.reorderSteps));
+      } else if (this.reorderSteps > 0) {
+        this.adapterService.moveItemUp(this.elementRef, false, this.reorderSteps);
+      }
+
       event.stopPropagation();
     } else if (this.keyboardDraggingEnabled && key.startsWith('arrow')) {
       let direction = event.key.toLowerCase().replace('arrow', '');
       if (direction === 'up') {
         this.adapterService.moveItemUp(this.elementRef);
+        this.reorderSteps--;
         this.grabHandle.nativeElement.focus();
         this.keyboardDraggingEnabled = true;
       } else if (direction === 'down') {
         this.adapterService.moveItemDown(this.elementRef);
+        this.reorderSteps++;
         this.grabHandle.nativeElement.focus();
         this.keyboardDraggingEnabled = true;
       }

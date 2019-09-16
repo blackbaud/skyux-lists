@@ -3,15 +3,21 @@ import {
   Injectable
 } from '@angular/core';
 
+import {
+  SkyRepeaterService
+} from './repeater.service';
+
 @Injectable()
 export class SkyRepeaterAdapterService {
   private host: ElementRef;
+
+  constructor(private repeaterService: SkyRepeaterService) {}
 
   public setRepeaterHost(hostRef: ElementRef): void {
     this.host = hostRef;
   }
 
-  public moveItemUp(elementRef: ElementRef, top = false): void {
+  public moveItemUp(elementRef: ElementRef, top = false, steps = 1): void {
     const itemArray = Array.from(this.host.nativeElement.querySelectorAll('sky-repeater-item'));
     const index = itemArray.indexOf(elementRef.nativeElement);
 
@@ -19,34 +25,35 @@ export class SkyRepeaterAdapterService {
       return;
     }
 
-    let newIndex = index - 1;
+    let newIndex = index - steps;
 
-    if (top) {
+    if (top || newIndex < 0) {
       newIndex = 0;
     }
 
-    this.moveItem(elementRef, newIndex);
+    this.moveItem(elementRef, index, newIndex);
   }
 
-  public moveItemDown(elementRef: ElementRef): void {
+  public moveItemDown(elementRef: ElementRef, steps = 1): void {
     const itemArray = Array.from(this.host.nativeElement.querySelectorAll('sky-repeater-item'));
     const index = itemArray.indexOf(elementRef.nativeElement);
 
-    if (index === itemArray.length - 1) {
+    if (index === itemArray.length - steps) {
       return;
     }
 
-    let newIndex = index + 1;
+    let newIndex = index + steps;
 
-    this.moveItem(elementRef, newIndex);
+    this.moveItem(elementRef, index, newIndex);
   }
 
-  private moveItem(itemRef: ElementRef, newIndex: number): void {
+  private moveItem(itemRef: ElementRef, oldIndex: number, newIndex: number): void {
     const repeaterDiv: HTMLElement = this.host.nativeElement.querySelector('.sky-repeater');
 
     repeaterDiv.removeChild(itemRef.nativeElement);
     const nextSibling = repeaterDiv.querySelectorAll('sky-repeater-item')[newIndex];
 
     repeaterDiv.insertBefore(itemRef.nativeElement, nextSibling);
+    this.repeaterService.reorderItem(oldIndex, newIndex);
   }
 }
