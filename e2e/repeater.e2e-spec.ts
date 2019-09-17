@@ -84,4 +84,13 @@ describe('Repeater', () => {
       screenshotName: 'repeater-selectable-and-context'
     });
   });
+
+  it('should match previous repeater screenshot when draggable', (done) => {
+    SkyHostBrowser.get('visual/repeater');
+    SkyHostBrowser.setWindowBreakpoint('lg');
+    SkyHostBrowser.scrollTo('#screenshot-repeater-draggable');
+    expect('#screenshot-repeater-draggable').toMatchBaselineScreenshot(done, {
+      screenshotName: 'repeater-draggable'
+    });
+  });
 });
