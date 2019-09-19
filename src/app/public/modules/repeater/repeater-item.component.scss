@@ -34,7 +34,6 @@
   display: flex;
   padding-top: $sky-padding;
   align-items: center;
-  max-height: 45px;
 
   ::ng-deep sky-checkbox {
     display: flex;
@@ -110,7 +109,7 @@
   cursor: -webkit-grab;
   cursor: -moz-grab;
   padding: 0;
-  margin-right: 10px;
+  margin-right: $sky-margin;
 }
 
 :host(.sky-repeater-item-dragging) {

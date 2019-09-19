@@ -124,9 +124,9 @@ export class SkyRepeaterItemComponent implements OnDestroy, OnInit {
   public keyboardDraggingEnabled: boolean = false;
   public reorderState: string;
 
+  private ngUnsubscribe = new Subject<void>();
   private reorderStateDescription: string;
   private reorderSteps: number;
-  private ngUnsubscribe = new Subject<void>();
 
   private _isCollapsible = true;
 
@@ -229,7 +229,7 @@ export class SkyRepeaterItemComponent implements OnDestroy, OnInit {
       }
 
       event.stopPropagation();
-    } else if (key === 'esc') {
+    } else if (key === 'escape') {
       this.keyboardDraggingEnabled = false;
       this.reorderState = undefined;
 
@@ -255,6 +255,7 @@ export class SkyRepeaterItemComponent implements OnDestroy, OnInit {
       }
 
       event.stopPropagation();
+      event.preventDefault();
     }
   }
 
