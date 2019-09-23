@@ -33,11 +33,11 @@
   },
   "skyux_repeater_item_reorder_instructions": {
     "_description": "Accessible operation instructions for reordering a repeater item",
-    "message": "Item grabbed. Press up and down arrow keys to change position, spacebar to drop, escape key to cancel."
+    "message": "Item grabbed. Press up and down arrow keys to change position, spacebar or enter to drop, escape key to cancel."
   },
   "skyux_repeater_item_reorder_operation": {
     "_description": "Accessible operation instructions for triggering reordering a repeater item",
-    "message": "Press spacebar to reorder"
+    "message": "Press spacebar or enter to reorder"
   },
   "skyux_repeater_item_reorder_top": {
     "_description": "Accessible label for button to reorder a repeart item to the top of the list",

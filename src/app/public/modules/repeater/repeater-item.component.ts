@@ -43,6 +43,7 @@ import {
 import {
   SkyRepeaterAdapterService
 } from './repeater-adapter.service';
+import { Observable } from 'rxjs';
 
 let nextContentId: number = 0;
 
@@ -122,9 +123,11 @@ export class SkyRepeaterItemComponent implements OnDestroy, OnInit {
 
   public slideDirection: string;
   public keyboardDraggingEnabled: boolean = false;
+  public reorderButtonLabel: string;
   public reorderState: string;
 
   private ngUnsubscribe = new Subject<void>();
+  private reorderInstructions: string;
   private reorderStateDescription: string;
   private reorderSteps: number;
 
@@ -144,8 +147,14 @@ export class SkyRepeaterItemComponent implements OnDestroy, OnInit {
   ) {
     this.slideForExpanded(false);
 
-    this.resourceService.getString('skyux_repeater_item_reorder_instructions').subscribe(reorderString => {
-      this.reorderStateDescription = reorderString;
+    // tslint:disable-next-line: deprecation
+    Observable.forkJoin(this.resourceService.getString('skyux_repeater_item_reorder_instructions'),
+    this.resourceService.getString('skyux_repeater_item_reorder_operation'))
+    .subscribe((translatedStrings: string[]) => {
+      this.reorderStateDescription = translatedStrings[0];
+      this.reorderInstructions = translatedStrings[1];
+
+      this.reorderButtonLabel = this.reorderInstructions;
     });
   }
 
@@ -218,7 +227,7 @@ export class SkyRepeaterItemComponent implements OnDestroy, OnInit {
 
   public handleKeyboardEvent(event: KeyboardEvent): void {
     let key = event.key.toLowerCase();
-    if (key === ' ') {
+    if (key === ' ' || key === 'enter') {
       this.keyboardDraggingEnabled = !this.keyboardDraggingEnabled;
       this.reorderSteps = 0;
 
@@ -232,6 +241,7 @@ export class SkyRepeaterItemComponent implements OnDestroy, OnInit {
     } else if (key === 'escape') {
       this.keyboardDraggingEnabled = false;
       this.reorderState = undefined;
+      this.reorderButtonLabel = this.reorderInstructions;
 
       if (this.reorderSteps < 0) {
         this.adapterService.moveItemDown(this.elementRef, Math.abs(this.reorderSteps));
@@ -243,15 +253,17 @@ export class SkyRepeaterItemComponent implements OnDestroy, OnInit {
     } else if (this.keyboardDraggingEnabled && key.startsWith('arrow')) {
       let direction = event.key.toLowerCase().replace('arrow', '');
       if (direction === 'up') {
-        this.adapterService.moveItemUp(this.elementRef);
+        let newIndex = this.adapterService.moveItemUp(this.elementRef);
         this.reorderSteps--;
         this.grabHandle.nativeElement.focus();
         this.keyboardDraggingEnabled = true;
+        this.reorderButtonLabel = 'Moved item to position ' + (newIndex + 1);
       } else if (direction === 'down') {
-        this.adapterService.moveItemDown(this.elementRef);
+        let newIndex = this.adapterService.moveItemDown(this.elementRef);
         this.reorderSteps++;
         this.grabHandle.nativeElement.focus();
         this.keyboardDraggingEnabled = true;
+        this.reorderButtonLabel = 'Moved item to position ' + (newIndex + 1);
       }
 
       event.stopPropagation();
@@ -261,6 +273,13 @@ export class SkyRepeaterItemComponent implements OnDestroy, OnInit {
 
   public handleBlurEvent(event: any): void {
     this.keyboardDraggingEnabled = false;
+
+    if (this.reorderSteps < 0) {
+      this.adapterService.moveItemDown(this.elementRef, Math.abs(this.reorderSteps));
+    } else if (this.reorderSteps > 0) {
+      this.adapterService.moveItemUp(this.elementRef, false, this.reorderSteps);
+    }
+    this.reorderButtonLabel = this.reorderInstructions;
     this.reorderState = undefined;
   }
 

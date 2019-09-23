@@ -40,7 +40,7 @@
       </span>
       <button
         class="sky-btn sky-tile-tools-control sky-repeater-item-grab-handle"
-        [attr.aria-label]="'skyux_repeater_item_reorder_operation' | skyLibResources"
+        [attr.aria-label]="reorderButtonLabel"
         (blur)="handleBlurEvent($event)"
         (click)="$event.stopPropagation()"
         (keydown)="handleKeyboardEvent($event)"
