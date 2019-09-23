@@ -128,6 +128,7 @@ export class SkyRepeaterItemComponent implements OnDestroy, OnInit {
 
   private ngUnsubscribe = new Subject<void>();
   private reorderInstructions: string;
+  private reorderMovedText: string;
   private reorderStateDescription: string;
   private reorderSteps: number;
 
@@ -148,11 +149,15 @@ export class SkyRepeaterItemComponent implements OnDestroy, OnInit {
     this.slideForExpanded(false);
 
     // tslint:disable-next-line: deprecation
-    Observable.forkJoin(this.resourceService.getString('skyux_repeater_item_reorder_instructions'),
-    this.resourceService.getString('skyux_repeater_item_reorder_operation'))
+    Observable.forkJoin(
+      this.resourceService.getString('skyux_repeater_item_reorder_instructions'),
+      this.resourceService.getString('skyux_repeater_item_reorder_operation'),
+      this.resourceService.getString('skyux_repeater_item_reorder_moved')
+    )
     .subscribe((translatedStrings: string[]) => {
       this.reorderStateDescription = translatedStrings[0];
       this.reorderInstructions = translatedStrings[1];
+      this.reorderMovedText = translatedStrings[2];
 
       this.reorderButtonLabel = this.reorderInstructions;
     });
@@ -257,13 +262,13 @@ export class SkyRepeaterItemComponent implements OnDestroy, OnInit {
         this.reorderSteps--;
         this.grabHandle.nativeElement.focus();
         this.keyboardDraggingEnabled = true;
-        this.reorderButtonLabel = 'Moved item to position ' + (newIndex + 1);
+        this.reorderButtonLabel = this.reorderMovedText + ' ' + (newIndex + 1);
       } else if (direction === 'down') {
         let newIndex = this.adapterService.moveItemDown(this.elementRef);
         this.reorderSteps++;
         this.grabHandle.nativeElement.focus();
         this.keyboardDraggingEnabled = true;
-        this.reorderButtonLabel = 'Moved item to position ' + (newIndex + 1);
+        this.reorderButtonLabel = this.reorderMovedText + ' ' + (newIndex + 1);
       }
 
       event.stopPropagation();
