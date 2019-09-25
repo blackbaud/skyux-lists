@@ -33,8 +33,11 @@ import {
 } from '@skyux/inline-form';
 
 import {
+  Observable,
   Subject
-} from 'rxjs/Subject';
+} from 'rxjs';
+
+import 'rxjs/add/observable/forkJoin';
 
 import {
   SkyRepeaterService
@@ -43,7 +46,6 @@ import {
 import {
   SkyRepeaterAdapterService
 } from './repeater-adapter.service';
-import { Observable } from 'rxjs';
 
 let nextContentId: number = 0;
 
