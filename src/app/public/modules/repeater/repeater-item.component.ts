@@ -230,6 +230,7 @@ export class SkyRepeaterItemComponent implements OnDestroy, OnInit {
   public moveToTop(event: Event): void {
     event.stopPropagation();
     this.adapterService.moveItemUp(this.elementRef, true);
+    (<HTMLElement> event.target).focus();
   }
 
   public handleKeyboardEvent(event: KeyboardEvent): void {
