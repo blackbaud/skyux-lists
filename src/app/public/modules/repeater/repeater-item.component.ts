@@ -1,4 +1,5 @@
 import {
+  AfterViewInit,
   ChangeDetectorRef,
   Component,
   EventEmitter,
@@ -6,7 +7,8 @@ import {
   OnDestroy,
   OnInit,
   Output,
-  TemplateRef
+  TemplateRef,
+  ElementRef
 } from '@angular/core';
 
 import {
@@ -31,6 +33,10 @@ import {
 } from 'rxjs/Subject';
 
 import {
+  SkyRepeaterAdapterService
+} from './repeater-adapter.service';
+
+import {
   SkyRepeaterService
 } from './repeater.service';
 
@@ -42,7 +48,7 @@ let nextContentId: number = 0;
   templateUrl: './repeater-item.component.html',
   animations: [skyAnimationSlide]
 })
-export class SkyRepeaterItemComponent implements OnDestroy, OnInit {
+export class SkyRepeaterItemComponent implements AfterViewInit, OnDestroy, OnInit {
 
   @Input()
   public inlineFormConfig: SkyInlineFormConfig;
@@ -83,6 +89,21 @@ export class SkyRepeaterItemComponent implements OnDestroy, OnInit {
   @Output()
   public inlineFormClose = new EventEmitter<SkyInlineFormCloseArgs>();
 
+  public set childFocusIndex(value: number) {
+    if (value !== this._childFocusIndex) {
+      this._childFocusIndex = value;
+      if (this.focusableChildren.length > 0 && value !== undefined) {
+        this.focusableChildren[value].focus();
+      } else {
+        this.elementRef.nativeElement.focus();
+      }
+    }
+  }
+
+  public get childFocusIndex(): number {
+    return this._childFocusIndex;
+  }
+
   public contentId: string = `sky-radio-content-${++nextContentId}`;
 
   public isActive: boolean = false;
@@ -106,7 +127,19 @@ export class SkyRepeaterItemComponent implements OnDestroy, OnInit {
 
   public slideDirection: string;
 
+  public set tabIndex(value: number) {
+    this._tabIndex = value;
+  }
+
+  public get tabIndex(): number {
+    return this._tabIndex;
+  }
+
+  private focusableChildren: HTMLElement[] = [];
+
   private ngUnsubscribe = new Subject<void>();
+
+  private _childFocusIndex: number;
 
   private _isCollapsible = true;
 
@@ -114,10 +147,14 @@ export class SkyRepeaterItemComponent implements OnDestroy, OnInit {
 
   private _isSelected = false;
 
+  private _tabIndex: number = -1;
+
   constructor(
-    private repeaterService: SkyRepeaterService,
+    private adapterService: SkyRepeaterAdapterService,
     private changeDetector: ChangeDetectorRef,
-    private logService: SkyLogService
+    private elementRef: ElementRef,
+    private logService: SkyLogService,
+    private repeaterService: SkyRepeaterService
   ) {
     this.slideForExpanded(false);
   }
@@ -131,6 +168,14 @@ export class SkyRepeaterItemComponent implements OnDestroy, OnInit {
           this.isActive = this === item;
           this.changeDetector.markForCheck();
       });
+    });
+  }
+
+  public ngAfterViewInit(): void {
+    // Wait for node to render, then reset all child tabIndexes to -1.
+    setTimeout(() => {
+      this.focusableChildren = this.adapterService.getFocusableChildren(this.elementRef.nativeElement);
+      this.adapterService.setTabIndexOfFocusableElems(this.elementRef.nativeElement, -1);
     });
   }
 
@@ -154,6 +199,45 @@ export class SkyRepeaterItemComponent implements OnDestroy, OnInit {
   public chevronDirectionChange(direction: string): void {
     this.updateForExpanded(direction === 'up', true);
   }
+
+  // Cycle backwards through interactive child elements
+  // If user reaches the beginning, focus on item.
+  public onArrowLeft(event: KeyboardEvent): void {
+    /* istanbul ignore else */
+    if (document.activeElement === event.target) {
+      if (this.childFocusIndex !== undefined) {
+        if (this.childFocusIndex === 0) {
+          this.childFocusIndex = undefined;
+        } else {
+          this.childFocusIndex--;
+        }
+      } else {
+        this.elementRef.nativeElement.focus();
+      }
+      event.stopPropagation();
+    }
+  }
+
+  // Cyle forward through interactive child elements.
+  // If user reaches the end, do nothing.
+  public onArrowRight(event: KeyboardEvent): void {
+    /* istanbul ignore else */
+    if (document.activeElement === event.target) {
+      if (this.focusableChildren.length <= 0 || this.childFocusIndex === this.focusableChildren.length - 1) {
+        // Do nothing...
+      } else {
+        if (this.childFocusIndex === undefined) {
+          this.childFocusIndex = 0;
+        } else {
+          this.childFocusIndex++;
+        }
+      }
+
+      event.stopPropagation();
+    }
+  }
+
+  // TODO: Arrow up and down
 
   public updateForExpanded(value: boolean, animate: boolean): void {
     if (this.isCollapsible === false && value === false) {

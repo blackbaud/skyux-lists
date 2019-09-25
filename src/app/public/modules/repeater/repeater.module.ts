@@ -11,7 +11,7 @@ import {
 } from '@angular/platform-browser/animations';
 
 import {
-  SkyLogModule
+  SkyLogModule, SkyCoreAdapterService
 } from '@skyux/core';
 
 import {
@@ -25,6 +25,10 @@ import {
 import {
   SkyInlineFormModule
 } from '@skyux/inline-form';
+
+import {
+  SkyRepeaterAdapterService
+} from './repeater-adapter.service';
 
 import {
   SkyRepeaterComponent
@@ -63,6 +67,8 @@ import {
     SkyRepeaterItemTitleComponent
   ],
   providers: [
+    SkyCoreAdapterService,
+    SkyRepeaterAdapterService,
     SkyRepeaterService
   ],
   imports: [

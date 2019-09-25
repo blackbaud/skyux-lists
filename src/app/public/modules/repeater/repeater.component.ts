@@ -88,6 +88,11 @@ export class SkyRepeaterComponent implements AfterContentInit, OnChanges, OnDest
     setTimeout(() => {
       this.updateForExpandMode();
     }, 0);
+
+    // Make the first item tabbable.
+    setTimeout(() => {
+      this.items.first.tabIndex = 0;
+    });
   }
 
   public ngOnChanges(changes: SimpleChanges): void {

@@ -1,10 +1,15 @@
 <div
   class="sky-repeater-item sky-padding-even-default"
+  [attr.tabindex]="tabIndex"
   [ngClass]="{
     'sky-repeater-item-active': isActive,
     'sky-repeater-item-collapsible': isCollapsible,
     'sky-repeater-item-selected': isSelected
   }"
+  (keydown.ArrowLeft)="onArrowLeft($event)"
+  (keydown.ArrowRight)="onArrowRight($event)"
+  (keydown.ArrowUp)="onArrowUp($event)"
+  (keydown.ArrowDown)="onArrowDown($event)"
 >
 
   <ng-container *ngIf="inlineFormTemplate">
