@@ -39,6 +39,7 @@
         {{reorderState}}
       </span>
       <button
+        aria-live="polite"
         class="sky-btn sky-tile-tools-control sky-repeater-item-grab-handle"
         [attr.aria-label]="reorderButtonLabel"
         (blur)="handleBlurEvent($event)"

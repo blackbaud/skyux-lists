@@ -129,6 +129,9 @@ export class SkyRepeaterItemComponent implements OnDestroy, OnInit {
   public reorderState: string;
 
   private ngUnsubscribe = new Subject<void>();
+  private reorderCancelText: string;
+  private reorderCurrentIndex: number;
+  private reorderFinishText: string;
   private reorderInstructions: string;
   private reorderMovedText: string;
   private reorderStateDescription: string;
@@ -152,14 +155,18 @@ export class SkyRepeaterItemComponent implements OnDestroy, OnInit {
 
     // tslint:disable-next-line: deprecation
     Observable.forkJoin(
+      this.resourceService.getString('skyux_repeater_item_reorder_cancel'),
+      this.resourceService.getString('skyux_repeater_item_reorder_finish'),
       this.resourceService.getString('skyux_repeater_item_reorder_instructions'),
       this.resourceService.getString('skyux_repeater_item_reorder_operation'),
       this.resourceService.getString('skyux_repeater_item_reorder_moved')
     )
     .subscribe((translatedStrings: string[]) => {
-      this.reorderStateDescription = translatedStrings[0];
-      this.reorderInstructions = translatedStrings[1];
-      this.reorderMovedText = translatedStrings[2];
+      this.reorderCancelText = translatedStrings[0];
+      this.reorderFinishText = translatedStrings[1];
+      this.reorderStateDescription = translatedStrings[2];
+      this.reorderInstructions = translatedStrings[3];
+      this.reorderMovedText = translatedStrings[4];
 
       this.reorderButtonLabel = this.reorderInstructions;
     });
@@ -242,14 +249,12 @@ export class SkyRepeaterItemComponent implements OnDestroy, OnInit {
       if (this.keyboardDraggingEnabled) {
         this.reorderState = this.reorderStateDescription;
       } else {
-        this.reorderState = undefined;
+        this.reorderState = this.reorderFinishText + ' ' + (this.reorderCurrentIndex + 1);
       }
 
       event.stopPropagation();
     } else if (key === 'escape') {
       this.keyboardDraggingEnabled = false;
-      this.reorderState = undefined;
-      this.reorderButtonLabel = this.reorderInstructions;
 
       if (this.reorderSteps < 0) {
         this.adapterService.moveItemDown(this.elementRef, Math.abs(this.reorderSteps));
@@ -257,21 +262,33 @@ export class SkyRepeaterItemComponent implements OnDestroy, OnInit {
         this.adapterService.moveItemUp(this.elementRef, false, this.reorderSteps);
       }
 
+      this.reorderButtonLabel = this.reorderCancelText;
+
+      // NOTE: This is necessary due to needing the cancel text to read first and then for the
+      // instructions to read out. The aria-live polite setting on the handle element ensures that
+      // the new instructions are read once the reading of the canel text finishes. A simple detect
+      // is not enough for the screen reader to read out the initial cancel text.
+      setTimeout(() => {
+        this.reorderButtonLabel = this.reorderInstructions;
+      });
+
+      (<HTMLElement> event.target).focus();
+
       event.stopPropagation();
     } else if (this.keyboardDraggingEnabled && key.startsWith('arrow')) {
       let direction = event.key.toLowerCase().replace('arrow', '');
       if (direction === 'up') {
-        let newIndex = this.adapterService.moveItemUp(this.elementRef);
+        this.reorderCurrentIndex = this.adapterService.moveItemUp(this.elementRef);
         this.reorderSteps--;
         this.grabHandle.nativeElement.focus();
         this.keyboardDraggingEnabled = true;
-        this.reorderButtonLabel = this.reorderMovedText + ' ' + (newIndex + 1);
+        this.reorderButtonLabel = this.reorderMovedText + ' ' + (this.reorderCurrentIndex + 1);
       } else if (direction === 'down') {
-        let newIndex = this.adapterService.moveItemDown(this.elementRef);
+        this.reorderCurrentIndex = this.adapterService.moveItemDown(this.elementRef);
         this.reorderSteps++;
         this.grabHandle.nativeElement.focus();
         this.keyboardDraggingEnabled = true;
-        this.reorderButtonLabel = this.reorderMovedText + ' ' + (newIndex + 1);
+        this.reorderButtonLabel = this.reorderMovedText + ' ' + (this.reorderCurrentIndex + 1);
       }
 
       event.stopPropagation();
