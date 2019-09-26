@@ -2,13 +2,14 @@ import {
   AfterViewInit,
   ChangeDetectorRef,
   Component,
+  ElementRef,
   EventEmitter,
   Input,
   OnDestroy,
   OnInit,
   Output,
   TemplateRef,
-  ElementRef
+  ViewChild
 } from '@angular/core';
 
 import {
@@ -95,7 +96,7 @@ export class SkyRepeaterItemComponent implements AfterViewInit, OnDestroy, OnIni
       if (this.focusableChildren.length > 0 && value !== undefined) {
         this.focusableChildren[value].focus();
       } else {
-        this.elementRef.nativeElement.focus();
+        this.itemRef.nativeElement.focus();
       }
     }
   }
@@ -135,6 +136,9 @@ export class SkyRepeaterItemComponent implements AfterViewInit, OnDestroy, OnIni
     return this._tabIndex;
   }
 
+  @ViewChild('skyRepeaterItem')
+  public itemRef: ElementRef;
+
   private focusableChildren: HTMLElement[] = [];
 
   private ngUnsubscribe = new Subject<void>();
@@ -152,7 +156,6 @@ export class SkyRepeaterItemComponent implements AfterViewInit, OnDestroy, OnIni
   constructor(
     private adapterService: SkyRepeaterAdapterService,
     private changeDetector: ChangeDetectorRef,
-    private elementRef: ElementRef,
     private logService: SkyLogService,
     private repeaterService: SkyRepeaterService
   ) {
@@ -168,15 +171,27 @@ export class SkyRepeaterItemComponent implements AfterViewInit, OnDestroy, OnIni
           this.isActive = this === item;
           this.changeDetector.markForCheck();
       });
+
+      // When service emits a focus change, set the tabIndex and browser focus.
+      this.repeaterService.focusedItemChange
+        .takeUntil(this.ngUnsubscribe)
+        .subscribe((item: SkyRepeaterItemComponent) => {
+          if (this === item) {
+            this.tabIndex = 0;
+            this.itemRef.nativeElement.focus();
+          } else {
+            this.tabIndex = -1;
+          }
+      });
     });
   }
 
   public ngAfterViewInit(): void {
-    // Wait for node to render, then reset all child tabIndexes to -1.
+    // Wait for item to render, then reset all child tabIndexes to -1.
     setTimeout(() => {
-      this.focusableChildren = this.adapterService.getFocusableChildren(this.elementRef.nativeElement);
-      this.adapterService.setTabIndexOfFocusableElems(this.elementRef.nativeElement, -1);
-    });
+      this.focusableChildren = this.adapterService.getFocusableChildren(this.itemRef.nativeElement);
+      this.adapterService.setTabIndexOfFocusableElems(this.itemRef.nativeElement, -1);
+    }, 1000);
   }
 
   public ngOnDestroy(): void {
@@ -200,44 +215,56 @@ export class SkyRepeaterItemComponent implements AfterViewInit, OnDestroy, OnIni
     this.updateForExpanded(direction === 'up', true);
   }
 
-  // Cycle backwards through interactive child elements
-  // If user reaches the beginning, focus on item.
+  // Cycle backwards through interactive child elements.
+  // If user reaches the beginning, focus on parent item.
   public onArrowLeft(event: KeyboardEvent): void {
-    /* istanbul ignore else */
-    if (document.activeElement === event.target) {
-      if (this.childFocusIndex !== undefined) {
-        if (this.childFocusIndex === 0) {
-          this.childFocusIndex = undefined;
-        } else {
-          this.childFocusIndex--;
-        }
-      } else {
-        this.elementRef.nativeElement.focus();
+    if (this.focusableChildren.length > 0) {
+      if (this.childFocusIndex > 0) {
+        this.childFocusIndex--;
+      } else if (this.childFocusIndex === 0) {
+        this.childFocusIndex = undefined;
       }
-      event.stopPropagation();
     }
+    event.stopPropagation();
+    event.preventDefault();
   }
 
   // Cyle forward through interactive child elements.
   // If user reaches the end, do nothing.
   public onArrowRight(event: KeyboardEvent): void {
-    /* istanbul ignore else */
-    if (document.activeElement === event.target) {
-      if (this.focusableChildren.length <= 0 || this.childFocusIndex === this.focusableChildren.length - 1) {
-        // Do nothing...
-      } else {
-        if (this.childFocusIndex === undefined) {
-          this.childFocusIndex = 0;
-        } else {
-          this.childFocusIndex++;
-        }
+    if (this.focusableChildren.length > 0) {
+      if (this.childFocusIndex < this.focusableChildren.length - 1) {
+        this.childFocusIndex++;
+      } else if (this.childFocusIndex === undefined) {
+        this.childFocusIndex = 0;
       }
-
-      event.stopPropagation();
     }
+    event.stopPropagation();
+    event.preventDefault();
   }
 
-  // TODO: Arrow up and down
+  public onArrowUp(event: KeyboardEvent): void {
+    this.childFocusIndex = undefined;
+    this.repeaterService.focusPreviousListItem(this);
+    event.preventDefault();
+    event.stopPropagation();
+  }
+
+  public onArrowDown(event: KeyboardEvent): void {
+    this.childFocusIndex = undefined;
+    this.repeaterService.focusNextListItem(this);
+    event.preventDefault();
+    event.stopPropagation();
+  }
+
+  // The dropdown compoment supports enter & arrow keys. This event listner will
+  // prevent those keyboard controls from bubbling up to tree view component.
+  public onContextMenuKeydown(e: KeyboardEvent): void {
+    const reservedKeys = ['enter', 'arrowdown', 'arrowup'];
+    if (reservedKeys.indexOf(e.key.toLowerCase()) > -1) {
+      e.stopPropagation();
+    }
+  }
 
   public updateForExpanded(value: boolean, animate: boolean): void {
     if (this.isCollapsible === false && value === false) {

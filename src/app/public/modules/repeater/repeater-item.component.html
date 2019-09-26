@@ -10,6 +10,7 @@
   (keydown.ArrowRight)="onArrowRight($event)"
   (keydown.ArrowUp)="onArrowUp($event)"
   (keydown.ArrowDown)="onArrowDown($event)"
+  #skyRepeaterItem
 >
 
   <ng-container *ngIf="inlineFormTemplate">
@@ -44,9 +45,10 @@
     >
     </sky-checkbox>
     <div
-        class="sky-repeater-item-context-menu"
-        [hidden]="contextMenuEl.children.length === 0"
-        #contextMenuEl
+      class="sky-repeater-item-context-menu"
+      [hidden]="contextMenuEl.children.length === 0"
+      (keydown)="onContextMenuKeydown($event)"
+      #contextMenuEl
     >
       <ng-content select="sky-repeater-item-context-menu"></ng-content>
     </div>
