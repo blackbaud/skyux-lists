@@ -4,11 +4,13 @@ import {
   fakeAsync,
   inject,
   TestBed,
-  tick
+  tick,
+  flush
 } from '@angular/core/testing';
 
 import {
-  expect
+  expect,
+  SkyAppTestUtility
 } from '@skyux-sdk/testing';
 
 import {
@@ -36,6 +38,16 @@ describe('Repeater item component', () => {
     public warn(message: any) { }
   }
 
+  // #region helpers
+  function flushDropdownTimer() {
+    flush();
+  }
+
+  function getRepeaterItems(el: HTMLElement): NodeListOf<HTMLElement> {
+    return el.querySelectorAll('.sky-repeater-item');
+  }
+  // #endregion
+
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [
@@ -56,6 +68,8 @@ describe('Repeater item component', () => {
       tick();
 
       expect(cmp.repeater.expandMode).toBe('none');
+
+      flushDropdownTimer();
     })
   );
 
@@ -68,6 +82,8 @@ describe('Repeater item component', () => {
 
     expect(el.querySelector('sky-chevron').getAttribute('aria-controls'))
       .toBe(el.querySelector('.sky-repeater-item-content').getAttribute('id'));
+
+    flushDropdownTimer();
   }));
 
   it('should be accessible', async(() => {
@@ -77,6 +93,166 @@ describe('Repeater item component', () => {
       expect(fixture.nativeElement).toBeAccessible();
     });
   }));
+
+  describe('keyboard controls', () => {
+    let fixture: ComponentFixture<RepeaterTestComponent>;
+    let cmp: RepeaterTestComponent;
+    let el: any;
+
+    beforeEach(fakeAsync(() => {
+      fixture = TestBed.createComponent(RepeaterTestComponent);
+      cmp = fixture.componentInstance;
+      cmp.showContextMenu = true;
+      el = fixture.nativeElement;
+      fixture.detectChanges();
+      tick(1000); // Allow repeater-item.component to set tabindexes & render context dropdown.
+      fixture.detectChanges();
+    }));
+
+    it('should initialize with only the first repeater item being tabbable', () => {
+      const items = getRepeaterItems(el);
+
+      expect(items[0].tabIndex).toEqual(0);
+      expect(items[1].tabIndex).toEqual(-1);
+      expect(items[2].tabIndex).toEqual(-1);
+    });
+
+    it('should give the focused repeater item a tabIndex of 0, and the rest a tabIndex of -1', () => {
+      const items = getRepeaterItems(el);
+
+      items[1].click();
+      fixture.detectChanges();
+
+      expect(items[0].tabIndex).toEqual(-1);
+      expect(items[1].tabIndex).toEqual(0);
+      expect(items[2].tabIndex).toEqual(-1);
+    });
+
+    it('should disable tabbing for all node children', () => {
+      const links = document.querySelectorAll('a') as NodeListOf<HTMLElement>;
+      const dropdowns = el.querySelectorAll('.sky-dropdown-button') as NodeListOf<HTMLElement>;
+      const chevrons = el.querySelectorAll('sky-chevron button') as NodeListOf<HTMLElement>;
+
+      Array.from(links).forEach(link => {
+        expect(link.tabIndex).toEqual(-1);
+      });
+      Array.from(dropdowns).forEach(dropdown => {
+        expect(dropdown.tabIndex).toEqual(-1);
+      });
+      Array.from(chevrons).forEach(chevron => {
+        expect(chevron.tabIndex).toEqual(-1);
+      });
+    });
+
+    it('should move between focusable children elements with left/right arrows', () => {
+      const dropdowns = el.querySelectorAll('.sky-dropdown-button');
+      const chevrons = el.querySelectorAll('sky-chevron button');
+      const links = el.querySelectorAll('a');
+      const items = getRepeaterItems(el);
+
+      // Press right arrow key on first node.
+      SkyAppTestUtility.fireDomEvent(items[0], 'focus');
+      SkyAppTestUtility.fireDomEvent(items[0], 'keydown', {
+        keyboardEventInit: {
+          key: 'ArrowRight'
+        }
+      });
+
+      // Expect first interactive child element to be selected (dropdown).
+      expect(document.activeElement).toEqual(dropdowns[0]);
+
+      // Press right arrow one more time.
+      SkyAppTestUtility.fireDomEvent(items[0], 'keydown', {
+        keyboardEventInit: {
+          key: 'ArrowRight'
+        }
+      });
+
+      // Expect second interactive child element to be selected (chevron).
+      expect(document.activeElement).toEqual(chevrons[0]);
+
+      // Press right arrow one more time.
+      SkyAppTestUtility.fireDomEvent(items[0], 'keydown', {
+        keyboardEventInit: {
+          key: 'ArrowRight'
+        }
+      });
+
+      // Expect third interactive child element to be selected (link).
+      expect(document.activeElement).toEqual(links[0]);
+
+      // Press left arrow key twice to go back.
+      SkyAppTestUtility.fireDomEvent(items[0], 'keydown', {
+        keyboardEventInit: {
+          key: 'ArrowLeft'
+        }
+      });
+      SkyAppTestUtility.fireDomEvent(items[0], 'keydown', {
+        keyboardEventInit: {
+          key: 'ArrowLeft'
+        }
+      });
+      SkyAppTestUtility.fireDomEvent(items[0], 'keydown', {
+        keyboardEventInit: {
+          key: 'ArrowLeft'
+        }
+      });
+
+      // Active focus should move back to first repeater item.
+      expect(document.activeElement).toEqual(items[0]);
+    });
+
+    it('should move between nodes with up/down arrows', () => {
+      const items = getRepeaterItems(el);
+
+      // Focus on repeater and press down arrow twice.
+      SkyAppTestUtility.fireDomEvent(items[0], 'focus');
+      SkyAppTestUtility.fireDomEvent(items[0], 'keydown', {
+        keyboardEventInit: {
+          key: 'ArrowDown'
+        }
+      });
+      SkyAppTestUtility.fireDomEvent(items[1], 'keydown', {
+        keyboardEventInit: {
+          key: 'ArrowDown'
+        }
+      });
+
+      // Expect focus to be on third repeater item.
+      expect(document.activeElement).toBe(items[2]);
+
+      // Press up arrow key.
+      SkyAppTestUtility.fireDomEvent(items[2], 'keydown', {
+        keyboardEventInit: {
+          key: 'ArrowUp'
+        }
+      });
+
+      // Expect focus to be on second repeater item.
+      expect(document.activeElement).toBe(items[1]);
+    });
+
+    it('should prevent enter key from bubbling beyond sky-angular-tree-context-menu element', fakeAsync(() => {
+      const dropdownButtons = document.querySelectorAll('.sky-dropdown-button') as NodeListOf<HTMLButtonElement>;
+
+      // Set focus on first dropdown and press keydown arrow.
+      dropdownButtons[0].click();
+      tick();
+      fixture.detectChanges();
+      tick();
+      SkyAppTestUtility.fireDomEvent(dropdownButtons[0], 'keydown', {
+        keyboardEventInit: {
+          key: 'ArrowDown'
+        }
+      });
+
+      // Expect focus to be on first dropdown menu item and NOT move to next repeater item.
+      const firstDropdownMenuItem = el.querySelectorAll('.sky-dropdown-item button')[0];
+      expect(document.activeElement).toBe(firstDropdownMenuItem);
+
+      flushDropdownTimer();
+    }));
+  });
 
   describe('with expand mode of "single"', () => {
     it('should collapse other items when an item is expanded', fakeAsync(() => {
@@ -105,6 +281,8 @@ describe('Repeater item component', () => {
       expect(repeaterItems[0].isExpanded).toBeFalsy();
       expect(repeaterItems[1].isExpanded).toBe(true);
       expect(repeaterItems[2].isExpanded).toBeFalsy();
+
+      flushDropdownTimer();
     }));
 
     it('should collapse other items when a new expanded item is added', fakeAsync(() => {
@@ -135,6 +313,8 @@ describe('Repeater item component', () => {
       expect(repeaterItems[0].isExpanded).toBe(false);
       expect(repeaterItems[1].isExpanded).toBe(false);
       expect(repeaterItems[2].isExpanded).toBe(true);
+
+      flushDropdownTimer();
     }));
 
     it('should toggle its collapsed state when an item\'s header is clicked', fakeAsync(() => {
@@ -157,6 +337,8 @@ describe('Repeater item component', () => {
       repeaterItems = cmp.repeater.items.toArray();
       expect(repeaterItems[0].isExpanded).toBe(false);
       expect(el.querySelector('sky-chevron').getAttribute('aria-expanded')).toBe('false');
+
+      flushDropdownTimer();
     }));
 
     it('should toggle its collapsed state when an item\'s chevron is clicked', fakeAsync(() => {
@@ -183,6 +365,8 @@ describe('Repeater item component', () => {
       repeaterItems = cmp.repeater.items.toArray();
 
       expect(repeaterItems[0].isExpanded).toBe(false);
+
+      flushDropdownTimer();
     }));
 
     it('should select items based on input', fakeAsync(() => {
@@ -199,6 +383,8 @@ describe('Repeater item component', () => {
       expect(repeaterItems[0].isSelected).toBe(false);
       expect(repeaterItems[1].isSelected).toBe(false);
       expect(repeaterItems[2].isSelected).toBe(true);
+
+      flushDropdownTimer();
     }));
 
     it('should be accessible', async(() => {
@@ -242,6 +428,8 @@ describe('Repeater item component', () => {
       tick();
 
       expect(expandSpy).toHaveBeenCalled();
+
+      flushDropdownTimer();
     }));
   });
 
@@ -272,6 +460,8 @@ describe('Repeater item component', () => {
       expect(repeaterItems[0].isExpanded).toBe(true);
       expect(repeaterItems[1].isExpanded).toBe(true);
       expect(repeaterItems[2].isExpanded).toBe(false);
+
+      flushDropdownTimer();
     }));
 
     it('should toggle its collapsed state when an item\'s header is clicked', fakeAsync(() => {
@@ -298,6 +488,8 @@ describe('Repeater item component', () => {
       repeaterItems = cmp.repeater.items.toArray();
 
       expect(repeaterItems[0].isExpanded).toBe(false);
+
+      flushDropdownTimer();
     }));
 
     it('should toggle its collapsed state when an item\'s chevron is clicked', fakeAsync(() => {
@@ -324,6 +516,8 @@ describe('Repeater item component', () => {
       repeaterItems = cmp.repeater.items.toArray();
 
       expect(repeaterItems[0].isExpanded).toBe(false);
+
+      flushDropdownTimer();
     }));
 
     it('should select items based on input', fakeAsync(() => {
@@ -340,6 +534,8 @@ describe('Repeater item component', () => {
       expect(repeaterItems[0].isSelected).toBe(false);
       expect(repeaterItems[1].isSelected).toBe(false);
       expect(repeaterItems[2].isSelected).toBe(true);
+
+      flushDropdownTimer();
     }));
 
     it('should be accessible', async(() => {
@@ -382,6 +578,8 @@ describe('Repeater item component', () => {
           expect(warnSpy).toHaveBeenCalled();
 
           expect(item.isExpanded).toBe(true);
+
+          flushDropdownTimer();
         })
     ));
 
@@ -403,6 +601,8 @@ describe('Repeater item component', () => {
       chevronEls = el.querySelectorAll('.sky-repeater-item-chevron');
 
       expect(chevronEls.length).toBe(0);
+
+      flushDropdownTimer();
     }));
 
     it(
@@ -435,6 +635,8 @@ describe('Repeater item component', () => {
         for (let repeaterItem of repeaterItems) {
           expect(repeaterItem.isExpanded).toBe(true);
         }
+
+        flushDropdownTimer();
       })
     );
 
@@ -462,6 +664,8 @@ describe('Repeater item component', () => {
       repeaterItems = cmp.repeater.items.toArray();
 
       expect(repeaterItems[0].isExpanded).toBe(true);
+
+      flushDropdownTimer();
     }));
 
     it('should select items based on input', fakeAsync(() => {
@@ -478,6 +682,8 @@ describe('Repeater item component', () => {
       expect(repeaterItems[0].isSelected).toBe(false);
       expect(repeaterItems[1].isSelected).toBe(false);
       expect(repeaterItems[2].isSelected).toBe(true);
+
+      flushDropdownTimer();
     }));
 
     it('should be accessible', async(() => {
@@ -520,6 +726,8 @@ describe('Repeater item component', () => {
 
       selectedItemsEl = el.querySelectorAll('.sky-repeater-item-selected');
       expect(selectedItemsEl.length).toBe(1);
+
+      flushDropdownTimer();
     }));
 
     it('should be accessible', async(() => {
@@ -558,6 +766,8 @@ describe('Repeater item component', () => {
 
       let activeRepeaterItem = el.querySelectorAll('.sky-repeater-item-active');
       expect(activeRepeaterItem.length).toBe(1);
+
+      flushDropdownTimer();
     }));
 
     it('should add and remove active css class when activeIndex value changes', fakeAsync(() => {
@@ -582,6 +792,8 @@ describe('Repeater item component', () => {
 
       activeRepeaterItem = el.querySelectorAll('.sky-repeater-item-active');
       expect(activeRepeaterItem.length).toBe(0);
+
+      flushDropdownTimer();
     }));
   });
 
@@ -624,6 +836,8 @@ describe('Repeater item component', () => {
       const inlineForm = getInlineForm();
 
       expect(inlineForm).not.toBeNull();
+
+      flushDropdownTimer();
     }));
 
     it('should show inline-form with custom buttons', async(() => {

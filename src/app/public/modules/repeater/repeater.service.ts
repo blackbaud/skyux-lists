@@ -63,6 +63,10 @@ export class SkyRepeaterService implements OnDestroy {
     this.itemCollapseStateChange.emit(item);
   }
 
+  public focusListItem(item: SkyRepeaterItemComponent): void {
+    this.focusedItemChange.next(item);
+  }
+
   public focusNextListItem(item: SkyRepeaterItemComponent): void {
     const focusedIndex = this.items.indexOf(item);
     if (this.items.length - 1 > focusedIndex) {

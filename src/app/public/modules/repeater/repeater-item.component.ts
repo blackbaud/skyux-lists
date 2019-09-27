@@ -259,11 +259,15 @@ export class SkyRepeaterItemComponent implements AfterViewInit, OnDestroy, OnIni
 
   // The dropdown compoment supports enter & arrow keys. This event listner will
   // prevent those keyboard controls from bubbling up to tree view component.
-  public onContextMenuKeydown(e: KeyboardEvent): void {
+  public onContextMenuKeydown(event: KeyboardEvent): void {
     const reservedKeys = ['enter', 'arrowdown', 'arrowup'];
-    if (reservedKeys.indexOf(e.key.toLowerCase()) > -1) {
-      e.stopPropagation();
+    if (reservedKeys.indexOf(event.key.toLowerCase()) > -1) {
+      event.stopPropagation();
     }
+  }
+
+  public onRepeaterItemClick(event: any): void {
+    this.repeaterService.focusListItem(this);
   }
 
   public updateForExpanded(value: boolean, animate: boolean): void {
