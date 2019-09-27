@@ -270,7 +270,7 @@ export class SkyRepeaterItemComponent implements OnDestroy, OnInit {
       // is not enough for the screen reader to read out the initial cancel text.
       setTimeout(() => {
         this.reorderButtonLabel = this.reorderInstructions;
-      });
+      }, 100);
 
       (<HTMLElement> event.target).focus();
 
