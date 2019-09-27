@@ -11,7 +11,8 @@ import {
 } from '@angular/platform-browser/animations';
 
 import {
-  SkyLogModule, SkyCoreAdapterService
+  SkyCoreAdapterService,
+  SkyLogModule
 } from '@skyux/core';
 
 import {

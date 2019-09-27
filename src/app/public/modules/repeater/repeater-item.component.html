@@ -7,10 +7,10 @@
     'sky-repeater-item-selected': isSelected
   }"
   (click)="onRepeaterItemClick($event)"
+  (keydown.ArrowDown)="onArrowDown($event)"
   (keydown.ArrowLeft)="onArrowLeft($event)"
   (keydown.ArrowRight)="onArrowRight($event)"
   (keydown.ArrowUp)="onArrowUp($event)"
-  (keydown.ArrowDown)="onArrowDown($event)"
   #skyRepeaterItem
 >
 

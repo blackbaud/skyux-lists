@@ -2,10 +2,10 @@ import {
   async,
   ComponentFixture,
   fakeAsync,
+  flush,
   inject,
   TestBed,
-  tick,
-  flush
+  tick
 } from '@angular/core/testing';
 
 import {
@@ -45,6 +45,18 @@ describe('Repeater item component', () => {
 
   function getRepeaterItems(el: HTMLElement): NodeListOf<HTMLElement> {
     return el.querySelectorAll('.sky-repeater-item');
+  }
+
+  function getDropdowns(el: HTMLElement): NodeListOf<HTMLElement> {
+    return el.querySelectorAll('.sky-dropdown-button') as NodeListOf<HTMLElement>;
+  }
+
+  function getChevrons(el: HTMLElement): NodeListOf<HTMLElement> {
+    return el.querySelectorAll('sky-chevron button') as NodeListOf<HTMLElement>;
+  }
+
+  function getLinks(el: HTMLElement): NodeListOf<HTMLElement> {
+    return document.querySelectorAll('a') as NodeListOf<HTMLElement>;
   }
   // #endregion
 
@@ -129,9 +141,9 @@ describe('Repeater item component', () => {
     });
 
     it('should disable tabbing for all node children', () => {
-      const links = document.querySelectorAll('a') as NodeListOf<HTMLElement>;
-      const dropdowns = el.querySelectorAll('.sky-dropdown-button') as NodeListOf<HTMLElement>;
-      const chevrons = el.querySelectorAll('sky-chevron button') as NodeListOf<HTMLElement>;
+      const links = getLinks(el);
+      const dropdowns = getDropdowns(el);
+      const chevrons = getChevrons(el);
 
       Array.from(links).forEach(link => {
         expect(link.tabIndex).toEqual(-1);
@@ -145,9 +157,9 @@ describe('Repeater item component', () => {
     });
 
     it('should move between focusable children elements with left/right arrows', () => {
-      const dropdowns = el.querySelectorAll('.sky-dropdown-button');
-      const chevrons = el.querySelectorAll('sky-chevron button');
-      const links = el.querySelectorAll('a');
+      const links = getLinks(el);
+      const dropdowns = getDropdowns(el);
+      const chevrons = getChevrons(el);
       const items = getRepeaterItems(el);
 
       // Press right arrow key on first node.
@@ -233,14 +245,14 @@ describe('Repeater item component', () => {
     });
 
     it('should prevent enter key from bubbling beyond sky-angular-tree-context-menu element', fakeAsync(() => {
-      const dropdownButtons = document.querySelectorAll('.sky-dropdown-button') as NodeListOf<HTMLButtonElement>;
+      const dropdowns = getDropdowns(el);
 
       // Set focus on first dropdown and press keydown arrow.
-      dropdownButtons[0].click();
+      dropdowns[0].click();
       tick();
       fixture.detectChanges();
       tick();
-      SkyAppTestUtility.fireDomEvent(dropdownButtons[0], 'keydown', {
+      SkyAppTestUtility.fireDomEvent(dropdowns[0], 'keydown', {
         keyboardEventInit: {
           key: 'ArrowDown'
         }
