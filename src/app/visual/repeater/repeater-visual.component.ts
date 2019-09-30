@@ -112,13 +112,9 @@ export class RepeaterVisualComponent {
 
   public onEnter(event: KeyboardEvent, index: number): void {
     this.onItemClick(index);
-    // event.stopPropagation();
-    // event.preventDefault();
   }
 
   public onSpace(event: KeyboardEvent, index: number): void {
     this.onItemClick(index);
-    // event.stopPropagation();
-    // event.preventDefault();
   }
 }

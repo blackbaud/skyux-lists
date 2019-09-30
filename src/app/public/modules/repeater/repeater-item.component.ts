@@ -257,7 +257,7 @@ export class SkyRepeaterItemComponent implements AfterViewInit, OnDestroy, OnIni
     event.stopPropagation();
   }
 
-  // The dropdown compoment supports enter, spacke, and arrow keys. This event listner will
+  // The dropdown compoment supports enter, space, and arrow keys. This event listner will
   // prevent those keyboard controls from bubbling up to tree view component.
   public onContextMenuKeydown(event: KeyboardEvent): void {
     const reservedKeys = ['enter', ' ', 'arrowdown', 'arrowup'];
