@@ -249,7 +249,7 @@ export class SkyRepeaterItemComponent implements OnDestroy, OnInit {
       if (this.keyboardDraggingEnabled) {
         this.reorderState = this.reorderStateDescription;
       } else {
-        this.reorderState = this.reorderFinishText + ' ' + (this.reorderCurrentIndex + 1);
+        this.reorderState = this.reorderFinishText + ' ' + (this.reorderCurrentIndex + 1)  + ' ' + this.reorderInstructions;;
       }
 
       event.stopPropagation();
@@ -262,16 +262,7 @@ export class SkyRepeaterItemComponent implements OnDestroy, OnInit {
         this.adapterService.moveItemUp(this.elementRef, false, this.reorderSteps);
       }
 
-      this.reorderButtonLabel = this.reorderCancelText;
-
-      // NOTE: This is necessary due to needing the cancel text to read first and then for the
-      // instructions to read out. The aria-live polite setting on the handle element ensures that
-      // the new instructions are read once the reading of the canel text finishes. A simple detect
-      // is not enough for the screen reader to read out the initial cancel text.
-      setTimeout(() => {
-        this.reorderButtonLabel = this.reorderInstructions;
-        this.changeDetector.markForCheck();
-      }, 50);
+      this.reorderButtonLabel = this.reorderCancelText + ' ' + this.reorderInstructions;
 
       (<HTMLElement> event.target).focus();
 

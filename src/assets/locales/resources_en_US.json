@@ -33,7 +33,7 @@
   },
   "skyux_repeater_item_reorder_cancel": {
     "_description": "Accessible screen reader text for when a reorder is finished",
-    "message": "Item rewording was canceled. The item was returned to its original position."
+    "message": "Item reordering was canceled. The item was returned to its original position."
   },
   "skyux_repeater_item_reorder_finish": {
     "_description": "Accessible screen reader text for when a reorder is finished",
