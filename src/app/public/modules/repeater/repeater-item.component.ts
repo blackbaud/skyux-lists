@@ -249,7 +249,7 @@ export class SkyRepeaterItemComponent implements OnDestroy, OnInit {
       if (this.keyboardDraggingEnabled) {
         this.reorderState = this.reorderStateDescription;
       } else {
-        this.reorderState = this.reorderFinishText + ' ' + (this.reorderCurrentIndex + 1)  + ' ' + this.reorderInstructions;;
+        this.reorderState = this.reorderFinishText + ' ' + (this.reorderCurrentIndex + 1)  + ' ' + this.reorderInstructions;
       }
 
       event.stopPropagation();
