@@ -891,6 +891,8 @@ describe('Repeater item component', () => {
       fixture.detectChanges();
       SkyAppTestUtility.fireDomEvent(itemDragHandle, 'keydown', { keyboardEventInit: { key: 'Escape' } });
       fixture.detectChanges();
+      tick(50);
+      fixture.detectChanges();
       SkyAppTestUtility.fireDomEvent(itemDragHandle, 'keydown', { keyboardEventInit: { key: 'arrowUp' } });
       fixture.detectChanges();
       expect(el.querySelectorAll('sky-repeater-item')[0]).not.toBe(itemToTest);
@@ -910,6 +912,8 @@ describe('Repeater item component', () => {
       fixture.detectChanges();
       SkyAppTestUtility.fireDomEvent(itemDragHandle, 'keydown', { keyboardEventInit: { key: 'Escape' } });
       fixture.detectChanges();
+      tick(50);
+      fixture.detectChanges();
       expect(el.querySelectorAll('sky-repeater-item')[0]).not.toBe(itemToTest);
       expect(el.querySelectorAll('sky-repeater-item')[1]).toBe(itemToTest);
     }));
@@ -926,6 +930,8 @@ describe('Repeater item component', () => {
       SkyAppTestUtility.fireDomEvent(itemDragHandle, 'keydown', { keyboardEventInit: { key: 'arrowDown' } });
       fixture.detectChanges();
       SkyAppTestUtility.fireDomEvent(itemDragHandle, 'keydown', { keyboardEventInit: { key: 'Escape' } });
+      fixture.detectChanges();
+      tick(50);
       fixture.detectChanges();
       expect(el.querySelectorAll('sky-repeater-item')[2]).not.toBe(itemToTest);
       expect(el.querySelectorAll('sky-repeater-item')[1]).toBe(itemToTest);
