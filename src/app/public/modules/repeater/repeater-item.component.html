@@ -11,6 +11,8 @@
   (keydown.ArrowLeft)="onArrowLeft($event)"
   (keydown.ArrowRight)="onArrowRight($event)"
   (keydown.ArrowUp)="onArrowUp($event)"
+  (keydown.Enter)="onEnter($event)"
+  (keydown.Space)="onSpace($event)"
   #skyRepeaterItem
 >
 
@@ -70,10 +72,10 @@
       </div>
       <div class="sky-repeater-item-chevron" *ngIf="isCollapsible">
         <sky-chevron
-            [attr.aria-controls]="contentId"
-            [attr.aria-expanded]="isExpanded"
-            [direction]="isExpanded ? 'up' : 'down'"
-            (directionChange)="chevronDirectionChange($event)"
+          [attr.aria-controls]="contentId"
+          [attr.aria-expanded]="isExpanded"
+          [direction]="isExpanded ? 'up' : 'down'"
+          (directionChange)="chevronDirectionChange($event)"
         >
         </sky-chevron>
       </div>

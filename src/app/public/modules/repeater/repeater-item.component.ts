@@ -257,17 +257,33 @@ export class SkyRepeaterItemComponent implements AfterViewInit, OnDestroy, OnIni
     event.stopPropagation();
   }
 
-  // The dropdown compoment supports enter & arrow keys. This event listner will
+  // The dropdown compoment supports enter, spacke, and arrow keys. This event listner will
   // prevent those keyboard controls from bubbling up to tree view component.
   public onContextMenuKeydown(event: KeyboardEvent): void {
-    const reservedKeys = ['enter', 'arrowdown', 'arrowup'];
+    const reservedKeys = ['enter', ' ', 'arrowdown', 'arrowup'];
     if (reservedKeys.indexOf(event.key.toLowerCase()) > -1) {
       event.stopPropagation();
     }
   }
 
+  public onEnter(event: KeyboardEvent): void {
+    // Unlike the arrow keys, enter should never execute unless focused on the parent item element.
+    if (event.target === this.itemRef.nativeElement) {
+      this.toggleSelected();
+      event.preventDefault();
+    }
+  }
+
   public onRepeaterItemClick(event: any): void {
     this.repeaterService.focusListItem(this);
+  }
+
+  public onSpace(event: KeyboardEvent): void {
+    // Unlike the arrow keys, space should never execute unless focused on the parent item element.
+    if (event.target === this.itemRef.nativeElement) {
+      this.toggleSelected();
+      event.preventDefault();
+    }
   }
 
   public updateForExpanded(value: boolean, animate: boolean): void {
@@ -301,5 +317,11 @@ export class SkyRepeaterItemComponent implements AfterViewInit, OnDestroy, OnIni
 
   private slideForExpanded(animate: boolean): void {
     this.slideDirection = this.isExpanded ? 'down' : 'up';
+  }
+
+  private toggleSelected(): void {
+    if (this.selectable) {
+      this.isSelected = !this.isSelected;
+    }
   }
 }

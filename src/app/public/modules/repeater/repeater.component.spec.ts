@@ -264,6 +264,39 @@ describe('Repeater item component', () => {
 
       flushDropdownTimer();
     }));
+
+    it('should select item with space and enter keys when selectable is set to true', () => {
+      cmp.selectable = true;
+      fixture.detectChanges();
+
+      const items = getRepeaterItems(el);
+
+      // Expect first item NOT to be selected.
+      expect(items[0]).not.toHaveCssClass('sky-repeater-item-selected');
+
+      // Focus on first repeater item and press enter key.
+      SkyAppTestUtility.fireDomEvent(items[0], 'focus');
+      SkyAppTestUtility.fireDomEvent(items[0], 'keydown', {
+        keyboardEventInit: {
+          key: 'Enter'
+        }
+      });
+      fixture.detectChanges();
+
+      // Expect first item to be selected.
+      expect(items[0]).toHaveCssClass('sky-repeater-item-selected');
+
+      // Press space key.
+      SkyAppTestUtility.fireDomEvent(items[0], 'keydown', {
+        keyboardEventInit: {
+          key: 'Space'
+        }
+      });
+      fixture.detectChanges();
+
+      // Expect first item NOT to be selected.
+      expect(items[0]).not.toHaveCssClass('sky-repeater-item-selected');
+    });
   });
 
   describe('with expand mode of "single"', () => {

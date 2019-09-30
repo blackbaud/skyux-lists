@@ -23,6 +23,8 @@ export class RepeaterTestComponent {
 
   public removeLastItem: boolean;
 
+  public selectable = false;
+
   public showContextMenu: boolean;
 
   @ViewChild(SkyRepeaterComponent)

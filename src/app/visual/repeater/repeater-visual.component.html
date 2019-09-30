@@ -30,6 +30,8 @@
   >
     <sky-repeater-item *ngFor="let item of items; let i = index"
       (click)="onItemClick(i)"
+      (keydown.Enter)="onEnter($event, i)"
+      (keydown.Space)="onSpace($event, i)"
     >
       <sky-repeater-item-title>
         {{ item.title }}
