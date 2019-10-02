@@ -139,6 +139,7 @@ export class SkyRepeaterItemComponent implements OnDestroy, OnInit {
     this.collapse.complete();
     this.expand.complete();
     this.inlineFormClose.complete();
+    this.isSelectedChange.complete();
 
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
