@@ -539,12 +539,11 @@ describe('Repeater item component', () => {
       let cmp: RepeaterTestComponent = fixture.componentInstance;
       fixture.detectChanges();
       tick();
-      const repeaterItems = cmp.repeater.items.toArray();
-      const repeaterCheckboxes = el.querySelectorAll('sky-checkbox');
-
       // Make each repeater item selectable.
       cmp.repeater.items.toArray().forEach(item => item.selectable = true);
       fixture.detectChanges();
+      const repeaterItems = cmp.repeater.items.toArray();
+      const repeaterCheckboxes = el.querySelectorAll('sky-checkbox');
 
       // Click on last repeater item.
       repeaterCheckboxes[2].querySelector('input').click();
