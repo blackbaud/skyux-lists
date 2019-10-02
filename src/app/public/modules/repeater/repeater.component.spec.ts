@@ -532,6 +532,29 @@ describe('Repeater item component', () => {
         expect(fixture.nativeElement).toBeAccessible();
       });
     }));
+
+    it('update the isSelected property on the input model', fakeAsync(() => {
+      let fixture = TestBed.createComponent(RepeaterTestComponent);
+      let cmp: RepeaterTestComponent = fixture.componentInstance;
+      fixture.detectChanges();
+
+      tick();
+
+      cmp.repeater.items.forEach(item => item.selectable = true);
+
+      const repeaterItems = cmp.repeater.items.toArray();
+      repeaterItems[2].updateIsSelected({source: undefined, checked: true});
+
+      fixture.detectChanges();
+
+      tick();
+
+      expect(repeaterItems[0].isSelected).toBe(false);
+      expect(repeaterItems[1].isSelected).toBe(false);
+      expect(repeaterItems[2].isSelected).toBe(true);
+
+      expect(cmp.lastItemSelected).toBe(true);
+    }));
   });
 
   describe('with activeIndex', () => {
