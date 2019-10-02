@@ -533,27 +533,28 @@ describe('Repeater item component', () => {
       });
     }));
 
-    it('update the isSelected property on the input model', fakeAsync(() => {
+    it('should update the isSelected property when the user selects an item', fakeAsync(() => {
       let fixture = TestBed.createComponent(RepeaterTestComponent);
       let el = fixture.nativeElement;
       let cmp: RepeaterTestComponent = fixture.componentInstance;
       fixture.detectChanges();
       tick();
-
-      cmp.repeater.items.forEach(item => item.selectable = true);
-      fixture.detectChanges();
-
       const repeaterItems = cmp.repeater.items.toArray();
       const repeaterCheckboxes = el.querySelectorAll('sky-checkbox');
-      repeaterCheckboxes[2].querySelector('input').click();
 
+      // Make each repeater item selectable.
+      cmp.repeater.items.toArray().forEach(item => item.selectable = true);
+      fixture.detectChanges();
+
+      // Click on last repeater item.
+      repeaterCheckboxes[2].querySelector('input').click();
       fixture.detectChanges();
       tick();
 
+      // Expect only last item to be selected, and input property (isSelected) to recieve new value.
       expect(repeaterItems[0].isSelected).toBe(false);
       expect(repeaterItems[1].isSelected).toBe(false);
       expect(repeaterItems[2].isSelected).toBe(true);
-
       expect(cmp.lastItemSelected).toBe(true);
     }));
   });

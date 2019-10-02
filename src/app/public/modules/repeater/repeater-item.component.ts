@@ -58,8 +58,6 @@ export class SkyRepeaterItemComponent implements OnDestroy, OnInit {
   public get isExpanded(): boolean {
     return this._isExpanded;
   }
-
-  @Output() public isSelectedChange = new EventEmitter<boolean>();
   @Input()
   public set isSelected(value: boolean) {
     this._isSelected = value;
@@ -83,6 +81,9 @@ export class SkyRepeaterItemComponent implements OnDestroy, OnInit {
 
   @Output()
   public inlineFormClose = new EventEmitter<SkyInlineFormCloseArgs>();
+
+  @Output()
+  public isSelectedChange = new EventEmitter<boolean>();
 
   public contentId: string = `sky-radio-content-${++nextContentId}`;
 
