@@ -90,6 +90,9 @@ export class SkyRepeaterItemComponent implements AfterViewInit, OnDestroy, OnIni
   @Output()
   public inlineFormClose = new EventEmitter<SkyInlineFormCloseArgs>();
 
+  @Output()
+  public isSelectedChange = new EventEmitter<boolean>();
+
   public set childFocusIndex(value: number) {
     if (value !== this._childFocusIndex) {
       this._childFocusIndex = value;
@@ -198,6 +201,7 @@ export class SkyRepeaterItemComponent implements AfterViewInit, OnDestroy, OnIni
     this.collapse.complete();
     this.expand.complete();
     this.inlineFormClose.complete();
+    this.isSelectedChange.complete();
 
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
@@ -309,6 +313,7 @@ export class SkyRepeaterItemComponent implements AfterViewInit, OnDestroy, OnIni
 
   public updateIsSelected(value: SkyCheckboxChange): void {
     this._isSelected = value.checked;
+    this.isSelectedChange.emit(this._isSelected);
   }
 
   public onInlineFormClose(inlineFormCloseArgs: SkyInlineFormCloseArgs): void {
