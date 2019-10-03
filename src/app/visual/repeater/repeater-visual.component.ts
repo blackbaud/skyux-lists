@@ -107,12 +107,10 @@ export class RepeaterVisualComponent {
   }
 
   public getSelectedItems(): string[] {
-    const ids: string[] = [];
-    this.itemsForSelectableRepeater.forEach(item => {
-      if (item.isSelected) {
-        ids.push(item.id.toString());
-      }
-    });
+    const ids: string[] = this.itemsForSelectableRepeater
+      .filter(item => item.isSelected)
+      .map(item => item.id.toString());
+
     return ids;
   }
 
