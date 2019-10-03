@@ -193,7 +193,7 @@ describe('Repeater item component', () => {
       // Expect third interactive child element to be selected (link).
       expect(document.activeElement).toEqual(links[0]);
 
-      // Press left arrow key twice to go back.
+      // Press left arrow key three times to go back.
       SkyAppTestUtility.fireDomEvent(items[0], 'keydown', {
         keyboardEventInit: {
           key: 'ArrowLeft'
@@ -808,6 +808,8 @@ describe('Repeater item component', () => {
       expect(repeaterItems[1].isSelected).toBe(false);
       expect(repeaterItems[2].isSelected).toBe(true);
       expect(cmp.lastItemSelected).toBe(true);
+
+      flushDropdownTimer();
     }));
   });
 

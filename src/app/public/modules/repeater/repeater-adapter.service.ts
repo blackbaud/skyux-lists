@@ -13,8 +13,8 @@ export class SkyRepeaterAdapterService {
     private skyAdapterService: SkyCoreAdapterService
   ) { }
 
-  public getFocusableChildren(element: HTMLElement): HTMLElement[] {
-    return this.skyAdapterService.getFocusableChildren(element);
+  public getFocusableChildren(element: HTMLElement, ignoreTabIndex: boolean = false): HTMLElement[] {
+    return this.skyAdapterService.getFocusableChildren(element, ignoreTabIndex);
   }
 
   public setTabIndexOfFocusableElems(element: HTMLElement, tabIndex: number): void {

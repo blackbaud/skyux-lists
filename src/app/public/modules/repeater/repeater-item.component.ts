@@ -94,10 +94,11 @@ export class SkyRepeaterItemComponent implements AfterViewInit, OnDestroy, OnIni
   public isSelectedChange = new EventEmitter<boolean>();
 
   public set childFocusIndex(value: number) {
+    const focusableChildren = this.adapterService.getFocusableChildren(this.itemRef.nativeElement, true);
     if (value !== this._childFocusIndex) {
       this._childFocusIndex = value;
-      if (this.focusableChildren.length > 0 && value !== undefined) {
-        this.focusableChildren[value].focus();
+      if (focusableChildren.length > 0 && value !== undefined) {
+        focusableChildren[value].focus();
       } else {
         this.itemRef.nativeElement.focus();
       }
@@ -131,18 +132,10 @@ export class SkyRepeaterItemComponent implements AfterViewInit, OnDestroy, OnIni
 
   public slideDirection: string;
 
-  public set tabIndex(value: number) {
-    this._tabIndex = value;
-  }
+  public tabIndex: number = -1;
 
-  public get tabIndex(): number {
-    return this._tabIndex;
-  }
-
-  @ViewChild('skyRepeaterItem')
-  public itemRef: ElementRef;
-
-  private focusableChildren: HTMLElement[] = [];
+  @ViewChild('skyRepeaterItem', { read: ElementRef })
+  private itemRef: ElementRef;
 
   private ngUnsubscribe = new Subject<void>();
 
@@ -153,8 +146,6 @@ export class SkyRepeaterItemComponent implements AfterViewInit, OnDestroy, OnIni
   private _isExpanded = true;
 
   private _isSelected = false;
-
-  private _tabIndex: number = -1;
 
   constructor(
     private adapterService: SkyRepeaterAdapterService,
@@ -192,7 +183,6 @@ export class SkyRepeaterItemComponent implements AfterViewInit, OnDestroy, OnIni
   public ngAfterViewInit(): void {
     // Wait for item to render, then reset all child tabIndexes to -1.
     setTimeout(() => {
-      this.focusableChildren = this.adapterService.getFocusableChildren(this.itemRef.nativeElement);
       this.adapterService.setTabIndexOfFocusableElems(this.itemRef.nativeElement, -1);
     }, 1000);
   }
@@ -222,7 +212,8 @@ export class SkyRepeaterItemComponent implements AfterViewInit, OnDestroy, OnIni
   // Cycle backwards through interactive child elements.
   // If user reaches the beginning, focus on parent item.
   public onArrowLeft(event: KeyboardEvent): void {
-    if (this.focusableChildren.length > 0) {
+    const focusableChildren = this.adapterService.getFocusableChildren(this.itemRef.nativeElement, true);
+    if (focusableChildren.length > 0) {
       if (this.childFocusIndex > 0) {
         this.childFocusIndex--;
       } else if (this.childFocusIndex === 0) {
@@ -236,8 +227,9 @@ export class SkyRepeaterItemComponent implements AfterViewInit, OnDestroy, OnIni
   // Cyle forward through interactive child elements.
   // If user reaches the end, do nothing.
   public onArrowRight(event: KeyboardEvent): void {
-    if (this.focusableChildren.length > 0) {
-      if (this.childFocusIndex < this.focusableChildren.length - 1) {
+    const focusableChildren = this.adapterService.getFocusableChildren(this.itemRef.nativeElement, true);
+    if (focusableChildren.length > 0) {
+      if (this.childFocusIndex < focusableChildren.length - 1) {
         this.childFocusIndex++;
       } else if (this.childFocusIndex === undefined) {
         this.childFocusIndex = 0;
@@ -276,6 +268,10 @@ export class SkyRepeaterItemComponent implements AfterViewInit, OnDestroy, OnIni
       this.toggleSelected();
       event.preventDefault();
     }
+  }
+
+  public onFocus(): void {
+    this.childFocusIndex = undefined;
   }
 
   public onRepeaterItemClick(event: any): void {
