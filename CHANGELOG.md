@@ -1,6 +1,6 @@
 # 3.4.2 (2019-10-03)
 
-- Fixed the repeater component to properly update the `isSelected` property when the value changes. [#71](https://github.com/blackbaud/skyux-lists/pull/71 (Thanks [@blackbaud-GavinNicol](https://github.com/blackbaud-GavinNicol)!)
+- Fixed the repeater item component to properly update the `isSelected` property when the value changes. [#71](https://github.com/blackbaud/skyux-lists/pull/71 (Thanks [@blackbaud-GavinNicol](https://github.com/blackbaud-GavinNicol)!)
 
 # 3.4.1 (2019-08-07)
 
