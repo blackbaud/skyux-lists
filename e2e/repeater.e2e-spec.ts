@@ -85,12 +85,12 @@ describe('Repeater', () => {
     });
   });
 
-  it('should match previous repeater screenshot when draggable', (done) => {
+  it('should match previous repeater screenshot when reorderable', (done) => {
     SkyHostBrowser.get('visual/repeater');
     SkyHostBrowser.setWindowBreakpoint('lg');
-    SkyHostBrowser.scrollTo('#screenshot-repeater-draggable');
-    expect('#screenshot-repeater-draggable').toMatchBaselineScreenshot(done, {
-      screenshotName: 'repeater-draggable'
+    SkyHostBrowser.scrollTo('#screenshot-repeater-reorderable');
+    expect('#screenshot-repeater-reorderable').toMatchBaselineScreenshot(done, {
+      screenshotName: 'repeater-reorderable'
     });
   });
 });

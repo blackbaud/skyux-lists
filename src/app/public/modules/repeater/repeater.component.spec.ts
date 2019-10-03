@@ -724,7 +724,7 @@ describe('Repeater item component', () => {
     }));
   });
 
-  describe('with draggability', () => {
+  describe('with reorderability', () => {
     let fixture: ComponentFixture<RepeaterTestComponent>;
     let cmp: RepeaterTestComponent;
     let el: any;
@@ -744,13 +744,16 @@ describe('Repeater item component', () => {
       cmp = fixture.componentInstance;
       el = fixture.nativeElement;
       fixture.detectChanges();
-      cmp.draggable = true;
+      cmp.reorderable = true;
     });
 
-    it('should move an item to the top via the "Top" button', fakeAsync(() => {
+    beforeEach(fakeAsync(() => {
       fixture.detectChanges();
       tick();
       fixture.detectChanges();
+    }));
+
+    it('should move an item to the top via the "Top" button', fakeAsync(() => {
       let items = el.querySelectorAll('sky-repeater-item');
       const itemToTest = items[1];
       el.querySelectorAll('.sky-repeater-item-reorder-top')[1].click();
@@ -762,9 +765,6 @@ describe('Repeater item component', () => {
     }));
 
     it('should not move the top item via the "Top" button', fakeAsync(() => {
-      fixture.detectChanges();
-      tick();
-      fixture.detectChanges();
       let items = el.querySelectorAll('sky-repeater-item');
       const itemToTest = items[0];
       el.querySelectorAll('.sky-repeater-item-reorder-top')[0].click();
@@ -776,9 +776,6 @@ describe('Repeater item component', () => {
     }));
 
     it('should update css classes correctly while dragging', fakeAsync(() => {
-      fixture.detectChanges();
-      tick();
-      fixture.detectChanges();
       let repeaterItem: HTMLElement = el.querySelectorAll('sky-repeater-item')[1];
       mockDragulaService.drag.emit([, repeaterItem]);
       fixture.detectChanges();
@@ -794,9 +791,6 @@ describe('Repeater item component', () => {
     }));
 
     it('should set the repeater item\'s grab handle as the drag handle', fakeAsync(() => {
-      fixture.detectChanges();
-      tick();
-      fixture.detectChanges();
       let repeaterItem: Element = el.querySelectorAll('sky-repeater-item')[1];
       let handle: Element = el.querySelectorAll('.sky-repeater-item-grab-handle')[1];
       let setOptionsSpy = spyOn(mockDragulaService, 'setOptions').and.callFake(
@@ -820,9 +814,6 @@ describe('Repeater item component', () => {
     }));
 
     it('should move an item up via keyboard controls', fakeAsync(() => {
-      fixture.detectChanges();
-      tick();
-      fixture.detectChanges();
       let items = el.querySelectorAll('sky-repeater-item');
       const itemToTest = items[1];
       const itemDragHandle = el.querySelectorAll('.sky-repeater-item-grab-handle')[1];
@@ -836,9 +827,6 @@ describe('Repeater item component', () => {
     }));
 
     it('should move an item down via keyboard controls', fakeAsync(() => {
-      fixture.detectChanges();
-      tick();
-      fixture.detectChanges();
       let items = el.querySelectorAll('sky-repeater-item');
       const itemToTest = items[1];
       const itemDragHandle = el.querySelectorAll('.sky-repeater-item-grab-handle')[1];
@@ -852,9 +840,6 @@ describe('Repeater item component', () => {
     }));
 
     it('should not move an item down via keyboard controls if it is the last item', fakeAsync(() => {
-      fixture.detectChanges();
-      tick();
-      fixture.detectChanges();
       let items = el.querySelectorAll('sky-repeater-item');
       const itemToTest = items[2];
       const itemDragHandle = el.querySelectorAll('.sky-repeater-item-grab-handle')[2];
@@ -868,9 +853,6 @@ describe('Repeater item component', () => {
     }));
 
     it('should not move an item when the left and right arrows are received keyboard controls', fakeAsync(() => {
-      fixture.detectChanges();
-      tick();
-      fixture.detectChanges();
       let items = el.querySelectorAll('sky-repeater-item');
       const itemToTest = items[1];
       const itemDragHandle = el.querySelectorAll('.sky-repeater-item-grab-handle')[1];
@@ -886,9 +868,6 @@ describe('Repeater item component', () => {
     }));
 
     it('should not move an item up via keyboard controls if the blur event is received', fakeAsync(() => {
-      fixture.detectChanges();
-      tick();
-      fixture.detectChanges();
       let items = el.querySelectorAll('sky-repeater-item');
       const itemToTest = items[1];
       const itemDragHandle = el.querySelectorAll('.sky-repeater-item-grab-handle')[1];
@@ -905,9 +884,6 @@ describe('Repeater item component', () => {
     }));
 
     it('should turn off reordering when escape is hit', fakeAsync(() => {
-      fixture.detectChanges();
-      tick();
-      fixture.detectChanges();
       let items = el.querySelectorAll('sky-repeater-item');
       const itemToTest = items[1];
       const itemDragHandle = el.querySelectorAll('.sky-repeater-item-grab-handle')[1];
@@ -922,9 +898,6 @@ describe('Repeater item component', () => {
     }));
 
     it('should revert any reordering up when escape is hit', fakeAsync(() => {
-      fixture.detectChanges();
-      tick();
-      fixture.detectChanges();
       let items = el.querySelectorAll('sky-repeater-item');
       const itemToTest = items[1];
       const itemDragHandle = el.querySelectorAll('.sky-repeater-item-grab-handle')[1];
@@ -939,9 +912,6 @@ describe('Repeater item component', () => {
     }));
 
     it('should revert any reordering down when escape is hit', fakeAsync(() => {
-      fixture.detectChanges();
-      tick();
-      fixture.detectChanges();
       let items = el.querySelectorAll('sky-repeater-item');
       const itemToTest = items[1];
       const itemDragHandle = el.querySelectorAll('.sky-repeater-item-grab-handle')[1];

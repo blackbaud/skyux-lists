@@ -18,7 +18,7 @@ export class SkyRepeaterAdapterService {
   }
 
   public moveItemUp(elementRef: ElementRef, top = false, steps = 1): number {
-    const itemArray = Array.from(this.host.nativeElement.querySelectorAll('sky-repeater-item'));
+    const itemArray = this.getRepeaterItemArray();
     const index = itemArray.indexOf(elementRef.nativeElement);
 
     if (index === 0) {
@@ -35,7 +35,7 @@ export class SkyRepeaterAdapterService {
   }
 
   public moveItemDown(elementRef: ElementRef, steps = 1): number {
-    const itemArray = Array.from(this.host.nativeElement.querySelectorAll('sky-repeater-item'));
+    const itemArray = this.getRepeaterItemArray();
     const index = itemArray.indexOf(elementRef.nativeElement);
 
     if (index === itemArray.length - steps) {
@@ -57,5 +57,9 @@ export class SkyRepeaterAdapterService {
     this.repeaterService.reorderItem(oldIndex, newIndex);
 
     return newIndex;
+  }
+
+  private getRepeaterItemArray() {
+    return Array.from(this.host.nativeElement.querySelectorAll('sky-repeater-item'));
   }
 }

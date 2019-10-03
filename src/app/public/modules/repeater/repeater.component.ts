@@ -43,18 +43,18 @@ export class SkyRepeaterComponent implements AfterContentInit, OnChanges, OnDest
   public activeIndex: number;
 
   @Input()
-  public set draggable(isDraggable: boolean) {
-    this._draggable = isDraggable;
+  public set reorderable(isReorderable: boolean) {
+    this._reorderable = isReorderable;
 
     if (this.items) {
       this.items.forEach(item => {
-        item.draggable = isDraggable;
+        item.reorderable = isReorderable;
       });
     }
   }
 
-  public get draggable() {
-    return this._draggable;
+  public get reorderable() {
+    return this._reorderable;
   }
 
   @Input()
@@ -72,7 +72,7 @@ export class SkyRepeaterComponent implements AfterContentInit, OnChanges, OnDest
 
   private ngUnsubscribe = new Subject<void>();
 
-  private _draggable = false;
+  private _reorderable = false;
 
   private _expandMode = 'none';
 
@@ -121,7 +121,7 @@ export class SkyRepeaterComponent implements AfterContentInit, OnChanges, OnDest
       this.updateForExpandMode();
 
       this.items.forEach(item => {
-        item.draggable = this.draggable;
+        item.reorderable = this.reorderable;
       });
     }, 0);
 

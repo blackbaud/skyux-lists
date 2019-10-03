@@ -15,7 +15,7 @@ export class RepeaterTestComponent {
 
   public activeIndex: number = undefined;
 
-  public draggable = false;
+  public reorderable = false;
 
   public expandMode = 'single';
 

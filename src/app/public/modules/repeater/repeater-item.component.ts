@@ -85,7 +85,7 @@ export class SkyRepeaterItemComponent implements OnDestroy, OnInit {
   public selectable: boolean = false;
 
   @Input()
-  public draggable: boolean = false;
+  public reorderable: boolean = false;
 
   @Input()
   public showInlineForm: boolean = false;
@@ -127,7 +127,7 @@ export class SkyRepeaterItemComponent implements OnDestroy, OnInit {
   }
 
   public slideDirection: string;
-  public keyboardDraggingEnabled: boolean = false;
+  public keyboardReorderingEnabled: boolean = false;
   public reorderButtonLabel: string;
   public reorderState: string;
 
@@ -245,21 +245,19 @@ export class SkyRepeaterItemComponent implements OnDestroy, OnInit {
     (<HTMLElement> event.target).focus();
   }
 
-  public handleKeyboardEvent(event: KeyboardEvent): void {
+  public onReorderHandleKeyDown(event: KeyboardEvent): void {
     let key = event.key.toLowerCase();
     if (key === ' ' || key === 'enter') {
-      this.keyboardDraggingEnabled = !this.keyboardDraggingEnabled;
+      this.keyboardReorderingEnabled = !this.keyboardReorderingEnabled;
       this.reorderSteps = 0;
 
-      if (this.keyboardDraggingEnabled) {
+      if (this.keyboardReorderingEnabled) {
         this.reorderState = this.reorderStateDescription;
       } else {
         this.reorderState = this.reorderFinishText + ' ' + (this.reorderCurrentIndex + 1)  + ' ' + this.reorderInstructions;
       }
-
-      event.stopPropagation();
     } else if (key === 'escape') {
-      this.keyboardDraggingEnabled = false;
+      this.keyboardReorderingEnabled = false;
 
       if (this.reorderSteps < 0) {
         this.adapterService.moveItemDown(this.elementRef, Math.abs(this.reorderSteps));
@@ -270,31 +268,29 @@ export class SkyRepeaterItemComponent implements OnDestroy, OnInit {
       this.reorderButtonLabel = this.reorderCancelText + ' ' + this.reorderInstructions;
 
       (<HTMLElement> event.target).focus();
-
-      event.stopPropagation();
-    } else if (this.keyboardDraggingEnabled && key.startsWith('arrow')) {
+    } else if (this.keyboardReorderingEnabled && key.startsWith('arrow')) {
       let direction = event.key.toLowerCase().replace('arrow', '');
       if (direction === 'up') {
         this.reorderCurrentIndex = this.adapterService.moveItemUp(this.elementRef);
         this.reorderSteps--;
         this.grabHandle.nativeElement.focus();
-        this.keyboardDraggingEnabled = true;
+        this.keyboardReorderingEnabled = true;
         this.reorderButtonLabel = this.reorderMovedText + ' ' + (this.reorderCurrentIndex + 1);
       } else if (direction === 'down') {
         this.reorderCurrentIndex = this.adapterService.moveItemDown(this.elementRef);
         this.reorderSteps++;
         this.grabHandle.nativeElement.focus();
-        this.keyboardDraggingEnabled = true;
+        this.keyboardReorderingEnabled = true;
         this.reorderButtonLabel = this.reorderMovedText + ' ' + (this.reorderCurrentIndex + 1);
       }
 
-      event.stopPropagation();
       event.preventDefault();
     }
+    event.stopPropagation();
   }
 
-  public handleBlurEvent(event: any): void {
-    this.keyboardDraggingEnabled = false;
+  public onReorderHandleBlur(event: any): void {
+    this.keyboardReorderingEnabled = false;
 
     if (this.reorderSteps < 0) {
       this.adapterService.moveItemDown(this.elementRef, Math.abs(this.reorderSteps));
