@@ -99,6 +99,9 @@ export class SkyRepeaterItemComponent implements OnDestroy, OnInit {
   @Output()
   public inlineFormClose = new EventEmitter<SkyInlineFormCloseArgs>();
 
+  @Output()
+  public isSelectedChange = new EventEmitter<boolean>();
+
   public contentId: string = `sky-repeater-item-content-${++nextContentId}`;
 
   public isActive: boolean = false;
@@ -188,6 +191,7 @@ export class SkyRepeaterItemComponent implements OnDestroy, OnInit {
     this.collapse.complete();
     this.expand.complete();
     this.inlineFormClose.complete();
+    this.isSelectedChange.complete();
 
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
@@ -228,6 +232,7 @@ export class SkyRepeaterItemComponent implements OnDestroy, OnInit {
 
   public updateIsSelected(value: SkyCheckboxChange): void {
     this._isSelected = value.checked;
+    this.isSelectedChange.emit(this._isSelected);
   }
 
   public onInlineFormClose(inlineFormCloseArgs: SkyInlineFormCloseArgs): void {
