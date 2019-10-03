@@ -94,7 +94,12 @@ export class SkyRepeaterItemComponent implements AfterViewInit, OnDestroy, OnIni
   public isSelectedChange = new EventEmitter<boolean>();
 
   public set childFocusIndex(value: number) {
-    const focusableChildren = this.adapterService.getFocusableChildren(this.itemRef.nativeElement, true);
+    const focusableChildren = this.adapterService.getFocusableChildren(
+      this.itemRef.nativeElement,
+      {
+        ignoreTabIndex: true
+      }
+    );
     if (value !== this._childFocusIndex) {
       this._childFocusIndex = value;
       if (focusableChildren.length > 0 && value !== undefined) {
@@ -212,7 +217,12 @@ export class SkyRepeaterItemComponent implements AfterViewInit, OnDestroy, OnIni
   // Cycle backwards through interactive child elements.
   // If user reaches the beginning, focus on parent item.
   public onArrowLeft(event: KeyboardEvent): void {
-    const focusableChildren = this.adapterService.getFocusableChildren(this.itemRef.nativeElement, true);
+    const focusableChildren = this.adapterService.getFocusableChildren(
+      this.itemRef.nativeElement,
+      {
+        ignoreTabIndex: true
+      }
+    );
     if (focusableChildren.length > 0) {
       if (this.childFocusIndex > 0) {
         this.childFocusIndex--;
@@ -227,7 +237,12 @@ export class SkyRepeaterItemComponent implements AfterViewInit, OnDestroy, OnIni
   // Cyle forward through interactive child elements.
   // If user reaches the end, do nothing.
   public onArrowRight(event: KeyboardEvent): void {
-    const focusableChildren = this.adapterService.getFocusableChildren(this.itemRef.nativeElement, true);
+    const focusableChildren = this.adapterService.getFocusableChildren(
+      this.itemRef.nativeElement,
+      {
+        ignoreTabIndex: true
+      }
+    );
     if (focusableChildren.length > 0) {
       if (this.childFocusIndex < focusableChildren.length - 1) {
         this.childFocusIndex++;

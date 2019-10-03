@@ -3,7 +3,8 @@ import {
 } from '@angular/core';
 
 import {
-  SkyCoreAdapterService
+  SkyCoreAdapterService,
+  SkyFocusableChildrenOptions
 } from '@skyux/core';
 
 @Injectable()
@@ -13,8 +14,8 @@ export class SkyRepeaterAdapterService {
     private skyAdapterService: SkyCoreAdapterService
   ) { }
 
-  public getFocusableChildren(element: HTMLElement, ignoreTabIndex: boolean = false): HTMLElement[] {
-    return this.skyAdapterService.getFocusableChildren(element, ignoreTabIndex);
+  public getFocusableChildren(element: HTMLElement, options: SkyFocusableChildrenOptions): HTMLElement[] {
+    return this.skyAdapterService.getFocusableChildren(element, options);
   }
 
   public setTabIndexOfFocusableElems(element: HTMLElement, tabIndex: number): void {
