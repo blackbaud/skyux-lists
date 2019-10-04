@@ -1,6 +1,6 @@
 # 3.5.1 (2019-10-04)
 
-- Fixed the repeater component to not throw an error when interacting with non-reorderable items. [#74](https://github.com/blackbaud/skyux-lists/pull/74)
+- Fixed the repeater component to properly handle interactions with items that users can't reorder. [#74](https://github.com/blackbaud/skyux-lists/pull/74)
 
 # 3.5.0 (2019-10-03)
 
