@@ -1,3 +1,7 @@
+# 3.5.1 (2019-10-04)
+
+- Fixed the repeater component to not throw an error when interacting with non-reorderable items. [#74](https://github.com/blackbaud/skyux-lists/pull/74)
+
 # 3.5.0 (2019-10-03)
 
 - Added the ability to reorder repeater item components. [#62](https://github.com/blackbaud/skyux-lists/pull/62)
