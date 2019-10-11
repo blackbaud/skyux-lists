@@ -80,4 +80,12 @@ export class SkyRepeaterService implements OnDestroy {
       this.focusedItemChange.next(this.items[focusedIndex - 1]);
     }
   }
+
+  public getItemIndex(item: SkyRepeaterItemComponent): number {
+    return this.items.indexOf(item);
+  }
+
+  public reorderItem(oldIndex: number, newIndex: number): void {
+    this.items.splice(newIndex, 0, this.items.splice(oldIndex, 1)[0]);
+  }
 }

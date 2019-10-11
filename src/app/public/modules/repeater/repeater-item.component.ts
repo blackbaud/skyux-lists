@@ -25,13 +25,20 @@ import {
 } from '@skyux/forms';
 
 import {
+  SkyLibResourcesService
+} from '@skyux/i18n';
+
+import {
   SkyInlineFormCloseArgs,
   SkyInlineFormConfig
 } from '@skyux/inline-form';
 
 import {
+  Observable,
   Subject
-} from 'rxjs/Subject';
+} from 'rxjs';
+
+import 'rxjs/add/observable/forkJoin';
 
 import {
   SkyRepeaterAdapterService
@@ -79,6 +86,9 @@ export class SkyRepeaterItemComponent implements AfterViewInit, OnDestroy, OnIni
   public selectable: boolean = false;
 
   @Input()
+  public reorderable: boolean = false;
+
+  @Input()
   public showInlineForm: boolean = false;
 
   @Output()
@@ -114,9 +124,12 @@ export class SkyRepeaterItemComponent implements AfterViewInit, OnDestroy, OnIni
     return this._childFocusIndex;
   }
 
-  public contentId: string = `sky-radio-content-${++nextContentId}`;
+  public contentId: string = `sky-repeater-item-content-${++nextContentId}`;
 
   public isActive: boolean = false;
+
+  @ViewChild('grabHandle', { read: ElementRef })
+  private grabHandle: ElementRef;
 
   public set isCollapsible(value: boolean) {
     if (this.isCollapsible !== value) {
@@ -136,6 +149,9 @@ export class SkyRepeaterItemComponent implements AfterViewInit, OnDestroy, OnIni
   }
 
   public slideDirection: string;
+  public keyboardReorderingEnabled: boolean = false;
+  public reorderButtonLabel: string;
+  public reorderState: string;
 
   public tabIndex: number = -1;
 
@@ -143,6 +159,13 @@ export class SkyRepeaterItemComponent implements AfterViewInit, OnDestroy, OnIni
   private itemRef: ElementRef;
 
   private ngUnsubscribe = new Subject<void>();
+  private reorderCancelText: string;
+  private reorderCurrentIndex: number;
+  private reorderFinishText: string;
+  private reorderInstructions: string;
+  private reorderMovedText: string;
+  private reorderStateDescription: string;
+  private reorderSteps: number;
 
   private _childFocusIndex: number;
 
@@ -156,9 +179,29 @@ export class SkyRepeaterItemComponent implements AfterViewInit, OnDestroy, OnIni
     private adapterService: SkyRepeaterAdapterService,
     private changeDetector: ChangeDetectorRef,
     private logService: SkyLogService,
-    private repeaterService: SkyRepeaterService
+    private repeaterService: SkyRepeaterService,
+    private elementRef: ElementRef,
+    private resourceService: SkyLibResourcesService
   ) {
     this.slideForExpanded(false);
+
+    // tslint:disable-next-line: deprecation
+    Observable.forkJoin(
+      this.resourceService.getString('skyux_repeater_item_reorder_cancel'),
+      this.resourceService.getString('skyux_repeater_item_reorder_finish'),
+      this.resourceService.getString('skyux_repeater_item_reorder_instructions'),
+      this.resourceService.getString('skyux_repeater_item_reorder_operation'),
+      this.resourceService.getString('skyux_repeater_item_reorder_moved')
+    )
+    .subscribe((translatedStrings: string[]) => {
+      this.reorderCancelText = translatedStrings[0];
+      this.reorderFinishText = translatedStrings[1];
+      this.reorderStateDescription = translatedStrings[2];
+      this.reorderInstructions = translatedStrings[3];
+      this.reorderMovedText = translatedStrings[4];
+
+      this.reorderButtonLabel = this.reorderInstructions;
+    });
   }
 
   public ngOnInit(): void {
@@ -169,19 +212,19 @@ export class SkyRepeaterItemComponent implements AfterViewInit, OnDestroy, OnIni
         .subscribe((item: SkyRepeaterItemComponent) => {
           this.isActive = this === item;
           this.changeDetector.markForCheck();
-      });
+        });
+    });
 
-      // When service emits a focus change, set the tabIndex and browser focus.
-      this.repeaterService.focusedItemChange
-        .takeUntil(this.ngUnsubscribe)
-        .subscribe((item: SkyRepeaterItemComponent) => {
-          if (this === item) {
-            this.tabIndex = 0;
-            this.itemRef.nativeElement.focus();
-          } else {
-            this.tabIndex = -1;
-          }
-      });
+    // When service emits a focus change, set the tabIndex and browser focus.
+    this.repeaterService.focusedItemChange
+      .takeUntil(this.ngUnsubscribe)
+      .subscribe((item: SkyRepeaterItemComponent) => {
+        if (this === item) {
+          this.tabIndex = 0;
+          this.itemRef.nativeElement.focus();
+        } else {
+          this.tabIndex = -1;
+        }
     });
   }
 
@@ -329,6 +372,68 @@ export class SkyRepeaterItemComponent implements AfterViewInit, OnDestroy, OnIni
 
   public onInlineFormClose(inlineFormCloseArgs: SkyInlineFormCloseArgs): void {
     this.inlineFormClose.emit(inlineFormCloseArgs);
+  }
+
+  public moveToTop(event: Event): void {
+    event.stopPropagation();
+    this.adapterService.moveItemUp(this.elementRef, true);
+    (<HTMLElement> event.target).focus();
+  }
+
+  public onReorderHandleKeyDown(event: KeyboardEvent): void {
+    let key = event.key.toLowerCase();
+    if (key === ' ' || key === 'enter') {
+      this.keyboardReorderingEnabled = !this.keyboardReorderingEnabled;
+      this.reorderSteps = 0;
+
+      if (this.keyboardReorderingEnabled) {
+        this.reorderState = this.reorderStateDescription;
+      } else {
+        this.reorderState = this.reorderFinishText + ' ' + (this.reorderCurrentIndex + 1)  + ' ' + this.reorderInstructions;
+      }
+    } else if (key === 'escape') {
+      this.keyboardReorderingEnabled = false;
+
+      if (this.reorderSteps < 0) {
+        this.adapterService.moveItemDown(this.elementRef, Math.abs(this.reorderSteps));
+      } else if (this.reorderSteps > 0) {
+        this.adapterService.moveItemUp(this.elementRef, false, this.reorderSteps);
+      }
+
+      this.reorderButtonLabel = this.reorderCancelText + ' ' + this.reorderInstructions;
+
+      (<HTMLElement> event.target).focus();
+    } else if (this.keyboardReorderingEnabled && key.startsWith('arrow')) {
+      let direction = event.key.toLowerCase().replace('arrow', '');
+      if (direction === 'up') {
+        this.reorderCurrentIndex = this.adapterService.moveItemUp(this.elementRef);
+        this.reorderSteps--;
+        this.grabHandle.nativeElement.focus();
+        this.keyboardReorderingEnabled = true;
+        this.reorderButtonLabel = this.reorderMovedText + ' ' + (this.reorderCurrentIndex + 1);
+      } else if (direction === 'down') {
+        this.reorderCurrentIndex = this.adapterService.moveItemDown(this.elementRef);
+        this.reorderSteps++;
+        this.grabHandle.nativeElement.focus();
+        this.keyboardReorderingEnabled = true;
+        this.reorderButtonLabel = this.reorderMovedText + ' ' + (this.reorderCurrentIndex + 1);
+      }
+
+      event.preventDefault();
+    }
+    event.stopPropagation();
+  }
+
+  public onReorderHandleBlur(event: any): void {
+    this.keyboardReorderingEnabled = false;
+
+    if (this.reorderSteps < 0) {
+      this.adapterService.moveItemDown(this.elementRef, Math.abs(this.reorderSteps));
+    } else if (this.reorderSteps > 0) {
+      this.adapterService.moveItemUp(this.elementRef, false, this.reorderSteps);
+    }
+    this.reorderButtonLabel = this.reorderInstructions;
+    this.reorderState = undefined;
   }
 
   private slideForExpanded(animate: boolean): void {

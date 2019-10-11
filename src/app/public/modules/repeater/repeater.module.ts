@@ -20,12 +20,17 @@ import {
 } from '@skyux/forms';
 
 import {
-  SkyChevronModule
+  SkyChevronModule,
+  SkyIconModule
 } from '@skyux/indicators';
 
 import {
   SkyInlineFormModule
 } from '@skyux/inline-form';
+
+import {
+  DragulaModule
+} from 'ng2-dragula/ng2-dragula';
 
 import {
   SkyRepeaterAdapterService
@@ -75,8 +80,10 @@ import {
   imports: [
     BrowserAnimationsModule,
     CommonModule,
+    DragulaModule,
     SkyChevronModule,
     SkyCheckboxModule,
+    SkyIconModule,
     SkyInlineFormModule,
     SkyListsResourcesModule,
     SkyLogModule
