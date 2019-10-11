@@ -4,7 +4,8 @@ import {
 } from '@angular/core';
 
 import {
-  SkyCoreAdapterService
+  SkyCoreAdapterService,
+  SkyFocusableChildrenOptions
 } from '@skyux/core';
 
 import {

@@ -176,10 +176,10 @@ export class SkyRepeaterItemComponent implements AfterViewInit, OnDestroy, OnIni
   private _isSelected = false;
 
   constructor(
-    private adapterService: SkyRepeaterAdapterService,
+    private repeaterService: SkyRepeaterService,
     private changeDetector: ChangeDetectorRef,
     private logService: SkyLogService,
-    private repeaterService: SkyRepeaterService,
+    private adapterService: SkyRepeaterAdapterService,
     private elementRef: ElementRef,
     private resourceService: SkyLibResourcesService
   ) {
