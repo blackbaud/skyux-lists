@@ -333,6 +333,8 @@ describe('Repeater item component', () => {
 
     expect(repeaterService.getItemIndex(fixture.componentInstance.repeater.items.toArray()[2]))
       .toBe(2);
+
+    flushDropdownTimer();
   }));
 
   it('should not error when a non-reorderable repeater is interacted with', fakeAsync(() => {
@@ -351,6 +353,8 @@ describe('Repeater item component', () => {
       fixture.detectChanges();
       tick();
     }).not.toThrow();
+
+    flushDropdownTimer();
   }));
 
   describe('with expand mode of "single"', () => {
@@ -1021,13 +1025,12 @@ describe('Repeater item component', () => {
         }).createComponent(RepeaterTestComponent);
       cmp = fixture.componentInstance;
       el = fixture.nativeElement;
-      fixture.detectChanges();
       cmp.reorderable = true;
     });
 
     beforeEach(fakeAsync(() => {
       fixture.detectChanges();
-      tick();
+      tick(1000); // Allow repeater-item.component to set tabindexes & render context dropdown.
       fixture.detectChanges();
     }));
 
@@ -1089,6 +1092,8 @@ describe('Repeater item component', () => {
       fixture.detectChanges();
 
       expect(setOptionsSpy).toHaveBeenCalled();
+
+      flushDropdownTimer();
     }));
 
     it('should move an item up via keyboard controls', fakeAsync(() => {
@@ -1201,6 +1206,45 @@ describe('Repeater item component', () => {
       fixture.detectChanges();
       expect(el.querySelectorAll('sky-repeater-item')[2]).not.toBe(itemToTest);
       expect(el.querySelectorAll('sky-repeater-item')[1]).toBe(itemToTest);
+    }));
+
+    it(`should set focus on the previous item when the arrowUp key is pressed
+      on the reorder handle while reording is not enabled`, fakeAsync(() => {
+      let items = getRepeaterItems(el);
+      const dragHandles = el.querySelectorAll('.sky-repeater-item-grab-handle');
+
+      // Focus on first item, and press right key. Expect focus to be on the first drag handle.
+      SkyAppTestUtility.fireDomEvent(items[0], 'focus');
+      SkyAppTestUtility.fireDomEvent(items[0], 'keydown', {
+        keyboardEventInit: {
+          key: 'ArrowRight'
+        }
+      });
+      expect(document.activeElement).toBe(dragHandles[0]);
+
+      // Press down key. Expect focus to go to next item.
+      SkyAppTestUtility.fireDomEvent(dragHandles[0], 'keydown', {
+        keyboardEventInit: {
+          key: 'ArrowDown'
+        }
+      });
+      expect(document.activeElement).toBe(items[1]);
+
+      // Press right key. Expect focus to go to drag handle.
+      SkyAppTestUtility.fireDomEvent(items[1], 'keydown', {
+        keyboardEventInit: {
+          key: 'ArrowRight'
+        }
+      });
+      expect(document.activeElement).toBe(dragHandles[1]);
+
+      // Press up key. Expect focus to go back to first item.
+      SkyAppTestUtility.fireDomEvent(dragHandles[1], 'keydown', {
+        keyboardEventInit: {
+          key: 'ArrowUp'
+        }
+      });
+      expect(document.activeElement).toBe(items[0]);
     }));
 
     it('should be accessible', async(() => {

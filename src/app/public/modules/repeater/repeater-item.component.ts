@@ -381,63 +381,109 @@ export class SkyRepeaterItemComponent implements AfterViewInit, OnDestroy, OnIni
   }
 
   public onReorderHandleKeyDown(event: KeyboardEvent): void {
-    let key = event.key.toLowerCase();
-    if (key === ' ' || key === 'enter') {
-      this.keyboardReorderingEnabled = !this.keyboardReorderingEnabled;
-      this.reorderSteps = 0;
+    switch (event.key.toLowerCase()) {
+      case ' ':
+        this.keyboardToggleReorder();
+        event.preventDefault();
+        event.stopPropagation();
+        break;
 
-      if (this.keyboardReorderingEnabled) {
-        this.reorderState = this.reorderStateDescription;
-      } else {
-        this.reorderState = this.reorderFinishText + ' ' + (this.reorderCurrentIndex + 1)  + ' ' + this.reorderInstructions;
-      }
-    } else if (key === 'escape') {
-      this.keyboardReorderingEnabled = false;
+      case 'enter':
+        this.keyboardToggleReorder();
+        event.preventDefault();
+        event.stopPropagation();
+        break;
 
-      if (this.reorderSteps < 0) {
-        this.adapterService.moveItemDown(this.elementRef, Math.abs(this.reorderSteps));
-      } else if (this.reorderSteps > 0) {
-        this.adapterService.moveItemUp(this.elementRef, false, this.reorderSteps);
-      }
+      case 'escape':
+        if (this.keyboardReorderingEnabled) {
+          this.keyboardReorderingEnabled = false;
+          this.revertReorderSteps();
+          this.reorderButtonLabel = this.reorderCancelText + ' ' + this.reorderInstructions;
+          (<HTMLElement> event.target).focus();
+          event.preventDefault();
+          event.stopPropagation();
+        }
+        break;
 
-      this.reorderButtonLabel = this.reorderCancelText + ' ' + this.reorderInstructions;
+      case 'arrowup':
+        if (this.keyboardReorderingEnabled) {
+          this.keyboardReorderUp();
+          event.preventDefault();
+          event.stopPropagation();
+        }
+        break;
 
-      (<HTMLElement> event.target).focus();
-    } else if (this.keyboardReorderingEnabled && key.startsWith('arrow')) {
-      let direction = event.key.toLowerCase().replace('arrow', '');
-      if (direction === 'up') {
-        this.reorderCurrentIndex = this.adapterService.moveItemUp(this.elementRef);
-        this.reorderSteps--;
-        this.grabHandle.nativeElement.focus();
-        this.keyboardReorderingEnabled = true;
-        this.reorderButtonLabel = this.reorderMovedText + ' ' + (this.reorderCurrentIndex + 1);
-      } else if (direction === 'down') {
-        this.reorderCurrentIndex = this.adapterService.moveItemDown(this.elementRef);
-        this.reorderSteps++;
-        this.grabHandle.nativeElement.focus();
-        this.keyboardReorderingEnabled = true;
-        this.reorderButtonLabel = this.reorderMovedText + ' ' + (this.reorderCurrentIndex + 1);
-      }
+      case 'arrowdown':
+        if (this.keyboardReorderingEnabled) {
+          this.keyboardReorderDown();
+          event.preventDefault();
+          event.stopPropagation();
+        }
+        break;
 
-      event.preventDefault();
+      case 'arrowleft':
+        if (this.keyboardReorderingEnabled) {
+          event.preventDefault();
+          event.stopPropagation();
+        }
+        break;
+
+      case 'arrowright':
+        if (this.keyboardReorderingEnabled) {
+          event.preventDefault();
+          event.stopPropagation();
+        }
+        break;
+
+      default:
+        break;
     }
-    event.stopPropagation();
   }
 
   public onReorderHandleBlur(event: any): void {
     this.keyboardReorderingEnabled = false;
-
-    if (this.reorderSteps < 0) {
-      this.adapterService.moveItemDown(this.elementRef, Math.abs(this.reorderSteps));
-    } else if (this.reorderSteps > 0) {
-      this.adapterService.moveItemUp(this.elementRef, false, this.reorderSteps);
-    }
+    this.revertReorderSteps();
     this.reorderButtonLabel = this.reorderInstructions;
     this.reorderState = undefined;
   }
 
   private slideForExpanded(animate: boolean): void {
     this.slideDirection = this.isExpanded ? 'down' : 'up';
+  }
+
+  private keyboardReorderUp() {
+    this.reorderCurrentIndex = this.adapterService.moveItemUp(this.elementRef);
+    this.reorderSteps--;
+    this.grabHandle.nativeElement.focus();
+    this.keyboardReorderingEnabled = true;
+    this.reorderButtonLabel = this.reorderMovedText + ' ' + (this.reorderCurrentIndex + 1);
+  }
+
+  private keyboardReorderDown() {
+    this.reorderCurrentIndex = this.adapterService.moveItemDown(this.elementRef);
+    this.reorderSteps++;
+    this.grabHandle.nativeElement.focus();
+    this.keyboardReorderingEnabled = true;
+    this.reorderButtonLabel = this.reorderMovedText + ' ' + (this.reorderCurrentIndex + 1);
+  }
+
+  private keyboardToggleReorder() {
+    this.keyboardReorderingEnabled = !this.keyboardReorderingEnabled;
+    this.reorderSteps = 0;
+
+    if (this.keyboardReorderingEnabled) {
+      this.reorderState = this.reorderStateDescription;
+    } else {
+      this.reorderState = this.reorderFinishText + ' ' + (this.reorderCurrentIndex + 1)  + ' ' + this.reorderInstructions;
+    }
+  }
+
+  private revertReorderSteps() {
+    if (this.reorderSteps < 0) {
+      this.adapterService.moveItemDown(this.elementRef, Math.abs(this.reorderSteps));
+    } else if (this.reorderSteps > 0) {
+      this.adapterService.moveItemUp(this.elementRef, false, this.reorderSteps);
+    }
   }
 
   private toggleSelected(): void {
