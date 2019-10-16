@@ -77,7 +77,7 @@ export class SkyRepeaterComponent implements AfterContentInit, OnChanges, OnDest
   private _expandMode = 'none';
 
   constructor(
-    private repeaterService: SkyRepeaterService,
+    public repeaterService: SkyRepeaterService,
     private adapterService: SkyRepeaterAdapterService,
     private dragulaService: DragulaService,
     private elementRef: ElementRef
