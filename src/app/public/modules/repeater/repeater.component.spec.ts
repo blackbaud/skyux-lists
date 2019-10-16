@@ -133,7 +133,7 @@ describe('Repeater item component', () => {
       cmp.showContextMenu = true;
       el = fixture.nativeElement;
       fixture.detectChanges();
-      tick(1000); // Allow repeater-item.component to set tabindexes & render context dropdown.
+      tick(); // Allow repeater-item.component to set tabindexes & render context dropdown.
       fixture.detectChanges();
     }));
 
@@ -1028,7 +1028,7 @@ describe('Repeater item component', () => {
 
       fixture.detectChanges();
       cmp.reorderable = true;
-      tick(1000); // Allow repeater-item.component to set tabindexes & render context dropdown.
+      tick(); // Allow repeater-item.component to set tabindexes & render context dropdown.
       fixture.detectChanges();
     }));
 

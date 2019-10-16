@@ -25,8 +25,15 @@ export class SkyRepeaterAdapterService {
     return this.skyAdapterService.getFocusableChildren(element, options);
   }
 
-  public setTabIndexOfFocusableElems(element: HTMLElement, tabIndex: number): void {
-    const focusableElems = this.skyAdapterService.getFocusableChildren(element);
+  public setTabIndexOfFocusableElems(
+    element: HTMLElement,
+    tabIndex: number,
+    ignoreVisibility = false
+  ): void {
+    const focusableElems = this.skyAdapterService.getFocusableChildren(
+      element,
+      { ignoreVisibility: ignoreVisibility }
+    );
     let index = focusableElems.length;
     while (index--) {
       focusableElems[index].tabIndex = tabIndex;

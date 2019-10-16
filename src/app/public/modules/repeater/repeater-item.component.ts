@@ -229,10 +229,7 @@ export class SkyRepeaterItemComponent implements AfterViewInit, OnDestroy, OnIni
   }
 
   public ngAfterViewInit(): void {
-    // Wait for item to render, then reset all child tabIndexes to -1.
-    setTimeout(() => {
-      this.adapterService.setTabIndexOfFocusableElems(this.itemRef.nativeElement, -1);
-    }, 1000);
+    this.adapterService.setTabIndexOfFocusableElems(this.itemRef.nativeElement, -1, true);
   }
 
   public ngOnDestroy(): void {
