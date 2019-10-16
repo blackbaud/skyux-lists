@@ -435,6 +435,7 @@ export class SkyRepeaterItemComponent implements AfterViewInit, OnDestroy, OnIni
         }
         break;
 
+      /* istanbul ignore next */
       default:
         break;
     }
