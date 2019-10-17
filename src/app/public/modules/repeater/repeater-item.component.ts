@@ -6,7 +6,8 @@ import {
   OnDestroy,
   OnInit,
   Output,
-  TemplateRef
+  TemplateRef,
+  ContentChild
 } from '@angular/core';
 
 import {
@@ -33,6 +34,7 @@ import {
 import {
   SkyRepeaterService
 } from './repeater.service';
+import { SkyRepeaterItemContentComponent } from './repeater-item-content.component';
 
 let nextContentId: number = 0;
 
@@ -43,6 +45,8 @@ let nextContentId: number = 0;
   animations: [skyAnimationSlide]
 })
 export class SkyRepeaterItemComponent implements OnDestroy, OnInit {
+  @ContentChild(SkyRepeaterItemContentComponent)
+  private repeaterItemContent: SkyRepeaterItemContentComponent;
 
   @Input()
   public inlineFormConfig: SkyInlineFormConfig;
@@ -88,6 +92,8 @@ export class SkyRepeaterItemComponent implements OnDestroy, OnInit {
 
   public isActive: boolean = false;
 
+  public hasItemContent: boolean = false;
+
   public set isCollapsible(value: boolean) {
     if (this.isCollapsible !== value) {
       this._isCollapsible = value;
@@ -124,6 +130,7 @@ export class SkyRepeaterItemComponent implements OnDestroy, OnInit {
   }
 
   public ngOnInit(): void {
+    this.hasItemContent = !!this.repeaterItemContent;
     setTimeout(() => {
       this.repeaterService.registerItem(this);
       this.repeaterService.activeItemChange
