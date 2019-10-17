@@ -76,7 +76,6 @@ export class SkyRepeaterItemComponent implements OnDestroy, OnInit {
     return this._isExpanded;
   }
 
-  @Output() public isSelectedChange = new EventEmitter<boolean>();
   @Input()
   public set isSelected(value: boolean) {
     this._isSelected = value;
