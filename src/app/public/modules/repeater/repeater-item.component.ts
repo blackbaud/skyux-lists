@@ -9,7 +9,9 @@ import {
   Output,
   TemplateRef,
   ViewChild,
-  ContentChild
+  ContentChildren,
+  QueryList,
+  AfterViewInit
 } from '@angular/core';
 
 import {
@@ -57,9 +59,9 @@ let nextContentId: number = 0;
   templateUrl: './repeater-item.component.html',
   animations: [skyAnimationSlide]
 })
-export class SkyRepeaterItemComponent implements OnDestroy, OnInit {
-  @ContentChild(SkyRepeaterItemContentComponent)
-  private repeaterItemContent: SkyRepeaterItemContentComponent;
+export class SkyRepeaterItemComponent implements OnDestroy, OnInit, AfterViewInit {
+  @ContentChildren(SkyRepeaterItemContentComponent)
+  private repeaterItemContent: QueryList<SkyRepeaterItemContentComponent>;
 
   @Input()
   public inlineFormConfig: SkyInlineFormConfig;
@@ -182,7 +184,6 @@ export class SkyRepeaterItemComponent implements OnDestroy, OnInit {
   }
 
   public ngOnInit(): void {
-    this.hasItemContent = !!this.repeaterItemContent;
     setTimeout(() => {
       this.repeaterService.registerItem(this);
       this.repeaterService.activeItemChange
@@ -191,6 +192,13 @@ export class SkyRepeaterItemComponent implements OnDestroy, OnInit {
           this.isActive = this === item;
           this.changeDetector.markForCheck();
         });
+    });
+  }
+
+  public ngAfterViewInit(): void {
+    this.hasItemContent = this.repeaterItemContent.length > 0;
+    this.repeaterItemContent.changes.subscribe(() => {
+      this.hasItemContent = this.repeaterItemContent.length > 0;
     });
   }
 
