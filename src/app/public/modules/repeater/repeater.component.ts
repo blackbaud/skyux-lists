@@ -116,6 +116,7 @@ export class SkyRepeaterComponent implements AfterContentInit, OnChanges, OnDest
       .takeUntil(this.ngUnsubscribe)
       .subscribe((index: number) => {
         this.activeIndex = index;
+        this.activeIndexChange.emit(index);
       });
 
     this.updateForExpandMode();

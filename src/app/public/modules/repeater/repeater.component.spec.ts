@@ -1002,6 +1002,34 @@ describe('Repeater item component', () => {
       flushDropdownTimer();
     }));
 
+    it('should NOT emit activeIndex values if enableActive = false', fakeAsync(() => {
+      cmp.enableActive = false;
+      cmp.activeIndex = undefined;
+      detectChangesAndTick(fixture);
+      let items = getItems();
+
+      items[0].click();
+      fixture.detectChanges();
+
+      expect(cmp.activeIndex).toEqual(undefined);
+
+      flushDropdownTimer();
+    }));
+
+    it('should emit activeIndex values as active index is changed', fakeAsync(() => {
+      cmp.enableActive = true;
+      cmp.activeIndex = undefined;
+      detectChangesAndTick(fixture);
+      let items = getItems();
+
+      items[0].click();
+      fixture.detectChanges();
+
+      expect(cmp.activeIndex).toEqual(0);
+
+      flushDropdownTimer();
+    }));
+
     it('should add and remove active css class when activeIndex input value changes', fakeAsync(() => {
       cmp.enableActive = true;
       detectChangesAndTick(fixture);
