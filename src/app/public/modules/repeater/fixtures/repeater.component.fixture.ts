@@ -15,7 +15,7 @@ export class RepeaterTestComponent {
 
   public activeIndex: number = undefined;
 
-  public reorderable = false;
+  public enableActive = false;
 
   public expandMode = 'single';
 
@@ -24,6 +24,8 @@ export class RepeaterTestComponent {
   public lastItemSelected = false;
 
   public removeLastItem: boolean;
+
+  public reorderable = false;
 
   public selectable = false;
 

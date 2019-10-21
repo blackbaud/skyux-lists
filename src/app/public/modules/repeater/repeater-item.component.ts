@@ -321,6 +321,7 @@ export class SkyRepeaterItemComponent implements AfterViewInit, OnDestroy, OnIni
     // Unlike the arrow keys, enter should never execute unless focused on the parent item element.
     if (event.target === this.itemRef.nativeElement) {
       this.toggleSelected();
+      this.repeaterService.activateItem(this);
       event.preventDefault();
     }
   }
@@ -330,13 +331,16 @@ export class SkyRepeaterItemComponent implements AfterViewInit, OnDestroy, OnIni
   }
 
   public onRepeaterItemClick(event: any): void {
+    this.childFocusIndex = undefined;
     this.repeaterService.focusListItem(this);
+    this.repeaterService.activateItem(this);
   }
 
   public onSpace(event: KeyboardEvent): void {
     // Unlike the arrow keys, space should never execute unless focused on the parent item element.
     if (event.target === this.itemRef.nativeElement) {
       this.toggleSelected();
+      this.repeaterService.activateItem(this);
       event.preventDefault();
     }
   }

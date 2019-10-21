@@ -3,10 +3,12 @@ import {
   Component,
   ContentChildren,
   ElementRef,
+  EventEmitter,
   Input,
   QueryList,
   OnChanges,
   OnDestroy,
+  Output,
   SimpleChanges
 } from '@angular/core';
 
@@ -40,7 +42,18 @@ import {
 export class SkyRepeaterComponent implements AfterContentInit, OnChanges, OnDestroy {
 
   @Input()
-  public activeIndex: number;
+  public set activeIndex(value: number) {
+    this._activeIndex = value;
+  }
+
+  public get activeIndex(): number {
+    return this._activeIndex;
+  }
+
+  @Input()
+  public set enableActive(value: boolean) {
+    this.repeaterService.enableActiveState = value;
+  }
 
   @Input()
   public set reorderable(isReorderable: boolean) {
@@ -67,10 +80,15 @@ export class SkyRepeaterComponent implements AfterContentInit, OnChanges, OnDest
     return this._expandMode || 'none';
   }
 
+  @Output()
+  public activeIndexChange = new EventEmitter();
+
   @ContentChildren(SkyRepeaterItemComponent)
   public items: QueryList<SkyRepeaterItemComponent>;
 
   private ngUnsubscribe = new Subject<void>();
+
+  private _activeIndex: number;
 
   private _reorderable = false;
 
@@ -92,6 +110,12 @@ export class SkyRepeaterComponent implements AfterContentInit, OnChanges, OnDest
             }
           });
         }
+      });
+
+    this.repeaterService.activeItemIndexChange
+      .takeUntil(this.ngUnsubscribe)
+      .subscribe((index: number) => {
+        this.activeIndex = index;
       });
 
     this.updateForExpandMode();

@@ -1,4 +1,4 @@
-<div
+<!-- <div
   class="app-screenshot sky-margin-stacked-default"
   id="screenshot-repeater"
 >
@@ -18,21 +18,18 @@
       <sky-repeater-item-content>Content 2</sky-repeater-item-content>
     </sky-repeater-item>
   </sky-repeater>
-</div>
+</div> -->
 
 <div
   class="app-screenshot sky-margin-stacked-default"
   id="screenshot-repeater-with-active-item"
 >
-  <h3>Repeater with activeIndex set on click</h3>
+  <h3>Repeater with activeIndex enabled</h3>
   <sky-repeater
-    [activeIndex]="activeIndex"
+    [enableActive]="true"
+    [activeIndex]="2"
   >
-    <sky-repeater-item *ngFor="let item of items; let i = index"
-      (click)="onItemClick(i)"
-      (keydown.Enter)="onEnter($event, i)"
-      (keydown.Space)="onSpace($event, i)"
-    >
+    <sky-repeater-item *ngFor="let item of items; let i = index">
       <sky-repeater-item-title>
         {{ item.title }}
       </sky-repeater-item-title>
@@ -61,7 +58,7 @@
   </button>
 </div>
 
-<div
+<!-- <div
   class="app-screenshot sky-margin-stacked-default"
   id="screenshot-repeater-collapsed"
 >
@@ -390,4 +387,4 @@
       <sky-repeater-item-content>Content 2</sky-repeater-item-content>
     </sky-repeater-item>
   </sky-repeater>
-</div>
+</div> -->
