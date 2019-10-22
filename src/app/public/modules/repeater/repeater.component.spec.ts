@@ -917,7 +917,7 @@ describe('Repeater item component', () => {
       fixture.detectChanges();
 
       activeRepeaterItem = el.querySelectorAll('.sky-repeater-item-active');
-      expect(activeRepeaterItem.length).toBe(0);
+      expect(activeRepeaterItem.length).toBe(1);
       expect(items[2]).toHaveCssClass('sky-repeater-item-active');
 
       flushDropdownTimer();
