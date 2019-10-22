@@ -25,6 +25,8 @@ export class RepeaterTestComponent {
 
   public removeLastItem: boolean;
 
+  public showItemWithNoContent: boolean;
+
   public showContextMenu: boolean;
 
   @ViewChild(SkyRepeaterComponent)

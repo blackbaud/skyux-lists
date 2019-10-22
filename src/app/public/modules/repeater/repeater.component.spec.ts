@@ -87,6 +87,18 @@ describe('Repeater item component', () => {
       .toBe(el.querySelector('.sky-repeater-item-content').getAttribute('id'));
   }));
 
+  it('hide the chevron and disable expand/collapse for items with no content', fakeAsync(() => {
+    let fixture = TestBed.createComponent(RepeaterTestComponent);
+    fixture.componentInstance.showItemWithNoContent = true;
+    let el = fixture.nativeElement;
+
+    fixture.detectChanges();
+    tick();
+    fixture.detectChanges();
+
+    expect(el.querySelectorAll('sky-repeater-item')[3].querySelector('sky-chevron')).not.toExist();
+  }));
+
   it('should be accessible', async(() => {
     let fixture = TestBed.createComponent(RepeaterTestComponent);
     fixture.detectChanges();
