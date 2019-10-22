@@ -15,8 +15,6 @@ export class RepeaterTestComponent {
 
   public activeIndex: number = undefined;
 
-  public enableActive = false;
-
   public expandMode = 'single';
 
   public lastItemExpanded: boolean;
@@ -30,6 +28,8 @@ export class RepeaterTestComponent {
   public selectable = false;
 
   public showContextMenu: boolean;
+
+  public showRepeaterWithActiveIndex = false;
 
   @ViewChild(SkyRepeaterComponent)
   public repeater: SkyRepeaterComponent;

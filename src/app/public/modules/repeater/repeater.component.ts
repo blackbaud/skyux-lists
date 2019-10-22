@@ -51,11 +51,6 @@ export class SkyRepeaterComponent implements AfterContentInit, OnChanges, OnDest
   }
 
   @Input()
-  public set enableActive(value: boolean) {
-    this.repeaterService.enableActiveState = value;
-  }
-
-  @Input()
   public set reorderable(isReorderable: boolean) {
     this._reorderable = isReorderable;
 
@@ -160,8 +155,11 @@ export class SkyRepeaterComponent implements AfterContentInit, OnChanges, OnDest
   }
 
   public ngOnChanges(changes: SimpleChanges): void {
-    if (changes['activeIndex'] && changes['activeIndex'].currentValue !== changes['activeIndex'].previousValue) {
-      this.repeaterService.activateItemByIndex(this.activeIndex);
+    if (changes['activeIndex']) {
+      this.repeaterService.enableActiveState = true;
+      if (changes['activeIndex'].currentValue !== changes['activeIndex'].previousValue) {
+        this.repeaterService.activateItemByIndex(this.activeIndex);
+      }
     }
   }
 

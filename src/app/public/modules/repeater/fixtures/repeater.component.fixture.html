@@ -1,8 +1,6 @@
-<sky-repeater
-  [enableActive]="enableActive"
+<sky-repeater *ngIf="!showRepeaterWithActiveIndex"
   [expandMode]="expandMode"
   [reorderable]="reorderable"
-  [(activeIndex)]="activeIndex"
 >
   <sky-repeater-item
     [selectable]="selectable"
@@ -47,5 +45,19 @@
     </sky-repeater-item-context-menu>
     <sky-repeater-item-title>Title 3</sky-repeater-item-title>
     <sky-repeater-item-content>Content 3</sky-repeater-item-content>
+  </sky-repeater-item>
+</sky-repeater>
+
+<sky-repeater *ngIf="showRepeaterWithActiveIndex"
+  [(activeIndex)]="activeIndex"
+>
+  <sky-repeater-item>
+    <sky-repeater-item-title>Title 1</sky-repeater-item-title>
+  </sky-repeater-item>
+  <sky-repeater-item>
+    <sky-repeater-item-title>Title 2</sky-repeater-item-title>
+  </sky-repeater-item>
+  <sky-repeater-item>
+    <sky-repeater-item-title>Title 3</sky-repeater-item-title>
   </sky-repeater-item>
 </sky-repeater>
