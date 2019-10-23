@@ -4,8 +4,7 @@ import {
 } from '@angular/core';
 
 import {
-  SkyCoreAdapterService,
-  SkyFocusableChildrenOptions
+  SkyCoreAdapterService
 } from '@skyux/core';
 
 import {
@@ -21,17 +20,19 @@ export class SkyRepeaterAdapterService {
     private skyAdapterService: SkyCoreAdapterService
   ) {}
 
-  public getFocusableChildren(element: HTMLElement, options: SkyFocusableChildrenOptions): HTMLElement[] {
-    return this.skyAdapterService.getFocusableChildren(element, options);
+  public getFocusableChildren(element: ElementRef): HTMLElement[] {
+    const htmlElement = element.nativeElement as HTMLElement;
+    return this.skyAdapterService.getFocusableChildren(htmlElement, { ignoreTabIndex: true });
   }
 
-  public setTabIndexOfFocusableElems(
-    element: HTMLElement,
+  public setTabIndexOfFocusableElements(
+    element: ElementRef,
     tabIndex: number,
     ignoreVisibility = false
   ): void {
+    const htmlElement = element.nativeElement as HTMLElement;
     const focusableElems = this.skyAdapterService.getFocusableChildren(
-      element,
+      htmlElement,
       { ignoreVisibility: ignoreVisibility }
     );
     let index = focusableElems.length;

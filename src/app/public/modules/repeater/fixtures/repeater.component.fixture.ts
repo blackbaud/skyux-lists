@@ -13,7 +13,13 @@ import {
 })
 export class RepeaterTestComponent {
 
-  public activeIndex: number = undefined;
+  public set activeIndex(value: number) {
+    this._activeIndex = value;
+  }
+
+  public get activeIndex(): number {
+    return this._activeIndex;
+  }
 
   public expandMode = 'single';
 
@@ -33,6 +39,8 @@ export class RepeaterTestComponent {
 
   @ViewChild(SkyRepeaterComponent)
   public repeater: SkyRepeaterComponent;
+
+  private _activeIndex: number;
 
   public onCollapse(): void {}
 

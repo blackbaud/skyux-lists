@@ -42,13 +42,7 @@ import {
 export class SkyRepeaterComponent implements AfterContentInit, OnChanges, OnDestroy {
 
   @Input()
-  public set activeIndex(value: number) {
-    this._activeIndex = value;
-  }
-
-  public get activeIndex(): number {
-    return this._activeIndex;
-  }
+  public activeIndex: number;
 
   @Input()
   public set reorderable(isReorderable: boolean) {
@@ -83,14 +77,12 @@ export class SkyRepeaterComponent implements AfterContentInit, OnChanges, OnDest
 
   private ngUnsubscribe = new Subject<void>();
 
-  private _activeIndex: number;
-
   private _reorderable = false;
 
   private _expandMode = 'none';
 
   constructor(
-    public repeaterService: SkyRepeaterService,
+    private repeaterService: SkyRepeaterService,
     private adapterService: SkyRepeaterAdapterService,
     private dragulaService: DragulaService,
     private elementRef: ElementRef
@@ -110,8 +102,10 @@ export class SkyRepeaterComponent implements AfterContentInit, OnChanges, OnDest
     this.repeaterService.activeItemIndexChange
       .takeUntil(this.ngUnsubscribe)
       .subscribe((index: number) => {
-        this.activeIndex = index;
-        this.activeIndexChange.emit(index);
+        if (index !== this.activeIndex) {
+          this.activeIndex = index;
+          this.activeIndexChange.emit(index);
+        }
       });
 
     this.updateForExpandMode();
@@ -146,9 +140,11 @@ export class SkyRepeaterComponent implements AfterContentInit, OnChanges, OnDest
     }, 0);
 
     // Make the first item tabbable.
-    setTimeout(() => {
-      this.items.first.tabIndex = 0;
-    });
+    if (this.items.length > 0) {
+      setTimeout(() => {
+        this.items.first.tabIndex = 0;
+      });
+    }
 
     // Setup item reorder drag-and-drop.
     this.initializeDragAndDrop();
@@ -166,6 +162,10 @@ export class SkyRepeaterComponent implements AfterContentInit, OnChanges, OnDest
   public ngOnDestroy(): void {
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
+  }
+
+  public getItemsFromService(): SkyRepeaterItemComponent[] {
+    return this.repeaterService.items;
   }
 
   private updateForExpandMode(itemAdded?: SkyRepeaterItemComponent): void {

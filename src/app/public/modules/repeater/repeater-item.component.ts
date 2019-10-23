@@ -104,12 +104,7 @@ export class SkyRepeaterItemComponent implements AfterViewInit, OnDestroy, OnIni
   public isSelectedChange = new EventEmitter<boolean>();
 
   public set childFocusIndex(value: number) {
-    const focusableChildren = this.adapterService.getFocusableChildren(
-      this.itemRef.nativeElement,
-      {
-        ignoreTabIndex: true
-      }
-    );
+    const focusableChildren = this.adapterService.getFocusableChildren(this.itemRef);
     if (value !== this._childFocusIndex) {
       this._childFocusIndex = value;
       if (focusableChildren.length > 0 && value !== undefined) {
@@ -229,7 +224,7 @@ export class SkyRepeaterItemComponent implements AfterViewInit, OnDestroy, OnIni
   }
 
   public ngAfterViewInit(): void {
-    this.adapterService.setTabIndexOfFocusableElems(this.itemRef.nativeElement, -1, true);
+    this.adapterService.setTabIndexOfFocusableElements(this.itemRef, -1, true);
   }
 
   public ngOnDestroy(): void {
@@ -254,62 +249,6 @@ export class SkyRepeaterItemComponent implements AfterViewInit, OnDestroy, OnIni
     this.updateForExpanded(direction === 'up', true);
   }
 
-  // Cycle backwards through interactive child elements.
-  // If user reaches the beginning, focus on parent item.
-  public onArrowLeft(event: KeyboardEvent): void {
-    const focusableChildren = this.adapterService.getFocusableChildren(
-      this.itemRef.nativeElement,
-      {
-        ignoreTabIndex: true
-      }
-    );
-    if (focusableChildren.length > 0) {
-      if (this.childFocusIndex > 0) {
-        this.childFocusIndex--;
-      } else if (this.childFocusIndex === 0) {
-        this.childFocusIndex = undefined;
-      }
-    }
-    event.stopPropagation();
-    event.preventDefault();
-  }
-
-  // Cyle forward through interactive child elements.
-  // If user reaches the end, do nothing.
-  public onArrowRight(event: KeyboardEvent): void {
-    const focusableChildren = this.adapterService.getFocusableChildren(
-      this.itemRef.nativeElement,
-      {
-        ignoreTabIndex: true
-      }
-    );
-    if (focusableChildren.length > 0) {
-      if (this.childFocusIndex < focusableChildren.length - 1) {
-        this.childFocusIndex++;
-      } else if (this.childFocusIndex === undefined) {
-        this.childFocusIndex = 0;
-      }
-    }
-    event.stopPropagation();
-    event.preventDefault();
-  }
-
-  public onArrowUp(event: KeyboardEvent): void {
-    this.childFocusIndex = undefined;
-    this.repeaterService.focusPreviousListItem(this);
-    event.preventDefault();
-    event.stopPropagation();
-  }
-
-  public onArrowDown(event: KeyboardEvent): void {
-    this.childFocusIndex = undefined;
-    this.repeaterService.focusNextListItem(this);
-    event.preventDefault();
-    event.stopPropagation();
-  }
-
-  // The dropdown compoment supports enter, space, and arrow keys. This event listner will
-  // prevent those keyboard controls from bubbling up to tree view component.
   public onContextMenuKeydown(event: KeyboardEvent): void {
     const reservedKeys = ['enter', ' ', 'arrowdown', 'arrowup'];
     if (reservedKeys.indexOf(event.key.toLowerCase()) > -1) {
@@ -317,32 +256,79 @@ export class SkyRepeaterItemComponent implements AfterViewInit, OnDestroy, OnIni
     }
   }
 
-  public onEnter(event: KeyboardEvent): void {
-    // Unlike the arrow keys, enter should never execute unless focused on the parent item element.
-    if (event.target === this.itemRef.nativeElement) {
-      this.toggleSelected();
-      this.repeaterService.activateItem(this);
-      event.preventDefault();
-    }
-  }
-
   public onFocus(): void {
     this.childFocusIndex = undefined;
+  }
+
+  public onItemKeyDown(event: KeyboardEvent): void {
+    switch (event.key.toLowerCase()) {
+      case ' ':
+      case 'enter':
+        // Unlike the arrow keys, space/enter should never execute
+        // unless focused on the parent item element.
+        if (event.target === this.itemRef.nativeElement) {
+          this.toggleSelected();
+          this.repeaterService.activateItem(this);
+          event.preventDefault();
+        }
+        break;
+
+      case 'arrowup':
+        this.childFocusIndex = undefined;
+        this.repeaterService.focusPreviousListItem(this);
+        event.preventDefault();
+        event.stopPropagation();
+        break;
+
+      case 'arrowdown':
+        this.childFocusIndex = undefined;
+        this.repeaterService.focusNextListItem(this);
+        event.preventDefault();
+        event.stopPropagation();
+        break;
+
+      case 'arrowleft': {
+        // Cycle backwards through interactive child elements.
+        // If user reaches the beginning, focus on parent item.
+        const focusableChildren = this.adapterService.getFocusableChildren(this.itemRef);
+        if (focusableChildren.length > 0) {
+          if (this.childFocusIndex > 0) {
+            this.childFocusIndex--;
+          } else if (this.childFocusIndex === 0) {
+            this.childFocusIndex = undefined;
+          }
+        }
+        event.stopPropagation();
+        event.preventDefault();
+        break;
+      }
+
+      case 'arrowright': {
+        // Cyle forward through interactive child elements.
+        // If user reaches the end, do nothing.
+        const focusableChildren = this.adapterService.getFocusableChildren(this.itemRef);
+        if (focusableChildren.length > 0) {
+          if (this.childFocusIndex < focusableChildren.length - 1) {
+            this.childFocusIndex++;
+          } else if (this.childFocusIndex === undefined) {
+            this.childFocusIndex = 0;
+          }
+        }
+        event.stopPropagation();
+        event.preventDefault();
+        break;
+      }
+
+      /* istanbul ignore next */
+      default:
+        break;
+    }
   }
 
   public onRepeaterItemClick(event: any): void {
     this.childFocusIndex = undefined;
     this.repeaterService.focusListItem(this);
     this.repeaterService.activateItem(this);
-  }
-
-  public onSpace(event: KeyboardEvent): void {
-    // Unlike the arrow keys, space should never execute unless focused on the parent item element.
-    if (event.target === this.itemRef.nativeElement) {
-      this.toggleSelected();
-      this.repeaterService.activateItem(this);
-      event.preventDefault();
-    }
   }
 
   public updateForExpanded(value: boolean, animate: boolean): void {
@@ -384,11 +370,6 @@ export class SkyRepeaterItemComponent implements AfterViewInit, OnDestroy, OnIni
   public onReorderHandleKeyDown(event: KeyboardEvent): void {
     switch (event.key.toLowerCase()) {
       case ' ':
-        this.keyboardToggleReorder();
-        event.preventDefault();
-        event.stopPropagation();
-        break;
-
       case 'enter':
         this.keyboardToggleReorder();
         event.preventDefault();
@@ -423,12 +404,6 @@ export class SkyRepeaterItemComponent implements AfterViewInit, OnDestroy, OnIni
         break;
 
       case 'arrowleft':
-        if (this.keyboardReorderingEnabled) {
-          event.preventDefault();
-          event.stopPropagation();
-        }
-        break;
-
       case 'arrowright':
         if (this.keyboardReorderingEnabled) {
           event.preventDefault();
@@ -453,34 +428,35 @@ export class SkyRepeaterItemComponent implements AfterViewInit, OnDestroy, OnIni
     this.slideDirection = this.isExpanded ? 'down' : 'up';
   }
 
-  private keyboardReorderUp() {
+  private keyboardReorderUp(): void {
     this.reorderCurrentIndex = this.adapterService.moveItemUp(this.elementRef);
     this.reorderSteps--;
     this.grabHandle.nativeElement.focus();
     this.keyboardReorderingEnabled = true;
-    this.reorderButtonLabel = this.reorderMovedText + ' ' + (this.reorderCurrentIndex + 1);
+    this.reorderButtonLabel = `${this.reorderMovedText} ${this.reorderCurrentIndex + 1}`;
   }
 
-  private keyboardReorderDown() {
+  private keyboardReorderDown(): void {
     this.reorderCurrentIndex = this.adapterService.moveItemDown(this.elementRef);
     this.reorderSteps++;
     this.grabHandle.nativeElement.focus();
     this.keyboardReorderingEnabled = true;
-    this.reorderButtonLabel = this.reorderMovedText + ' ' + (this.reorderCurrentIndex + 1);
+    this.reorderButtonLabel = `${this.reorderMovedText} ${this.reorderCurrentIndex + 1}`;
   }
 
-  private keyboardToggleReorder() {
+  private keyboardToggleReorder(): void {
     this.keyboardReorderingEnabled = !this.keyboardReorderingEnabled;
     this.reorderSteps = 0;
 
     if (this.keyboardReorderingEnabled) {
       this.reorderState = this.reorderStateDescription;
     } else {
-      this.reorderState = this.reorderFinishText + ' ' + (this.reorderCurrentIndex + 1)  + ' ' + this.reorderInstructions;
+      this.reorderState =
+        `${this.reorderFinishText} ${this.reorderCurrentIndex + 1} ${this.reorderInstructions}`;
     }
   }
 
-  private revertReorderSteps() {
+  private revertReorderSteps(): void {
     if (this.reorderSteps < 0) {
       this.adapterService.moveItemDown(this.elementRef, Math.abs(this.reorderSteps));
     } else if (this.reorderSteps > 0) {

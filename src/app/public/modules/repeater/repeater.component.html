@@ -1,7 +1,7 @@
 <div
   class="sky-repeater"
   dragula="sky-repeater"
-  [(dragulaModel)]='repeaterService.items'
+  [dragulaModel]="getItemsFromService()"
   #repeaterHost
 >
   <ng-content></ng-content>

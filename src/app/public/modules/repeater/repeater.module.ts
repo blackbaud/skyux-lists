@@ -33,10 +33,6 @@ import {
 } from 'ng2-dragula/ng2-dragula';
 
 import {
-  SkyRepeaterAdapterService
-} from './repeater-adapter.service';
-
-import {
   SkyRepeaterComponent
 } from './repeater.component';
 
@@ -57,10 +53,6 @@ import {
 } from './repeater-item-title.component';
 
 import {
-  SkyRepeaterService
-} from './repeater.service';
-
-import {
   SkyListsResourcesModule
 } from '../shared';
 
@@ -73,9 +65,7 @@ import {
     SkyRepeaterItemTitleComponent
   ],
   providers: [
-    SkyCoreAdapterService,
-    SkyRepeaterAdapterService,
-    SkyRepeaterService
+    SkyCoreAdapterService
   ],
   imports: [
     BrowserAnimationsModule,
