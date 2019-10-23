@@ -104,13 +104,14 @@ export class SkyRepeaterItemComponent implements AfterViewInit, OnDestroy, OnIni
   public isSelectedChange = new EventEmitter<boolean>();
 
   public set childFocusIndex(value: number) {
-    const focusableChildren = this.adapterService.getFocusableChildren(this.itemRef);
     if (value !== this._childFocusIndex) {
       this._childFocusIndex = value;
+
+      const focusableChildren = this.adapterService.getFocusableChildren(this.itemRef);
       if (focusableChildren.length > 0 && value !== undefined) {
-        focusableChildren[value].focus();
+        this.adapterService.focusElement(focusableChildren[value]);
       } else {
-        this.itemRef.nativeElement.focus();
+        this.adapterService.focusElement(this.itemRef);
       }
     }
   }
@@ -216,7 +217,7 @@ export class SkyRepeaterItemComponent implements AfterViewInit, OnDestroy, OnIni
       .subscribe((item: SkyRepeaterItemComponent) => {
         if (this === item) {
           this.tabIndex = 0;
-          this.itemRef.nativeElement.focus();
+          this.adapterService.focusElement(this.itemRef);
         } else {
           this.tabIndex = -1;
         }
@@ -364,7 +365,7 @@ export class SkyRepeaterItemComponent implements AfterViewInit, OnDestroy, OnIni
   public moveToTop(event: Event): void {
     event.stopPropagation();
     this.adapterService.moveItemUp(this.elementRef, true);
-    (<HTMLElement> event.target).focus();
+    this.adapterService.focusElement(<HTMLElement> event.target);
   }
 
   public onReorderHandleKeyDown(event: KeyboardEvent): void {
@@ -381,7 +382,7 @@ export class SkyRepeaterItemComponent implements AfterViewInit, OnDestroy, OnIni
           this.keyboardReorderingEnabled = false;
           this.revertReorderSteps();
           this.reorderButtonLabel = this.reorderCancelText + ' ' + this.reorderInstructions;
-          (<HTMLElement> event.target).focus();
+          this.adapterService.focusElement(<HTMLElement> event.target);
           event.preventDefault();
           event.stopPropagation();
         }
@@ -431,7 +432,7 @@ export class SkyRepeaterItemComponent implements AfterViewInit, OnDestroy, OnIni
   private keyboardReorderUp(): void {
     this.reorderCurrentIndex = this.adapterService.moveItemUp(this.elementRef);
     this.reorderSteps--;
-    this.grabHandle.nativeElement.focus();
+    this.adapterService.focusElement(this.grabHandle);
     this.keyboardReorderingEnabled = true;
     this.reorderButtonLabel = `${this.reorderMovedText} ${this.reorderCurrentIndex + 1}`;
   }
@@ -439,7 +440,7 @@ export class SkyRepeaterItemComponent implements AfterViewInit, OnDestroy, OnIni
   private keyboardReorderDown(): void {
     this.reorderCurrentIndex = this.adapterService.moveItemDown(this.elementRef);
     this.reorderSteps++;
-    this.grabHandle.nativeElement.focus();
+    this.adapterService.focusElement(this.grabHandle);
     this.keyboardReorderingEnabled = true;
     this.reorderButtonLabel = `${this.reorderMovedText} ${this.reorderCurrentIndex + 1}`;
   }

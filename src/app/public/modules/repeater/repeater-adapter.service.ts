@@ -25,6 +25,14 @@ export class SkyRepeaterAdapterService {
     return this.skyAdapterService.getFocusableChildren(htmlElement, { ignoreTabIndex: true });
   }
 
+  public focusElement(element: ElementRef | HTMLElement): void {
+    if (element instanceof ElementRef) {
+      element.nativeElement.focus();
+    } else {
+      element.focus();
+    }
+  }
+
   public setTabIndexOfFocusableElements(
     element: ElementRef,
     tabIndex: number,
