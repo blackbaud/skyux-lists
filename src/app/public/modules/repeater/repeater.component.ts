@@ -70,7 +70,7 @@ export class SkyRepeaterComponent implements AfterContentInit, OnChanges, OnDest
   }
 
   @Output()
-  public activeIndexChange = new EventEmitter();
+  public activeIndexChange = new EventEmitter<number>();
 
   @ContentChildren(SkyRepeaterItemComponent)
   public items: QueryList<SkyRepeaterItemComponent>;
