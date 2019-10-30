@@ -200,6 +200,10 @@ export class SkyRepeaterItemComponent implements OnDestroy, OnInit, AfterViewIni
     this.repeaterItemContent.changes.subscribe(() => {
       this.hasItemContent = this.repeaterItemContent.length > 0;
       this.isCollapsible = this.hasItemContent && this.repeaterService.expandMode !== 'none';
+
+      if (this.repeaterService.expandMode === 'single') {
+        this.repeaterService.onItemCollapseStateChange(this);
+      }
     });
   }
 

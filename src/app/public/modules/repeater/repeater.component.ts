@@ -59,6 +59,7 @@ export class SkyRepeaterComponent implements AfterContentInit, OnChanges, OnDest
 
   @Input()
   public set expandMode(value: string) {
+    this.repeaterService.expandMode = value;
     this._expandMode = value;
     this.updateForExpandMode();
   }
