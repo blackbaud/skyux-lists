@@ -11,8 +11,7 @@ import {
   TemplateRef,
   ViewChild,
   ContentChildren,
-  QueryList,
-  AfterViewInit
+  QueryList
 } from '@angular/core';
 
 import {
@@ -235,9 +234,7 @@ export class SkyRepeaterItemComponent implements OnDestroy, OnInit, AfterViewIni
 
   public ngAfterViewInit(): void {
     this.adapterService.setTabIndexOfFocusableElements(this.itemRef, -1, true);
-  }
 
-  public ngAfterViewInit(): void {
     this.hasItemContent = this.repeaterItemContent.length > 0;
     this.repeaterItemContent.changes.subscribe(() => {
       this.hasItemContent = this.repeaterItemContent.length > 0;
