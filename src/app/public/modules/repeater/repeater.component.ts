@@ -152,6 +152,7 @@ export class SkyRepeaterComponent implements AfterContentInit, OnChanges, OnDest
       }
 
       this.items.forEach((item) => {
+        item.expandMode = this._expandMode;
         item.isCollapsible = isCollapsible && !!item.hasItemContent;
 
         if (item !== itemAdded && isSingle && item.isExpanded) {
