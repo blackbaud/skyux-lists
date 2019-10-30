@@ -75,8 +75,17 @@
     </sky-repeater-item>
     <sky-repeater-item [isExpanded]="false">
       <sky-repeater-item-title>Title 3</sky-repeater-item-title>
+      <sky-repeater-item-content *ngIf="isVisible">
+        Content
+      </sky-repeater-item-content>
     </sky-repeater-item>
   </sky-repeater>
+  <button
+    (click)="isVisible = true"
+    type="button"
+  >
+    Show repeater item content
+  </button>
 </div>
 
 <div

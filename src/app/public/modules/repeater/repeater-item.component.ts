@@ -114,11 +114,6 @@ export class SkyRepeaterItemComponent implements OnDestroy, OnInit, AfterViewIni
 
   public hasItemContent: boolean = false;
 
-  public set expandMode(value: string) {
-    this._expandMode = value;
-  }
-  private _expandMode = 'none';
-
   @ViewChild('grabHandle', { read: ElementRef })
   private grabHandle: ElementRef;
 
@@ -204,7 +199,7 @@ export class SkyRepeaterItemComponent implements OnDestroy, OnInit, AfterViewIni
     this.hasItemContent = this.repeaterItemContent.length > 0;
     this.repeaterItemContent.changes.subscribe(() => {
       this.hasItemContent = this.repeaterItemContent.length > 0;
-      this.isCollapsible = this.hasItemContent && this._expandMode !== 'none';
+      this.isCollapsible = this.hasItemContent && this.repeaterService.expandMode !== 'none';
     });
   }
 
