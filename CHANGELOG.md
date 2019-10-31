@@ -1,7 +1,7 @@
 # 3.6.0 (2019-10-30)
 
 - Added keyboard navigation controls to the repeater component. [#67](https://github.com/blackbaud/skyux-lists/pull/67)
-- Fixed repeater items to be reorderable when dynamically added [#80](https://github.com/blackbaud/skyux-lists/pull/80)
+- Fixed the repeater item component to make dynamically added items reorderable. [#80](https://github.com/blackbaud/skyux-lists/pull/80)
 
 # 3.5.1 (2019-10-04)
 
