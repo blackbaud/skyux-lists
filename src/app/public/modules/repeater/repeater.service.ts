@@ -15,13 +15,13 @@ import {
 @Injectable()
 export class SkyRepeaterService implements OnDestroy {
 
-  public expandMode: string;
-
   public activeItemChange = new BehaviorSubject<SkyRepeaterItemComponent>(undefined);
 
   public activeItemIndexChange = new BehaviorSubject<number>(undefined);
 
   public enableActiveState = false;
+
+  public expandMode: string;
 
   public focusedItemChange = new BehaviorSubject<SkyRepeaterItemComponent>(undefined);
 

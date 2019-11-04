@@ -73,16 +73,20 @@
       <sky-repeater-item-title>Title 2</sky-repeater-item-title>
       <sky-repeater-item-content>Content 2</sky-repeater-item-content>
     </sky-repeater-item>
-    <sky-repeater-item [isExpanded]="false">
-      <sky-repeater-item-title>Title 3</sky-repeater-item-title>
+    <sky-repeater-item
+      [isExpanded]="false"
+    >
+      <sky-repeater-item-title>
+        Title 3
+      </sky-repeater-item-title>
       <sky-repeater-item-content *ngIf="isVisible">
         Content
       </sky-repeater-item-content>
     </sky-repeater-item>
   </sky-repeater>
   <button
-    (click)="isVisible = true"
     type="button"
+    (click)="isVisible = true"
   >
     Show repeater item content
   </button>
