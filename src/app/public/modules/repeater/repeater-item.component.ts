@@ -9,7 +9,9 @@ import {
   OnInit,
   Output,
   TemplateRef,
-  ViewChild
+  ViewChild,
+  ContentChildren,
+  QueryList
 } from '@angular/core';
 
 import {
@@ -40,6 +42,8 @@ import {
 
 import 'rxjs/add/observable/forkJoin';
 
+import { SkyRepeaterItemContentComponent } from './repeater-item-content.component';
+
 import {
   SkyRepeaterAdapterService
 } from './repeater-adapter.service';
@@ -56,7 +60,9 @@ let nextContentId: number = 0;
   templateUrl: './repeater-item.component.html',
   animations: [skyAnimationSlide]
 })
-export class SkyRepeaterItemComponent implements AfterViewInit, OnDestroy, OnInit {
+export class SkyRepeaterItemComponent implements OnDestroy, OnInit, AfterViewInit {
+  @ContentChildren(SkyRepeaterItemContentComponent)
+  private repeaterItemContent: QueryList<SkyRepeaterItemContentComponent>;
 
   @Input()
   public inlineFormConfig: SkyInlineFormConfig;
@@ -123,6 +129,8 @@ export class SkyRepeaterItemComponent implements AfterViewInit, OnDestroy, OnIni
   public contentId: string = `sky-repeater-item-content-${++nextContentId}`;
 
   public isActive: boolean = false;
+
+  public hasItemContent: boolean = false;
 
   @ViewChild('grabHandle', { read: ElementRef })
   private grabHandle: ElementRef;
@@ -226,6 +234,16 @@ export class SkyRepeaterItemComponent implements AfterViewInit, OnDestroy, OnIni
 
   public ngAfterViewInit(): void {
     this.adapterService.setTabIndexOfFocusableElements(this.itemRef, -1, true);
+
+    this.hasItemContent = this.repeaterItemContent.length > 0;
+    this.repeaterItemContent.changes.subscribe(() => {
+      this.hasItemContent = this.repeaterItemContent.length > 0;
+      this.isCollapsible = this.hasItemContent && this.repeaterService.expandMode !== 'none';
+
+      if (this.repeaterService.expandMode === 'single') {
+        this.repeaterService.onItemCollapseStateChange(this);
+      }
+    });
   }
 
   public ngOnDestroy(): void {
