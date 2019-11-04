@@ -30,7 +30,9 @@ export class RepeaterTestComponent {
   public removeLastItem: boolean;
 
   public showItemWithNoContent: boolean;
-  
+
+  public showDynamicContent: boolean;
+
   public reorderable = false;
 
   public selectable = false;
