@@ -79,16 +79,16 @@
       <sky-repeater-item-title>
         Title 3
       </sky-repeater-item-title>
-      <sky-repeater-item-content *ngIf="isVisible">
+      <sky-repeater-item-content *ngIf="showContent">
         Content
       </sky-repeater-item-content>
     </sky-repeater-item>
   </sky-repeater>
   <button
     type="button"
-    (click)="isVisible = true"
+    (click)="showContent = !showContent"
   >
-    Show repeater item content
+    Toggle item content
   </button>
 </div>
 
