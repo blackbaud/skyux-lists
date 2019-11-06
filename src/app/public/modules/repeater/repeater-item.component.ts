@@ -132,12 +132,6 @@ export class SkyRepeaterItemComponent implements OnDestroy, OnInit, AfterViewIni
 
   public isActive: boolean = false;
 
-  @ContentChildren(SkyRepeaterItemContentComponent)
-  private repeaterItemContentComponents: QueryList<SkyRepeaterItemContentComponent>;
-
-  @ViewChild('grabHandle', { read: ElementRef })
-  private grabHandle: ElementRef;
-
   public set isCollapsible(value: boolean) {
     if (this.isCollapsible !== value) {
       this._isCollapsible = value;
@@ -164,6 +158,12 @@ export class SkyRepeaterItemComponent implements OnDestroy, OnInit, AfterViewIni
 
   @ViewChild('skyRepeaterItem', { read: ElementRef })
   private itemRef: ElementRef;
+
+  @ViewChild('grabHandle', { read: ElementRef })
+  private grabHandle: ElementRef;
+
+  @ContentChildren(SkyRepeaterItemContentComponent)
+  private repeaterItemContentComponents: QueryList<SkyRepeaterItemContentComponent>;
 
   private ngUnsubscribe = new Subject<void>();
   private reorderCancelText: string;
@@ -485,12 +485,14 @@ export class SkyRepeaterItemComponent implements OnDestroy, OnInit, AfterViewIni
   }
 
   private updateExpandOnContentChange(): void {
-    this.repeaterItemContentComponents.changes.subscribe(() => {
-      this.hasItemContent = this.repeaterItemContentComponents.length > 0;
-      this.isCollapsible = this.hasItemContent && this.repeaterService.expandMode !== 'none';
-      if (this.repeaterService.expandMode === 'single') {
-        this.repeaterService.onItemCollapseStateChange(this);
-      }
-    });
+    this.repeaterItemContentComponents.changes
+      .takeUntil(this.ngUnsubscribe)
+      .subscribe(() => {
+        this.hasItemContent = this.repeaterItemContentComponents.length > 0;
+        this.isCollapsible = this.hasItemContent && this.repeaterService.expandMode !== 'none';
+        if (this.repeaterService.expandMode === 'single') {
+          this.repeaterService.onItemCollapseStateChange(this);
+        }
+      });
   }
 }
