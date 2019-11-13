@@ -48,6 +48,7 @@ import {
 import {
   SkyRepeaterService
 } from './repeater.service';
+import { RepeaterDynamicFixtureComponent } from './fixtures/repeater-dynamic.component.fixture';
 
 describe('Repeater item component', () => {
   class MockLogService {
@@ -87,7 +88,8 @@ describe('Repeater item component', () => {
     TestBed.configureTestingModule({
       imports: [
         SkyRepeaterFixturesModule
-      ]
+      ],
+      providers: [SkyRepeaterService]
     });
   });
 
@@ -1515,6 +1517,56 @@ describe('Repeater item component', () => {
       fixture.whenStable().then(() => {
         expect(fixture.nativeElement).toBeAccessible();
       });
+    }));
+  });
+
+  describe('with list items bound to an array', () => {
+    let fixture: ComponentFixture<RepeaterDynamicFixtureComponent>;
+    let component: RepeaterDynamicFixtureComponent;
+    let el: any;
+
+    beforeEach(() => {
+      fixture = TestBed.createComponent(RepeaterDynamicFixtureComponent);
+      component = fixture.componentInstance;
+      el = fixture.nativeElement;
+    });
+
+    it('should add new items to the bottom of the repeater after reordering', fakeAsync(() => {
+      detectChangesAndTick(fixture);
+      let repeaterItems = component.repeaterComponent.items.toArray();
+      let itemElements = el.querySelectorAll('sky-repeater-item');
+
+      expect(repeaterItems.length).toBe(3);
+
+      // Reorder items and add a new one.
+      el.querySelectorAll('.sky-repeater-item-reorder-top')[2].click();
+      component.addItem();
+      detectChangesAndTick(fixture);
+
+      // Expect new item to be added to the bottom.
+      repeaterItems = component.repeaterComponent.items.toArray();
+      itemElements = el.querySelectorAll('sky-repeater-item');
+      expect(repeaterItems.length).toBe(4);
+      expect(itemElements[3].innerText).toBe('New record 1');
+
+      flushDropdownTimer();
+    }));
+
+    it('should add new items to the service in the correct order after reordering', fakeAsync(() => {
+      let repeaterService = TestBed.get(SkyRepeaterService);
+      detectChangesAndTick(fixture);
+      const lastIndexId = repeaterService.items.length;
+
+      // Reorder items and add a new one.
+      el.querySelectorAll('.sky-repeater-item-reorder-top')[2].click();
+      component.addItem();
+      detectChangesAndTick(fixture);
+
+      // Expect last item in service's array to be the new item.
+      expect(repeaterService.items[3].contentId)
+        .toEqual(`sky-repeater-item-content-${lastIndexId + 1}`);
+
+      flushDropdownTimer();
     }));
   });
 });

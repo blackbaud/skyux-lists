@@ -39,8 +39,12 @@
   </h3>
   <sky-repeater
     [(activeIndex)]="activeIndex"
+    reorderable="true"
+    (reorderChange)="onReorderChange($event)"
   >
-    <sky-repeater-item *ngFor="let item of items; let i = index">
+    <sky-repeater-item *ngFor="let item of items; let i = index"
+      [tag]="item.id"
+    >
       <sky-repeater-item-title>
         {{ item.title }}
       </sky-repeater-item-title>

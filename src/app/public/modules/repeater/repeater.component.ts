@@ -14,7 +14,7 @@ import {
 
 import {
   DragulaService
-} from 'ng2-dragula/ng2-dragula';
+} from 'ng2-dragula';
 
 import {
   Subject
@@ -73,6 +73,9 @@ export class SkyRepeaterComponent implements AfterContentInit, OnChanges, OnDest
   @Output()
   public activeIndexChange = new EventEmitter<number>();
 
+  @Output()
+  public reorderChange = new EventEmitter<any[]>();
+
   @ContentChildren(SkyRepeaterItemComponent)
   public items: QueryList<SkyRepeaterItemComponent>;
 
@@ -119,6 +122,10 @@ export class SkyRepeaterComponent implements AfterContentInit, OnChanges, OnDest
     setTimeout(() => {
       if (this.activeIndex || this.activeIndex === 0) {
         this.repeaterService.activateItemByIndex(this.activeIndex);
+      }
+
+      if (!this.everyItemHasTag()) {
+        console.warn('Please supply tag properties for each repeater item when reordering functionality is enabled.');
       }
     });
 
@@ -206,15 +213,33 @@ export class SkyRepeaterComponent implements AfterContentInit, OnChanges, OnDest
     this.dragulaService
       .dragend
       .takeUntil(this.ngUnsubscribe)
-      .subscribe(([, source]: Array<HTMLElement>) =>
-        source.classList.remove('sky-repeater-item-dragging')
-      );
+      .subscribe(([, source]: Array<HTMLElement>) => {
+        source.classList.remove('sky-repeater-item-dragging');
+        this.emitTags();
+      });
 
     this.dragulaService.setOptions('sky-repeater', {
       moves: (el: HTMLElement, container: HTMLElement, handle: HTMLElement) => {
         const target = el.querySelector('.sky-repeater-item-grab-handle');
         return target && target.contains(handle);
       }
+    });
+  }
+
+  private emitTags(): void {
+    const tags: any[] = [];
+    this.repeaterService.items.forEach(item => {
+      tags.push(item.tag);
+    });
+    this.reorderChange.emit(tags);
+  }
+
+  private everyItemHasTag(): boolean {
+    if (this.items.length === 0) {
+      return false;
+    }
+    return this.items.toArray().every(item => {
+      return item.tag !== undefined;
     });
   }
 }

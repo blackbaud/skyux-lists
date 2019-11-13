@@ -15,6 +15,10 @@ import {
 } from '../repeater.module';
 
 import {
+  RepeaterDynamicFixtureComponent
+} from './repeater-dynamic.component.fixture';
+
+import {
   RepeaterTestComponent
 } from './repeater.component.fixture';
 
@@ -24,6 +28,7 @@ import {
 
 @NgModule({
   declarations: [
+    RepeaterDynamicFixtureComponent,
     RepeaterInlineFormFixtureComponent,
     RepeaterTestComponent
   ],
@@ -33,6 +38,7 @@ import {
     SkyRepeaterModule
   ],
   exports: [
+    RepeaterDynamicFixtureComponent,
     RepeaterInlineFormFixtureComponent,
     RepeaterTestComponent
   ]
