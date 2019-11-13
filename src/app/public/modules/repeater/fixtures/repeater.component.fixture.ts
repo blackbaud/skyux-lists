@@ -23,6 +23,8 @@ export class RepeaterTestComponent {
 
   public expandMode = 'single';
 
+  public items: string[] = [ 'Item 1', 'Item 2', 'Item 3' ];
+
   public lastItemExpanded: boolean;
 
   public lastItemSelected = false;
@@ -42,8 +44,6 @@ export class RepeaterTestComponent {
   public showRepeaterWithActiveIndex = false;
 
   public showRepeaterWithNgFor = false;
-
-  public items: string[] = [ 'Item 1', 'Item 2', 'Item 3' ];
 
   @ViewChild(SkyRepeaterComponent)
   public repeater: SkyRepeaterComponent;
