@@ -41,6 +41,10 @@ export class RepeaterTestComponent {
 
   public showRepeaterWithActiveIndex = false;
 
+  public showRepeaterWithNgFor = false;
+
+  public items: string[] = [ 'Item 1', 'Item 2', 'Item 3' ];
+
   @ViewChild(SkyRepeaterComponent)
   public repeater: SkyRepeaterComponent;
 
