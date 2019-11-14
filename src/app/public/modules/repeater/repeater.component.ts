@@ -74,7 +74,7 @@ export class SkyRepeaterComponent implements AfterContentInit, OnChanges, OnDest
   public activeIndexChange = new EventEmitter<number>();
 
   @Output()
-  public reorderChange = new EventEmitter<any[]>();
+  public orderChange = new EventEmitter<any[]>();
 
   @ContentChildren(SkyRepeaterItemComponent)
   public items: QueryList<SkyRepeaterItemComponent>;
@@ -110,6 +110,12 @@ export class SkyRepeaterComponent implements AfterContentInit, OnChanges, OnDest
           this.activeIndex = index;
           this.activeIndexChange.emit(index);
         }
+      });
+
+    this.repeaterService.orderChange
+      .takeUntil(this.ngUnsubscribe)
+      .subscribe(() => {
+        this.emitTags();
       });
 
     this.updateForExpandMode();
@@ -229,14 +235,13 @@ export class SkyRepeaterComponent implements AfterContentInit, OnChanges, OnDest
   }
 
   private emitTags(): void {
-    const tags: any[] = [];
-    this.repeaterService.items.forEach(item => {
-      tags.push(item.tag);
-    });
-    this.reorderChange.emit(tags);
+    const tags = this.repeaterService.items.map(item => item.tag);
+    this.orderChange.emit(tags);
   }
 
   private everyItemHasTag(): boolean {
+    /* sanity check */
+    /* istanbul ignore if */
     if (!this.items || this.items.length === 0) {
       return false;
     }

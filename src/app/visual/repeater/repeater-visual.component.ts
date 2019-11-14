@@ -108,7 +108,7 @@ export class RepeaterVisualComponent {
     this.items.push(newItem);
   }
 
-  public onReorderChange(tags: any): void {
+  public onOrderChange(tags: any): void {
     console.log(tags);
   }
 

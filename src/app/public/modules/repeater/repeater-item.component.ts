@@ -157,7 +157,7 @@ export class SkyRepeaterItemComponent implements OnDestroy, OnInit, AfterViewIni
   public tabIndex: number = -1;
 
   /**
-   * Specifies a familiar object for this repeater item to be returned when a `reorderChange` event fires.
+   * Specifies a familiar object for this repeater item to be returned when a `orderChange` event fires.
    * This property is required if `reorderable` is set to `true`.
    */
   @Input()
@@ -386,6 +386,7 @@ export class SkyRepeaterItemComponent implements OnDestroy, OnInit, AfterViewIni
     event.stopPropagation();
     this.adapterService.moveItemUp(this.elementRef, true);
     this.adapterService.focusElement(<HTMLElement> event.target);
+    this.repeaterService.registerOrderChange();
   }
 
   public onReorderHandleKeyDown(event: KeyboardEvent): void {
@@ -413,6 +414,7 @@ export class SkyRepeaterItemComponent implements OnDestroy, OnInit, AfterViewIni
           this.keyboardReorderUp();
           event.preventDefault();
           event.stopPropagation();
+          this.repeaterService.registerOrderChange();
         }
         break;
 
@@ -421,6 +423,7 @@ export class SkyRepeaterItemComponent implements OnDestroy, OnInit, AfterViewIni
           this.keyboardReorderDown();
           event.preventDefault();
           event.stopPropagation();
+          this.repeaterService.registerOrderChange();
         }
         break;
 
@@ -483,6 +486,7 @@ export class SkyRepeaterItemComponent implements OnDestroy, OnInit, AfterViewIni
     } else if (this.reorderSteps > 0) {
       this.adapterService.moveItemUp(this.elementRef, false, this.reorderSteps);
     }
+    this.repeaterService.registerOrderChange();
   }
 
   private toggleSelected(): void {

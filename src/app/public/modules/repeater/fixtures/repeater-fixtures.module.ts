@@ -15,10 +15,6 @@ import {
 } from '../repeater.module';
 
 import {
-  RepeaterDynamicFixtureComponent
-} from './repeater-dynamic.component.fixture';
-
-import {
   RepeaterTestComponent
 } from './repeater.component.fixture';
 
@@ -26,11 +22,15 @@ import {
   RepeaterInlineFormFixtureComponent
 } from './repeater-inline-form.component.fixture';
 
+import {
+  RepeaterWithMissingTagsFixtureComponent
+} from './repeater-missing-tag.fixture';
+
 @NgModule({
   declarations: [
-    RepeaterDynamicFixtureComponent,
     RepeaterInlineFormFixtureComponent,
-    RepeaterTestComponent
+    RepeaterTestComponent,
+    RepeaterWithMissingTagsFixtureComponent
   ],
   imports: [
     CommonModule,
@@ -38,9 +38,9 @@ import {
     SkyRepeaterModule
   ],
   exports: [
-    RepeaterDynamicFixtureComponent,
     RepeaterInlineFormFixtureComponent,
-    RepeaterTestComponent
+    RepeaterTestComponent,
+    RepeaterWithMissingTagsFixtureComponent
   ]
 })
 export class SkyRepeaterFixturesModule { }
