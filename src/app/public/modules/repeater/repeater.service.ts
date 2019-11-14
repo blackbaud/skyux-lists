@@ -27,15 +27,7 @@ export class SkyRepeaterService implements OnDestroy {
 
   public itemCollapseStateChange = new EventEmitter<SkyRepeaterItemComponent>();
 
-  public set items(value: SkyRepeaterItemComponent[]) {
-    this._items = value;
-  }
-
-  public get items(): SkyRepeaterItemComponent[] {
-    return this._items;
-  }
-
-  private _items: SkyRepeaterItemComponent[] = [];
+  public items: SkyRepeaterItemComponent[] = [];
 
   public ngOnDestroy(): void {
     this.activeItemChange.complete();

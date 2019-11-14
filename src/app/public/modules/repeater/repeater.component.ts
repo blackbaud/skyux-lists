@@ -14,7 +14,7 @@ import {
 
 import {
   DragulaService
-} from 'ng2-dragula';
+} from 'ng2-dragula/ng2-dragula';
 
 import {
   Subject
@@ -124,7 +124,7 @@ export class SkyRepeaterComponent implements AfterContentInit, OnChanges, OnDest
         this.repeaterService.activateItemByIndex(this.activeIndex);
       }
 
-      if (!this.everyItemHasTag()) {
+      if (this.reorderable && !this.everyItemHasTag()) {
         console.warn('Please supply tag properties for each repeater item when reordering functionality is enabled.');
       }
     });
@@ -237,7 +237,7 @@ export class SkyRepeaterComponent implements AfterContentInit, OnChanges, OnDest
   }
 
   private everyItemHasTag(): boolean {
-    if (this.items.length === 0) {
+    if (!this.items || this.items.length === 0) {
       return false;
     }
     return this.items.toArray().every(item => {

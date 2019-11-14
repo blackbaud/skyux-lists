@@ -34,6 +34,10 @@ import {
 } from './fixtures/repeater.component.fixture';
 
 import {
+  RepeaterDynamicFixtureComponent
+} from './fixtures/repeater-dynamic.component.fixture';
+
+import {
   SkyRepeaterFixturesModule
 } from './fixtures/repeater-fixtures.module';
 
@@ -48,7 +52,6 @@ import {
 import {
   SkyRepeaterService
 } from './repeater.service';
-import { RepeaterDynamicFixtureComponent } from './fixtures/repeater-dynamic.component.fixture';
 
 describe('Repeater item component', () => {
   class MockLogService {

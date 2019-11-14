@@ -39,12 +39,8 @@
   </h3>
   <sky-repeater
     [(activeIndex)]="activeIndex"
-    reorderable="true"
-    (reorderChange)="onReorderChange($event)"
   >
-    <sky-repeater-item *ngFor="let item of items; let i = index"
-      [tag]="item.id"
-    >
+    <sky-repeater-item *ngFor="let item of items; let i = index">
       <sky-repeater-item-title>
         {{ item.title }}
       </sky-repeater-item-title>
@@ -483,10 +479,12 @@
   <sky-repeater
     [expandMode]="'single'"
     [reorderable]="true"
+    (reorderChange)="onReorderChange($event)"
   >
     <sky-repeater-item
       [isExpanded]="false"
       [selectable]="true"
+      [tag]="'item1'"
       (collapse)="onCollapse()"
       (expand)="onExpand()"
     >
@@ -515,6 +513,7 @@
     <sky-repeater-item
       [isExpanded]="false"
       [selectable]="true"
+      [tag]="'item2'"
     >
       <sky-repeater-item-context-menu>
         <sky-dropdown

@@ -45,7 +45,6 @@ export class RepeaterVisualComponent {
       fund: '2018 Special Events Fund'
     },
     {
-      id: 89,
       title: '2019 Gala',
       note: '2019 Gala for friends and family',
       fund: 'General 2019 Fund'
@@ -110,9 +109,7 @@ export class RepeaterVisualComponent {
   }
 
   public onReorderChange(tags: any): void {
-    this.items.sort((a, b) => {
-      return tags.indexOf(a.id) - tags.indexOf(b.id);
-    });
+    console.log(tags);
   }
 
   public getSelectedItems(): string[] {
