@@ -73,6 +73,10 @@ export class SkyRepeaterComponent implements AfterContentInit, OnChanges, OnDest
   @Output()
   public activeIndexChange = new EventEmitter<number>();
 
+  /**
+   * Fires when the order of repeater items change.
+   * The event emits an ordered array of `tag`s based on the `tag` property for each repeater item that the consumer provides.
+   */
   @Output()
   public orderChange = new EventEmitter<any[]>();
 
