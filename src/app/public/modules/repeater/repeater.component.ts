@@ -73,11 +73,10 @@ export class SkyRepeaterComponent implements AfterContentInit, OnChanges, OnDest
   @Output()
   public activeIndexChange = new EventEmitter<number>();
 
-  // tslint:disable:max-line-length
   /**
-   * Fires when the order of repeater items change. This event emits an ordered array of the `tag` properties that the consumer provides for each repeater item.
+   * Fires when users change the order of repeater items.
+   * This event emits an ordered array of the `tag` properties that the consumer provides for each repeater item.
    */
-  // tslint:enable:max-line-length
   @Output()
   public orderChange = new EventEmitter<any[]>();
 
