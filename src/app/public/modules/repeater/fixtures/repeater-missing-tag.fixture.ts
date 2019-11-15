@@ -3,7 +3,9 @@ import {
   Component
 } from '@angular/core';
 
-/** Simple component for testing an orderable repeater with missing tags (error state). */
+/**
+ * Simple component for testing a reorderable repeater with missing tags (error state)
+ */
 @Component({
   template: `
     <sky-repeater

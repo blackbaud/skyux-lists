@@ -157,8 +157,8 @@ export class SkyRepeaterItemComponent implements OnDestroy, OnInit, AfterViewIni
   public tabIndex: number = -1;
 
   /**
-   * Specifies a familiar object for this repeater item to be returned when a `orderChange` event fires.
-   * This property is required if `reorderable` is set to `true`.
+   * Specifies an object that the repeater component returns for this repeater item when the `orderChange` event fires.
+   * Required if you set the `reorderable` property to `true`.
    */
   @Input()
   public tag: any;
