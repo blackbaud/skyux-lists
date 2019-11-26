@@ -235,7 +235,10 @@ export class SkyRepeaterItemComponent implements OnDestroy, OnInit, AfterViewIni
       .subscribe((item: SkyRepeaterItemComponent) => {
         if (this === item) {
           this.tabIndex = 0;
-          this.adapterService.focusElement(this.itemRef);
+
+          if (!this.itemRef.nativeElement.contains(document.activeElement)) {
+            this.adapterService.focusElement(this.itemRef);
+          }
         } else {
           this.tabIndex = -1;
         }
@@ -346,8 +349,17 @@ export class SkyRepeaterItemComponent implements OnDestroy, OnInit, AfterViewIni
     }
   }
 
-  public onRepeaterItemClick(event: any): void {
-    this.childFocusIndex = undefined;
+  public onRepeaterItemClick(event: MouseEvent): void {
+    if (event.target === this.elementRef.nativeElement) {
+      this.childFocusIndex = undefined;
+    } else {
+      const focusableChildren = this.adapterService.getFocusableChildren(this.itemRef);
+      for (let focusableChild of focusableChildren) {
+        if (focusableChild === event.target) {
+          this.childFocusIndex = focusableChildren.indexOf(focusableChild);
+        }
+      }
+    }
     this.repeaterService.focusListItem(this);
     this.repeaterService.activateItem(this);
   }
