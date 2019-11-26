@@ -350,15 +350,11 @@ export class SkyRepeaterItemComponent implements OnDestroy, OnInit, AfterViewIni
   }
 
   public onRepeaterItemClick(event: MouseEvent): void {
-    if (event.target === this.elementRef.nativeElement) {
+    const focusableChildren = this.adapterService.getFocusableChildren(this.itemRef);
+    if (focusableChildren.indexOf(<HTMLElement> event.target) < 0) {
       this.childFocusIndex = undefined;
     } else {
-      const focusableChildren = this.adapterService.getFocusableChildren(this.itemRef);
-      for (let focusableChild of focusableChildren) {
-        if (focusableChild === event.target) {
-          this.childFocusIndex = focusableChildren.indexOf(focusableChild);
-        }
-      }
+      this.childFocusIndex = focusableChildren.indexOf(<HTMLElement> event.target);
     }
     this.repeaterService.focusListItem(this);
     this.repeaterService.activateItem(this);
