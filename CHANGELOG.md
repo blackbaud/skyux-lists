@@ -1,6 +1,6 @@
 # 3.7.1 (2019-11-27)
 
-- Fixed the repeater item component to not steal focus from focasable child elements when they are activated. [#96](https://github.com/blackbaud/skyux-lists/pull/96)
+- Fixed the repeater item component to not steal focus from focusable child elements when they are activated. [#96](https://github.com/blackbaud/skyux-lists/pull/96)
 
 # 3.7.0 (2019-11-15)
 
