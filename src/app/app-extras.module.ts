@@ -7,6 +7,7 @@ import {
 } from '@skyux/indicators';
 
 import {
+  SkyCardModule,
   SkyFluidGridModule
 } from '@skyux/layout';
 
@@ -19,6 +20,11 @@ import {
 } from '@skyux/router';
 
 import {
+  SkyToolbarModule
+} from '@skyux/layout';
+
+import {
+  SkyDataManagerModule,
   SkyFilterModule,
   SkyInfiniteScrollModule,
   SkyPagingModule,
@@ -29,6 +35,8 @@ import {
 @NgModule({
   exports: [
     SkyAppLinkModule,
+    SkyCardModule,
+    SkyDataManagerModule,
     SkyDropdownModule,
     SkyFilterModule,
     SkyFluidGridModule,
@@ -36,7 +44,8 @@ import {
     SkyInfiniteScrollModule,
     SkyPagingModule,
     SkyRepeaterModule,
-    SkySortModule
+    SkySortModule,
+    SkyToolbarModule
   ]
 })
 export class AppExtrasModule { }

@@ -1,0 +1,8 @@
+<sky-data-view
+  [viewConfig]="viewConfig"
+>
+  <sky-card size="small" *ngFor="let item of items">
+    <sky-card-title>{{item.name}}</sky-card-title>
+    <sky-card-content>{{item.description}}</sky-card-content>
+  </sky-card>
+</sky-data-view>
