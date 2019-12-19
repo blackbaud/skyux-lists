@@ -1,0 +1,11 @@
+<sky-data-view
+  skyAgGridDataManager
+  [viewConfig]="viewConfig"
+>
+  <ag-grid-angular
+    *ngIf="isActive && gridInitialized"
+    [gridOptions]="gridOptions"
+    [rowData]="displayedItems"
+  >
+  </ag-grid-angular>
+</sky-data-view>

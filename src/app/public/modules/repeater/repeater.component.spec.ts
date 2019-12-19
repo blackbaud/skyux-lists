@@ -30,6 +30,10 @@ import {
 } from './fixtures/mock-dragula.service';
 
 import {
+  RepeaterAsyncItemsTestComponent
+} from './fixtures/repeater-async-items.component.fixture';
+
+import {
   RepeaterTestComponent
 } from './fixtures/repeater.component.fixture';
 
@@ -381,6 +385,8 @@ describe('Repeater item component', () => {
 
       const items = getRepeaterItems(el);
 
+      const isSelectedChangeSpy = spyOn(cmp, 'onIsSelectedChange').and.callThrough();
+
       // Expect first item NOT to be selected.
       expect(items[0]).not.toHaveCssClass('sky-repeater-item-selected');
 
@@ -395,7 +401,12 @@ describe('Repeater item component', () => {
 
       // Expect first item to be selected.
       expect(items[0]).toHaveCssClass('sky-repeater-item-selected');
+      // Expect the isSelectedChange event to have been called with 'true'.
+      expect(isSelectedChangeSpy).toHaveBeenCalledWith(true);
+      // Expect the isSelectedChange event to have occurred once.
+      expect(isSelectedChangeSpy).toHaveBeenCalledTimes(1);
 
+      isSelectedChangeSpy.calls.reset();
       // Press space key.
       SkyAppTestUtility.fireDomEvent(items[0], 'keydown', {
         keyboardEventInit: {
@@ -406,6 +417,10 @@ describe('Repeater item component', () => {
 
       // Expect first item NOT to be selected.
       expect(items[0]).not.toHaveCssClass('sky-repeater-item-selected');
+      // Expect the isSelectedChange event to have been called with 'false'.
+      expect(isSelectedChangeSpy).toHaveBeenCalledWith(false);
+      // Expect the event to have occurred twice.
+      expect(isSelectedChangeSpy).toHaveBeenCalledTimes(1);
     });
   });
 
@@ -901,20 +916,23 @@ describe('Repeater item component', () => {
       let el = fixture.nativeElement;
 
       fixture.detectChanges();
-
       tick();
 
       cmp.repeater.items.forEach(item => item.selectable = true);
 
+      fixture.detectChanges();
+      tick();
+
       let selectedItemsEl = el.querySelectorAll('.sky-repeater-item-selected') as NodeList;
       expect(selectedItemsEl.length).toBe(0);
 
-      // select first item
       const repeaterItems = cmp.repeater.items.toArray();
-      repeaterItems[0].updateIsSelected({ source: undefined, checked: true });
+
+      // Click to select first item.
+      const items = getRepeaterItems(el);
+      items[0].querySelector('input').click();
 
       fixture.detectChanges();
-
       tick();
 
       expect(repeaterItems[0].isSelected).toBe(true);
@@ -938,7 +956,7 @@ describe('Repeater item component', () => {
       });
     }));
 
-    it('should update the isSelected property when the user selects an item', fakeAsync(() => {
+    it('should update the isSelected property when the user clicks the checkbox', fakeAsync(() => {
       let fixture = TestBed.createComponent(RepeaterTestComponent);
       let el = fixture.nativeElement;
       let cmp: RepeaterTestComponent = fixture.componentInstance;
@@ -952,6 +970,39 @@ describe('Repeater item component', () => {
 
       // Click on last repeater item.
       repeaterCheckboxes[2].querySelector('input').click();
+      fixture.detectChanges();
+      tick();
+
+      // Expect only last item to be selected, and input property (isSelected) to recieve new value.
+      expect(repeaterItems[0].isSelected).toBe(false);
+      expect(repeaterItems[1].isSelected).toBe(false);
+      expect(repeaterItems[2].isSelected).toBe(true);
+      expect(cmp.lastItemSelected).toBe(true);
+
+      flushDropdownTimer();
+    }));
+
+    it('should update the isSelected property when the user uses keyboard controls', fakeAsync(() => {
+      let fixture = TestBed.createComponent(RepeaterTestComponent);
+      let el = fixture.nativeElement;
+      let cmp: RepeaterTestComponent = fixture.componentInstance;
+      fixture.detectChanges();
+      tick();
+      // Make each repeater item selectable.
+      cmp.repeater.items.toArray().forEach(item => item.selectable = true);
+      fixture.detectChanges();
+      const repeaterItems = cmp.repeater.items.toArray();
+      const itemElements = getRepeaterItems(el);
+
+      // Click on last repeater item.
+      // Focus on first repeater item and press enter key.
+      SkyAppTestUtility.fireDomEvent(itemElements[2], 'focus');
+      SkyAppTestUtility.fireDomEvent(itemElements[2], 'keydown', {
+        keyboardEventInit: {
+          key: 'Enter'
+        }
+      });
+      fixture.detectChanges();
       fixture.detectChanges();
       tick();
 
@@ -1235,6 +1286,49 @@ describe('Repeater item component', () => {
     expect(consoleSpy).toHaveBeenCalled();
   }));
 
+  describe('dragula integration', () => {
+    let fixture: ComponentFixture<RepeaterTestComponent>;
+
+    beforeEach(() => {
+      fixture = TestBed.createComponent(RepeaterTestComponent);
+    });
+
+    it('should set the repeater item\'s grab handle as the drag handle', fakeAsync(inject(
+      [DragulaService],
+      (dragulaService: DragulaService) => {
+        let movesCallback: Function;
+        let setOptionsSpy = spyOn(dragulaService, 'setOptions').and.callFake(
+          (bagId: any, options: any) => {
+            movesCallback = options.moves;
+          }
+        );
+
+        fixture.componentInstance.reorderable = true;
+        fixture.detectChanges();
+        tick();
+
+        fixture.detectChanges();
+        tick();
+
+        const nativeElement = fixture.elementRef.nativeElement;
+        const repeaterItem = nativeElement.querySelectorAll('sky-repeater-item')[1];
+        const handle = getReorderHandles(nativeElement)[1];
+
+        const result = movesCallback(
+          repeaterItem,
+          undefined,
+          handle
+        );
+
+        expect(result).toBe(true);
+
+        expect(setOptionsSpy).toHaveBeenCalled();
+
+        flushDropdownTimer();
+      }
+    )));
+  });
+
   describe('with reorderability', () => {
     let fixture: ComponentFixture<RepeaterTestComponent>;
     let cmp: RepeaterTestComponent;
@@ -1319,43 +1413,20 @@ describe('Repeater item component', () => {
     }));
 
     it('should update css classes correctly while dragging', fakeAsync(() => {
-      let repeaterItem: HTMLElement = el.querySelectorAll('sky-repeater-item')[1];
-      mockDragulaService.drag.emit([, repeaterItem]);
+      const groupName = fixture.componentInstance.repeater.dragulaGroupName;
+      let repeaterItem = el.querySelectorAll('sky-repeater-item')[1];
+      mockDragulaService.drag.emit([groupName, repeaterItem]);
       fixture.detectChanges();
       tick();
       fixture.detectChanges();
       repeaterItem = el.querySelectorAll('sky-repeater-item')[1];
-      expect(repeaterItem.classList.contains('sky-repeater-item-dragging')).toBeTruthy(); mockDragulaService.dragend.emit([, repeaterItem]);
+      expect(repeaterItem.classList.contains('sky-repeater-item-dragging')).toBeTruthy();
+      mockDragulaService.dragend.emit([groupName, repeaterItem]);
       fixture.detectChanges();
       tick();
       fixture.detectChanges();
       repeaterItem = el.querySelectorAll('sky-repeater-item')[1];
       expect(repeaterItem.classList.contains('sky-repeater-item-dragging')).toBeFalsy();
-    }));
-
-    it('should set the repeater item\'s grab handle as the drag handle', fakeAsync(() => {
-      let repeaterItem: Element = el.querySelectorAll('sky-repeater-item')[1];
-      let handle: Element = getReorderHandles(el)[1];
-      let setOptionsSpy = spyOn(mockDragulaService, 'setOptions').and.callFake(
-        (bagId: any, options: any) => {
-          let result = options.moves(
-            repeaterItem,
-            undefined,
-            handle
-          );
-
-          expect(result).toBe(true);
-        }
-      );
-
-      fixture = TestBed.createComponent(RepeaterTestComponent);
-      fixture.detectChanges();
-      tick();
-      fixture.detectChanges();
-
-      expect(setOptionsSpy).toHaveBeenCalled();
-
-      flushDropdownTimer();
     }));
 
     it('should move an item up via keyboard controls using "Space" to activate', fakeAsync(() => {
@@ -1627,12 +1698,19 @@ describe('Repeater item component', () => {
 
       expect(cmp.sortedItemTags).toBeUndefined();
 
-      let repeaterItem: HTMLElement = el.querySelectorAll('sky-repeater-item')[1];
-      mockDragulaService.drag.emit([, repeaterItem]);
+      const groupName = fixture.componentInstance.repeater.dragulaGroupName;
+      let repeaterItem: HTMLElement = el.querySelectorAll('sky-repeater-item')[0];
+      mockDragulaService.drag.emit([groupName, repeaterItem]);
       detectChangesAndTick(fixture);
-      mockDragulaService.dragend.emit([, repeaterItem]);
+      const repeaterDiv: HTMLElement = fixture.nativeElement.querySelector('.sky-repeater');
+
+      repeaterDiv.removeChild(repeaterItem);
+      const nextSibling = repeaterDiv.querySelectorAll('sky-repeater-item')[2];
+
+      repeaterDiv.insertBefore(repeaterItem, nextSibling);
+      mockDragulaService.dragend.emit([groupName, repeaterItem]);
       detectChangesAndTick(fixture);
-      expect(cmp.sortedItemTags).toEqual([ 'item1', 'item2', 'item3' ]);
+      expect(cmp.sortedItemTags).toEqual(['item2', 'item3', 'item1']);
     }));
 
     xit('should add new items to the bottom of the repeater after reordering', fakeAsync(() => {
@@ -1674,6 +1752,35 @@ describe('Repeater item component', () => {
       fixture.whenStable().then(() => {
         expect(fixture.nativeElement).toBeAccessible();
       });
+    }));
+  });
+
+  describe('with async repeater items', () => {
+    let fixture: ComponentFixture<RepeaterAsyncItemsTestComponent>;
+    let cmp: RepeaterAsyncItemsTestComponent;
+    let el: any;
+
+    beforeEach(fakeAsync(() => {
+      fixture = TestBed.createComponent(RepeaterAsyncItemsTestComponent);
+      cmp = fixture.componentInstance;
+      el = fixture.nativeElement;
+    }));
+
+    it('should show active repeater item when activeIndex is set', fakeAsync(() => {
+      cmp.activeIndex = 1;
+      fixture.detectChanges();
+      tick(1000); // Wait for async items to load.
+      fixture.detectChanges();
+      tick();
+      fixture.detectChanges();
+
+      setTimeout(() => {
+        const activeRepeaterItem = el.querySelectorAll('.sky-repeater-item-active');
+        expect(activeRepeaterItem.length).toEqual(1);
+      });
+
+      fixture.destroy();
+      flush();
     }));
   });
 });

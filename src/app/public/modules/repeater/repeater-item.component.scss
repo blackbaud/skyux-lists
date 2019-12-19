@@ -5,6 +5,7 @@
   display: flex;
   @include sky-border(row);
   padding-top: 0;
+  position: relative;
 
   sky-inline-form {
     display: block;
@@ -27,6 +28,13 @@
     color: $sky-text-color-default;
     padding-left: 6px;
     border-left: $sky-nav-selected-border-width solid $sky-highlight-color-info;
+
+    ::ng-deep .sky-inline-delete {
+      margin-left: -$sky-nav-selected-border-width;
+      // NOTE: Unfoortunately, scss variables aren't compiled into calc functions. However, the
+      // added pixels should match 'sky-nav-selected-border-width'
+      width: calc(100% + 4px);
+    }
   }
 }
 
@@ -53,6 +61,18 @@
 
 .sky-repeater-item-chevron {
   margin-left: $sky-margin;
+}
+
+// Height here is the standard height for checkboxes and the reorder handle. Used for when the
+// chevron is hidden to ensure that the right side is the same height as the left.
+.sky-repeater-item-chevron-placeholder {
+  height: 24px;
+}
+
+// Height here is the standard height for context menus. Used to ensure that the right side is
+// the same height as the left.
+.sky-repeater-item-chevron-placeholder-with-context {
+  height: 29px;
 }
 
 .sky-repeater-item-context-menu {

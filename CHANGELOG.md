@@ -1,3 +1,37 @@
+# 3.8.5 (2020-02-28)
+
+- Fixed the repeater component to output the correct `orderChange` value when users drag the first reorderable repeater item. [#138](https://github.com/blackbaud/skyux-lists/pull/138)
+
+# 3.8.4 (2020-02-28)
+
+- Fixed the repeater component to output the correct `orderChange` value when users drag reorderable repeater items. [#134](https://github.com/blackbaud/skyux-lists/pull/134)
+
+# 3.8.3 (2020-02-26)
+
+- Fixed the repeater component to prevent form submission when users click the “Top” button on reorderable repeaters. [#128](https://github.com/blackbaud/skyux-lists/pull/128)
+
+# 3.8.2 (2020-02-24)
+
+- Fixed the repeater component to load faster when using reorderable repeater items. [#121](https://github.com/blackbaud/skyux-lists/pull/121)
+- Fixed the repeater item component to properly update the `isSelected` property when the value changes using the `enter` or `space` keys. [#123](https://github.com/blackbaud/skyux-lists/pull/123) (Thanks, [@michael-tims](https://github.com/michael-tims)!)
+
+# 3.8.1 (2020-02-12)
+
+- Fixed the repeater component to load faster when using a large number of repeater items. [#113](https://github.com/blackbaud/skyux-lists/pull/113)
+
+# 3.8.0 (2020-02-11)
+
+- Added support for the inline delete component to the repeater item component. [#111](https://github.com/blackbaud/skyux-lists/pull/111)
+
+# 3.7.3 (2020-01-27)
+
+- Fixed the repeater component to highlight the active item when when async lists load. [#107](https://github.com/blackbaud/skyux-lists/pull/107)
+
+# 3.7.2 (2019-12-18)
+
+- Fixed the repeater item component to prevent throwing errors when using the keyboard. [#104](https://github.com/blackbaud/skyux-lists/pull/104)
+- Fixed the repeater item component to properly align header items. [#101](https://github.com/blackbaud/skyux-lists/pull/101)
+
 # 3.7.1 (2019-11-27)
 
 - Fixed the repeater item component to not steal focus from focusable child elements when they are activated. [#96](https://github.com/blackbaud/skyux-lists/pull/96)
