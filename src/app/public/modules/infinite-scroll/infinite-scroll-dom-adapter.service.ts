@@ -67,6 +67,43 @@ export class SkyInfiniteScrollDomAdapterService implements OnDestroy {
     }).map(() => undefined); // Change to void return type
   }
 
+  /**
+   * This event returns a boolean on scroll indicating whether the provided element is in view.
+   * @param elementRef The infinite scroll element reference.
+   */
+  public elementInViewOnScroll(elementRef: ElementRef): Observable<boolean> {
+    const parent = this.findScrollableParent(elementRef.nativeElement);
+
+    return Observable
+      .fromEvent(parent, 'scroll')
+      .takeUntil(this.ngUnsubscribe)
+      .map(() => {
+        const isInView = this.isElementScrolledInView(
+          elementRef.nativeElement,
+          parent
+        );
+        return isInView;
+    });
+  }
+
+  public scrollToElement(elementRef: ElementRef): void {
+    if (!elementRef || !elementRef.nativeElement) {
+      return;
+    }
+
+    const windowObj = this.windowRef.nativeWindow;
+    const parent = this.findScrollableParent(elementRef.nativeElement);
+
+    if (parent === windowObj) {
+      this.windowRef.nativeWindow.scrollTo(
+        elementRef.nativeElement.offsetLeft,
+        elementRef.nativeElement.offsetTop
+      );
+    } else {
+      parent.scrollTop = elementRef.nativeElement.offsetTop;
+    }
+  }
+
   private createObserver(element: any): void {
     this.observer = new MutationObserver((mutations: MutationRecord[]) => {
       const hasUpdates = !!mutations.find((mutation) => {
@@ -123,14 +160,14 @@ export class SkyInfiniteScrollDomAdapterService implements OnDestroy {
     parentElement: any
   ): boolean {
     const windowObj = this.windowRef.nativeWindow;
+    const elementRect = element.getBoundingClientRect();
 
     if (parentElement === windowObj) {
-      return (parentElement.pageYOffset + parentElement.innerHeight > element.offsetTop);
+      return (elementRect.top >= 0) && (elementRect.bottom <= window.innerHeight);
     }
 
-    const elementRect = element.getBoundingClientRect();
+    // TODO: Double check this logic!
     const parentRect = parentElement.getBoundingClientRect();
-
-    return (elementRect.top < parentRect.top + parentRect.height);
+    return (elementRect.top >= 0) && (elementRect.bottom <= parentRect.height);
   }
 }

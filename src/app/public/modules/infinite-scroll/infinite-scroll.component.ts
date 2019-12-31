@@ -29,6 +29,7 @@ import {
   ]
 })
 export class SkyInfiniteScrollComponent implements OnDestroy {
+
   @Input()
   public get enabled(): boolean {
     return this._enabled;
@@ -40,13 +41,50 @@ export class SkyInfiniteScrollComponent implements OnDestroy {
     }
   }
 
+  /**
+   * Indicates whether to display a back to top button when users scroll past the provided target element.
+   */
+  @Input()
+  public set backToTopTarget(value: ElementRef) {
+    this._backToTopTarget = value;
+    if (value) {
+        this.domAdapter.elementInViewOnScroll(this.backToTopTarget)
+          .takeUntil(this.ngUnsubscribe)
+          .subscribe((inView: boolean) => {
+            if (this.enabled && this.backToTopTarget) {
+              this.showScrollToTopButton = !inView;
+            }
+        });
+    }
+  }
+
+  public get backToTopTarget(): ElementRef {
+    return this._backToTopTarget;
+  }
+
   @Output()
   public scrollEnd = new EventEmitter<void>();
 
   public isWaiting = false;
 
+  public set showScrollToTopButton(value: boolean) {
+    if (this._showScrollToTopButton !== value) {
+      this._showScrollToTopButton = value;
+      this.changeDetector.markForCheck();
+    }
+  }
+
+  public get showScrollToTopButton(): boolean {
+    return this._showScrollToTopButton;
+  }
+
   private ngUnsubscribe = new Subject<void>();
+
+  private _backToTopTarget: ElementRef;
+
   private _enabled = false;
+
+  private _showScrollToTopButton: boolean = false;
 
   constructor(
     private changeDetector: ChangeDetectorRef,
@@ -62,6 +100,10 @@ export class SkyInfiniteScrollComponent implements OnDestroy {
 
   public startInfiniteScrollLoad(): void {
     this.notifyScrollEnd();
+  }
+
+  public onScrollToTopClick(): void {
+    this.domAdapter.scrollToElement(this.backToTopTarget);
   }
 
   private notifyScrollEnd(): void {

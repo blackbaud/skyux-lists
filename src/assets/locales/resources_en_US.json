@@ -11,6 +11,10 @@
     "_description": "Text for the filter summary component",
     "message": "Filter"
   },
+  "skyux_infinite_scroll_back_to_top": {
+    "_description": "Text for the back to top button in the infinite scroll component",
+    "message": "Back to top"
+  },
   "skyux_infinite_scroll_load_more_button": {
     "_description": "Text for loading more in the infinite scroll button",
     "message": "Load more"

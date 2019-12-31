@@ -17,7 +17,9 @@
     </sky-repeater-item>
   </sky-repeater>
   <sky-infinite-scroll
+    [backToTopTarget]="backToTopTarget"
     [enabled]="true"
+    (scrollEnd)="addToFirst()"
   >
   </sky-infinite-scroll>
 </div>
