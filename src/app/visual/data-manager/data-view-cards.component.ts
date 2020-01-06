@@ -1,11 +1,12 @@
 import {
   Component
 } from '@angular/core';
-import { DataViewConfig } from '../../public/modules/data-manager/models/data-view-config';
 
-// import {
-//   SkyDataManagerService
-// } from '../../public/modules/data-manager/';
+import {
+  SkyDataManagerService,
+  SkyDataManagerSortOption,
+  SkyDataViewConfig
+} from '../../public/modules/data-manager/';
 
 @Component({
   selector: 'data-view-cards',
@@ -13,11 +14,28 @@ import { DataViewConfig } from '../../public/modules/data-manager/models/data-vi
 })
 export class DataViewCardsComponent {
 
-  public viewConfig: DataViewConfig = {
+  public viewConfig: SkyDataViewConfig = {
     id: 'cardsView',
     name: 'Cards View',
     icon: 'th-large',
-    isActive: false
+    isActive: false,
+    sortEnabled: true,
+    searchEnabled: true,
+    filterButtonEnabled: true,
+    sortOptions: [
+      {
+        id: 'az',
+        label: 'Name (A - Z)',
+        descending: false,
+        propertyName: 'name'
+      },
+      {
+        id: 'za',
+        label: 'Name (Z - A)',
+        descending: true,
+        propertyName: 'name'
+      }
+    ]
   };
 
   public items: any[] = [
@@ -60,5 +78,38 @@ export class DataViewCardsComponent {
 
   ];
 
-  // constructor(private dataManagerService: SkyDataManagerService) {}
+  public displayedItems: any[];
+
+  constructor(private dataManagerService: SkyDataManagerService) {
+    this.displayedItems = this.items;
+
+    this.dataManagerService.activeSortOption.subscribe(sortOption => {
+      console.log('sortOption');
+      console.log(sortOption);
+      if (sortOption) {
+        this.sortItems(sortOption);
+      }
+    });
+
+    this.dataManagerService.searchText.subscribe(text => {
+      console.log('search in cards');
+    });
+  }
+
+  public sortItems(sortOption: SkyDataManagerSortOption) {
+    let result = this.displayedItems.sort(function (a: any, b: any) {
+      let descending = sortOption.descending ? -1 : 1,
+        sortProperty = sortOption.propertyName;
+
+      if (a[sortProperty] > b[sortProperty]) {
+        return (descending);
+      } else if (a[sortProperty] < b[sortProperty]) {
+        return (-1 * descending);
+      } else {
+        return 0;
+      }
+    });
+
+    this.displayedItems = result;
+  }
 }

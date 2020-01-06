@@ -1,11 +1,10 @@
 <sky-data-manager>
   <sky-toolbar>
-    <sky-toolbar-item>
-      <sky-data-manager-search></sky-data-manager-search>
-    </sky-toolbar-item>
-    <sky-toolbar-item>
-      <sky-data-manager-view-switcher></sky-data-manager-view-switcher>
-    </sky-toolbar-item>
+    <sky-data-manager-sort [showButtonText]="true"></sky-data-manager-sort>
+    <sky-data-manager-filter-button [showButtonText]="true"></sky-data-manager-filter-button>
+    <sky-data-manager-column-picker></sky-data-manager-column-picker>
+    <sky-data-manager-search></sky-data-manager-search>
+    <sky-data-manager-view-switcher></sky-data-manager-view-switcher>
   </sky-toolbar>
   <data-view-repeater></data-view-repeater>
   <data-view-cards></data-view-cards>

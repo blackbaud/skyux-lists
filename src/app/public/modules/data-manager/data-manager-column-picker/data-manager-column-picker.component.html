@@ -1,0 +1,16 @@
+<sky-toolbar-item *ngIf="columnPickerEnabled">
+  <button
+    class="sky-btn sky-btn-default"
+    type="button"
+    (click)="openColumnPickerModal()"
+  >
+    <sky-icon
+      icon="columns"
+    ></sky-icon>
+    <span
+      class="sky-column-selector-action-btn-text"
+    >
+      Columns
+    </span>
+  </button>
+</sky-toolbar-item>

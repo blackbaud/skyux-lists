@@ -11,8 +11,12 @@ import {
 } from 'rxjs/Subject';
 
 import {
-  DataViewConfig
+  SkyDataViewConfig
 } from './models/data-view-config';
+
+import {
+  SkyDataManagerSortOption
+} from './models/data-manager-sort-option';
 
 @Injectable()
 export class SkyDataManagerService {
@@ -20,15 +24,16 @@ export class SkyDataManagerService {
 
   public searchText: BehaviorSubject<string> = new BehaviorSubject<string>(undefined);
 
-  public sort: Subject<string> = new Subject();
+  public activeSortOption: BehaviorSubject<SkyDataManagerSortOption> =
+    new BehaviorSubject<SkyDataManagerSortOption>(undefined);
 
   public selectedColumnIds: Subject<string[]> = new Subject();
 
-  public activeView: Subject<DataViewConfig> = new Subject();
+  public activeView: Subject<SkyDataViewConfig> = new Subject();
 
-  public views: BehaviorSubject<DataViewConfig[]> = new BehaviorSubject<DataViewConfig[]>([]);
+  public views: BehaviorSubject<SkyDataViewConfig[]> = new BehaviorSubject<SkyDataViewConfig[]>([]);
 
-  public registerView(view: DataViewConfig): void {
+  public registerView(view: SkyDataViewConfig): void {
     let currentViews = this.views.value;
 
     currentViews.push(view);

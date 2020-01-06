@@ -9,11 +9,11 @@ import {
 
 import {
   SkyDataManagerService
-} from './data-manager.service';
+} from '../data-manager.service';
 
 import {
-  DataViewConfig
-} from './models/data-view-config';
+  SkyDataViewConfig
+} from '../models/data-view-config';
 
 @Component({
   selector: 'sky-data-manager-view-switcher',
@@ -22,25 +22,25 @@ import {
 })
 export class SkyDataManagerViewSwitcherComponent {
 
-  public get activeView(): DataViewConfig {
+  public get activeView(): SkyDataViewConfig {
     return this._activeView;
   }
 
-  public set activeView(view: DataViewConfig) {
+  public set activeView(view: SkyDataViewConfig) {
     this.dataManagerService.activeView.next(view);
   }
 
-  public get views(): BehaviorSubject<DataViewConfig[]> {
+  public get views(): BehaviorSubject<SkyDataViewConfig[]> {
     return this.dataManagerService.views;
   }
 
-  private _activeView: DataViewConfig;
+  private _activeView: SkyDataViewConfig;
 
   constructor(private dataManagerService: SkyDataManagerService) {
     this.dataManagerService.activeView.subscribe(view => this._activeView = view);
   }
 
-  public onViewChange(view: DataViewConfig) {
+  public onViewChange(view: SkyDataViewConfig) {
     this.dataManagerService.activeView.next(view);
   }
 }

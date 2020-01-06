@@ -6,7 +6,7 @@ import {
 
 import {
   SkyDataManagerService
-} from './data-manager.service';
+} from '../data-manager.service';
 
 import { delay } from 'rxjs/operators';
 

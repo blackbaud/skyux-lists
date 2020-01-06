@@ -1,10 +1,10 @@
 import {
   Component
 } from '@angular/core';
-import { DataViewConfig } from '../../public/modules/data-manager/models/data-view-config';
 
 import {
-  SkyDataManagerService
+  SkyDataManagerService,
+  SkyDataViewConfig
 } from '../../public/modules/data-manager/';
 
 @Component({
@@ -13,12 +13,26 @@ import {
 })
 export class DataViewRepeaterComponent {
 
-  public viewConfig: DataViewConfig = {
+  public viewConfig: SkyDataViewConfig = {
     id: 'repeaterView',
     name: 'Repeater View',
     icon: 'list',
     searchEnabled: true,
-    isActive: true
+    isActive: true,
+    columnPickerEnabled: true,
+    filterButtonEnabled: true,
+    columnOptions: [
+      {
+        id: '1',
+        label: 'Column 1',
+        isSelected: true
+      },
+      {
+        id: '2',
+        label: 'Column 2',
+        isSelected: false
+      }
+    ]
   };
 
   public displayedItems: any[];
@@ -59,7 +73,10 @@ export class DataViewRepeaterComponent {
   constructor(private dataManagerService: SkyDataManagerService) {
     this.displayedItems = this.items;
 
-    this.dataManagerService.searchText.subscribe(text => this.searchItems(text));
+    this.dataManagerService.searchText.subscribe(text => {
+      console.log('search in repeater');
+      this.searchItems(text);
+    });
    }
 
   public searchItems(searchText: string) {

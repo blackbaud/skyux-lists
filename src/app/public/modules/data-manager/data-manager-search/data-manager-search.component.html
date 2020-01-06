@@ -1,0 +1,9 @@
+<sky-toolbar-item *ngIf="searchEnabled">
+  <sky-search
+    [searchText]="searchText | async"
+    [debounceTime]="250"
+    (searchApply)="searchApplied($event)"
+    (searchChange)="searchApplied($event)"
+  >
+  </sky-search>
+</sky-toolbar-item>

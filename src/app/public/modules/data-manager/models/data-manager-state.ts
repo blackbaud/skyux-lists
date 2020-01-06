@@ -1,10 +1,10 @@
-export class DataManagerFilterModel {
-  public name: string;
-  public defaultValue: any;
-  public label: string;
-  public dismissible: boolean = true;
-  public value: any;
-  public filterFunction: Function;
+import {
+  SkyDataManagerFilter
+} from './data-manager-filter';
+
+export class SkyDataState {
+  public filters: SkyDataManagerFilter[];
+
 
   // constructor(data?: any) {
   //   if (data) {

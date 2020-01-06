@@ -1,0 +1,7 @@
+<sky-toolbar-item *ngIf="filterButtonEnabled">
+  <sky-filter-button
+    [showButtonText]="showButtonText"
+    (filterButtonClick)="filterButtonClicked()"
+  >
+  </sky-filter-button>
+</sky-toolbar-item>

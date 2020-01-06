@@ -9,7 +9,7 @@ import {
 import {
   SkyDataManagerService
 } from './data-manager.service';
-import { DataViewConfig } from './models/data-view-config';
+import { SkyDataViewConfig } from './models/data-view-config';
 
 @Component({
   selector: 'sky-data-view',
@@ -19,7 +19,7 @@ import { DataViewConfig } from './models/data-view-config';
 export class SkyDataViewComponent implements OnInit {
 
   @Input()
-  public viewConfig: DataViewConfig;
+  public viewConfig: SkyDataViewConfig;
 
   public get isActive(): boolean {
     return this.viewConfig.isActive;

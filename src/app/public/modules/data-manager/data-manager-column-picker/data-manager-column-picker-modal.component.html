@@ -1,0 +1,37 @@
+
+<sky-modal>
+  <sky-modal-header>
+    {{title}}
+  </sky-modal-header>
+  <sky-modal-content>
+    <sky-repeater
+  expandMode="none"
+>
+  <sky-repeater-item
+    *ngFor="let column of context.columnOptions"
+    [isSelected]="column.isSelected"
+    [selectable]="true"
+  >
+    <sky-repeater-item-title>
+      <div class="pull-left">
+        {{column.label}}
+      </div>
+    </sky-repeater-item-title>
+  </sky-repeater-item>
+</sky-repeater>
+  </sky-modal-content>
+  <sky-modal-footer>
+    <button
+      sky-cmp-id="apply-changes"
+      class="sky-btn sky-btn-primary"
+      (click)="applyChanges()">
+      Apply changes
+    </button>
+    <button
+      sky-cmp-id="cancel"
+      class="sky-btn sky-btn-link"
+      (click)="cancelChanges()">
+      Cancel
+    </button>
+  </sky-modal-footer>
+</sky-modal>
