@@ -67,6 +67,10 @@ import {
 } from './data-manager-sort/data-manager-sort.component';
 
 import {
+  SkyDataManagerToolbarComponent
+} from './data-manager-toolbar/data-manager-toolbar.component';
+
+import {
   SkyDataManagerViewSwitcherComponent
 } from './data-manager-view-switcher/data-manager-view-switcher.component';
 
@@ -82,6 +86,7 @@ import {
     SkyDataManagerFilterButtonComponent,
     SkyDataManagerSearchComponent,
     SkyDataManagerSortComponent,
+    SkyDataManagerToolbarComponent,
     SkyDataManagerViewSwitcherComponent,
     SkyDataViewComponent
   ],
@@ -104,6 +109,7 @@ import {
     SkyDataManagerFilterButtonComponent,
     SkyDataManagerSearchComponent,
     SkyDataManagerSortComponent,
+    SkyDataManagerToolbarComponent,
     SkyDataManagerViewSwitcherComponent,
     SkyDataViewComponent
   ],

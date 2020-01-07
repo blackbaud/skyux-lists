@@ -22,6 +22,7 @@ export class DataViewCardsComponent {
     sortEnabled: true,
     searchEnabled: true,
     filterButtonEnabled: true,
+    showSortButtonText: true,
     sortOptions: [
       {
         id: 'az',
@@ -84,15 +85,12 @@ export class DataViewCardsComponent {
     this.displayedItems = this.items;
 
     this.dataManagerService.activeSortOption.subscribe(sortOption => {
-      console.log('sortOption');
-      console.log(sortOption);
       if (sortOption) {
         this.sortItems(sortOption);
       }
     });
 
     this.dataManagerService.searchText.subscribe(text => {
-      console.log('search in cards');
     });
   }
 

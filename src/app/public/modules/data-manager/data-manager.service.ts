@@ -34,6 +34,8 @@ export class SkyDataManagerService {
   public views: BehaviorSubject<SkyDataViewConfig[]> = new BehaviorSubject<SkyDataViewConfig[]>([]);
 
   public registerView(view: SkyDataViewConfig): void {
+    console.log('registering view');
+    console.log(view);
     let currentViews = this.views.value;
 
     currentViews.push(view);

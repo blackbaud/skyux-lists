@@ -74,7 +74,6 @@ export class DataViewRepeaterComponent {
     this.displayedItems = this.items;
 
     this.dataManagerService.searchText.subscribe(text => {
-      console.log('search in repeater');
       this.searchItems(text);
     });
    }

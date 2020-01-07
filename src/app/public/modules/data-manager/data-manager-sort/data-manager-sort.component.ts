@@ -53,15 +53,13 @@ export class SkyDataManagerSortComponent {
       .pipe(
         delay(0)
     ).subscribe(view => {
-      console.log(view);
       this.sortEnabled = view && view.sortEnabled;
       this.sortOptions = view && view.sortOptions;
     });
    }
 
    public sortSelected(sortOption: SkyDataManagerSortOption) {
-     console.log('sort selected');
-     console.log(sortOption);
+
     this.dataManagerService.activeSortOption.next(sortOption);
    }
 }

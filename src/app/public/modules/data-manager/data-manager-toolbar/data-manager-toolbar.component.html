@@ -1,0 +1,41 @@
+<sky-toolbar>
+  <sky-toolbar-section>
+
+    <sky-toolbar-item *ngIf="activeView?.sortEnabled">
+      <sky-sort [showButtonText]="activeView?.showSortButtonText">
+        <sky-sort-item
+          *ngFor="let item of activeView?.sortOptions"
+          [active]="activeSortOptionId === item.id"
+          (itemSelect)="sortSelected(item)">
+          {{item.label}}
+        </sky-sort-item>
+      </sky-sort>
+    </sky-toolbar-item>
+
+    <sky-toolbar-item *ngIf="activeView?.searchEnabled">
+      <sky-search
+        [searchText]="searchText | async"
+        [debounceTime]="250"
+        (searchApply)="searchApplied($event)"
+        (searchChange)="searchApplied($event)"
+      >
+      </sky-search>
+    </sky-toolbar-item>
+
+    <sky-toolbar-view-actions>
+      <div
+      class="sky-switch-icon-group"
+      >
+        <sky-radio *ngFor="let view of views"
+          name="dataview"
+          [icon]="view.icon"
+          [value]="view.id"
+          [label]="view.name"
+          [(ngModel)]="activeView.id"
+          (change)="onViewChange(view)"
+        >
+        </sky-radio>
+      </div>
+    </sky-toolbar-view-actions>
+  </sky-toolbar-section>
+</sky-toolbar>

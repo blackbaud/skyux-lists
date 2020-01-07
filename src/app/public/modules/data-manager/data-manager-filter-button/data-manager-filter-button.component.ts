@@ -47,7 +47,6 @@ export class SkyDataManagerFilterButtonComponent {
    }
 
   public filterButtonClicked(): void {
-    console.log('filter button clicked');
     // const context = new SkyDataManagerColumnPickerModalContext();
     // context.columnOptions = this.columnOptions;
 
