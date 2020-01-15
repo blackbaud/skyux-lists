@@ -3,6 +3,10 @@ import {
 } from '@angular/core';
 
 import {
+  SkyCheckboxModule
+} from '@skyux/forms';
+
+import {
   SkyIconModule
 } from '@skyux/indicators';
 
@@ -10,6 +14,10 @@ import {
   SkyCardModule,
   SkyFluidGridModule
 } from '@skyux/layout';
+
+import {
+  SkyModalModule
+} from '@skyux/modals';
 
 import {
   SkyDropdownModule
@@ -32,20 +40,29 @@ import {
   SkySortModule
 } from './public';
 
+import {
+  SkyDataManagerFiltersModalDemoComponent
+} from './visual/data-manager/data-filter-modal.component';
+
 @NgModule({
   exports: [
     SkyAppLinkModule,
     SkyCardModule,
+    SkyCheckboxModule,
     SkyDataManagerModule,
     SkyDropdownModule,
     SkyFilterModule,
     SkyFluidGridModule,
     SkyIconModule,
     SkyInfiniteScrollModule,
+    SkyModalModule,
     SkyPagingModule,
     SkyRepeaterModule,
     SkySortModule,
     SkyToolbarModule
+  ],
+  entryComponents: [
+    SkyDataManagerFiltersModalDemoComponent
   ]
 })
 export class AppExtrasModule { }

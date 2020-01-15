@@ -27,6 +27,6 @@ export class SkyDataManagerColumnPickerModalComponent {
   }
 
   public applyChanges() {
-    this.instance.save();
+    this.instance.save(this.context.columnOptions.filter(col => col.isSelected));
   }
 }

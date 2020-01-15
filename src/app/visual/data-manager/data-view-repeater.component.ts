@@ -1,11 +1,15 @@
 import {
-  Component
+  Component,
+  Input,
+  EventEmitter,
+  Output
 } from '@angular/core';
 
 import {
-  SkyDataManagerService,
+  SkyDataManagerState,
   SkyDataViewConfig
 } from '../../public/modules/data-manager/';
+import { SkyDataManagerFiltersModalDemoComponent } from './data-filter-modal.component';
 
 @Component({
   selector: 'data-view-repeater',
@@ -13,14 +17,24 @@ import {
 })
 export class DataViewRepeaterComponent {
 
+  public get dataState(): SkyDataManagerState {
+    return this._dataState;
+  }
+
+  @Input()
+  public set dataState(value: SkyDataManagerState) {
+    this._dataState = value;
+    this.displayedItems = this.filterItems(this.searchItems(this.items));
+  }
+
   public viewConfig: SkyDataViewConfig = {
     id: 'repeaterView',
     name: 'Repeater View',
     icon: 'list',
     searchEnabled: true,
-    isActive: true,
     columnPickerEnabled: true,
     filterButtonEnabled: true,
+    filterModalComponent: SkyDataManagerFiltersModalDemoComponent,
     columnOptions: [
       {
         id: '1',
@@ -32,10 +46,12 @@ export class DataViewRepeaterComponent {
         label: 'Column 2',
         isSelected: false
       }
-    ]
+    ],
+    additionalOptions: {
+      soText: true
+    }
   };
 
-  public displayedItems: any[];
   public items: any[] = [
     {
       name: 'Orange',
@@ -70,24 +86,38 @@ export class DataViewRepeaterComponent {
 
   ];
 
-  constructor(private dataManagerService: SkyDataManagerService) {
-    this.displayedItems = this.items;
+  public displayedItems = this.items;
 
-    this.dataManagerService.searchText.subscribe(text => {
-      this.searchItems(text);
-    });
-   }
+  public get isActive(): boolean {
+    return this._isActive;
+  }
 
-  public searchItems(searchText: string) {
-    let filteredItems = this.items;
+  public set isActive(value: boolean) {
+    this._isActive = value;
+
+    if (value) {
+      this.activeViewChange.emit(this.viewConfig);
+    }
+  }
+
+  @Output()
+  public activeViewChange: EventEmitter<SkyDataViewConfig> = new EventEmitter<SkyDataViewConfig>();
+
+  private _dataState: SkyDataManagerState;
+  private _isActive: boolean = true;
+
+  public searchItems(items: any[]): any[] {
+    let searchedItems = items;
+    let searchText = this.dataState && this.dataState.searchText;
 
     if (searchText) {
-      filteredItems = this.items.filter(function (item: any) {
+      searchedItems = items.filter(function (item: any) {
         let property: any;
 
         for (property in item) {
           if (item.hasOwnProperty(property) && (property === 'name' || property === 'description')) {
-            if (item[property].indexOf(searchText) > -1) {
+            const propertyText = item[property].toLowerCase();
+            if (propertyText.indexOf(searchText) > -1) {
               return true;
             }
           }
@@ -96,6 +126,23 @@ export class DataViewRepeaterComponent {
         return false;
       });
     }
-    this.displayedItems = filteredItems;
+    return searchedItems;
+  }
+
+  public filterItems(items: any[]): any[] {
+    let filteredItems = items;
+    let filterData = this.dataState && this.dataState.filterData;
+
+    if (filterData) {
+      filteredItems = items.filter((item: any) => {
+        if (((filterData.hideOrange && item.color !== 'orange') || !filterData.hideOrange) &&
+            ((filterData.type !== 'any' && item.type === filterData.type) || (!filterData.type || filterData.type === 'any'))) {
+              return true;
+            }
+        return false;
+      });
+    }
+
+    return filteredItems;
   }
 }

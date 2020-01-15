@@ -43,10 +43,6 @@ import {
 } from '@skyux/layout';
 
 import {
-  SkyDataManagerColumnPickerComponent
-} from './data-manager-column-picker/data-manager-column-picker.component';
-
-import {
   SkyDataManagerColumnPickerModalComponent
 } from './data-manager-column-picker/data-manager-column-picker-modal.component';
 
@@ -55,24 +51,24 @@ import {
 } from './data-manager.component';
 
 import {
-  SkyDataManagerFilterButtonComponent
-} from './data-manager-filter-button/data-manager-filter-button.component';
+  SkyDataManagerLeftItemsComponent
+} from './data-manager-left-items/data-manager-left-items.component';
 
 import {
-  SkyDataManagerSearchComponent
-} from './data-manager-search/data-manager-search.component';
+  SkyDataManagerRightItemsComponent
+} from './data-manager-right-items/data-manager-right-items.component';
 
 import {
-  SkyDataManagerSortComponent
-} from './data-manager-sort/data-manager-sort.component';
+  SkyDataManagerSectionComponent
+} from './data-manager-section/data-manager-section.component';
 
 import {
   SkyDataManagerToolbarComponent
 } from './data-manager-toolbar/data-manager-toolbar.component';
 
 import {
-  SkyDataManagerViewSwitcherComponent
-} from './data-manager-view-switcher/data-manager-view-switcher.component';
+  SkyDataManagerToolbarItemComponent
+} from './data-manager-toolbar/data-manager-toolbar-item/data-manager-toolbar-item.component';
 
 import {
   SkyDataViewComponent
@@ -80,14 +76,13 @@ import {
 
 @NgModule({
   declarations: [
-    SkyDataManagerColumnPickerComponent,
     SkyDataManagerColumnPickerModalComponent,
     SkyDataManagerComponent,
-    SkyDataManagerFilterButtonComponent,
-    SkyDataManagerSearchComponent,
-    SkyDataManagerSortComponent,
+    SkyDataManagerLeftItemsComponent,
+    SkyDataManagerRightItemsComponent,
+    SkyDataManagerSectionComponent,
     SkyDataManagerToolbarComponent,
-    SkyDataManagerViewSwitcherComponent,
+    SkyDataManagerToolbarItemComponent,
     SkyDataViewComponent
   ],
   imports: [
@@ -103,14 +98,13 @@ import {
     SkyToolbarModule
   ],
   exports: [
-    SkyDataManagerColumnPickerComponent,
     SkyDataManagerColumnPickerModalComponent,
     SkyDataManagerComponent,
-    SkyDataManagerFilterButtonComponent,
-    SkyDataManagerSearchComponent,
-    SkyDataManagerSortComponent,
+    SkyDataManagerLeftItemsComponent,
+    SkyDataManagerRightItemsComponent,
+    SkyDataManagerSectionComponent,
     SkyDataManagerToolbarComponent,
-    SkyDataManagerViewSwitcherComponent,
+    SkyDataManagerToolbarItemComponent,
     SkyDataViewComponent
   ],
   entryComponents: [

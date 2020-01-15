@@ -7,12 +7,13 @@ import {
 } from './data-manager-column-picker-option';
 
 export class SkyDataViewConfig {
+  public additionalOptions?: Object;
   public columnOptions?: SkyDataManagerColumnPickerOption[];
   public columnPickerEnabled?: boolean;
   public filterButtonEnabled?: boolean;
+  public filterModalComponent?: any;
   public icon?: string;
   public id: string;
-  public isActive: boolean;
   public name: string;
   public searchEnabled?: boolean;
   public showFilterButtonText?: boolean;

@@ -1,6 +1,14 @@
 <sky-toolbar>
   <sky-toolbar-section>
 
+    <sky-toolbar-item *ngIf="activeView?.filterButtonEnabled">
+      <sky-filter-button
+        [showButtonText]="activeView?.showFilterButtonText"
+        (filterButtonClick)="filterButtonClicked()"
+      >
+      </sky-filter-button>
+    </sky-toolbar-item>
+
     <sky-toolbar-item *ngIf="activeView?.sortEnabled">
       <sky-sort [showButtonText]="activeView?.showSortButtonText">
         <sky-sort-item
@@ -12,9 +20,28 @@
       </sky-sort>
     </sky-toolbar-item>
 
+    <sky-toolbar-item *ngIf="activeView?.columnPickerEnabled">
+      <button
+        class="sky-btn sky-btn-default"
+        type="button"
+        (click)="openColumnPickerModal()"
+      >
+        <sky-icon
+          icon="columns"
+        ></sky-icon>
+        <span
+          class="sky-column-selector-action-btn-text"
+        >
+          Columns
+        </span>
+      </button>
+    </sky-toolbar-item>
+
+    <ng-content select="sky-data-manager-left-items"></ng-content>
+
     <sky-toolbar-item *ngIf="activeView?.searchEnabled">
       <sky-search
-        [searchText]="searchText | async"
+        [searchText]="dataState?.searchText"
         [debounceTime]="250"
         (searchApply)="searchApplied($event)"
         (searchChange)="searchApplied($event)"
@@ -23,6 +50,7 @@
     </sky-toolbar-item>
 
     <sky-toolbar-view-actions>
+      <ng-content select="sky-data-manager-right-items"></ng-content>
       <div
       class="sky-switch-icon-group"
       >
@@ -38,4 +66,5 @@
       </div>
     </sky-toolbar-view-actions>
   </sky-toolbar-section>
+  <ng-content select="sky-data-manager-section"></ng-content>
 </sky-toolbar>
