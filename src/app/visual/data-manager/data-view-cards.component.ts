@@ -1,13 +1,12 @@
 import {
   Component,
-  Input,
-  EventEmitter,
-  Output
+  Input
 } from '@angular/core';
 
 import {
   SkyDataManagerState,
-  SkyDataViewConfig
+  SkyDataViewConfig,
+  SkyDataManagerService
 } from '../../public/modules/data-manager/';
 import { SkyDataManagerFiltersModalDemoComponent } from './data-filter-modal.component';
 
@@ -91,25 +90,15 @@ export class DataViewCardsComponent {
     }
   ];
 
-  public get isActive(): boolean {
-    return this._isActive;
-  }
-
-  public set isActive(value: boolean) {
-    this._isActive = value;
-
-    if (value) {
-      this.activeViewChange.emit(this.viewConfig);
-    }
-  }
-
-  @Output()
-  public activeViewChange: EventEmitter<SkyDataViewConfig> = new EventEmitter<SkyDataViewConfig>();
-
   private _dataState: SkyDataManagerState;
-  private _isActive: boolean = false;
 
   public displayedItems = this.items;
+
+  constructor(private dataManagerService: SkyDataManagerService) {
+    this.dataManagerService.dataState.subscribe(state => {
+      this.dataState = state;
+    });
+  }
 
   public sortItems(items: any[]): any[] {
     let result = items;
@@ -174,6 +163,6 @@ export class DataViewCardsComponent {
   }
 
   public searchBe() {
-    this.dataState = this.dataState.setSearchText('be');
+    this.dataManagerService.dataState.next(this.dataState.setSearchText('be'));
   }
 }

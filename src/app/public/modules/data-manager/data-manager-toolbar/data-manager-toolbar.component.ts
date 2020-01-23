@@ -60,7 +60,7 @@ export class SkyDataManagerToolbarComponent implements OnInit {
 
   private _activeView: SkyDataViewConfig;
   private _dataState: SkyDataManagerState;
-  private _views: SkyDataViewConfig[];
+  private _views: SkyDataViewConfig[] = [];
 
   constructor(
     private changeDetector: ChangeDetectorRef,

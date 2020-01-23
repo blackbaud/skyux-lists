@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
-import { SkyDataManagerState, SkyDataViewConfig } from '../../public';
+import { SkyDataManagerState, SkyDataViewConfig, SkyDataManagerService } from '../../public';
 
 @Component({
   selector: 'data-manager-visual',
-  templateUrl: './data-manager-visual.component.html'
+  templateUrl: './data-manager-visual.component.html',
+  providers: [SkyDataManagerService]
 })
 export class DataManagerVisualComponent {
 
@@ -15,11 +16,11 @@ export class DataManagerVisualComponent {
     }
   });
 
-  public searchSo() {
-    this.dataState = this.dataState.setSearchText('so');
+  constructor(private dataManagerService: SkyDataManagerService) {
+    this.dataManagerService.activeView.subscribe(view => this.activeView = view);
   }
 
-  public setActiveView(view: SkyDataViewConfig): void {
-    this.activeView = view;
+  public searchSo() {
+    this.dataManagerService.dataState.next(this.dataState.setSearchText('so'));
   }
 }

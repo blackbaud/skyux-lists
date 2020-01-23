@@ -1,13 +1,13 @@
 import {
   Component,
   Input,
-  EventEmitter,
-  Output
+  OnInit
 } from '@angular/core';
 
 import {
   SkyDataManagerState,
-  SkyDataViewConfig
+  SkyDataViewConfig,
+  SkyDataManagerService
 } from '../../public/modules/data-manager/';
 import { SkyDataManagerFiltersModalDemoComponent } from './data-filter-modal.component';
 
@@ -15,7 +15,7 @@ import { SkyDataManagerFiltersModalDemoComponent } from './data-filter-modal.com
   selector: 'data-view-repeater',
   templateUrl: './data-view-repeater.component.html'
 })
-export class DataViewRepeaterComponent {
+export class DataViewRepeaterComponent implements OnInit {
 
   public get dataState(): SkyDataManagerState {
     return this._dataState;
@@ -39,12 +39,14 @@ export class DataViewRepeaterComponent {
       {
         id: '1',
         label: 'Column 1',
-        isSelected: true
+        isSelected: true,
+        description: 'This is a column.'
       },
       {
         id: '2',
         label: 'Column 2',
-        isSelected: false
+        isSelected: false,
+        description: 'This is also a column, but it is a different column.'
       }
     ],
     additionalOptions: {
@@ -88,23 +90,16 @@ export class DataViewRepeaterComponent {
 
   public displayedItems = this.items;
 
-  public get isActive(): boolean {
-    return this._isActive;
+  private _dataState: SkyDataManagerState = new SkyDataManagerState();
+
+  constructor(private dataManagerService: SkyDataManagerService) {
   }
 
-  public set isActive(value: boolean) {
-    this._isActive = value;
-
-    if (value) {
-      this.activeViewChange.emit(this.viewConfig);
-    }
+  public ngOnInit(): void {
+    this.dataManagerService.dataState.subscribe(state => {
+      this.dataState = state;
+    });
   }
-
-  @Output()
-  public activeViewChange: EventEmitter<SkyDataViewConfig> = new EventEmitter<SkyDataViewConfig>();
-
-  private _dataState: SkyDataManagerState;
-  private _isActive: boolean = true;
 
   public searchItems(items: any[]): any[] {
     let searchedItems = items;

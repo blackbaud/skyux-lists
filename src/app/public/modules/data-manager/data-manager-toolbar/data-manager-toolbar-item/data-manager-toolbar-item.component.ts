@@ -2,10 +2,10 @@ import {
   ChangeDetectorRef,
   ChangeDetectionStrategy,
   Component,
-  Input,
-  OnInit,
-  Output,
-  EventEmitter
+  // Input,
+  OnInit
+  // Output,
+  // EventEmitter
 } from '@angular/core';
 
 import {
@@ -36,20 +36,23 @@ export class SkyDataManagerToolbarItemComponent implements OnInit {
     return this._dataState;
   }
 
-  @Input()
+  // @Input()
   public set dataState(value: SkyDataManagerState) {
-    this.fromDataStateSetter = true;
-    setTimeout(() => { this.dataManagerService.dataState.next(value); });
+    // this.fromDataStateSetter = true;
+    this._dataState = value;
+    // setTimeout(() => {
+      this.dataManagerService.dataState.next(value);
+    // });
   }
 
-  @Output()
-  public dataStateChange: EventEmitter<SkyDataManagerState> =
-    new EventEmitter<SkyDataManagerState>();
+  // @Output()
+  // public dataStateChange: EventEmitter<SkyDataManagerState> =
+  //   new EventEmitter<SkyDataManagerState>();
 
   public isEnabled: boolean;
   private _activeView: SkyDataViewConfig;
   private _dataState: SkyDataManagerState = new SkyDataManagerState();
-  private fromDataStateSetter: boolean;
+  // private fromDataStateSetter: boolean;
 
   constructor(
     private changeDetector: ChangeDetectorRef,
@@ -63,10 +66,10 @@ export class SkyDataManagerToolbarItemComponent implements OnInit {
 
     this.dataManagerService.dataState.subscribe(dataState => {
       this._dataState = dataState;
-      if (!this.fromDataStateSetter) {
-        this.dataStateChange.emit(this.dataState);
-      }
-      this.fromDataStateSetter = false;
+      // if (!this.fromDataStateSetter) {
+      //   this.dataStateChange.emit(this.dataState);
+      // }
+      // this.fromDataStateSetter = false;
     });
   }
 }
