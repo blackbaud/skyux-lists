@@ -3,6 +3,11 @@ import {
   SkyHostBrowser
 } from '@skyux-sdk/e2e';
 
+import {
+  by,
+  element
+} from 'protractor';
+
 describe('Repeater', () => {
   it('should match previous repeater screenshot', (done) => {
     SkyHostBrowser.get('visual/repeater');
@@ -91,6 +96,20 @@ describe('Repeater', () => {
     SkyHostBrowser.scrollTo('#screenshot-repeater-reorderable');
     expect('#screenshot-repeater-reorderable').toMatchBaselineScreenshot(done, {
       screenshotName: 'repeater-reorderable'
+    });
+  });
+
+  it('should match previous repeater screenshot with an inline delete', (done) => {
+    SkyHostBrowser.get('visual/repeater');
+    SkyHostBrowser.setWindowBreakpoint('lg');
+    SkyHostBrowser.scrollTo('#screenshot-repeater-inline-delete');
+    element.all(by.css('#screenshot-repeater-inline-delete .sky-dropdown-button')).get(0).click();
+    element(by.css('#screenshot-repeater-inline-delete #inline-delete-trigger-standard')).click();
+    element.all(by.css('#screenshot-repeater-inline-delete .sky-dropdown-button')).get(1).click();
+    element(by.css('#screenshot-repeater-inline-delete #inline-delete-trigger-active')).click();
+    element(by.css('#screenshot-repeater-inline-delete')).click();
+    expect('#screenshot-repeater-inline-delete').toMatchBaselineScreenshot(done, {
+      screenshotName: 'repeater-inline-delete'
     });
   });
 });
