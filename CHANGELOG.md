@@ -1,6 +1,6 @@
 # 3.7.3 (2020-01-24)
 
-- Fixed the repeater component to show the active item when using async lists. [#107](https://github.com/blackbaud/skyux-lists/pull/107)
+- Fixed the repeater component to highlight the active item when when async lists load. [#107](https://github.com/blackbaud/skyux-lists/pull/107)
 
 # 3.7.2 (2019-12-18)
 
