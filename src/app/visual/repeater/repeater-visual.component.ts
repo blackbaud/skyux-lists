@@ -161,6 +161,14 @@ export class RepeaterVisualComponent {
     this.onItemClick(index);
   }
 
+  public hideActiveInlineDelete() {
+    this.showActiveInlineDelete = false;
+  }
+
+  public hideStandardInlineDelete() {
+    this.showStandardInlineDelete = false;
+  }
+
   public triggerActiveInlineDelete() {
     this.showActiveInlineDelete = true;
   }

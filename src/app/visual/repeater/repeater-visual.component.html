@@ -555,7 +555,10 @@
       [expandMode]="'single'"
     >
       <sky-repeater-item>
-        <sky-inline-delete *ngIf="showStandardInlineDelete"></sky-inline-delete>
+        <sky-inline-delete *ngIf="showStandardInlineDelete"
+          (cancelTriggered)="hideStandardInlineDelete()"
+          (deleteTriggered)="hideStandardInlineDelete()"
+        ></sky-inline-delete>
         <sky-repeater-item-context-menu>
             <sky-dropdown
               buttonType="context-menu"
@@ -579,9 +582,13 @@
         <sky-repeater-item-content>
           Content 1
         </sky-repeater-item-content>
-      </sky-repeater-item>
+      </sky-repeater-item
+      >
       <sky-repeater-item>
-        <sky-inline-delete *ngIf="showActiveInlineDelete"></sky-inline-delete>
+        <sky-inline-delete *ngIf="showActiveInlineDelete"
+          (cancelTriggered)="hideActiveInlineDelete()"
+          (deleteTriggered)="hideActiveInlineDelete()"
+        ></sky-inline-delete>
         <sky-repeater-item-context-menu>
             <sky-dropdown
               buttonType="context-menu"
