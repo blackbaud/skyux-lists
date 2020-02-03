@@ -967,6 +967,53 @@ describe('Repeater item component', () => {
 
       flushDropdownTimer();
     }));
+
+    it('should emit the isSelectedChange event when the user selects an item', fakeAsync(() => {
+      let fixture = TestBed.createComponent(RepeaterTestComponent);
+      let el = fixture.nativeElement;
+      let cmp: RepeaterTestComponent = fixture.componentInstance;
+      cmp.selectable = true;
+      fixture.detectChanges();
+
+      const item = getRepeaterItems(el)[0];
+
+      const isSelectedChangeSpy = spyOn(cmp, 'onIsSelectedChange').and.callThrough();
+
+      // Focus on first repeater item and press enter key.
+      SkyAppTestUtility.fireDomEvent(item, 'focus');
+      SkyAppTestUtility.fireDomEvent(item, 'keydown', {
+        keyboardEventInit: {
+          key: 'Enter'
+        }
+      });
+      fixture.detectChanges();
+
+      // Expect the event to have occurred once.
+      expect(isSelectedChangeSpy).toHaveBeenCalledTimes(1);
+
+      // Press space key.
+      SkyAppTestUtility.fireDomEvent(item, 'keydown', {
+        keyboardEventInit: {
+          key: ' '
+        }
+      });
+      fixture.detectChanges();
+
+      // Expect the event to have occurred twice.
+      expect(isSelectedChangeSpy).toHaveBeenCalledTimes(2);
+
+      const itemCheckbox = item.querySelector('sky-checkbox');
+
+      // Click on first repeater item checkbox.
+      itemCheckbox.querySelector('input').click();
+      fixture.detectChanges();
+      tick();
+
+      // Expect the event to have occurred three times.
+      expect(isSelectedChangeSpy).toHaveBeenCalledTimes(3);
+
+      flushDropdownTimer();
+    }));
   });
 
   describe('with active index', () => {

@@ -516,7 +516,8 @@ export class SkyRepeaterItemComponent implements OnDestroy, OnInit, AfterViewIni
 
   private toggleSelected(): void {
     if (this.selectable) {
-      this.isSelected = !this.isSelected;
+      this._isSelected = !this._isSelected;
+      this.isSelectedChange.emit(this._isSelected);
     }
   }
 
