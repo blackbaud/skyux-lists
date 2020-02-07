@@ -161,19 +161,19 @@ export class RepeaterVisualComponent {
     this.onItemClick(index);
   }
 
-  public hideActiveInlineDelete() {
+  public hideActiveInlineDelete(): void {
     this.showActiveInlineDelete = false;
   }
 
-  public hideStandardInlineDelete() {
+  public hideStandardInlineDelete(): void {
     this.showStandardInlineDelete = false;
   }
 
-  public triggerActiveInlineDelete() {
+  public triggerActiveInlineDelete(): void {
     this.showActiveInlineDelete = true;
   }
 
-  public triggerStandardInlineDelete() {
+  public triggerStandardInlineDelete(): void {
     this.showStandardInlineDelete = true;
   }
 }
