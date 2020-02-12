@@ -52,6 +52,7 @@ export class SkyInfiniteScrollComponent implements OnDestroy {
           .takeUntil(this.ngUnsubscribe)
           .subscribe((inView: boolean) => {
             if (this.enabled && this.backToTopTarget) {
+              // TODO: show docking service!
               this.showScrollToTopButton = !inView;
             }
         });
