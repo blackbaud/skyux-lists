@@ -1,3 +1,15 @@
+# 3.8.1 (2020-02-12)
+
+- Fixed the repeater component to load faster when using a large number of repeater items. [#113](https://github.com/blackbaud/skyux-lists/pull/113)
+
+# 3.8.0 (2020-02-11)
+
+- Added support for the inline delete component to the repeater item component. [#111](https://github.com/blackbaud/skyux-lists/pull/111)
+
+# 3.7.3 (2020-01-27)
+
+- Fixed the repeater component to highlight the active item when when async lists load. [#107](https://github.com/blackbaud/skyux-lists/pull/107)
+
 # 3.7.2 (2019-12-18)
 
 - Fixed the repeater item component to prevent throwing errors when using the keyboard. [#104](https://github.com/blackbaud/skyux-lists/pull/104)
