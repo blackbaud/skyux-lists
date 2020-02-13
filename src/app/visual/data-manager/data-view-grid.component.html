@@ -2,6 +2,7 @@
   [viewConfig]="viewConfig"
 >
   <ag-grid-angular
+    *ngIf="isActive"
     [gridOptions]="gridOptions"
     [rowData]="displayedItems"
   >

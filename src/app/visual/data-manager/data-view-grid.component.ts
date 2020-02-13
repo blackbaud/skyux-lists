@@ -5,7 +5,7 @@ import {
 } from '@angular/core';
 
 import {
-  SkyAgGridService
+  SkyAgGridService, SkyCellType
 } from '@skyux/ag-grid';
 
 import {
@@ -30,8 +30,16 @@ export class DataViewGridComponent implements OnInit {
 
   @Input()
   public items: any[];
+  public isActive: boolean;
 
   public columnDefs = [
+    {
+      colId: 'selected',
+      field: 'selected',
+      headerName: '',
+      maxWidth: 50,
+      type: SkyCellType.RowSelector
+    },
     {
       colId: 'name',
       field: 'name',
@@ -61,6 +69,7 @@ export class DataViewGridComponent implements OnInit {
     name: 'Grid View',
     icon: 'table',
     searchEnabled: true,
+    multiselectToolbarEnabled: true,
     columnPickerEnabled: true,
     filterButtonEnabled: true,
     columnOptions: [
@@ -74,7 +83,9 @@ export class DataViewGridComponent implements OnInit {
         label: 'Description',
         description: 'Some information about the fruit.'
       }
-    ]
+    ],
+    onClearAllClick: this.clearAll.bind(this),
+    onSelectAllClick: this.selectAll.bind(this)
   };
 
   public displayedItems: any[];
@@ -95,10 +106,10 @@ export class DataViewGridComponent implements OnInit {
         gridOptions: {
           columnDefs: this.columnDefs,
           onGridReady: (event: GridReadyEvent) => {
-            console.log('hello');
             this.colApi = event.columnApi;
             this.gridApi = event.api;
             this.gridApi.sizeColumnsToFit();
+            this.displayColumns();
           },
           onColumnMoved: () => {
             // let columnOrder = this.colApi.getAllDisplayedVirtualColumns().map(col => col.getColDef().colId);
@@ -115,18 +126,14 @@ export class DataViewGridComponent implements OnInit {
     });
 
     this.dataManagerService.activeViewId.subscribe(id => {
-      if (id === 'gridView') {
-        // this.displayColumns();
-        // this.gridApi.sizeColumnsToFit();
-      }
+        this.isActive = id === 'gridView';
     });
   }
 
   public displayColumns(): void {
     let viewState = this.dataState.getViewStateById('gridView');
     if (this.colApi) {
-      // let visibleColumns = ['selected'].concat(viewState.selectedColumnIds);
-      let visibleColumns = viewState.selectedColumnIds;
+      let visibleColumns = ['selected'].concat(viewState.selectedColumnIds);
       this.columnDefs.forEach((col: ColDef) => {
         let colIndex = visibleColumns.indexOf(col.colId);
         this.colApi.setColumnVisible(col.colId, colIndex !== -1);
@@ -173,5 +180,19 @@ export class DataViewGridComponent implements OnInit {
     }
 
     return filteredItems;
+  }
+
+  public selectAll(): void {
+    this.displayedItems.forEach(item => {
+      item.selected = true;
+    });
+    this.gridApi.selectAll();
+  }
+
+  public clearAll(): void {
+    this.displayedItems.forEach(item => {
+      item.selected = false;
+    });
+    this.gridApi.deselectAll();
   }
 }
