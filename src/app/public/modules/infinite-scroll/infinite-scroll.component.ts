@@ -10,6 +10,11 @@ import {
 } from '@angular/core';
 
 import {
+  SkyDockItem,
+  SkyDockService
+} from '@skyux/layout';
+
+import {
   Subject
 } from 'rxjs/Subject';
 
@@ -18,6 +23,10 @@ import 'rxjs/add/operator/takeWhile';
 import {
   SkyInfiniteScrollDomAdapterService
 } from './infinite-scroll-dom-adapter.service';
+
+import {
+  SkyInfiniteScrollBackToTopComponent
+} from './infinite-scroll-back-to-top.component';
 
 @Component({
   selector: 'sky-infinite-scroll',
@@ -48,14 +57,22 @@ export class SkyInfiniteScrollComponent implements OnDestroy {
   public set backToTopTarget(value: ElementRef) {
     this._backToTopTarget = value;
     if (value) {
-        this.domAdapter.elementInViewOnScroll(this.backToTopTarget)
-          .takeUntil(this.ngUnsubscribe)
-          .subscribe((inView: boolean) => {
-            if (this.enabled && this.backToTopTarget) {
-              // TODO: show docking service!
-              this.showScrollToTopButton = !inView;
-            }
-        });
+      this.domAdapter.elementInViewOnScroll(this.backToTopTarget)
+        .takeUntil(this.ngUnsubscribe)
+        .subscribe((inView: boolean) => {
+          // Insert back to top button if it doesn't exist and we scroll down.
+          if (!this.dockItem && !inView) {
+            this.dockItem = this.dockService.insertComponent(SkyInfiniteScrollBackToTopComponent);
+            this.dockItem.componentInstance.scrollToTopClick.subscribe(() => {
+              this.domAdapter.scrollToElement(this.backToTopTarget);
+            });
+          }
+          // Remove back to top button if we scroll back up.
+          if (this.dockItem && inView) {
+            this.dockItem.destroy();
+            this.dockItem = undefined;
+          }
+      });
     }
   }
 
@@ -79,6 +96,8 @@ export class SkyInfiniteScrollComponent implements OnDestroy {
     return this._showScrollToTopButton;
   }
 
+  private dockItem: SkyDockItem<SkyInfiniteScrollBackToTopComponent>;
+
   private ngUnsubscribe = new Subject<void>();
 
   private _backToTopTarget: ElementRef;
@@ -90,7 +109,8 @@ export class SkyInfiniteScrollComponent implements OnDestroy {
   constructor(
     private changeDetector: ChangeDetectorRef,
     private elementRef: ElementRef,
-    private domAdapter: SkyInfiniteScrollDomAdapterService
+    private domAdapter: SkyInfiniteScrollDomAdapterService,
+    private dockService: SkyDockService
   ) { }
 
   public ngOnDestroy(): void {
@@ -101,10 +121,6 @@ export class SkyInfiniteScrollComponent implements OnDestroy {
 
   public startInfiniteScrollLoad(): void {
     this.notifyScrollEnd();
-  }
-
-  public onScrollToTopClick(): void {
-    this.domAdapter.scrollToElement(this.backToTopTarget);
   }
 
   private notifyScrollEnd(): void {

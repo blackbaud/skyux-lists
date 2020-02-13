@@ -1,4 +1,4 @@
-<h2>
+<!-- <h2>
   Contained scroll:
 </h2>
 <div
@@ -17,7 +17,6 @@
     </sky-repeater-item>
   </sky-repeater>
   <sky-infinite-scroll
-    [backToTopTarget]="backToTopTarget"
     [enabled]="true"
     (scrollEnd)="addToFirst()"
   >
@@ -58,7 +57,7 @@
 </div>
 
 <br>
-<hr>
+<hr> -->
 <h2>
   Window scroll:
 </h2>
@@ -77,12 +76,13 @@
     </sky-repeater-item>
   </sky-repeater>
   <sky-infinite-scroll
+    [backToTopTarget]="backToTopTarget"
     [enabled]="secondEnabled"
     (scrollEnd)="addToSecond()"
   >
   </sky-infinite-scroll>
 </div>
-<button
+<!-- <button
   class="sky-btn"
   style="position: fixed; bottom: 5px; right: 5px; z-index: 1000;"
   [ngClass]="{
@@ -92,4 +92,4 @@
   (click)="secondEnabled = !secondEnabled"
 >
   Toggle second enabled
-</button>
+</button> -->

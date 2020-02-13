@@ -1,0 +1,13 @@
+@import "~@skyux/theme/scss/mixins";
+@import "~@skyux/theme/scss/_compat/mixins";
+
+.sky-infinite-scroll-back-to-top {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  margin-top: $sky-margin-double;
+  padding: $sky-padding;
+  background-color: $sky-color-white;
+  box-shadow: 0 -3px 3px 0 $sky-color-gray-20;
+}

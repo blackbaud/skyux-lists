@@ -1,13 +1,6 @@
 <div *ngIf="enabled"
   class="sky-infinite-scroll"
 >
-  <button *ngIf="showScrollToTopButton"
-    class="sky-infinite-scroll-back-to-top-btn sky-btn sky-btn-default"
-    type="button"
-    (click)="onScrollToTopClick()"
-  >
-    {{ 'skyux_infinite_scroll_back_to_top' | skyLibResources }}
-  </button>
   <button *ngIf="!isWaiting && enabled"
     class="sky-btn sky-btn-default"
     type="button"

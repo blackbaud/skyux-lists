@@ -15,6 +15,10 @@ import {
 } from '@skyux/indicators';
 
 import {
+  SkyDockModule
+} from '@skyux/layout';
+
+import {
   SkyListsResourcesModule
 } from '../shared';
 
@@ -22,12 +26,18 @@ import {
   SkyInfiniteScrollComponent
 } from './infinite-scroll.component';
 
+import {
+  SkyInfiniteScrollBackToTopComponent
+} from './infinite-scroll-back-to-top.component';
+
 @NgModule({
   declarations: [
-    SkyInfiniteScrollComponent
+    SkyInfiniteScrollComponent,
+    SkyInfiniteScrollBackToTopComponent
   ],
   imports: [
     CommonModule,
+    SkyDockModule,
     SkyListsResourcesModule,
     SkyWaitModule
   ],
@@ -36,6 +46,9 @@ import {
   ],
   providers: [
     SkyAppWindowRef
+  ],
+  entryComponents: [
+    SkyInfiniteScrollBackToTopComponent
   ]
 })
 export class SkyInfiniteScrollModule { }
