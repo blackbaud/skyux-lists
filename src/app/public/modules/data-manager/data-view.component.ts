@@ -57,8 +57,8 @@ export class SkyDataViewComponent implements OnInit {
   ) { }
 
   public ngOnInit(): void {
-    this.dataManagerService.activeView.subscribe(activeView => {
-      this.isActive = this.viewConfig && this.viewConfig.id === activeView.id;
+    this.dataManagerService.activeViewId.subscribe(activeViewId => {
+      this.isActive = this.viewConfig && this.viewConfig.id === activeViewId;
     });
   }
 }

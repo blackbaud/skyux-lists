@@ -9,19 +9,18 @@ import {
   SkyDataViewConfig,
   SkyDataManagerService
 } from '../../public/modules/data-manager/';
-import { SkyDataManagerFiltersModalDemoComponent } from './data-filter-modal.component';
 
 @Component({
   selector: 'data-view-repeater',
   templateUrl: './data-view-repeater.component.html'
 })
 export class DataViewRepeaterComponent implements OnInit {
+  @Input()
+  public items: any[];
 
   public get dataState(): SkyDataManagerState {
     return this._dataState;
   }
-
-  @Input()
   public set dataState(value: SkyDataManagerState) {
     this._dataState = value;
     this.displayedItems = this.filterItems(this.searchItems(this.items));
@@ -32,63 +31,13 @@ export class DataViewRepeaterComponent implements OnInit {
     name: 'Repeater View',
     icon: 'list',
     searchEnabled: true,
-    columnPickerEnabled: true,
     filterButtonEnabled: true,
-    filterModalComponent: SkyDataManagerFiltersModalDemoComponent,
-    columnOptions: [
-      {
-        id: '1',
-        label: 'Column 1',
-        isSelected: true,
-        description: 'This is a column.'
-      },
-      {
-        id: '2',
-        label: 'Column 2',
-        isSelected: false,
-        description: 'This is also a column, but it is a different column.'
-      }
-    ],
-    additionalOptions: {
-      soText: true
-    }
+    multiselectToolbarEnabled: true,
+    onClearAllClick: this.clearAll.bind(this),
+    onSelectAllClick: this.selectAll.bind(this)
   };
 
-  public items: any[] = [
-    {
-      name: 'Orange',
-      description: 'A round, orange fruit.',
-      type: 'citrus',
-      color: 'orange'
-    },
-    {
-      name: 'Mango',
-      description: 'Delicious in smoothies, but don\'t eat the skin.',
-      type: 'other',
-      color: 'orange'
-    },
-    {
-      name: 'Lime',
-      description: 'A sour, green fruit used in many drinks.',
-      type: 'citrus',
-      color: 'green'
-    },
-    {
-      name: 'Strawberry',
-      description: 'A red fruit that goes well with shortcake.',
-      type: 'berry',
-      color: 'red'
-    },
-    {
-      name: 'Blueberry',
-      description: 'A small, blue fruit often found in muffins.',
-      type: 'berry',
-      color: 'blue'
-    }
-
-  ];
-
-  public displayedItems = this.items;
+  public displayedItems: any[];
 
   private _dataState: SkyDataManagerState = new SkyDataManagerState();
 
@@ -96,6 +45,8 @@ export class DataViewRepeaterComponent implements OnInit {
   }
 
   public ngOnInit(): void {
+    this.displayedItems = this.items;
+
     this.dataManagerService.dataState.subscribe(state => {
       this.dataState = state;
     });
@@ -139,5 +90,17 @@ export class DataViewRepeaterComponent implements OnInit {
     }
 
     return filteredItems;
+  }
+
+  public selectAll(): void {
+    this.displayedItems.forEach(item => {
+      item.selected = true;
+    });
+  }
+
+  public clearAll(): void {
+    this.displayedItems.forEach(item => {
+      item.selected = false;
+    });
   }
 }

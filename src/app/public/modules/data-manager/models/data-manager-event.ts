@@ -1,6 +1,7 @@
 export enum SkyDataManagerEvent {
-  ColumnPicker = 'COLUMN_PICKER',
   Filter = 'FILTER',
   Search = 'SEARCH',
-  Sort = 'SORT'
+  Selection = 'SELECTION',
+  Sort = 'SORT',
+  ViewState = 'VIEW_STATE'
 }

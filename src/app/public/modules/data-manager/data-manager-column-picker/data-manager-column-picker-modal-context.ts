@@ -4,4 +4,5 @@ import {
 
 export class SkyDataManagerColumnPickerModalContext {
   public columnOptions: SkyDataManagerColumnPickerOption[];
+  public selectedColumnIds: string[];
 }

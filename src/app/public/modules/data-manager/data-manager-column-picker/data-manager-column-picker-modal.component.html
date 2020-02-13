@@ -4,38 +4,51 @@
     {{title}}
   </sky-modal-header>
   <sky-modal-content>
-    <sky-repeater
-  expandMode="none"
->
-  <sky-repeater-item
-    *ngFor="let column of context.columnOptions"
-    [isSelected]="column.isSelected"
-    [selectable]="true"
-  >
-    <sky-repeater-item-title>
-      <div class="pull-left">
-        {{column.label}}
-      </div>
-    </sky-repeater-item-title>
-    <sky-repeater-item-content>
-      <div>
-        {{column.description}}
-      </div>
-    </sky-repeater-item-content>
-  </sky-repeater-item>
-</sky-repeater>
+    <sky-data-manager
+      activeViewId="columnPicker"
+    >
+      <sky-data-manager-toolbar>
+      </sky-data-manager-toolbar>
+
+      <sky-data-view
+      [viewConfig]="viewConfig"
+      >
+        <sky-repeater
+          expandMode="none"
+        >
+          <sky-repeater-item
+            *ngFor="let column of displayedColumnData"
+            [selectable]="true"
+            [(isSelected)]="column.isSelected"
+          >
+            <sky-repeater-item-title>
+              <div class="pull-left">
+                {{column.label}}
+              </div>
+            </sky-repeater-item-title>
+            <sky-repeater-item-content>
+              <div>
+                {{column.description}}
+              </div>
+            </sky-repeater-item-content>
+          </sky-repeater-item>
+        </sky-repeater>
+      </sky-data-view>
+    </sky-data-manager>
   </sky-modal-content>
   <sky-modal-footer>
     <button
       sky-cmp-id="apply-changes"
       class="sky-btn sky-btn-primary"
-      (click)="applyChanges()">
+      (click)="applyChanges()"
+    >
       Apply changes
     </button>
     <button
       sky-cmp-id="cancel"
       class="sky-btn sky-btn-link"
-      (click)="cancelChanges()">
+      (click)="cancelChanges()"
+    >
       Cancel
     </button>
   </sky-modal-footer>

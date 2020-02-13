@@ -2,7 +2,10 @@
   [viewConfig]="viewConfig"
 >
   <sky-repeater expandMode="none">
-    <sky-repeater-item *ngFor="let item of displayedItems">
+    <sky-repeater-item *ngFor="let item of displayedItems"
+      selectable="true"
+      [(isSelected)]="item.selected"
+    >
       <sky-repeater-item-title>
         {{item.name}}
       </sky-repeater-item-title>

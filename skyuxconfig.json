@@ -9,7 +9,8 @@
   "app": {
     "styles": [
       "src/app/visual-styles.scss",
-      "@skyux/theme/css/sky.css"
+      "@skyux/theme/css/sky.css",
+      "@skyux/ag-grid/css/sky-ag-grid.css"
     ]
   },
   "testSettings": {

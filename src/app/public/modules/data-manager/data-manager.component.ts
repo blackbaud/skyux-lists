@@ -2,41 +2,89 @@ import {
   ChangeDetectionStrategy,
   Component,
   Input,
+  OnDestroy,
   OnInit
 } from '@angular/core';
 
 import {
+  Subject
+} from 'rxjs/Subject';
+
+import {
+  SkyUIConfigService
+} from '@skyux/core';
+
+import {
   SkyDataManagerService
 } from './data-manager.service';
+
+import {
+  SkyDataManagerState, SkyDataManagerStateOptions, SkyDataManagerConfig
+} from './models';
 
 @Component({
   selector: 'sky-data-manager',
   templateUrl: './data-manager.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class SkyDataManagerComponent implements OnInit {
+export class SkyDataManagerComponent implements OnDestroy, OnInit {
 
-// @Input()
-// public set activeViewId(value: string) {
-//   this._activeViewId = value;
+  @Input()
+  public set activeViewId(value: string) {
+    this.dataManagerService.activeViewId.next(value);
+  }
 
-//   this.dataManagerService.setActiveViewById(value);
-// }
+  @Input()
+  public dataManagerConfig: SkyDataManagerConfig;
 
-// public get activeViewId(): string {
-//   return this._activeViewId;
-// }
+  @Input()
+  public defaultDataState: SkyDataManagerState = new SkyDataManagerState();
 
-// private _activeViewId: string;
+  @Input()
+  public settingsKey: string;
 
-@Input()
-public activeViewId: string;
+  private ngUnsubscribe = new Subject();
 
-constructor(private dataManagerService: SkyDataManagerService) { }
+  constructor(
+    private dataManagerService: SkyDataManagerService,
+    private uiConfigService: SkyUIConfigService
+    ) { }
 
-public ngOnInit(): void {
-  console.log(this.activeViewId);
-  this.dataManagerService.setActiveViewById(this.activeViewId);
-}
+  public ngOnInit(): void {
+    if (this.settingsKey) {
+      this.uiConfigService.getConfig(this.settingsKey, this.defaultDataState.getStateOptions())
+        .take(1)
+        .subscribe((config: SkyDataManagerStateOptions) => {
+          this.dataManagerService.dataState.next(new SkyDataManagerState(config));
+        });
+    } else {
+      this.dataManagerService.dataState.next(this.defaultDataState);
+    }
 
+    if (this.settingsKey) {
+      this.dataManagerService.dataState
+        .takeUntil(this.ngUnsubscribe)
+        .subscribe(state => {
+          this.uiConfigService.setConfig(
+            this.settingsKey,
+            state.getStateOptions()
+          )
+            .takeUntil(this.ngUnsubscribe)
+            .subscribe(
+              () => { },
+              (err) => {
+                console.warn('Could not save grid settings.');
+                console.warn(err);
+              }
+            );
+        });
+    }
+
+    this.dataManagerService.dataManagerConfig.next(this.dataManagerConfig);
+  }
+
+  public ngOnDestroy(): void {
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
+  }
 }

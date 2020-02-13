@@ -1,6 +1,6 @@
-export class SkyDataManagerSortOption {
-  public descending: boolean;
-  public id: string;
-  public label: string;
-  public propertyName: string;
+export interface SkyDataManagerSortOption {
+  descending: boolean;
+  id: string;
+  label: string;
+  propertyName: string;
 }

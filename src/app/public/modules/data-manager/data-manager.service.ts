@@ -7,31 +7,30 @@ import {
 } from 'rxjs/BehaviorSubject';
 
 import {
-  Subject
-} from 'rxjs/Subject';
-
-import {
+  SkyDataManagerConfig,
   SkyDataManagerState,
-  SkyDataViewConfig
+  SkyDataViewConfig,
+  SkyDataViewState
 } from './models';
 
 @Injectable()
 export class SkyDataManagerService {
 
-  public activeView: Subject<SkyDataViewConfig> = new Subject();
+  public activeViewId: BehaviorSubject<string> = new BehaviorSubject<string>(undefined);
+
+  public dataManagerConfig: BehaviorSubject<SkyDataManagerConfig> =
+    new BehaviorSubject<SkyDataManagerConfig>(undefined);
 
   public views: BehaviorSubject<SkyDataViewConfig[]> = new BehaviorSubject<SkyDataViewConfig[]>([]);
 
-  public dataState: Subject<SkyDataManagerState> = new BehaviorSubject<SkyDataManagerState>(new SkyDataManagerState());
+  public dataState: BehaviorSubject<SkyDataManagerState> =
+    new BehaviorSubject<SkyDataManagerState>(new SkyDataManagerState());
 
-  public setActiveViewById(activeViewId: string): void {
+  public getViewById(viewId: string): SkyDataViewConfig {
     const currentViews: SkyDataViewConfig[] = this.views.value;
-    let viewConfig: SkyDataViewConfig = currentViews.find(view => view.id === activeViewId);
+    let viewConfig: SkyDataViewConfig = currentViews.find(view => view.id === viewId);
 
-    console.log(currentViews);
-    setTimeout(() => {
-      this.activeView.next(viewConfig);
-    });
+    return viewConfig;
   }
 
   public registerOrUpdateView(view: SkyDataViewConfig): void {
@@ -45,5 +44,18 @@ export class SkyDataManagerService {
     }
 
     this.views.next(currentViews);
+
+    let activeViewId = this.activeViewId.value;
+    this.activeViewId.next(activeViewId);
+
+    let dataState = this.dataState.getValue();
+    let currentViewState = dataState.getViewStateById(view.id);
+
+    if (!currentViewState) {
+      let newViewState = new SkyDataViewState({ viewId: view.id });
+      let newDataState = dataState.addOrUpdateView(view.id, newViewState);
+
+      this.dataState.next(newDataState);
+    }
   }
 }

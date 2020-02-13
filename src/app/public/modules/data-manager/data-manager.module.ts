@@ -11,36 +11,41 @@ import {
 } from '@angular/common';
 
 import {
-  SkyFilterModule
-} from '../filter';
+  SkyUIConfigService
+} from '@skyux/core';
 
 import {
   SkyIconModule
 } from '@skyux/indicators';
 
 import {
+  SkyCheckboxModule,
   SkyRadioModule
 } from '@skyux/forms';
 
 import {
-  SkyRepeaterModule
-} from '../repeater';
-
-import {
-  SkyModalModule
-} from '@skyux/modals';
+  SkyToolbarModule
+} from '@skyux/layout';
 
 import {
   SkySearchModule
 } from '@skyux/lookup';
 
 import {
-  SkySortModule
-} from '../sort';
+  SkyModalModule
+} from '@skyux/modals';
 
 import {
-  SkyToolbarModule
-} from '@skyux/layout';
+  SkyFilterModule
+} from '../filter';
+
+import {
+  SkyRepeaterModule
+} from '../repeater';
+
+import {
+  SkySortModule
+} from '../sort';
 
 import {
   SkyDataManagerColumnPickerModalComponent
@@ -67,14 +72,13 @@ import {
 } from './data-manager-toolbar/data-manager-toolbar.component';
 
 import {
-  SkyDataManagerToolbarItemComponent
-} from './data-manager-toolbar/data-manager-toolbar-item/data-manager-toolbar-item.component';
-
-import {
   SkyDataViewComponent
 } from './data-view.component';
 
 @NgModule({
+  providers: [
+    SkyUIConfigService
+  ],
   declarations: [
     SkyDataManagerColumnPickerModalComponent,
     SkyDataManagerComponent,
@@ -82,12 +86,12 @@ import {
     SkyDataManagerRightItemsComponent,
     SkyDataManagerSectionComponent,
     SkyDataManagerToolbarComponent,
-    SkyDataManagerToolbarItemComponent,
     SkyDataViewComponent
   ],
   imports: [
     CommonModule,
     FormsModule,
+    SkyCheckboxModule,
     SkyFilterModule,
     SkyIconModule,
     SkyModalModule,
@@ -104,7 +108,6 @@ import {
     SkyDataManagerRightItemsComponent,
     SkyDataManagerSectionComponent,
     SkyDataManagerToolbarComponent,
-    SkyDataManagerToolbarItemComponent,
     SkyDataViewComponent
   ],
   entryComponents: [

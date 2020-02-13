@@ -3,6 +3,14 @@ import {
 } from '@angular/core';
 
 import {
+  AgGridModule
+} from 'ag-grid-angular';
+
+import {
+  SkyAgGridModule
+} from '@skyux/ag-grid';
+
+import {
   SkyCheckboxModule
 } from '@skyux/forms';
 
@@ -46,6 +54,8 @@ import {
 
 @NgModule({
   exports: [
+    AgGridModule,
+    SkyAgGridModule,
     SkyAppLinkModule,
     SkyCardModule,
     SkyCheckboxModule,

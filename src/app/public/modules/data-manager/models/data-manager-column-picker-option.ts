@@ -1,6 +1,5 @@
-export class SkyDataManagerColumnPickerOption {
-  public id: string;
-  public isSelected: boolean;
-  public label: string;
-  public description?: string;
+export interface SkyDataManagerColumnPickerOption {
+  id: string;
+  label: string;
+  description?: string;
 }

@@ -1,23 +1,21 @@
 import {
-  SkyDataManagerSortOption
-} from './data-manager-sort-option';
-
-import {
   SkyDataManagerColumnPickerOption
 } from './data-manager-column-picker-option';
 
-export class SkyDataViewConfig {
-  public additionalOptions?: Object;
-  public columnOptions?: SkyDataManagerColumnPickerOption[];
-  public columnPickerEnabled?: boolean;
-  public filterButtonEnabled?: boolean;
-  public filterModalComponent?: any;
-  public icon?: string;
-  public id: string;
-  public name: string;
-  public searchEnabled?: boolean;
-  public showFilterButtonText?: boolean;
-  public showSortButtonText?: boolean;
-  public sortEnabled?: boolean;
-  public sortOptions?: SkyDataManagerSortOption[];
+export interface SkyDataViewConfig {
+  additionalOptions?: Object;
+  columnOptions?: SkyDataManagerColumnPickerOption[];
+  columnPickerEnabled?: boolean;
+  filterButtonEnabled?: boolean;
+  icon?: string;
+  id: string;
+  multiselectToolbarEnabled?: boolean;
+  name: string;
+  onClearAllClick?: Function;
+  onSelectAllClick?: Function;
+  searchEnabled?: boolean;
+  searchExpandMode?: string;
+  showFilterButtonText?: boolean;
+  showSortButtonText?: boolean;
+  sortEnabled?: boolean;
 }
