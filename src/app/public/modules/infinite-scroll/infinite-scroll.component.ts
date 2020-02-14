@@ -46,6 +46,12 @@ export class SkyInfiniteScrollComponent implements OnDestroy {
   public set enabled(value: boolean) {
     if (this._enabled !== value) {
       this._enabled = value;
+
+      // Complete listners if infinite scroll is disabled.
+      if (!value) {
+        this.disabled.next();
+      }
+
       this.setListeners();
     }
   }
@@ -56,6 +62,7 @@ export class SkyInfiniteScrollComponent implements OnDestroy {
   @Input()
   public set backToTopTarget(value: ElementRef) {
     this._backToTopTarget = value;
+    this.setBackToTopListner();
   }
 
   public get backToTopTarget(): ElementRef {
@@ -66,6 +73,12 @@ export class SkyInfiniteScrollComponent implements OnDestroy {
   public scrollEnd = new EventEmitter<void>();
 
   public isWaiting = false;
+
+  /**
+   * This subject fires when the infinite scroll gets disabled.
+   * Our listner observables know when to complete.
+   */
+  private disabled = new Subject<void>();
 
   private dockItem: SkyDockItem<SkyInfiniteScrollBackToTopComponent>;
 
@@ -99,53 +112,51 @@ export class SkyInfiniteScrollComponent implements OnDestroy {
   }
 
   private setListeners(): void {
-    if (this.enabled) {
-      // The user has scrolled to the infinite scroll element.
-      this.domAdapter.scrollTo(this.elementRef)
+    // The user has scrolled to the infinite scroll element.
+    this.domAdapter.scrollTo(this.elementRef)
+      .takeUntil(this.disabled)
+      .subscribe(() => {
+        if (!this.isWaiting && this.enabled) {
+          this.notifyScrollEnd();
+        }
+    });
+
+    // New items have been loaded into the parent element.
+    this.domAdapter.parentChanges(this.elementRef)
+      .takeUntil(this.disabled)
+      .subscribe(() => {
+        if (this.isWaiting) {
+          this.isWaiting = false;
+          this.changeDetector.markForCheck();
+        }
+    });
+  }
+
+  private setBackToTopListner(): void {
+    if (this.backToTopTarget) {
+      this.domAdapter.elementInViewOnScroll(this.backToTopTarget)
         .takeUntil(this.ngUnsubscribe)
-        .subscribe(() => {
-          if (!this.isWaiting && this.enabled) {
-            this.notifyScrollEnd();
+        .subscribe((elementInView: boolean) => {
+          // Add back to top button if user scrolls down.
+          if (!this.dockItem && !elementInView) {
+            this.showBackToTopButton();
+          }
+          // Remove back to top button if user scrolls back up.
+          if (this.dockItem && elementInView) {
+            this.dockItem.destroy();
+            this.dockItem = undefined;
           }
       });
-
-      // New items have been loaded into the parent element.
-      this.domAdapter.parentChanges(this.elementRef)
-        .takeUntil(this.ngUnsubscribe)
-        .subscribe(() => {
-          if (this.isWaiting) {
-            this.isWaiting = false;
-            this.changeDetector.markForCheck();
-          }
-      });
-
-      // Enable back to top listeners.
-      if (this.backToTopTarget) {
-        this.domAdapter.elementInViewOnScroll(this.backToTopTarget)
-          .takeUntil(this.ngUnsubscribe)
-          .subscribe((elementInView: boolean) => {
-            // Add back to top button if user scrolls down.
-            if (!this.dockItem && !elementInView) {
-              this.addBackToTop();
-            }
-            // Remove back to top button if user scrolls back up.
-            if (this.dockItem && elementInView) {
-              this.dockItem.destroy();
-              this.dockItem = undefined;
-            }
-        });
-      }
-    } else {
-      this.ngUnsubscribe.next();
     }
   }
 
-  private addBackToTop(): void {
+  private showBackToTopButton(): void {
     this.dockItem = this.dockService.insertComponent(SkyInfiniteScrollBackToTopComponent);
+
+    // Listen for clicks on the "back to top" button so we know when to scroll up.
     this.dockItem.componentInstance.scrollToTopClick
       .takeUntil(this.ngUnsubscribe)
       .subscribe(() => {
-        // Listen for clicks on the "back to top" button so we know when to scroll up.
         this.domAdapter.scrollToElement(this.backToTopTarget);
     });
   }
