@@ -4,9 +4,13 @@ import {
 } from '@angular/core';
 
 import {
-  Observable, Subject
+  Observable,
+  Subject
 } from 'rxjs';
 
+/**
+ * @internal
+ */
 @Component({
   selector: 'sky-infinite-scroll-back-to-top',
   templateUrl: './infinite-scroll-back-to-top.component.html',

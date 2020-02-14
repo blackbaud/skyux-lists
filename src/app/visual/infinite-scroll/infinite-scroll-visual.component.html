@@ -1,72 +1,22 @@
-<!-- <h2>
-  Contained scroll:
-</h2>
-<div
-  class="app-screenshot"
-  id="screenshot-infinite-scroll"
-  style="position: relative; overflow-y: auto; height: 220px;"
->
-  <sky-repeater>
-    <sky-repeater-item *ngFor="let item of firstList">
-      <sky-repeater-item-title>
-        Title {{ item }}
-      </sky-repeater-item-title>
-      <sky-repeater-item-content>
-        Content {{ item }}
-      </sky-repeater-item-content>
-    </sky-repeater-item>
-  </sky-repeater>
-  <sky-infinite-scroll
-    [enabled]="true"
-    (scrollEnd)="addToFirst()"
-  >
-  </sky-infinite-scroll>
-</div>
-
-<br>
-<hr>
 <h2>
-  Disabled:
+  Infinite scroll
 </h2>
-<div
-  class="app-screenshot"
-  id="screenshot-infinite-scroll-nobutton"
+<button
+  class="sky-btn"
+  [ngClass]="{
+    'sky-btn-primary': enabled,
+    'sky-btn-default': !enabled
+  }"
+  (click)="enabled = !enabled"
 >
-  <sky-repeater>
-    <sky-repeater-item>
-      <sky-repeater-item-title>
-        Title 1
-      </sky-repeater-item-title>
-      <sky-repeater-item-content>
-        Content 1
-      </sky-repeater-item-content>
-    </sky-repeater-item>
-    <sky-repeater-item>
-      <sky-repeater-item-title>
-        Title 2
-      </sky-repeater-item-title>
-      <sky-repeater-item-content>
-        Content 2
-      </sky-repeater-item-content>
-    </sky-repeater-item>
-  </sky-repeater>
-  <sky-infinite-scroll
-    [enabled]="false"
-  >
-  </sky-infinite-scroll>
-</div>
-
-<br>
-<hr> -->
-<h2>
-  Window scroll:
-</h2>
+  Toggle enabled
+</button>
 <div
   class="app-screenshot"
   id="screenshot-infinite-scroll-wait"
 >
   <sky-repeater>
-    <sky-repeater-item *ngFor="let item of secondList">
+    <sky-repeater-item *ngFor="let item of items">
       <sky-repeater-item-title>
         Title {{ item }}
       </sky-repeater-item-title>
@@ -77,19 +27,8 @@
   </sky-repeater>
   <sky-infinite-scroll
     [backToTopTarget]="backToTopTarget"
-    [enabled]="secondEnabled"
-    (scrollEnd)="addToSecond()"
+    [enabled]="enabled"
+    (scrollEnd)="loadMore()"
   >
   </sky-infinite-scroll>
 </div>
-<!-- <button
-  class="sky-btn"
-  style="position: fixed; bottom: 5px; right: 5px; z-index: 1000;"
-  [ngClass]="{
-    'sky-btn-primary': secondEnabled,
-    'sky-btn-default': !secondEnabled
-  }"
-  (click)="secondEnabled = !secondEnabled"
->
-  Toggle second enabled
-</button> -->

@@ -69,7 +69,7 @@ export class SkyInfiniteScrollDomAdapterService implements OnDestroy {
 
   /**
    * This event returns a boolean on scroll indicating whether the provided element is in view.
-   * @param elementRef The infinite scroll element reference.
+   * @param elementRef The target element reference.
    */
   public elementInViewOnScroll(elementRef: ElementRef): Observable<boolean> {
     const parent = this.findScrollableParent(elementRef.nativeElement);
@@ -86,6 +86,11 @@ export class SkyInfiniteScrollDomAdapterService implements OnDestroy {
     });
   }
 
+
+  /**
+   * Scrolls the window or scrollable parent to the provided element.
+   * @param elementRef The target element reference.
+   */
   public scrollToElement(elementRef: ElementRef): void {
     if (!elementRef || !elementRef.nativeElement) {
       return;

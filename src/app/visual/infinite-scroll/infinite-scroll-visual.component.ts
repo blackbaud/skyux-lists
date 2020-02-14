@@ -16,20 +16,16 @@ import {
 })
 export class InfiniteScrollVisualComponent implements AfterViewInit {
 
-  public firstList: any[] = [
-    0, 1
+  public backToTopTarget: ElementRef;
+
+  public enabled: boolean = true;
+
+  public items: any[] = [
+    0, 1, 2, 3, 4, 5
   ];
 
   @ViewChildren(SkyRepeaterItemComponent, { read: ElementRef })
   public repeaterItems: QueryList<ElementRef>;
-
-  public backToTopTarget: ElementRef;
-
-  public secondList: any[] = [
-    0, 1
-  ];
-
-  public secondEnabled = true;
 
   public ngAfterViewInit(): void {
     // Once repeater items are loaded, set the first repeater item as the "back to top" target.
@@ -39,23 +35,13 @@ export class InfiniteScrollVisualComponent implements AfterViewInit {
     });
   }
 
-  public addToFirst() {
+  public loadMore() {
     setTimeout(() => {
-      this.firstList.push(this.firstList.length);
-      this.firstList.push(this.firstList.length);
-      this.firstList.push(this.firstList.length);
-      this.firstList.push(this.firstList.length);
-      this.firstList.push(this.firstList.length);
-    }, 1000);
-  }
-
-  public addToSecond() {
-    setTimeout(() => {
-      this.secondList.push(this.secondList.length);
-      this.secondList.push(this.secondList.length);
-      this.secondList.push(this.secondList.length);
-      this.secondList.push(this.secondList.length);
-      this.secondList.push(this.secondList.length);
+      this.items.push(this.items.length);
+      this.items.push(this.items.length);
+      this.items.push(this.items.length);
+      this.items.push(this.items.length);
+      this.items.push(this.items.length);
     }, 1000);
   }
 }

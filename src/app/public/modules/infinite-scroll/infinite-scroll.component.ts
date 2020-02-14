@@ -56,24 +56,6 @@ export class SkyInfiniteScrollComponent implements OnDestroy {
   @Input()
   public set backToTopTarget(value: ElementRef) {
     this._backToTopTarget = value;
-    if (value) {
-      this.domAdapter.elementInViewOnScroll(this.backToTopTarget)
-        .takeUntil(this.ngUnsubscribe)
-        .subscribe((inView: boolean) => {
-          // Insert back to top button if it doesn't exist and we scroll down.
-          if (!this.dockItem && !inView) {
-            this.dockItem = this.dockService.insertComponent(SkyInfiniteScrollBackToTopComponent);
-            this.dockItem.componentInstance.scrollToTopClick.subscribe(() => {
-              this.domAdapter.scrollToElement(this.backToTopTarget);
-            });
-          }
-          // Remove back to top button if we scroll back up.
-          if (this.dockItem && inView) {
-            this.dockItem.destroy();
-            this.dockItem = undefined;
-          }
-      });
-    }
   }
 
   public get backToTopTarget(): ElementRef {
@@ -85,17 +67,6 @@ export class SkyInfiniteScrollComponent implements OnDestroy {
 
   public isWaiting = false;
 
-  public set showScrollToTopButton(value: boolean) {
-    if (this._showScrollToTopButton !== value) {
-      this._showScrollToTopButton = value;
-      this.changeDetector.markForCheck();
-    }
-  }
-
-  public get showScrollToTopButton(): boolean {
-    return this._showScrollToTopButton;
-  }
-
   private dockItem: SkyDockItem<SkyInfiniteScrollBackToTopComponent>;
 
   private ngUnsubscribe = new Subject<void>();
@@ -103,8 +74,6 @@ export class SkyInfiniteScrollComponent implements OnDestroy {
   private _backToTopTarget: ElementRef;
 
   private _enabled = false;
-
-  private _showScrollToTopButton: boolean = false;
 
   constructor(
     private changeDetector: ChangeDetectorRef,
@@ -149,8 +118,35 @@ export class SkyInfiniteScrollComponent implements OnDestroy {
             this.changeDetector.markForCheck();
           }
       });
+
+      // Enable back to top listeners.
+      if (this.backToTopTarget) {
+        this.domAdapter.elementInViewOnScroll(this.backToTopTarget)
+          .takeUntil(this.ngUnsubscribe)
+          .subscribe((elementInView: boolean) => {
+            // Add back to top button if user scrolls down.
+            if (!this.dockItem && !elementInView) {
+              this.addBackToTop();
+            }
+            // Remove back to top button if user scrolls back up.
+            if (this.dockItem && elementInView) {
+              this.dockItem.destroy();
+              this.dockItem = undefined;
+            }
+        });
+      }
     } else {
       this.ngUnsubscribe.next();
     }
+  }
+
+  private addBackToTop(): void {
+    this.dockItem = this.dockService.insertComponent(SkyInfiniteScrollBackToTopComponent);
+    this.dockItem.componentInstance.scrollToTopClick
+      .takeUntil(this.ngUnsubscribe)
+      .subscribe(() => {
+        // Listen for clicks on the "back to top" button so we know when to scroll up.
+        this.domAdapter.scrollToElement(this.backToTopTarget);
+    });
   }
 }

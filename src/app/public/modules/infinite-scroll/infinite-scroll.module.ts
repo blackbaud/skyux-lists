@@ -32,8 +32,8 @@ import {
 
 @NgModule({
   declarations: [
-    SkyInfiniteScrollComponent,
-    SkyInfiniteScrollBackToTopComponent
+    SkyInfiniteScrollBackToTopComponent,
+    SkyInfiniteScrollComponent
   ],
   imports: [
     CommonModule,
