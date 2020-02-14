@@ -171,7 +171,6 @@ export class SkyInfiniteScrollDomAdapterService implements OnDestroy {
       return (elementRect.top >= 0) && (elementRect.bottom <= window.innerHeight);
     }
 
-    // TODO: Double check this logic!
     const parentRect = parentElement.getBoundingClientRect();
     return (elementRect.top >= 0) && (elementRect.bottom <= parentRect.height);
   }

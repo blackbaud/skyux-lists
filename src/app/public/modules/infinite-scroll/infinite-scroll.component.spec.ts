@@ -168,17 +168,27 @@ describe('Infinite scroll', () => {
     expect(spy).toHaveBeenCalled();
   }));
 
-  xit('should not show back to top button when backToTopTarget is undefined', () => {
+  describe('back to top', () => {
+    xit('should not show when backToTopTarget is undefined', () => {
 
-  });
+    });
 
-  xit('should show back to top button when backToTopTarget id defined and user scrolls past the elementRef', () => {
+    xit('should show when backToTopTarget id defined and user scrolls past the elementRef', () => {
 
-  });
+    });
 
-  xit('should scroll to provided elementRef when back to top button is clicked', () => {
+    xit('should scroll to provided elementRef when back to top button is clicked', () => {
 
-  });
+    });
+
+    xit('should scroll to provided elementRef when back to top button is clicked', () => {
+
+    });
+
+    xit('should still show up when infinite scroll is disabled', () => {
+
+    });
+  })
 
   it('should be accessible', async(() => {
     fixture.detectChanges();
