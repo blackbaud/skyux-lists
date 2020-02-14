@@ -24,15 +24,13 @@ export class InfiniteScrollVisualComponent implements AfterViewInit {
     0, 1, 2, 3, 4, 5
   ];
 
+  public showScrollableContainer: boolean = false;
+
   @ViewChildren(SkyRepeaterItemComponent, { read: ElementRef })
-  public repeaterItems: QueryList<ElementRef>;
+  private repeaterItems: QueryList<ElementRef>;
 
   public ngAfterViewInit(): void {
-    // Once repeater items are loaded, set the first repeater item as the "back to top" target.
-    // The setTimeout avoids an ExpressionChangedAfterItHasBeenCheckedError.
-    setTimeout(() => {
-      this.backToTopTarget = this.repeaterItems.first;
-    });
+    this.setBackToTopTarget();
   }
 
   public loadMore() {
@@ -43,5 +41,20 @@ export class InfiniteScrollVisualComponent implements AfterViewInit {
       this.items.push(this.items.length);
       this.items.push(this.items.length);
     }, 1000);
+  }
+
+  public toggleScrollableContainer(): void {
+    this.showScrollableContainer = !this.showScrollableContainer;
+    this.setBackToTopTarget();
+  }
+
+  /**
+   * Set the first repeater item as the "back to top" target.
+   * The setTimeout avoids an ExpressionChangedAfterItHasBeenCheckedError.
+   */
+  private setBackToTopTarget(): void {
+    setTimeout(() => {
+      this.backToTopTarget = this.repeaterItems.first;
+    });
   }
 }

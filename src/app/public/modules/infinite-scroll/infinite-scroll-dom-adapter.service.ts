@@ -86,12 +86,13 @@ export class SkyInfiniteScrollDomAdapterService implements OnDestroy {
     });
   }
 
-
   /**
    * Scrolls the window or scrollable parent to the provided element.
    * @param elementRef The target element reference.
    */
   public scrollToElement(elementRef: ElementRef): void {
+    /* sanity check */
+    /* istanbul ignore if */
     if (!elementRef || !elementRef.nativeElement) {
       return;
     }

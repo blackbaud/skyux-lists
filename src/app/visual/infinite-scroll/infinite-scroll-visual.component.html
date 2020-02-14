@@ -11,9 +11,44 @@
 >
   Toggle enabled
 </button>
-<div
+<button
+  class="sky-btn"
+  [ngClass]="{
+    'sky-btn-primary': showScrollableContainer,
+    'sky-btn-default': !showScrollableContainer
+  }"
+  (click)="toggleScrollableContainer()"
+>
+  Toggle scrollable container
+</button>
+
+<!-- Parent is window -->
+<div *ngIf="!showScrollableContainer"
   class="app-screenshot"
-  id="screenshot-infinite-scroll-wait"
+  id="screenshot-infinite-scroll"
+>
+  <sky-repeater>
+    <sky-repeater-item *ngFor="let item of items">
+      <sky-repeater-item-title>
+        Title {{ item }}
+      </sky-repeater-item-title>
+      <sky-repeater-item-content>
+        Content {{ item }}
+      </sky-repeater-item-content>
+    </sky-repeater-item>
+  </sky-repeater>
+  <sky-infinite-scroll
+    [backToTopTarget]="backToTopTarget"
+    [enabled]="enabled"
+    (scrollEnd)="loadMore()"
+  >
+  </sky-infinite-scroll>
+</div>
+
+<!-- Parent is scrollable div -->
+<div *ngIf="showScrollableContainer"
+  id="screenshot-infinite-scroll"
+  style="height: 300px; overflow-y: scroll; border: 3px solid black;"
 >
   <sky-repeater>
     <sky-repeater-item *ngFor="let item of items">

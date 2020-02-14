@@ -97,6 +97,7 @@ export class SkyInfiniteScrollComponent implements OnDestroy {
 
   public ngOnDestroy(): void {
     this.enabled = false;
+    this.destroyBackToTop();
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
   }
@@ -139,18 +140,17 @@ export class SkyInfiniteScrollComponent implements OnDestroy {
         .subscribe((elementInView: boolean) => {
           // Add back to top button if user scrolls down.
           if (!this.dockItem && !elementInView) {
-            this.showBackToTopButton();
+            this.addBackToTop();
           }
           // Remove back to top button if user scrolls back up.
-          if (this.dockItem && elementInView) {
-            this.dockItem.destroy();
-            this.dockItem = undefined;
+          if (elementInView) {
+            this.destroyBackToTop();
           }
       });
     }
   }
 
-  private showBackToTopButton(): void {
+  private addBackToTop(): void {
     this.dockItem = this.dockService.insertComponent(SkyInfiniteScrollBackToTopComponent);
 
     // Listen for clicks on the "back to top" button so we know when to scroll up.
@@ -159,5 +159,12 @@ export class SkyInfiniteScrollComponent implements OnDestroy {
       .subscribe(() => {
         this.domAdapter.scrollToElement(this.backToTopTarget);
     });
+  }
+
+  private destroyBackToTop(): void {
+    if (this.dockItem) {
+      this.dockItem.destroy();
+      this.dockItem = undefined;
+    }
   }
 }

@@ -1,7 +1,8 @@
 import {
   async,
   ComponentFixture,
-  TestBed
+  TestBed,
+  fakeAsync
 } from '@angular/core/testing';
 
 import {
@@ -31,6 +32,7 @@ describe('Infinite scroll', () => {
     fixture.destroy();
   });
 
+  // #region helpers
   function clickLoadButton(): void {
     fixture.nativeElement.querySelector('.sky-btn').click();
     fixture.detectChanges();
@@ -41,6 +43,39 @@ describe('Infinite scroll', () => {
     SkyAppTestUtility.fireDomEvent(window, 'scroll');
     fixture.detectChanges();
   }
+
+  function scrollWindowTop(): void {
+    window.scrollTo(0, 0);
+    SkyAppTestUtility.fireDomEvent(window, 'scroll');
+    fixture.detectChanges();
+  }
+
+  function getBackToTop(): HTMLElement {
+    return document.querySelector('.sky-infinite-scroll-back-to-top');
+  }
+
+  function getBackToTopButton(): HTMLElement {
+    return document.querySelector('.sky-infinite-scroll-back-to-top button');
+  }
+
+  function clickBackToTopButton(): void {
+    getBackToTopButton().click();
+  }
+
+  function setBackToTopTarget(): void {
+    fixture.componentInstance.backToTopTarget = fixture.componentInstance.repeaterItems.first;
+    fixture.detectChanges();
+  }
+
+  function getBackToTopTarget(): HTMLElement {
+    return document.querySelectorAll('li')[0];
+  }
+
+  function isElementInView(element: HTMLElement): boolean {
+    const elementRect = element.getBoundingClientRect();
+    return (elementRect.top >= 0) && (elementRect.bottom <= window.innerHeight);
+  }
+  // #endregion
 
   it('should set defaults', () => {
     expect(fixture.componentInstance.infiniteScrollComponent.enabled).toEqual(false);
@@ -168,27 +203,70 @@ describe('Infinite scroll', () => {
     expect(spy).toHaveBeenCalled();
   }));
 
-  describe('back to top', () => {
-    xit('should not show when backToTopTarget is undefined', () => {
+  describe('back to top button', () => {
+    it('should not show when backToTopTarget is undefined', () => {
+      fixture.componentInstance.loadItems(1000);
+      fixture.detectChanges();
+      scrollWindowBottom();
 
+      const backToTopElement = getBackToTop();
+      expect(backToTopElement).toBeNull();
     });
 
-    xit('should show when backToTopTarget id defined and user scrolls past the elementRef', () => {
+    it('should show when backToTopTarget is defined and the target element is scrolled out of view', fakeAsync(() => {
+      fixture.componentInstance.loadItems(1000);
+      fixture.detectChanges();
+      setBackToTopTarget();
+      scrollWindowBottom();
 
+      const backToTopElement = getBackToTop();
+      expect(backToTopElement).not.toBeNull();
+    }));
+
+    it('should not show when user scrolls back to the top', fakeAsync(() => {
+      fixture.componentInstance.loadItems(1000);
+      fixture.detectChanges();
+      setBackToTopTarget();
+      scrollWindowBottom();
+
+      let backToTopElement = getBackToTop();
+      expect(backToTopElement).not.toBeNull();
+
+      scrollWindowTop();
+
+      backToTopElement = getBackToTop();
+      expect(backToTopElement).toBeNull();
+    }));
+
+    it('should scroll to target element when back to top button is clicked', () => {
+      fixture.componentInstance.loadItems(1000);
+      fixture.detectChanges();
+      setBackToTopTarget();
+      scrollWindowBottom();
+      const backToTopTarget = getBackToTopTarget();
+
+      expect(isElementInView(backToTopTarget)).toBe(false);
+
+      clickBackToTopButton();
+
+      expect(isElementInView(backToTopTarget)).toBe(true);
     });
 
-    xit('should scroll to provided elementRef when back to top button is clicked', () => {
+    it('should still show when infinite scroll is disabled and target element is scrolled out of view', () => {
+      fixture.componentInstance.enabled = false;
+      fixture.componentInstance.loadItems(1000);
+      fixture.detectChanges();
+      setBackToTopTarget();
+      scrollWindowBottom();
+      const backToTopTarget = getBackToTopTarget();
 
+      expect(isElementInView(backToTopTarget)).toBe(false);
+
+      clickBackToTopButton();
+
+      expect(isElementInView(backToTopTarget)).toBe(true);
     });
-
-    xit('should scroll to provided elementRef when back to top button is clicked', () => {
-
-    });
-
-    xit('should still show up when infinite scroll is disabled', () => {
-
-    });
-  })
+  });
 
   it('should be accessible', async(() => {
     fixture.detectChanges();

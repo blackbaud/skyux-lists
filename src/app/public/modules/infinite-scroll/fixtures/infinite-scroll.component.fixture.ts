@@ -1,7 +1,9 @@
 import {
   Component,
   ElementRef,
-  ViewChild
+  QueryList,
+  ViewChild,
+  ViewChildren
 } from '@angular/core';
 
 import {
@@ -13,14 +15,21 @@ import {
   templateUrl: './infinite-scroll.component.fixture.html'
 })
 export class SkyInfiniteScrollTestComponent {
+
+  public backToTopTarget: ElementRef;
+
+  public enabled: boolean;
+
+  public items: object[] = [];
+
   @ViewChild('infiniteScrollComponent')
   public infiniteScrollComponent: SkyInfiniteScrollComponent;
 
+  @ViewChildren('listItem')
+  public repeaterItems: QueryList<ElementRef>;
+
   @ViewChild('wrapper')
   public wrapper: ElementRef;
-
-  public enabled: boolean;
-  public items: object[] = [];
 
   public onScrollEnd(): void {
     const num: number = this.items.length;
