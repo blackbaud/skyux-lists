@@ -38,9 +38,9 @@ describe('Infinite scroll', () => {
     fixture.detectChanges();
   }
 
-  function scrollWindowBottom(): void {
-    window.scrollTo(0, document.body.scrollHeight);
-    SkyAppTestUtility.fireDomEvent(window, 'scroll');
+  function scrollElementToBottom(element: any): void {
+    element.scrollTo(0, document.body.scrollHeight);
+    SkyAppTestUtility.fireDomEvent(element, 'scroll');
     fixture.detectChanges();
   }
 
@@ -122,7 +122,7 @@ describe('Infinite scroll', () => {
     fixture.detectChanges();
     expect(spy).not.toHaveBeenCalled();
 
-    scrollWindowBottom();
+    scrollElementToBottom(window);
     fixture.detectChanges();
     expect(spy).toHaveBeenCalled();
   }));
@@ -135,12 +135,12 @@ describe('Infinite scroll', () => {
 
     const spy = spyOn(fixture.componentInstance, 'onScrollEnd').and.callThrough();
 
-    scrollWindowBottom();
+    scrollElementToBottom(window);
     fixture.detectChanges();
     expect(spy).toHaveBeenCalled();
     spy.calls.reset();
 
-    scrollWindowBottom();
+    scrollElementToBottom(window);
     fixture.detectChanges();
     expect(spy).not.toHaveBeenCalled();
   }));
@@ -150,7 +150,7 @@ describe('Infinite scroll', () => {
     fixture.componentInstance.enabled = false;
     fixture.componentInstance.loadItems(1000);
     fixture.detectChanges();
-    scrollWindowBottom();
+    scrollElementToBottom(window);
     expect(spy).not.toHaveBeenCalled();
   }));
 
@@ -161,7 +161,7 @@ describe('Infinite scroll', () => {
     fixture.detectChanges();
     fixture.componentInstance.enabled = true;
     fixture.detectChanges();
-    scrollWindowBottom();
+    scrollElementToBottom(window);
     expect(spy).toHaveBeenCalled();
   }));
 
@@ -207,7 +207,7 @@ describe('Infinite scroll', () => {
     it('should not show when backToTopTarget is undefined', () => {
       fixture.componentInstance.loadItems(1000);
       fixture.detectChanges();
-      scrollWindowBottom();
+      scrollElementToBottom(window);
 
       const backToTopElement = getBackToTop();
       expect(backToTopElement).toBeNull();
@@ -217,7 +217,7 @@ describe('Infinite scroll', () => {
       fixture.componentInstance.loadItems(1000);
       fixture.detectChanges();
       setBackToTopTarget();
-      scrollWindowBottom();
+      scrollElementToBottom(window);
 
       const backToTopElement = getBackToTop();
       expect(backToTopElement).not.toBeNull();
@@ -227,7 +227,7 @@ describe('Infinite scroll', () => {
       fixture.componentInstance.loadItems(1000);
       fixture.detectChanges();
       setBackToTopTarget();
-      scrollWindowBottom();
+      scrollElementToBottom(window);
 
       let backToTopElement = getBackToTop();
       expect(backToTopElement).not.toBeNull();
@@ -242,7 +242,7 @@ describe('Infinite scroll', () => {
       fixture.componentInstance.loadItems(1000);
       fixture.detectChanges();
       setBackToTopTarget();
-      scrollWindowBottom();
+      scrollElementToBottom(window);
       const backToTopTarget = getBackToTopTarget();
 
       expect(isElementInView(backToTopTarget)).toBe(false);
@@ -252,12 +252,29 @@ describe('Infinite scroll', () => {
       expect(isElementInView(backToTopTarget)).toBe(true);
     });
 
+    it('should scroll to target element when back to top button is clicked and an element is the scrollable parent', async(() => {
+      const wrapper = fixture.componentInstance.wrapper.nativeElement;
+      wrapper.setAttribute('style', 'height:200px;overflow:auto;');
+
+      fixture.componentInstance.loadItems(1000);
+      fixture.detectChanges();
+      setBackToTopTarget();
+      const backToTopTarget = getBackToTopTarget();
+      scrollElementToBottom(wrapper);
+
+      expect(isElementInView(backToTopTarget)).toBe(false);
+
+      clickBackToTopButton();
+
+      expect(isElementInView(backToTopTarget)).toBe(true);
+    }));
+
     it('should still show when infinite scroll is disabled and target element is scrolled out of view', () => {
       fixture.componentInstance.enabled = false;
       fixture.componentInstance.loadItems(1000);
       fixture.detectChanges();
       setBackToTopTarget();
-      scrollWindowBottom();
+      scrollElementToBottom(window);
       const backToTopTarget = getBackToTopTarget();
 
       expect(isElementInView(backToTopTarget)).toBe(false);
