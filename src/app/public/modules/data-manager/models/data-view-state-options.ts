@@ -1,5 +1,5 @@
 export interface SkyDataViewStateOptions {
   viewId: string;
-  selectedColumnIds?: string[];
+  displayedColumnIds?: string[];
   additionalData?: any;
 }

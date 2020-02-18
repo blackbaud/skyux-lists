@@ -3,14 +3,14 @@ import {
 } from '.';
 
 export class SkyDataViewState {
-  public selectedColumnIds: string[] = [];
+  public displayedColumnIds: string[] = [];
   public viewId: string;
   public additionalData: any;
 
   constructor(data?: SkyDataViewStateOptions) {
     if (data) {
       this.viewId = data.viewId;
-      this.selectedColumnIds = data.selectedColumnIds || [];
+      this.displayedColumnIds = data.displayedColumnIds || [];
       this.additionalData = data.additionalData;
     }
   }
@@ -18,15 +18,15 @@ export class SkyDataViewState {
   public getViewStateOptions(): SkyDataViewStateOptions {
     return {
       viewId: this.viewId,
-      selectedColumnIds: this.selectedColumnIds,
+      displayedColumnIds: this.displayedColumnIds,
       additionalData: this.additionalData
     };
   }
 
-  public setSelectedColumnIds(ids: string[]): SkyDataViewState {
+  public setDisplayedColumnIds(ids: string[]): SkyDataViewState {
     return new SkyDataViewState({
       viewId: this.viewId,
-      selectedColumnIds: ids,
+      displayedColumnIds: ids,
       additionalData: this.additionalData
     });
   }

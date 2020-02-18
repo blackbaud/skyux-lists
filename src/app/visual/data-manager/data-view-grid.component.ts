@@ -38,7 +38,8 @@ export class DataViewGridComponent implements OnInit {
       field: 'selected',
       headerName: '',
       maxWidth: 50,
-      type: SkyCellType.RowSelector
+      type: SkyCellType.RowSelector,
+      suppressMovable: true
     },
     {
       colId: 'name',
@@ -60,6 +61,7 @@ export class DataViewGridComponent implements OnInit {
     this._dataState = value;
     this.displayedItems = this.filterItems(this.searchItems(this.items));
     this.displayColumns();
+    this.sortItems();
   }
 
   public gridOptions: GridOptions;
@@ -69,6 +71,7 @@ export class DataViewGridComponent implements OnInit {
     name: 'Grid View',
     icon: 'table',
     searchEnabled: true,
+    sortEnabled: true,
     multiselectToolbarEnabled: true,
     columnPickerEnabled: true,
     filterButtonEnabled: true,
@@ -110,14 +113,17 @@ export class DataViewGridComponent implements OnInit {
             this.gridApi = event.api;
             this.gridApi.sizeColumnsToFit();
             this.displayColumns();
+            this.sortItems();
           },
-          onColumnMoved: () => {
-            // let columnOrder = this.colApi.getAllDisplayedVirtualColumns().map(col => col.getColDef().colId);
-            // let viewState = this.dataState.getViewStateById('gridView');
+          onColumnMoved: (event: any) => {
+            let columnOrder = this.colApi.getAllDisplayedVirtualColumns().map(col => col.getColDef().colId);
+            if (event.source !== 'api') {
+            let viewState = this.dataState.getViewStateById('gridView');
 
-            // viewState = viewState.setSelectedColumnIds(columnOrder);
-            // this.dataState = this.dataState.addOrUpdateView('gridView', viewState);
+            viewState = viewState.setDisplayedColumnIds(columnOrder);
+            this.dataState = this.dataState.addOrUpdateView('gridView', viewState);
           }
+        }
         }
       });
 
@@ -133,12 +139,22 @@ export class DataViewGridComponent implements OnInit {
   public displayColumns(): void {
     let viewState = this.dataState.getViewStateById('gridView');
     if (this.colApi) {
-      let visibleColumns = ['selected'].concat(viewState.selectedColumnIds);
+      let visibleColumns = viewState.displayedColumnIds;
       this.columnDefs.forEach((col: ColDef) => {
         let colIndex = visibleColumns.indexOf(col.colId);
         this.colApi.setColumnVisible(col.colId, colIndex !== -1);
         this.colApi.moveColumn(col.colId, colIndex);
       });
+    }
+  }
+
+  public sortItems(): void {
+    if (this.gridApi) {
+      let sortOption = this.dataState.activeSortOption;
+      this.gridApi.setSortModel([{
+        colId: sortOption.propertyName,
+        sort: sortOption.descending ? 'desc' : 'asc'
+      }]);
     }
   }
 

@@ -154,7 +154,7 @@ export class SkyDataManagerToolbarComponent implements OnInit {
     const context = new SkyDataManagerColumnPickerModalContext();
     const currentViewState = this.dataState.getViewStateById(this.activeView.id);
     context.columnOptions = this.activeView && this.activeView.columnOptions;
-    context.selectedColumnIds = currentViewState.selectedColumnIds;
+    context.displayedColumnIds = currentViewState.displayedColumnIds;
 
     const options: any = {
       providers: [{ provide: SkyDataManagerColumnPickerModalContext, useValue: context }]
@@ -164,10 +164,10 @@ export class SkyDataManagerToolbarComponent implements OnInit {
 
     modalInstance.closed.subscribe((result: SkyModalCloseArgs) => {
       if (result.reason === 'save') {
-        const selectedColumnIds =
+        const displayedColumnIds =
           result.data.map((col: SkyDataManagerColumnPickerOption) => col.id);
 
-        const updatedViewState = currentViewState.setSelectedColumnIds(selectedColumnIds);
+        const updatedViewState = currentViewState.setDisplayedColumnIds(displayedColumnIds);
         this.dataState = this.dataState.addOrUpdateView(this.activeView.id, updatedViewState);
         }
     });

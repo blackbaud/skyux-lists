@@ -114,7 +114,7 @@ export class SkyDataManagerColumnPickerModalComponent implements OnInit {
   }
 
   public isSelected(id: string) {
-    return this.context.selectedColumnIds.findIndex(colId => colId === id) !== -1;
+    return this.context.displayedColumnIds.findIndex(colId => colId === id) !== -1;
   }
 
   public applyChanges(): void {
