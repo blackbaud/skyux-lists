@@ -38,9 +38,9 @@ describe('Infinite scroll', () => {
     fixture.detectChanges();
   }
 
-  function scrollElementToBottom(element: any): void {
-    element.scrollTo(0, document.body.scrollHeight);
-    SkyAppTestUtility.fireDomEvent(element, 'scroll');
+  function scrollWindowToBottom(): void {
+    window.scrollTo(0, document.body.scrollHeight);
+    SkyAppTestUtility.fireDomEvent(window, 'scroll');
     fixture.detectChanges();
   }
 
@@ -122,7 +122,7 @@ describe('Infinite scroll', () => {
     fixture.detectChanges();
     expect(spy).not.toHaveBeenCalled();
 
-    scrollElementToBottom(window);
+    scrollWindowToBottom();
     fixture.detectChanges();
     expect(spy).toHaveBeenCalled();
   }));
@@ -135,12 +135,12 @@ describe('Infinite scroll', () => {
 
     const spy = spyOn(fixture.componentInstance, 'onScrollEnd').and.callThrough();
 
-    scrollElementToBottom(window);
+    scrollWindowToBottom();
     fixture.detectChanges();
     expect(spy).toHaveBeenCalled();
     spy.calls.reset();
 
-    scrollElementToBottom(window);
+    scrollWindowToBottom();
     fixture.detectChanges();
     expect(spy).not.toHaveBeenCalled();
   }));
@@ -150,7 +150,7 @@ describe('Infinite scroll', () => {
     fixture.componentInstance.enabled = false;
     fixture.componentInstance.loadItems(1000);
     fixture.detectChanges();
-    scrollElementToBottom(window);
+    scrollWindowToBottom();
     expect(spy).not.toHaveBeenCalled();
   }));
 
@@ -161,7 +161,7 @@ describe('Infinite scroll', () => {
     fixture.detectChanges();
     fixture.componentInstance.enabled = true;
     fixture.detectChanges();
-    scrollElementToBottom(window);
+    scrollWindowToBottom();
     expect(spy).toHaveBeenCalled();
   }));
 
@@ -207,7 +207,7 @@ describe('Infinite scroll', () => {
     it('should not show when backToTopTarget is undefined', () => {
       fixture.componentInstance.loadItems(1000);
       fixture.detectChanges();
-      scrollElementToBottom(window);
+      scrollWindowToBottom();
 
       const backToTopElement = getBackToTop();
       expect(backToTopElement).toBeNull();
@@ -217,7 +217,7 @@ describe('Infinite scroll', () => {
       fixture.componentInstance.loadItems(1000);
       fixture.detectChanges();
       setBackToTopTarget();
-      scrollElementToBottom(window);
+      scrollWindowToBottom();
 
       const backToTopElement = getBackToTop();
       expect(backToTopElement).not.toBeNull();
@@ -227,7 +227,7 @@ describe('Infinite scroll', () => {
       fixture.componentInstance.loadItems(1000);
       fixture.detectChanges();
       setBackToTopTarget();
-      scrollElementToBottom(window);
+      scrollWindowToBottom();
 
       let backToTopElement = getBackToTop();
       expect(backToTopElement).not.toBeNull();
@@ -242,7 +242,7 @@ describe('Infinite scroll', () => {
       fixture.componentInstance.loadItems(1000);
       fixture.detectChanges();
       setBackToTopTarget();
-      scrollElementToBottom(window);
+      scrollWindowToBottom();
       const backToTopTarget = getBackToTopTarget();
 
       expect(isElementInView(backToTopTarget)).toBe(false);
@@ -260,7 +260,9 @@ describe('Infinite scroll', () => {
       fixture.detectChanges();
       setBackToTopTarget();
       const backToTopTarget = getBackToTopTarget();
-      scrollElementToBottom(wrapper);
+      wrapper.scrollTop = 999;
+      SkyAppTestUtility.fireDomEvent(wrapper, 'scroll');
+      fixture.detectChanges();
 
       expect(isElementInView(backToTopTarget)).toBe(false);
 
@@ -274,7 +276,7 @@ describe('Infinite scroll', () => {
       fixture.componentInstance.loadItems(1000);
       fixture.detectChanges();
       setBackToTopTarget();
-      scrollElementToBottom(window);
+      scrollWindowToBottom();
       const backToTopTarget = getBackToTopTarget();
 
       expect(isElementInView(backToTopTarget)).toBe(false);
