@@ -21,7 +21,7 @@ export class InfiniteScrollVisualComponent implements AfterViewInit {
   public enabled: boolean = true;
 
   public items: any[] = [
-    0, 1, 2, 3, 4, 5
+    0, 1, 2, 3
   ];
 
   public showScrollableContainer: boolean = false;
