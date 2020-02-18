@@ -2,6 +2,7 @@
   Infinite scroll
 </h2>
 <button
+  id="toggle-enabled"
   class="sky-btn"
   [ngClass]="{
     'sky-btn-primary': enabled,
@@ -12,6 +13,7 @@
   Toggle enabled
 </button>
 <button
+  id="toggle-scrollable-container"
   class="sky-btn"
   [ngClass]="{
     'sky-btn-primary': showScrollableContainer,
@@ -66,4 +68,10 @@
     (scrollEnd)="loadMore()"
   >
   </sky-infinite-scroll>
+</div>
+
+<div
+  id="screenshot-window"
+  class="app-screenshot-window"
+>
 </div>

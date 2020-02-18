@@ -40,6 +40,11 @@ export class InfiniteScrollVisualComponent implements AfterViewInit {
       this.items.push(this.items.length);
       this.items.push(this.items.length);
       this.items.push(this.items.length);
+      this.items.push(this.items.length);
+      this.items.push(this.items.length);
+      this.items.push(this.items.length);
+      this.items.push(this.items.length);
+      this.items.push(this.items.length);
     }, 1000);
   }
 
