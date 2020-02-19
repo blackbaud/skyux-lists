@@ -1,5 +1,6 @@
 export interface SkyDataManagerColumnPickerOption {
-  id: string;
-  label: string;
+  alwaysDisplayed?: boolean;
   description?: string;
+  id: string;
+  label?: string;
 }

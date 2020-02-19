@@ -43,7 +43,13 @@ export class DataManagerVisualComponent {
   public dataState = new SkyDataManagerState({
     filterData: {
       hideOrange: true
-    }
+    },
+    views: [
+      {
+        viewId: 'gridView',
+        displayedColumnIds: ['selected', 'name']
+      }
+    ]
   });
 
   public items: any[] = [

@@ -5,7 +5,8 @@ import {
 } from '@angular/core';
 
 import {
-  SkyAgGridService, SkyCellType
+  SkyAgGridService,
+  SkyCellType
 } from '@skyux/ag-grid';
 
 import {
@@ -13,7 +14,8 @@ import {
   ColDef,
   GridApi,
   GridOptions,
-  GridReadyEvent
+  GridReadyEvent,
+  ColumnMovedEvent
 } from 'ag-grid-community';
 
 import {
@@ -39,7 +41,9 @@ export class DataViewGridComponent implements OnInit {
       headerName: '',
       maxWidth: 50,
       type: SkyCellType.RowSelector,
-      suppressMovable: true
+      suppressMovable: true,
+      lockPosition: true,
+      lockVisible: true
     },
     {
       colId: 'name',
@@ -59,9 +63,8 @@ export class DataViewGridComponent implements OnInit {
   }
   public set dataState(value: SkyDataManagerState) {
     this._dataState = value;
-    this.displayedItems = this.filterItems(this.searchItems(this.items));
-    this.displayColumns();
-    this.sortItems();
+    this.dataManagerService.dataState.next(value);
+    this.updateData();
   }
 
   public gridOptions: GridOptions;
@@ -76,6 +79,10 @@ export class DataViewGridComponent implements OnInit {
     columnPickerEnabled: true,
     filterButtonEnabled: true,
     columnOptions: [
+      {
+        id: 'selected',
+        alwaysDisplayed: true
+      },
       {
         id: 'name',
         label: 'Fruit name',
@@ -112,10 +119,9 @@ export class DataViewGridComponent implements OnInit {
             this.colApi = event.columnApi;
             this.gridApi = event.api;
             this.gridApi.sizeColumnsToFit();
-            this.displayColumns();
-            this.sortItems();
+            this.updateData();
           },
-          onColumnMoved: (event: any) => {
+          onColumnMoved: (event: ColumnMovedEvent) => {
             let columnOrder = this.colApi.getAllDisplayedVirtualColumns().map(col => col.getColDef().colId);
             if (event.source !== 'api') {
             let viewState = this.dataState.getViewStateById('gridView');
@@ -128,7 +134,8 @@ export class DataViewGridComponent implements OnInit {
       });
 
     this.dataManagerService.dataState.subscribe(state => {
-      this.dataState = state;
+      this._dataState = state;
+      this.updateData();
     });
 
     this.dataManagerService.activeViewId.subscribe(id => {
@@ -136,10 +143,17 @@ export class DataViewGridComponent implements OnInit {
     });
   }
 
+  public updateData(): void {
+    this.displayColumns();
+    this.sortItems();
+    this.displayedItems = this.filterItems(this.searchItems(this.items));
+  }
+
   public displayColumns(): void {
     let viewState = this.dataState.getViewStateById('gridView');
     if (this.colApi) {
       let visibleColumns = viewState.displayedColumnIds;
+      console.log(visibleColumns);
       this.columnDefs.forEach((col: ColDef) => {
         let colIndex = visibleColumns.indexOf(col.colId);
         this.colApi.setColumnVisible(col.colId, colIndex !== -1);
@@ -149,8 +163,8 @@ export class DataViewGridComponent implements OnInit {
   }
 
   public sortItems(): void {
-    if (this.gridApi) {
-      let sortOption = this.dataState.activeSortOption;
+    let sortOption = this.dataState.activeSortOption;
+    if (this.gridApi && sortOption) {
       this.gridApi.setSortModel([{
         colId: sortOption.propertyName,
         sort: sortOption.descending ? 'desc' : 'asc'

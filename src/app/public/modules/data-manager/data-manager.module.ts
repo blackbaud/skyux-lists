@@ -11,8 +11,7 @@ import {
 } from '@angular/common';
 
 import {
-  SkyUIConfigService,
-  SkyViewkeeperModule
+  SkyUIConfigService
 } from '@skyux/core';
 
 import {
@@ -100,8 +99,7 @@ import {
     SkyRepeaterModule,
     SkySearchModule,
     SkySortModule,
-    SkyToolbarModule,
-    SkyViewkeeperModule
+    SkyToolbarModule
   ],
   exports: [
     SkyDataManagerColumnPickerModalComponent,

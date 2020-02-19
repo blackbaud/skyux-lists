@@ -146,6 +146,9 @@ export class SkyDataManagerState {
       this.views.push(view);
     }
 
+    console.log('have the views changed');
+    console.log(this.views);
+
     return new SkyDataManagerState({
       activeSortOption: this.activeSortOption,
       activeViewId: this.activeViewId,

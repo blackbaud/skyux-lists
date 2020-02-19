@@ -16,15 +16,13 @@ import {
 } from '../data-manager.service';
 
 import {
+  SkyDataManagerColumnPickerOption,
   SkyDataManagerState,
   SkyDataViewConfig
 } from '../models';
 
-class Column {
-  public id: string;
-  public label: string;
-  public isSelected: boolean;
-  public description?: string;
+interface Column extends SkyDataManagerColumnPickerOption {
+  isSelected: boolean;
 }
 
 @Component({
@@ -39,7 +37,7 @@ export class SkyDataManagerColumnPickerModalComponent implements OnInit {
 
   public set dataState(value: SkyDataManagerState) {
     this._dataState = value;
-    this.displayedColumnData = this.searchColumns(this.columnData);
+    this.displayedColumnData = this.searchColumns(this.columnData.filter(col => !col.alwaysDisplayed));
   }
 
   public title = 'Choose columns to show in the list';
@@ -66,6 +64,7 @@ export class SkyDataManagerColumnPickerModalComponent implements OnInit {
   public ngOnInit(): void {
     this.columnData = this.context.columnOptions.map(columnOption => {
       return {
+        alwaysDisplayed: columnOption.alwaysDisplayed,
         id: columnOption.id,
         label: columnOption.label,
         description: columnOption.description,
@@ -118,6 +117,6 @@ export class SkyDataManagerColumnPickerModalComponent implements OnInit {
   }
 
   public applyChanges(): void {
-    this.instance.save(this.columnData.filter(col => col.isSelected));
+    this.instance.save(this.columnData.filter(col => col.isSelected || col.alwaysDisplayed));
   }
 }
