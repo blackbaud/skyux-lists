@@ -15,6 +15,10 @@ import {
 } from '@skyux/core';
 
 import {
+  SkyI18nModule
+} from '@skyux/i18n';
+
+import {
   SkyIconModule
 } from '@skyux/indicators';
 
@@ -93,6 +97,7 @@ import {
     FormsModule,
     SkyCheckboxModule,
     SkyFilterModule,
+    SkyI18nModule,
     SkyIconModule,
     SkyModalModule,
     SkyRadioModule,

@@ -153,7 +153,6 @@ export class DataViewGridComponent implements OnInit {
     let viewState = this.dataState.getViewStateById('gridView');
     if (this.colApi) {
       let visibleColumns = viewState.displayedColumnIds;
-      console.log(visibleColumns);
       this.columnDefs.forEach((col: ColDef) => {
         let colIndex = visibleColumns.indexOf(col.colId);
         this.colApi.setColumnVisible(col.colId, colIndex !== -1);

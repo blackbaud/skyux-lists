@@ -1,7 +1,7 @@
 
 <sky-modal>
   <sky-modal-header>
-    {{title}}
+    {{'skyux_data_manager_column_picker_title' | skyLibResources}}
   </sky-modal-header>
   <sky-modal-content>
     <sky-data-manager
@@ -42,14 +42,14 @@
       class="sky-btn sky-btn-primary"
       (click)="applyChanges()"
     >
-      Apply changes
+      {{'skyux_data_manager_apply_changes_button_title' | skyLibResources}}
     </button>
     <button
       sky-cmp-id="cancel"
       class="sky-btn sky-btn-link"
       (click)="cancelChanges()"
     >
-      Cancel
+      {{'skyux_data_manager_cancel_button_title' | skyLibResources}}
     </button>
   </sky-modal-footer>
 </sky-modal>

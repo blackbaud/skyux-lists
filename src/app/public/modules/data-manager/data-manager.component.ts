@@ -55,7 +55,6 @@ export class SkyDataManagerComponent implements OnDestroy, OnInit {
       this.uiConfigService.getConfig(this.settingsKey, this.defaultDataState.getStateOptions())
         .take(1)
         .subscribe((config: SkyDataManagerStateOptions) => {
-          console.log(config);
           this.dataManagerService.dataState.next(new SkyDataManagerState(config));
         });
     } else {
@@ -63,12 +62,9 @@ export class SkyDataManagerComponent implements OnDestroy, OnInit {
     }
 
     if (this.settingsKey) {
-      console.log('wtf');
       this.dataManagerService.dataState
         .takeUntil(this.ngUnsubscribe)
         .subscribe(state => {
-          console.log('the data state changed');
-          console.log(state);
           this.uiConfigService.setConfig(
             this.settingsKey,
             state.getStateOptions()
