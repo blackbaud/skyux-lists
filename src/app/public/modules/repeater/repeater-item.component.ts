@@ -90,7 +90,10 @@ export class SkyRepeaterItemComponent implements OnDestroy, OnInit, AfterViewIni
 
   @Input()
   public set isSelected(value: boolean) {
-    this._isSelected = value;
+    if (value !== this._isSelected) {
+      this._isSelected = value;
+      this.isSelectedChange.emit(this._isSelected);
+    }
   }
 
   public get isSelected(): boolean {
@@ -406,8 +409,7 @@ export class SkyRepeaterItemComponent implements OnDestroy, OnInit, AfterViewIni
   }
 
   public updateIsSelected(value: SkyCheckboxChange): void {
-    this._isSelected = value.checked;
-    this.isSelectedChange.emit(this._isSelected);
+    this.isSelected = value.checked;
   }
 
   public onInlineFormClose(inlineFormCloseArgs: SkyInlineFormCloseArgs): void {
