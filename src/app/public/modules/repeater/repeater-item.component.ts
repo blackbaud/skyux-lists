@@ -315,7 +315,9 @@ export class SkyRepeaterItemComponent implements OnDestroy, OnInit, AfterViewIni
           // Unlike the arrow keys, space/enter should never execute
           // unless focused on the parent item element.
           if (event.target === this.itemRef.nativeElement) {
-            this.toggleSelected();
+            if (this.selectable) {
+              this.isSelected = !this.isSelected;
+            }
             this.repeaterService.activateItem(this);
             event.preventDefault();
           }
@@ -408,7 +410,7 @@ export class SkyRepeaterItemComponent implements OnDestroy, OnInit, AfterViewIni
     }
   }
 
-  public updateIsSelected(value: SkyCheckboxChange): void {
+  public onCheckboxChange(value: SkyCheckboxChange): void {
     this.isSelected = value.checked;
   }
 
@@ -524,12 +526,6 @@ export class SkyRepeaterItemComponent implements OnDestroy, OnInit, AfterViewIni
       this.adapterService.moveItemUp(this.elementRef, false, this.reorderSteps);
     }
     this.repeaterService.registerOrderChange();
-  }
-
-  private toggleSelected(): void {
-    if (this.selectable) {
-      this.isSelected = !this.isSelected;
-    }
   }
 
   private updateExpandOnContentChange(): void {

@@ -379,7 +379,7 @@ describe('Repeater item component', () => {
       flushDropdownTimer();
     }));
 
-    fit('should select item with space and enter keys when selectable is set to true', () => {
+    it('should select item with space and enter keys when selectable is set to true', () => {
       cmp.selectable = true;
       fixture.detectChanges();
 
@@ -916,20 +916,23 @@ describe('Repeater item component', () => {
       let el = fixture.nativeElement;
 
       fixture.detectChanges();
-
       tick();
 
       cmp.repeater.items.forEach(item => item.selectable = true);
 
+      fixture.detectChanges();
+      tick();
+
       let selectedItemsEl = el.querySelectorAll('.sky-repeater-item-selected') as NodeList;
       expect(selectedItemsEl.length).toBe(0);
 
-      // select first item
       const repeaterItems = cmp.repeater.items.toArray();
-      repeaterItems[0].updateIsSelected({ source: undefined, checked: true });
+
+      // Click to select first item.
+      const items = getRepeaterItems(el);
+      items[0].querySelector('input').click();
 
       fixture.detectChanges();
-
       tick();
 
       expect(repeaterItems[0].isSelected).toBe(true);
