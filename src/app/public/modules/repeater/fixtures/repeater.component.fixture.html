@@ -9,6 +9,7 @@
     (collapse)="onCollapse()"
     (expand)="onExpand()"
     (isSelectedChange)="onIsSelectedChange($event)"
+    [(isSelected)]="isSelected"
   >
     <sky-repeater-item-context-menu *ngIf="showContextMenu">
       <sky-dropdown
