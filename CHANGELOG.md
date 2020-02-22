@@ -1,3 +1,14 @@
+# 4.0.0-rc.0 (2020-02-22)
+
+### New features
+
+- Added support for `@angular/core@^9`. [#124](https://github.com/blackbaud/skyux-lists/pull/124)
+- Updated the pipeline to transpile to the [Angular Package Format](https://docs.google.com/document/d/1CZC2rcpxffTDfRDs6p1cfbmKNLA6x5O-NtkJglDaBVs/preview). [#124](https://github.com/blackbaud/skyux-lists/pull/124)
+
+### Breaking changes
+
+- Dropped support for `rxjs@5`. Consumers may install `rxjs-compat@^6` to support older versions of `rxjs`. [#124](https://github.com/blackbaud/skyux-lists/pull/124)
+
 # 3.8.1 (2020-02-12)
 
 - Fixed the repeater component to load faster when using a large number of repeater items. [#113](https://github.com/blackbaud/skyux-lists/pull/113)
