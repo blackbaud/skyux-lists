@@ -173,7 +173,10 @@ export class SkyRepeaterItemComponent implements OnDestroy, OnInit, AfterViewIni
   @ContentChild(SkyRepeaterItemContextMenuComponent, { read: ElementRef })
   public contextMenu: ElementRef;
 
-  @ViewChild('inlineDelete')
+  @ViewChild('inlineDelete', {
+    read: ElementRef,
+    static: true
+  })
   private inlineDelete: ElementRef;
 
   @ViewChild('skyRepeaterItem', {
