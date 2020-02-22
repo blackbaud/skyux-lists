@@ -37,11 +37,13 @@ import {
 } from '@skyux/inline-form';
 
 import {
-  Observable,
+  forkJoin as observableForkJoin,
   Subject
 } from 'rxjs';
 
-import 'rxjs/add/observable/forkJoin';
+import {
+  takeUntil
+} from 'rxjs/operators';
 
 import {
   SkyRepeaterAdapterService
@@ -217,7 +219,7 @@ export class SkyRepeaterItemComponent implements OnDestroy, OnInit, AfterViewIni
     this.slideForExpanded(false);
 
     // tslint:disable-next-line: deprecation
-    Observable.forkJoin(
+    observableForkJoin(
       this.resourceService.getString('skyux_repeater_item_reorder_cancel'),
       this.resourceService.getString('skyux_repeater_item_reorder_finish'),
       this.resourceService.getString('skyux_repeater_item_reorder_instructions'),
@@ -238,7 +240,7 @@ export class SkyRepeaterItemComponent implements OnDestroy, OnInit, AfterViewIni
   public ngOnInit(): void {
     this.repeaterService.registerItem(this);
     this.repeaterService.activeItemChange
-      .takeUntil(this.ngUnsubscribe)
+      .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe((item: SkyRepeaterItemComponent) => {
         const newIsActiveValue = this === item;
         if (newIsActiveValue !== this.isActive) {
@@ -249,7 +251,7 @@ export class SkyRepeaterItemComponent implements OnDestroy, OnInit, AfterViewIni
 
     // When service emits a focus change, set the tabIndex and browser focus.
     this.repeaterService.focusedItemChange
-      .takeUntil(this.ngUnsubscribe)
+      .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe((item: SkyRepeaterItemComponent) => {
         if (this === item) {
           this.tabIndex = 0;
@@ -534,7 +536,7 @@ export class SkyRepeaterItemComponent implements OnDestroy, OnInit, AfterViewIni
 
   private updateExpandOnContentChange(): void {
     this.repeaterItemContentComponents.changes
-      .takeUntil(this.ngUnsubscribe)
+      .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(() => {
         this.hasItemContent = this.repeaterItemContentComponents.length > 0;
         this.isCollapsible = this.hasItemContent && this.repeaterService.expandMode !== 'none';
