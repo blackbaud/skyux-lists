@@ -17,11 +17,15 @@ import {
 
 import {
   DragulaService
-} from 'ng2-dragula/ng2-dragula';
+} from 'ng2-dragula';
 
 import {
   Subject
-} from 'rxjs/Subject';
+} from 'rxjs';
+
+import {
+  takeUntil
+} from 'rxjs/operators';
 
 import {
   SkyRepeaterItemComponent
@@ -95,7 +99,7 @@ export class SkyRepeaterComponent implements AfterContentInit, OnChanges, OnDest
     this.dragulaGroupName = `sky-repeater-dragula-${++uniqueId}`;
 
     this.repeaterService.itemCollapseStateChange
-      .takeUntil(this.ngUnsubscribe)
+      .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe((item: SkyRepeaterItemComponent) => {
         if (this.expandMode === 'single' && item.isExpanded) {
           this.items.forEach((otherItem) => {
@@ -107,7 +111,7 @@ export class SkyRepeaterComponent implements AfterContentInit, OnChanges, OnDest
       });
 
     this.repeaterService.activeItemIndexChange
-      .takeUntil(this.ngUnsubscribe)
+      .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe((index: number) => {
         if (index !== this.activeIndex) {
           this.activeIndex = index;
@@ -116,7 +120,7 @@ export class SkyRepeaterComponent implements AfterContentInit, OnChanges, OnDest
       });
 
     this.repeaterService.orderChange
-      .takeUntil(this.ngUnsubscribe)
+      .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(() => {
         this.emitTags();
       });
@@ -141,7 +145,7 @@ export class SkyRepeaterComponent implements AfterContentInit, OnChanges, OnDest
     // HACK: Not updating for expand mode in a timeout causes an error.
     // https://github.com/angular/angular/issues/6005
     this.items.changes
-      .takeUntil(this.ngUnsubscribe)
+      .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(() => {
         setTimeout(() => {
           if (!!this.items.last) {
@@ -237,7 +241,7 @@ export class SkyRepeaterComponent implements AfterContentInit, OnChanges, OnDest
     this.dragulaUnsubscribe = new Subject<void>();
 
     this.dragulaService.drag
-      .takeUntil(this.dragulaUnsubscribe)
+      .pipe(takeUntil(this.dragulaUnsubscribe))
       .subscribe(([groupName, subject]: any[]) => {
         /* istanbul ignore else */
         if (groupName === this.dragulaGroupName) {
@@ -246,7 +250,7 @@ export class SkyRepeaterComponent implements AfterContentInit, OnChanges, OnDest
       });
 
     this.dragulaService.dragend
-      .takeUntil(this.dragulaUnsubscribe)
+      .pipe(takeUntil(this.dragulaUnsubscribe))
       .subscribe(([groupName, subject]: any[]) => {
         /* istanbul ignore else */
         if (groupName === this.dragulaGroupName) {

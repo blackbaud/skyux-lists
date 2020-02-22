@@ -30,7 +30,7 @@ import {
 
 import {
   DragulaModule
-} from 'ng2-dragula/ng2-dragula';
+} from 'ng2-dragula';
 
 import {
   SkyRepeaterComponent
@@ -54,7 +54,7 @@ import {
 
 import {
   SkyListsResourcesModule
-} from '../shared';
+} from '../shared/lists-resources.module';
 
 @NgModule({
   declarations: [

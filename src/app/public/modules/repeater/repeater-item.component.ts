@@ -37,15 +37,13 @@ import {
 } from '@skyux/inline-form';
 
 import {
-  SkyInlineDeleteComponent
-} from '@skyux/layout/modules/inline-delete';
-
-import {
-  Observable,
+  forkJoin as observableForkJoin,
   Subject
 } from 'rxjs';
 
-import 'rxjs/add/observable/forkJoin';
+import {
+  takeUntil
+} from 'rxjs/operators';
 
 import {
   SkyRepeaterAdapterService
@@ -175,13 +173,22 @@ export class SkyRepeaterItemComponent implements OnDestroy, OnInit, AfterViewIni
   @ContentChild(SkyRepeaterItemContextMenuComponent, { read: ElementRef })
   public contextMenu: ElementRef;
 
-  @ContentChild(SkyInlineDeleteComponent)
-  public inlineDelete: SkyInlineDeleteComponent;
+  @ViewChild('inlineDelete', {
+    read: ElementRef,
+    static: true
+  })
+  private inlineDelete: ElementRef;
 
-  @ViewChild('skyRepeaterItem', { read: ElementRef })
+  @ViewChild('skyRepeaterItem', {
+    read: ElementRef,
+    static: false
+  })
   private itemRef: ElementRef;
 
-  @ViewChild('grabHandle', { read: ElementRef })
+  @ViewChild('grabHandle', {
+    read: ElementRef,
+    static: false
+  })
   private grabHandle: ElementRef;
 
   @ContentChildren(SkyRepeaterItemContentComponent)
@@ -215,7 +222,7 @@ export class SkyRepeaterItemComponent implements OnDestroy, OnInit, AfterViewIni
     this.slideForExpanded(false);
 
     // tslint:disable-next-line: deprecation
-    Observable.forkJoin(
+    observableForkJoin(
       this.resourceService.getString('skyux_repeater_item_reorder_cancel'),
       this.resourceService.getString('skyux_repeater_item_reorder_finish'),
       this.resourceService.getString('skyux_repeater_item_reorder_instructions'),
@@ -236,7 +243,7 @@ export class SkyRepeaterItemComponent implements OnDestroy, OnInit, AfterViewIni
   public ngOnInit(): void {
     this.repeaterService.registerItem(this);
     this.repeaterService.activeItemChange
-      .takeUntil(this.ngUnsubscribe)
+      .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe((item: SkyRepeaterItemComponent) => {
         const newIsActiveValue = this === item;
         if (newIsActiveValue !== this.isActive) {
@@ -247,7 +254,7 @@ export class SkyRepeaterItemComponent implements OnDestroy, OnInit, AfterViewIni
 
     // When service emits a focus change, set the tabIndex and browser focus.
     this.repeaterService.focusedItemChange
-      .takeUntil(this.ngUnsubscribe)
+      .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe((item: SkyRepeaterItemComponent) => {
         if (this === item) {
           this.tabIndex = 0;
@@ -372,7 +379,9 @@ export class SkyRepeaterItemComponent implements OnDestroy, OnInit, AfterViewIni
   }
 
   public onRepeaterItemClick(event: MouseEvent): void {
-    if (!this.inlineDelete) {
+    const hasInlineDelete = (this.inlineDelete.nativeElement.children.length > 0);
+
+    if (!hasInlineDelete) {
       const focusableChildren = this.adapterService.getFocusableChildren(this.itemRef);
       if (focusableChildren.indexOf(<HTMLElement> event.target) < 0) {
         this.childFocusIndex = undefined;
@@ -532,7 +541,7 @@ export class SkyRepeaterItemComponent implements OnDestroy, OnInit, AfterViewIni
 
   private updateExpandOnContentChange(): void {
     this.repeaterItemContentComponents.changes
-      .takeUntil(this.ngUnsubscribe)
+      .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(() => {
         this.hasItemContent = this.repeaterItemContentComponents.length > 0;
         this.isCollapsible = this.hasItemContent && this.repeaterService.expandMode !== 'none';
