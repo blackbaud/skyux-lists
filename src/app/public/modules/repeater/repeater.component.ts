@@ -17,11 +17,13 @@ import {
 
 import {
   DragulaService
-} from 'ng2-dragula/ng2-dragula';
+} from 'ng2-dragula';
 
 import {
   Subject
 } from 'rxjs/Subject';
+
+import 'rxjs/add/operator/takeUntil';
 
 import {
   SkyRepeaterItemComponent

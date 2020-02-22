@@ -21,6 +21,8 @@ import 'rxjs/add/observable/fromEvent';
 
 import 'rxjs/add/operator/filter';
 
+import 'rxjs/add/operator/map';
+
 @Injectable()
 export class SkyInfiniteScrollDomAdapterService implements OnDestroy {
   private ngUnsubscribe = new Subject<void>();

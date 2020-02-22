@@ -37,10 +37,6 @@ import {
 } from '@skyux/inline-form';
 
 import {
-  SkyInlineDeleteComponent
-} from '@skyux/layout/modules/inline-delete';
-
-import {
   Observable,
   Subject
 } from 'rxjs';
@@ -175,13 +171,19 @@ export class SkyRepeaterItemComponent implements OnDestroy, OnInit, AfterViewIni
   @ContentChild(SkyRepeaterItemContextMenuComponent, { read: ElementRef })
   public contextMenu: ElementRef;
 
-  @ContentChild(SkyInlineDeleteComponent)
-  public inlineDelete: SkyInlineDeleteComponent;
+  @ContentChild('sky-inline-delete')
+  public inlineDelete: ElementRef;
 
-  @ViewChild('skyRepeaterItem', { read: ElementRef })
+  @ViewChild('skyRepeaterItem', {
+    read: ElementRef,
+    static: false
+  })
   private itemRef: ElementRef;
 
-  @ViewChild('grabHandle', { read: ElementRef })
+  @ViewChild('grabHandle', {
+    read: ElementRef,
+    static: false
+  })
   private grabHandle: ElementRef;
 
   @ContentChildren(SkyRepeaterItemContentComponent)

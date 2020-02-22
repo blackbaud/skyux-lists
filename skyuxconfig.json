@@ -12,6 +12,12 @@
       "@skyux/theme/css/sky.css"
     ]
   },
+  "librarySettings": {
+    "whitelistedNonPeerDependencies": [
+      "dragula",
+      "ng2-dragula"
+    ]
+  },
   "testSettings": {
     "e2e": {
       "browserSet": "speedy"
