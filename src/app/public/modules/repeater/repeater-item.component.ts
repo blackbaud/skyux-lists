@@ -173,8 +173,8 @@ export class SkyRepeaterItemComponent implements OnDestroy, OnInit, AfterViewIni
   @ContentChild(SkyRepeaterItemContextMenuComponent, { read: ElementRef })
   public contextMenu: ElementRef;
 
-  @ContentChild('sky-inline-delete')
-  public inlineDelete: ElementRef;
+  @ViewChild('inlineDelete')
+  private inlineDelete: ElementRef;
 
   @ViewChild('skyRepeaterItem', {
     read: ElementRef,
@@ -376,7 +376,9 @@ export class SkyRepeaterItemComponent implements OnDestroy, OnInit, AfterViewIni
   }
 
   public onRepeaterItemClick(event: MouseEvent): void {
-    if (!this.inlineDelete) {
+    const hasInlineDelete = (this.inlineDelete.nativeElement.children.length > 0);
+
+    if (!hasInlineDelete) {
       const focusableChildren = this.adapterService.getFocusableChildren(this.itemRef);
       if (focusableChildren.indexOf(<HTMLElement> event.target) < 0) {
         this.childFocusIndex = undefined;
