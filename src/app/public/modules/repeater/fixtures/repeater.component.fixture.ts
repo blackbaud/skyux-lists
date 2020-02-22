@@ -64,7 +64,7 @@ export class RepeaterTestComponent {
 
   @ViewChild(SkyRepeaterComponent, {
     read: SkyRepeaterComponent,
-    static: true
+    static: false
   })
   public repeater: SkyRepeaterComponent;
 
