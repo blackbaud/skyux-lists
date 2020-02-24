@@ -1,3 +1,7 @@
+# 3.8.2 (2020-02-24)
+
+- Fixed the repeater component to load faster when using reordable repeater items. [#121](https://github.com/blackbaud/skyux-lists/pull/121)
+
 # 3.8.1 (2020-02-12)
 
 - Fixed the repeater component to load faster when using a large number of repeater items. [#113](https://github.com/blackbaud/skyux-lists/pull/113)
