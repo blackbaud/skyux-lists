@@ -1,6 +1,6 @@
 # 3.8.2 (2020-02-24)
 
-- Fixed the repeater component to load faster when using reordable repeater items. [#121](https://github.com/blackbaud/skyux-lists/pull/121)
+- Fixed the repeater component to load faster when using reorderable repeater items. [#121](https://github.com/blackbaud/skyux-lists/pull/121)
 - Fixed the repeater item component to properly update the `isSelected` property when the value changes using the `enter` or `space` keys. [#123](https://github.com/blackbaud/skyux-lists/pull/123) (Thanks, [@michael-tims](https://github.com/michael-tims)!)
 
 # 3.8.1 (2020-02-12)
