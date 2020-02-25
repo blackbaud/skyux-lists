@@ -102,7 +102,7 @@ describe('Repeater', () => {
   it('should match previous repeater screenshot with an inline delete', (done) => {
     SkyHostBrowser.get('visual/repeater');
     SkyHostBrowser.setWindowBreakpoint('lg');
-    SkyHostBrowser.scrollTo('#screenshot-repeater-inline-delete');
+    SkyHostBrowser.scrollTo('#screenshot-last-repeater-item');
     element.all(by.css('#screenshot-repeater-inline-delete .sky-dropdown-button')).get(0).click();
     element(by.css('#screenshot-repeater-inline-delete #inline-delete-trigger-standard')).click();
     element.all(by.css('#screenshot-repeater-inline-delete .sky-dropdown-button')).get(1).click();
