@@ -1,3 +1,7 @@
+# 3.8.3 (2020-02-26)
+
+- FIxed the repeater component to not submit forms when the "Top" button on reorderable repeaters is clicked. [#128](https://github.com/blackbaud/skyux-lists/pull/128)
+
 # 3.8.2 (2020-02-24)
 
 - Fixed the repeater component to load faster when using reorderable repeater items. [#121](https://github.com/blackbaud/skyux-lists/pull/121)
