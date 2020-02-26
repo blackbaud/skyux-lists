@@ -95,8 +95,8 @@
     </sky-toolbar-item>
     <sky-toolbar-view-actions>
       <sky-checkbox
-        [checked]="showOnlySelected"
-        (change)="onShowOnlySelected()"
+        [checked]="onlyShowSelected"
+        (change)="onOnlyShowSelected($event)"
       >
         <sky-checkbox-label>
           {{'skyux_data_manager_show_selected_option_title' | skyLibResources}}

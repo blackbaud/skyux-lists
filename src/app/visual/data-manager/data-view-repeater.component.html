@@ -5,6 +5,7 @@
     <sky-repeater-item *ngFor="let item of displayedItems"
       selectable="true"
       [(isSelected)]="item.selected"
+      (isSelectedChange)="onItemSelect($event, item)"
     >
       <sky-repeater-item-title>
         {{item.name}}

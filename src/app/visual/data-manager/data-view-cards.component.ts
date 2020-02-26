@@ -27,8 +27,9 @@ export class DataViewCardsComponent implements OnInit {
     this.displayedItems = this.sortItems(this.filterItems(this.searchItems(this.items)));
   }
 
+  public viewId = 'cardsView';
   public viewConfig: SkyDataViewConfig = {
-    id: 'cardsView',
+    id: this.viewId,
     name: 'Cards View',
     icon: 'th-large',
     sortEnabled: true,
@@ -114,6 +115,6 @@ export class DataViewCardsComponent implements OnInit {
   }
 
   public searchBe() {
-    this.dataManagerService.dataState.next(this.dataState.setSearchText('be'));
+    this.dataManagerService.dataState.next(this.dataState.setSearchText('be', this.viewId));
   }
 }

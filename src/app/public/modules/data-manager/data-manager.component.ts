@@ -38,7 +38,7 @@ export class SkyDataManagerComponent implements OnDestroy, OnInit {
   public dataManagerConfig: SkyDataManagerConfig;
 
   @Input()
-  public defaultDataState: SkyDataManagerState = new SkyDataManagerState();
+  public defaultDataState: SkyDataManagerState = new SkyDataManagerState({source: 'defaultState'});
 
   @Input()
   public settingsKey: string;
@@ -73,7 +73,7 @@ export class SkyDataManagerComponent implements OnDestroy, OnInit {
             .subscribe(
               () => { },
               (err) => {
-                console.warn('Could not save grid settings.');
+                console.warn('Could not save data manager settings.');
                 console.warn(err);
               }
             );

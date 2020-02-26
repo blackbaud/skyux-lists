@@ -24,7 +24,7 @@ export class SkyDataManagerService {
   public views: BehaviorSubject<SkyDataViewConfig[]> = new BehaviorSubject<SkyDataViewConfig[]>([]);
 
   public dataState: BehaviorSubject<SkyDataManagerState> =
-    new BehaviorSubject<SkyDataManagerState>(new SkyDataManagerState());
+    new BehaviorSubject<SkyDataManagerState>(new SkyDataManagerState({source: 'defaultState'}));
 
   public getViewById(viewId: string): SkyDataViewConfig {
     const currentViews: SkyDataViewConfig[] = this.views.value;
@@ -53,7 +53,7 @@ export class SkyDataManagerService {
 
     if (!currentViewState) {
       let newViewState = new SkyDataViewState({ viewId: view.id });
-      let newDataState = dataState.addOrUpdateView(view.id, newViewState);
+      let newDataState = dataState.addOrUpdateView(view.id, newViewState, 'defaultState');
 
       this.dataState.next(newDataState);
     }

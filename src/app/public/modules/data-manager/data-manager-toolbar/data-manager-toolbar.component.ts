@@ -33,6 +33,7 @@ import {
 import {
   SkyDataManagerFilterModalContext
 } from '../data-manager-filter-context';
+import { SkyCheckboxChange } from '@skyux/forms';
 
 @Component({
   selector: 'sky-data-manager-toolbar',
@@ -109,6 +110,7 @@ export class SkyDataManagerToolbarComponent implements OnInit {
 
     this.dataManagerService.dataState.subscribe(dataState => {
       this._dataState = dataState;
+      this.onlyShowSelected = dataState.onlyShowSelected;
       this.changeDetector.markForCheck();
     });
 
@@ -118,7 +120,7 @@ export class SkyDataManagerToolbarComponent implements OnInit {
    }
 
    public sortSelected(sortOption: SkyDataManagerSortOption) {
-    this.dataState = this.dataState.setActiveSortOption(sortOption);
+    this.dataState = this.dataState.setActiveSortOption(sortOption, 'toolbar');
    }
 
   public onViewChange(viewId: string) {
@@ -126,7 +128,7 @@ export class SkyDataManagerToolbarComponent implements OnInit {
   }
 
   public searchApplied(text: string) {
-    this.dataState = this.dataState.setSearchText(text);
+    this.dataState = this.dataState.setSearchText(text, 'toolbar');
   }
 
   public filterButtonClicked(): void {
@@ -144,7 +146,7 @@ export class SkyDataManagerToolbarComponent implements OnInit {
 
       modalInstance.closed.subscribe((result: SkyModalCloseArgs) => {
         if (result.reason === 'save') {
-          this.dataState = this.dataState.setFilterData(result.data);
+          this.dataState = this.dataState.setFilterData(result.data, 'toolbar');
         }
       });
     }
@@ -168,7 +170,7 @@ export class SkyDataManagerToolbarComponent implements OnInit {
           result.data.map((col: SkyDataManagerColumnPickerOption) => col.id);
 
         const updatedViewState = currentViewState.setDisplayedColumnIds(displayedColumnIds);
-        this.dataState = this.dataState.addOrUpdateView(this.activeView.id, updatedViewState);
+        this.dataState = this.dataState.addOrUpdateView(this.activeView.id, updatedViewState, 'toolbar');
         }
     });
   }
@@ -181,7 +183,7 @@ export class SkyDataManagerToolbarComponent implements OnInit {
     this.activeView.onClearAllClick();
   }
 
-  public onOnlyShowSelected(onlyShowSelected: boolean) {
-    this.dataState = this.dataState.setOnlyShowSelected(onlyShowSelected);
+  public onOnlyShowSelected(event: SkyCheckboxChange) {
+    this.dataState = this.dataState.setOnlyShowSelected(event.checked, 'toolbar');
   }
 }

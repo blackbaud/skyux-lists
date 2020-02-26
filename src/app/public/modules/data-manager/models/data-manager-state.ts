@@ -15,9 +15,10 @@ export class SkyDataManagerState {
   public onlyShowSelected: boolean;
   public searchText: string;
   public selectedIds: string[];
+  public source: string;
   public views: SkyDataViewState[] = [];
 
-  constructor(data?: SkyDataManagerStateOptions) {
+  constructor(data: SkyDataManagerStateOptions) {
     if (data) {
       let views = data.views && data.views.map(view => new SkyDataViewState(view));
 
@@ -28,6 +29,7 @@ export class SkyDataManagerState {
       this.onlyShowSelected = data.onlyShowSelected;
       this.selectedIds = data.selectedIds;
       this.searchText = data.searchText;
+      this.source = data.source;
       this.views = views || [];
     }
   }
@@ -45,13 +47,14 @@ export class SkyDataManagerState {
       onlyShowSelected: this.onlyShowSelected,
       searchText: this.searchText,
       selectedIds: this.selectedIds,
+      source: this.source,
       views: viewStates
     };
   }
 
-  public setActiveSortOption(option: SkyDataManagerSortOption): SkyDataManagerState {
+  public setActiveSortOption(activeSortOption: SkyDataManagerSortOption, source: string): SkyDataManagerState {
     return new SkyDataManagerState({
-      activeSortOption: option,
+      activeSortOption,
       activeViewId: this.activeViewId,
       additionalData: this.additionalData,
       event: SkyDataManagerEvent.Sort,
@@ -59,53 +62,57 @@ export class SkyDataManagerState {
       onlyShowSelected: this.onlyShowSelected,
       searchText: this.searchText,
       selectedIds: this.selectedIds,
+      source,
       views: this.views
     });
   }
 
-  public setAdditionalData(data: any, event?: string): SkyDataManagerState {
+  public setAdditionalData(additionalData: any, source: string, event?: string): SkyDataManagerState {
     return new SkyDataManagerState({
       activeSortOption: this.activeSortOption,
       activeViewId: this.activeViewId,
-      additionalData: data,
-      event: event,
+      additionalData,
+      event,
       filterData: this.filterData,
       onlyShowSelected: this.onlyShowSelected,
       searchText: this.searchText,
       selectedIds: this.selectedIds,
+      source,
       views: this.views
     });
   }
 
-  public setFilterData(filters: any): SkyDataManagerState {
+  public setFilterData(filterData: any, source: string): SkyDataManagerState {
     return new SkyDataManagerState({
       activeSortOption: this.activeSortOption,
       activeViewId: this.activeViewId,
       additionalData: this.additionalData,
       event: SkyDataManagerEvent.Filter,
-      filterData: filters,
+      filterData,
       onlyShowSelected: this.onlyShowSelected,
       searchText: this.searchText,
       selectedIds: this.selectedIds,
+      source,
       views: this.views
     });
   }
 
-  public setOnlyShowSelected(onlyShowSelected: boolean): SkyDataManagerState {
+  public setOnlyShowSelected(onlyShowSelected: boolean, source: string): SkyDataManagerState {
     return new SkyDataManagerState({
       activeSortOption: this.activeSortOption,
       activeViewId: this.activeViewId,
       additionalData: this.additionalData,
       event: SkyDataManagerEvent.Filter,
       filterData: this.filterData,
-      onlyShowSelected: onlyShowSelected,
+      onlyShowSelected,
       searchText: this.searchText,
       selectedIds: this.selectedIds,
+      source,
       views: this.views
     });
   }
 
-  public setSearchText(text: string): SkyDataManagerState {
+  public setSearchText(searchText: string, source: string): SkyDataManagerState {
     return new SkyDataManagerState({
       activeSortOption: this.activeSortOption,
       activeViewId: this.activeViewId,
@@ -113,13 +120,14 @@ export class SkyDataManagerState {
       event: SkyDataManagerEvent.Search,
       filterData: this.filterData,
       onlyShowSelected: this.onlyShowSelected,
-      searchText: text,
+      searchText,
       selectedIds: this.selectedIds,
+      source,
       views: this.views
     });
   }
 
-  public setSelectedIds(ids: string[]): SkyDataManagerState {
+  public setSelectedIds(selectedIds: string[], source: string): SkyDataManagerState {
     return new SkyDataManagerState({
       activeSortOption: this.activeSortOption,
       activeViewId: this.activeViewId,
@@ -128,7 +136,8 @@ export class SkyDataManagerState {
       filterData: this.filterData,
       onlyShowSelected: this.onlyShowSelected,
       searchText: this.searchText,
-      selectedIds: ids,
+      selectedIds,
+      source,
       views: this.views
     });
   }
@@ -137,7 +146,7 @@ export class SkyDataManagerState {
     return this.views.find(view => view.viewId === viewId);
   }
 
-  public addOrUpdateView(viewId: string, view: SkyDataViewState): SkyDataManagerState {
+  public addOrUpdateView(viewId: string, view: SkyDataViewState, source: string): SkyDataManagerState {
     const existingViewIndex = this.views.findIndex(v => v.viewId === viewId);
 
     if (existingViewIndex !== -1) {
@@ -154,6 +163,7 @@ export class SkyDataManagerState {
       filterData: this.filterData,
       searchText: this.searchText,
       selectedIds: this.selectedIds,
+      source,
       views: this.views
     });
   }

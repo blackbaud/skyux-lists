@@ -38,6 +38,10 @@ export class SkyDataManagerColumnPickerModalComponent implements OnInit {
   public set dataState(value: SkyDataManagerState) {
     this._dataState = value;
     this.displayedColumnData = this.searchColumns(this.columnData.filter(col => !col.alwaysDisplayed));
+
+    if (value.onlyShowSelected) {
+      this.displayedColumnData = this.displayedColumnData.filter(col => col.isSelected);
+    }
   }
 
   public title = 'Choose columns to show in the list';

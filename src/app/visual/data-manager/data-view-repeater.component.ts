@@ -23,11 +23,13 @@ export class DataViewRepeaterComponent implements OnInit {
   }
   public set dataState(value: SkyDataManagerState) {
     this._dataState = value;
-    this.displayedItems = this.filterItems(this.searchItems(this.items));
+    this.updateData();
+    this.dataManagerService.dataState.next(value);
   }
 
+  public viewId = 'repeaterView';
   public viewConfig: SkyDataViewConfig = {
-    id: 'repeaterView',
+    id: this.viewId,
     name: 'Repeater View',
     icon: 'list',
     searchEnabled: true,
@@ -39,7 +41,7 @@ export class DataViewRepeaterComponent implements OnInit {
 
   public displayedItems: any[];
 
-  private _dataState: SkyDataManagerState = new SkyDataManagerState();
+  private _dataState: SkyDataManagerState = new SkyDataManagerState({source: 'defaultState'});
 
   constructor(private dataManagerService: SkyDataManagerService) {
   }
@@ -48,8 +50,21 @@ export class DataViewRepeaterComponent implements OnInit {
     this.displayedItems = this.items;
 
     this.dataManagerService.dataState.subscribe(state => {
-      this.dataState = state;
+      this._dataState = state;
+      this.updateData();
     });
+  }
+
+  public updateData(): void {
+    let selectedIds = this.dataState.selectedIds || [];
+    this.items.forEach(item => {
+      item.selected = selectedIds.indexOf(item.id) !== -1;
+    });
+    this.displayedItems = this.filterItems(this.searchItems(this.items));
+
+    if (this.dataState.onlyShowSelected) {
+      this.displayedItems = this.displayedItems.filter(item => item.selected);
+    }
   }
 
   public searchItems(items: any[]): any[] {
@@ -93,14 +108,40 @@ export class DataViewRepeaterComponent implements OnInit {
   }
 
   public selectAll(): void {
+    let selectedIds = this.dataState.selectedIds || [];
+
     this.displayedItems.forEach(item => {
-      item.selected = true;
+      if (!item.selected) {
+        item.selected = true;
+        selectedIds.push(item.id);
+      }
     });
+
+    this.dataState = this.dataState.setSelectedIds(selectedIds, this.viewId);
   }
 
   public clearAll(): void {
+    let selectedIds = this.dataState.selectedIds || [];
+
     this.displayedItems.forEach(item => {
-      item.selected = false;
+      if (item.selected) {
+        let itemIndex = selectedIds.indexOf(item.id);
+        item.selected = false;
+        selectedIds.splice(itemIndex, 1);
+      }
     });
+    this.dataState = this.dataState.setSelectedIds(selectedIds, this.viewId);
+  }
+
+  public onItemSelect(isSelected: boolean, item: any): void {
+    let selectedItems = this.dataState.selectedIds || [];
+    if (isSelected) {
+      selectedItems.push(item.id);
+    } else {
+      let index = selectedItems.indexOf(item.id);
+      selectedItems.splice(index, 1);
+    }
+
+    this.dataState = this.dataState.setSelectedIds(selectedItems, this.viewId);
   }
 }

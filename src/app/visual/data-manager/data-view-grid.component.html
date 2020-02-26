@@ -2,7 +2,7 @@
   [viewConfig]="viewConfig"
 >
   <ag-grid-angular
-    *ngIf="isActive"
+    *ngIf="isActive && columnsReady"
     [gridOptions]="gridOptions"
     [rowData]="displayedItems"
   >
