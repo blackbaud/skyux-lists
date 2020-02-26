@@ -20,7 +20,8 @@ import {
 
 import {
   SkyCardModule,
-  SkyFluidGridModule
+  SkyFluidGridModule,
+  SkyInlineDeleteModule
 } from '@skyux/layout';
 
 import {
@@ -65,6 +66,7 @@ import {
     SkyFluidGridModule,
     SkyIconModule,
     SkyInfiniteScrollModule,
+    SkyInlineDeleteModule,
     SkyModalModule,
     SkyPagingModule,
     SkyRepeaterModule,
