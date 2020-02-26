@@ -19,7 +19,9 @@ import {
 } from './data-manager.service';
 
 import {
-  SkyDataManagerState, SkyDataManagerStateOptions, SkyDataManagerConfig
+  SkyDataManagerConfig,
+  SkyDataManagerState,
+  SkyDataManagerStateOptions
 } from './models';
 
 @Component({

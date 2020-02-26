@@ -1,5 +1,7 @@
 
-import { Component } from '@angular/core';
+import {
+  Component
+} from '@angular/core';
 
 @Component({
   selector: 'sky-data-manager-right-items',

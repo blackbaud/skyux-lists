@@ -6,17 +6,21 @@ import {
 } from '@angular/core';
 
 import {
+  SkyCheckboxChange
+} from '@skyux/forms';
+
+import {
+  SkyModalCloseArgs,
+  SkyModalService
+} from '@skyux/modals';
+
+import {
   SkyDataManagerService
 } from '../data-manager.service';
 
 import {
   SkyDataManagerColumnPickerModalContext
 } from '../data-manager-column-picker/data-manager-column-picker-modal-context';
-
-import {
-  SkyModalCloseArgs,
-  SkyModalService
-} from '@skyux/modals';
 
 import {
   SkyDataManagerColumnPickerModalComponent
@@ -33,7 +37,6 @@ import {
 import {
   SkyDataManagerFilterModalContext
 } from '../data-manager-filter-context';
-import { SkyCheckboxChange } from '@skyux/forms';
 
 @Component({
   selector: 'sky-data-manager-toolbar',
