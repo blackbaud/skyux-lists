@@ -74,6 +74,8 @@ export class RepeaterTestComponent {
 
   public onExpand(): void {}
 
+  public onIsSelectedChange(value: boolean): void {}
+
   public addItem(): void {
     const newItem = {
       id: `item${nextItemId++}`,
