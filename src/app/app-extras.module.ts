@@ -7,6 +7,7 @@ import {
 } from '@skyux/indicators';
 
 import {
+  SkyBackToTopModule,
   SkyFluidGridModule,
   SkyInlineDeleteModule
 } from '@skyux/layout';
@@ -33,6 +34,7 @@ import {
     SkyDropdownModule,
     SkyFilterModule,
     SkyFluidGridModule,
+    SkyBackToTopModule,
     SkyIconModule,
     SkyInfiniteScrollModule,
     SkyInlineDeleteModule,
