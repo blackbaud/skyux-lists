@@ -29,18 +29,15 @@
   class="app-screenshot"
   id="screenshot-infinite-scroll"
 >
-  <span skyBackToTop></span>
-  <sky-repeater>
-    <ng-container *ngFor="let item of items; let i = index">
-      <sky-repeater-item>
-        <sky-repeater-item-title>
-          Title {{ item }}
-        </sky-repeater-item-title>
-        <sky-repeater-item-content>
-          Content {{ item }}
-        </sky-repeater-item-content>
-      </sky-repeater-item>
-    </ng-container>
+  <sky-repeater skyBackToTop>
+    <sky-repeater-item *ngFor="let item of items; let i = index">
+      <sky-repeater-item-title>
+        Title {{ item }}
+      </sky-repeater-item-title>
+      <sky-repeater-item-content>
+        Content {{ item }}
+      </sky-repeater-item-content>
+    </sky-repeater-item>
   </sky-repeater>
   <sky-infinite-scroll
     [enabled]="enabled"
@@ -54,7 +51,7 @@
   id="screenshot-infinite-scroll"
   style="height: 300px; overflow-y: scroll; border: 3px solid black;"
 >
-  <sky-repeater>
+  <sky-repeater skyBackToTop>
     <sky-repeater-item *ngFor="let item of items">
       <sky-repeater-item-title>
         Title {{ item }}
