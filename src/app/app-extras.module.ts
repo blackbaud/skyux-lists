@@ -31,10 +31,10 @@ import {
 @NgModule({
   exports: [
     SkyAppLinkModule,
+    SkyBackToTopModule,
     SkyDropdownModule,
     SkyFilterModule,
     SkyFluidGridModule,
-    SkyBackToTopModule,
     SkyIconModule,
     SkyInfiniteScrollModule,
     SkyInlineDeleteModule,

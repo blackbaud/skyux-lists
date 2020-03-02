@@ -16,7 +16,7 @@ export class InfiniteScrollVisualComponent {
 
   public showScrollableContainer: boolean = false;
 
-  public loadMore() {
+  public loadMore(): void {
     setTimeout(() => {
       this.items.push(this.items.length);
       this.items.push(this.items.length);
