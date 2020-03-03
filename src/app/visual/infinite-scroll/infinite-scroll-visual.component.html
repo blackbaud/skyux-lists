@@ -1,28 +1,32 @@
-<h2>
-  Infinite scroll
-</h2>
-<button
-  id="toggle-enabled"
-  class="sky-btn"
-  [ngClass]="{
-    'sky-btn-primary': enabled,
-    'sky-btn-default': !enabled
-  }"
-  (click)="enabled = !enabled"
+<div
+  class="app-screenshot"
 >
-  Toggle enabled
-</button>
-<button
-  id="toggle-scrollable-container"
-  class="sky-btn"
-  [ngClass]="{
-    'sky-btn-primary': showScrollableContainer,
-    'sky-btn-default': !showScrollableContainer
-  }"
-  (click)="toggleScrollableContainer()"
->
-  Toggle scrollable container
-</button>
+  <h2>
+    Infinite scroll
+  </h2>
+  <button
+    id="toggle-enabled"
+    class="sky-btn"
+    [ngClass]="{
+      'sky-btn-primary': enabled,
+      'sky-btn-default': !enabled
+    }"
+    (click)="enabled = !enabled"
+  >
+    Toggle enabled
+  </button>
+  <button
+    id="toggle-scrollable-container"
+    class="sky-btn"
+    [ngClass]="{
+      'sky-btn-primary': showScrollableContainer,
+      'sky-btn-default': !showScrollableContainer
+    }"
+    (click)="toggleScrollableContainer()"
+  >
+    Toggle scrollable container
+  </button>
+</div>
 
 <!-- Parent is window -->
 <div *ngIf="!showScrollableContainer"
