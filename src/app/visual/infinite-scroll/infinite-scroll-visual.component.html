@@ -26,6 +26,17 @@
   >
     Toggle scrollable container
   </button>
+  <button
+    id="toggle-disable-loader"
+    class="sky-btn"
+    [ngClass]="{
+      'sky-btn-primary': disableLoader,
+      'sky-btn-default': !disableLoader
+    }"
+    (click)="disableLoader = !disableLoader"
+  >
+    Toggle disabling loader for e2e test
+  </button>
 </div>
 
 <!-- Parent is window -->
@@ -48,6 +59,9 @@
     (scrollEnd)="loadMore()"
   >
   </sky-infinite-scroll>
+  <span
+    id="screenshot-window-bottom">
+  </span>
 </div>
 
 <!-- Parent is scrollable div -->

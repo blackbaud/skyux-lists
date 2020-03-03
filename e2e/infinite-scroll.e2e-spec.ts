@@ -29,9 +29,19 @@ describe('Infinite Scroll', () => {
   });
 
   it('should match previous screenshot in wait mode', (done) => {
+    element(by.css('#toggle-disable-loader')).click();
     element(by.css('#screenshot-infinite-scroll .sky-btn')).click();
     expect('#screenshot-infinite-scroll').toMatchBaselineScreenshot(done, {
       screenshotName: 'infinite-scroll-wait'
+    });
+  });
+
+  it('should match previous screenshot with back to top component showing', (done) => {
+    element(by.css('#screenshot-infinite-scroll .sky-btn')).click();
+    element(by.css('#toggle-enabled')).click();
+    SkyHostBrowser.scrollTo('#screenshot-window-bottom');
+    expect('#screenshot-window').toMatchBaselineScreenshot(done, {
+      screenshotName: 'infinite-scroll-back-to-top'
     });
   });
 });

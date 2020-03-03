@@ -8,6 +8,8 @@ import {
 })
 export class InfiniteScrollVisualComponent {
 
+  public disableLoader: boolean = false;
+
   public enabled: boolean = true;
 
   public items: any[] = [
@@ -17,18 +19,20 @@ export class InfiniteScrollVisualComponent {
   public showScrollableContainer: boolean = false;
 
   public loadMore(): void {
-    setTimeout(() => {
-      this.items.push(this.items.length);
-      this.items.push(this.items.length);
-      this.items.push(this.items.length);
-      this.items.push(this.items.length);
-      this.items.push(this.items.length);
-      this.items.push(this.items.length);
-      this.items.push(this.items.length);
-      this.items.push(this.items.length);
-      this.items.push(this.items.length);
-      this.items.push(this.items.length);
-    }, 1000);
+    if (!this.disableLoader) {
+      setTimeout(() => {
+        this.items.push(this.items.length);
+        this.items.push(this.items.length);
+        this.items.push(this.items.length);
+        this.items.push(this.items.length);
+        this.items.push(this.items.length);
+        this.items.push(this.items.length);
+        this.items.push(this.items.length);
+        this.items.push(this.items.length);
+        this.items.push(this.items.length);
+        this.items.push(this.items.length);
+      }, 1000);
+    }
   }
 
   public toggleScrollableContainer(): void {
