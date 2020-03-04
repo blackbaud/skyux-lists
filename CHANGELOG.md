@@ -1,3 +1,7 @@
+# 4.0.0-rc.1 (2020-03-04)
+
+- Added all bug fixes and features from the `master` branch. [#129](https://github.com/blackbaud/skyux-lists/pull/129) [#131](https://github.com/blackbaud/skyux-lists/pull/131) [#137](https://github.com/blackbaud/skyux-lists/pull/137) [#141](https://github.com/blackbaud/skyux-lists/pull/141)
+
 # 3.8.5 (2020-02-28)
 
 - Fixed the repeater component to output the correct `orderChange` value when users drag the first reorderable repeater item. [#138](https://github.com/blackbaud/skyux-lists/pull/138)
