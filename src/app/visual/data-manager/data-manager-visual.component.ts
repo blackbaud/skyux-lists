@@ -47,7 +47,7 @@ export class DataManagerVisualComponent {
     views: [
       {
         viewId: 'gridView',
-        displayedColumnIds: ['selected', 'name']
+        displayedColumnIds: ['selected', 'name', 'description']
       }
     ],
     source: 'defaultState'

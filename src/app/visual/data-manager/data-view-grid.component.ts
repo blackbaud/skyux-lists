@@ -10,13 +10,10 @@ import {
 } from '@skyux/ag-grid';
 
 import {
-  ColumnApi,
   ColDef,
   GridApi,
   GridOptions,
-  GridReadyEvent,
-  ColumnMovedEvent,
-  RowSelectedEvent
+  GridReadyEvent
 } from 'ag-grid-community';
 
 import {
@@ -95,15 +92,12 @@ export class DataViewGridComponent implements OnInit {
         label: 'Description',
         description: 'Some information about the fruit.'
       }
-    ],
-    onClearAllClick: this.clearAll.bind(this),
-    onSelectAllClick: this.selectAll.bind(this)
+    ]
   };
 
-  public colApi: ColumnApi;
-  public columnsReady = false;
   public displayedItems: any[];
   public gridApi: GridApi;
+  public gridInitialized: boolean;
   public gridOptions: GridOptions;
   public isActive: boolean;
 
@@ -120,9 +114,7 @@ export class DataViewGridComponent implements OnInit {
       {
         gridOptions: {
           columnDefs: this.columnDefs,
-          onGridReady: this.onGridReady.bind(this),
-          onColumnMoved: this.onColumnMove.bind(this),
-          onRowSelected: this.onRowSelectionChange.bind(this)
+          onGridReady: this.onGridReady.bind(this)
         }
       });
 
@@ -141,24 +133,11 @@ export class DataViewGridComponent implements OnInit {
   }
 
   public updateData(): void {
-    this.displayColumns();
     this.sortItems();
     this.displayedItems = this.filterItems(this.searchItems(this.items));
 
     if (this.dataState.onlyShowSelected) {
       this.displayedItems = this.displayedItems.filter(item => item.selected);
-    }
-  }
-
-  public displayColumns(): void {
-    if (this.colApi) {
-      let viewState = this.dataState.getViewStateById(this.viewId);
-      let visibleColumns = viewState.displayedColumnIds;
-      this.columnDefs.forEach((col: ColDef) => {
-        let colIndex = visibleColumns.indexOf(col.colId);
-        this.colApi.setColumnVisible(col.colId, colIndex !== -1);
-        this.colApi.moveColumn(col.colId, colIndex);
-      });
     }
   }
 
@@ -181,21 +160,10 @@ export class DataViewGridComponent implements OnInit {
         }
     });
 
-    this.columnsReady = true;
-  }
-
-  public onColumnMove(event: ColumnMovedEvent): void {
-    if (event.source !== 'api') {
-      let columnOrder = this.colApi.getAllDisplayedVirtualColumns().map(col => col.getColDef().colId);
-      let viewState = this.dataState.getViewStateById(this.viewId);
-
-      viewState = viewState.setDisplayedColumnIds(columnOrder);
-      this.dataState = this.dataState.addOrUpdateView(this.viewId, viewState, this.viewId);
-    }
+    this.gridInitialized = true;
   }
 
   public onGridReady(event: GridReadyEvent): void {
-    this.colApi = event.columnApi;
     this.gridApi = event.api;
     this.gridApi.sizeColumnsToFit();
     this.updateData();
@@ -249,18 +217,5 @@ export class DataViewGridComponent implements OnInit {
     }
 
     return filteredItems;
-  }
-
-  public selectAll(): void {
-    this.gridApi.selectAll();
-  }
-
-  public clearAll(): void {
-    this.gridApi.deselectAll();
-  }
-
-  public onRowSelectionChange(event: RowSelectedEvent): void {
-    let selectedIds = this.gridApi.getSelectedNodes().map(row => row.data.id);
-    this.dataState = this.dataState.setSelectedIds(selectedIds, this.viewId);
   }
 }

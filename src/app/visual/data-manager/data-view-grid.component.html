@@ -1,8 +1,9 @@
 <sky-data-view
+  skyAgGridDataManager
   [viewConfig]="viewConfig"
 >
   <ag-grid-angular
-    *ngIf="isActive && columnsReady"
+    *ngIf="isActive && gridInitialized"
     [gridOptions]="gridOptions"
     [rowData]="displayedItems"
   >

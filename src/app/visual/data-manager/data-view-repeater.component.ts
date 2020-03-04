@@ -40,6 +40,7 @@ export class DataViewRepeaterComponent implements OnInit {
   };
 
   public displayedItems: any[];
+  public isActive: boolean;
 
   private _dataState: SkyDataManagerState = new SkyDataManagerState({source: 'defaultState'});
 
@@ -52,6 +53,10 @@ export class DataViewRepeaterComponent implements OnInit {
     this.dataManagerService.dataState.subscribe(state => {
       this._dataState = state;
       this.updateData();
+    });
+
+    this.dataManagerService.activeViewId.subscribe(id => {
+      this.isActive = id === this.viewId;
     });
   }
 
@@ -134,6 +139,7 @@ export class DataViewRepeaterComponent implements OnInit {
   }
 
   public onItemSelect(isSelected: boolean, item: any): void {
+    console.log('ugh');
     let selectedItems = this.dataState.selectedIds || [];
     if (isSelected) {
       selectedItems.push(item.id);
