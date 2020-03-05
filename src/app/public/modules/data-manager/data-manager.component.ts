@@ -40,12 +40,14 @@ export class SkyDataManagerComponent implements OnDestroy, OnInit {
   public dataManagerConfig: SkyDataManagerConfig;
 
   @Input()
-  public defaultDataState: SkyDataManagerState = new SkyDataManagerState({source: 'defaultState'});
+  public defaultDataState: SkyDataManagerState = new SkyDataManagerState({});
 
   @Input()
   public settingsKey: string;
 
-  private ngUnsubscribe = new Subject();
+  // the source to provide for data state changes
+  private _source = 'dataManger';
+  private _ngUnsubscribe = new Subject();
 
   constructor(
     private dataManagerService: SkyDataManagerService,
@@ -57,21 +59,21 @@ export class SkyDataManagerComponent implements OnDestroy, OnInit {
       this.uiConfigService.getConfig(this.settingsKey, this.defaultDataState.getStateOptions())
         .take(1)
         .subscribe((config: SkyDataManagerStateOptions) => {
-          this.dataManagerService.dataState.next(new SkyDataManagerState(config));
+          this.dataManagerService.updateDataState(new SkyDataManagerState(config), this._source);
         });
     } else {
-      this.dataManagerService.dataState.next(this.defaultDataState);
+      this.dataManagerService.updateDataState(this.defaultDataState, this._source);
     }
 
     if (this.settingsKey) {
-      this.dataManagerService.dataState
-        .takeUntil(this.ngUnsubscribe)
+      this.dataManagerService.getDataStateSubscription(this._source)
+        .takeUntil(this._ngUnsubscribe)
         .subscribe(state => {
           this.uiConfigService.setConfig(
             this.settingsKey,
             state.getStateOptions()
           )
-            .takeUntil(this.ngUnsubscribe)
+            .takeUntil(this._ngUnsubscribe)
             .subscribe(
               () => { },
               (err) => {
@@ -86,7 +88,7 @@ export class SkyDataManagerComponent implements OnDestroy, OnInit {
   }
 
   public ngOnDestroy(): void {
-    this.ngUnsubscribe.next();
-    this.ngUnsubscribe.complete();
+    this._ngUnsubscribe.next();
+    this._ngUnsubscribe.complete();
   }
 }

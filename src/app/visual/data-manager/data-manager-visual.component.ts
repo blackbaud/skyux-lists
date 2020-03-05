@@ -49,8 +49,7 @@ export class DataManagerVisualComponent {
         viewId: 'gridView',
         displayedColumnIds: ['selected', 'name', 'description']
       }
-    ],
-    source: 'defaultState'
+    ]
   });
 
   public items: any[] = [
@@ -103,6 +102,6 @@ export class DataManagerVisualComponent {
   }
 
   public searchSo() {
-    this.dataManagerService.dataState.next(this.dataState.setSearchText('so', 'toolbar'));
+    this.dataManagerService.updateDataState(this.dataState.setSearchText('so'), 'toolbar');
   }
 }

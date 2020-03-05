@@ -62,10 +62,8 @@ export class DataViewGridComponent implements OnInit {
   }
   public set dataState(value: SkyDataManagerState) {
     this._dataState = value;
-    this.dataManagerService.dataState.next(value);
-    if (value.source !== this.viewId) {
-      this.updateData();
-    }
+    this.dataManagerService.updateDataState(value, this.viewId);
+    this.updateData();
   }
 
   public viewConfig: SkyDataViewConfig = {
@@ -101,7 +99,7 @@ export class DataViewGridComponent implements OnInit {
   public gridOptions: GridOptions;
   public isActive: boolean;
 
-  private _dataState: SkyDataManagerState = new SkyDataManagerState({source: 'defaultState'});
+  private _dataState: SkyDataManagerState = new SkyDataManagerState({});
 
   constructor(
     private agGridService: SkyAgGridService,
@@ -118,13 +116,10 @@ export class DataViewGridComponent implements OnInit {
         }
       });
 
-    this.dataManagerService.dataState.subscribe(state => {
+    this.dataManagerService.getDataStateSubscription(this.viewId).subscribe(state => {
       this._dataState = state;
       this.setInitialColumnOrder();
-
-      if (state.source !== this.viewId) {
-        this.updateData();
-      }
+      this.updateData();
     });
 
     this.dataManagerService.activeViewId.subscribe(id => {

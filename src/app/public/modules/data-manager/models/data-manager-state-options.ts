@@ -13,6 +13,5 @@ export interface SkyDataManagerStateOptions {
   onlyShowSelected?: boolean;
   searchText?: string;
   selectedIds?: string[];
-  source: string;
   views?: SkyDataViewStateOptions[];
 }

@@ -15,7 +15,6 @@ export class SkyDataManagerState {
   public onlyShowSelected: boolean;
   public searchText: string;
   public selectedIds: string[];
-  public source: string;
   public views: SkyDataViewState[] = [];
 
   constructor(data: SkyDataManagerStateOptions) {
@@ -29,7 +28,6 @@ export class SkyDataManagerState {
       this.onlyShowSelected = data.onlyShowSelected;
       this.selectedIds = data.selectedIds;
       this.searchText = data.searchText;
-      this.source = data.source;
       this.views = views || [];
     }
   }
@@ -47,12 +45,11 @@ export class SkyDataManagerState {
       onlyShowSelected: this.onlyShowSelected,
       searchText: this.searchText,
       selectedIds: this.selectedIds,
-      source: this.source,
       views: viewStates
     };
   }
 
-  public setActiveSortOption(activeSortOption: SkyDataManagerSortOption, source: string): SkyDataManagerState {
+  public setActiveSortOption(activeSortOption: SkyDataManagerSortOption): SkyDataManagerState {
     return new SkyDataManagerState({
       activeSortOption,
       activeViewId: this.activeViewId,
@@ -62,12 +59,11 @@ export class SkyDataManagerState {
       onlyShowSelected: this.onlyShowSelected,
       searchText: this.searchText,
       selectedIds: this.selectedIds,
-      source,
       views: this.views
     });
   }
 
-  public setAdditionalData(additionalData: any, source: string, event?: string): SkyDataManagerState {
+  public setAdditionalData(additionalData: any, event?: string): SkyDataManagerState {
     return new SkyDataManagerState({
       activeSortOption: this.activeSortOption,
       activeViewId: this.activeViewId,
@@ -77,12 +73,11 @@ export class SkyDataManagerState {
       onlyShowSelected: this.onlyShowSelected,
       searchText: this.searchText,
       selectedIds: this.selectedIds,
-      source,
       views: this.views
     });
   }
 
-  public setFilterData(filterData: any, source: string): SkyDataManagerState {
+  public setFilterData(filterData: any): SkyDataManagerState {
     return new SkyDataManagerState({
       activeSortOption: this.activeSortOption,
       activeViewId: this.activeViewId,
@@ -92,12 +87,11 @@ export class SkyDataManagerState {
       onlyShowSelected: this.onlyShowSelected,
       searchText: this.searchText,
       selectedIds: this.selectedIds,
-      source,
       views: this.views
     });
   }
 
-  public setOnlyShowSelected(onlyShowSelected: boolean, source: string): SkyDataManagerState {
+  public setOnlyShowSelected(onlyShowSelected: boolean): SkyDataManagerState {
     return new SkyDataManagerState({
       activeSortOption: this.activeSortOption,
       activeViewId: this.activeViewId,
@@ -107,12 +101,11 @@ export class SkyDataManagerState {
       onlyShowSelected,
       searchText: this.searchText,
       selectedIds: this.selectedIds,
-      source,
       views: this.views
     });
   }
 
-  public setSearchText(searchText: string, source: string): SkyDataManagerState {
+  public setSearchText(searchText: string): SkyDataManagerState {
     return new SkyDataManagerState({
       activeSortOption: this.activeSortOption,
       activeViewId: this.activeViewId,
@@ -122,12 +115,11 @@ export class SkyDataManagerState {
       onlyShowSelected: this.onlyShowSelected,
       searchText,
       selectedIds: this.selectedIds,
-      source,
       views: this.views
     });
   }
 
-  public setSelectedIds(selectedIds: string[], source: string): SkyDataManagerState {
+  public setSelectedIds(selectedIds: string[]): SkyDataManagerState {
     return new SkyDataManagerState({
       activeSortOption: this.activeSortOption,
       activeViewId: this.activeViewId,
@@ -137,7 +129,6 @@ export class SkyDataManagerState {
       onlyShowSelected: this.onlyShowSelected,
       searchText: this.searchText,
       selectedIds,
-      source,
       views: this.views
     });
   }
@@ -146,7 +137,7 @@ export class SkyDataManagerState {
     return this.views.find(view => view.viewId === viewId);
   }
 
-  public addOrUpdateView(viewId: string, view: SkyDataViewState, source: string): SkyDataManagerState {
+  public addOrUpdateView(viewId: string, view: SkyDataViewState): SkyDataManagerState {
     const existingViewIndex = this.views.findIndex(v => v.viewId === viewId);
 
     if (existingViewIndex !== -1) {
@@ -163,7 +154,6 @@ export class SkyDataManagerState {
       filterData: this.filterData,
       searchText: this.searchText,
       selectedIds: this.selectedIds,
-      source,
       views: this.views
     });
   }

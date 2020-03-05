@@ -87,9 +87,9 @@ export class SkyAgGridDataManagerAdapterDirective implements AfterContentInit {
       this.viewConfig.onSelectAllClick = this.selectAll.bind(this);
       this.viewConfig.onClearAllClick = this.clearAll.bind(this);
 
-      this.displayColumns(this.dataManagerSvc.dataState.value);
+      this.displayColumns(this.dataManagerSvc.getCurrentDataState());
 
-      this.dataStateSub = this.dataManagerSvc.dataState.subscribe((dataState) => {
+      this.dataStateSub = this.dataManagerSvc.getDataStateSubscription(this.viewConfig.id).subscribe((dataState) => {
         this.displayColumns(dataState);
       });
 
@@ -102,29 +102,31 @@ export class SkyAgGridDataManagerAdapterDirective implements AfterContentInit {
       );
 
       if (event.source !== 'api') {
-        const dataState = this.dataManagerSvc.dataState.value;
+        const dataState = this.dataManagerSvc.getCurrentDataState();
 
         const viewState = dataState
           .getViewStateById(this.viewConfig.id)
           .setDisplayedColumnIds(columnOrder);
 
-        this.dataManagerSvc.dataState.next(
-          dataState.addOrUpdateView(this.viewConfig.id, viewState, this.viewConfig.id)
+        this.dataManagerSvc.updateDataState(
+          dataState.addOrUpdateView(this.viewConfig.id, viewState),
+          this.viewConfig.id
         );
       }
     });
 
     agGrid.rowSelected.subscribe(() => {
       const selectedIds = agGrid.api.getSelectedNodes().map(row => row.data.id);
-      const dataState = this.dataManagerSvc.dataState.value;
-      this.dataManagerSvc.dataState.next(
-        dataState.setSelectedIds(selectedIds, this.viewConfig.id)
+      const dataState = this.dataManagerSvc.getCurrentDataState();
+      this.dataManagerSvc.updateDataState(
+        dataState.setSelectedIds(selectedIds),
+        this.viewConfig.id
       );
     });
 
     agGrid.sortChanged.subscribe((event: SortChangedEvent) => {
       const gridSortModel = agGrid.api.getSortModel();
-      const dataState = this.dataManagerSvc.dataState.value;
+      const dataState = this.dataManagerSvc.getCurrentDataState();
       let sortOption: SkyDataManagerSortOption;
 
       if (gridSortModel.length) {
@@ -137,7 +139,10 @@ export class SkyAgGridDataManagerAdapterDirective implements AfterContentInit {
             option.descending === (activeSortModel.sort === 'desc');
         });
       }
-      this.dataManagerSvc.dataState.next(dataState.setActiveSortOption(sortOption, this.viewConfig.id));
+      this.dataManagerSvc.updateDataState(
+        dataState.setActiveSortOption(sortOption),
+        this.viewConfig.id
+        );
     });
   }
 

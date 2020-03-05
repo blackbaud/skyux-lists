@@ -76,7 +76,7 @@ export class SkyDataManagerColumnPickerModalComponent implements OnInit {
       };
     });
 
-    this.dataManagerService.dataState.subscribe(state => {
+    this.dataManagerService.getDataStateSubscription('toolbar').subscribe(state => {
       this.dataState = state;
     });
   }

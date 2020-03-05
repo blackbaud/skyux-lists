@@ -9,22 +9,53 @@ import {
 import {
   SkyDataManagerConfig,
   SkyDataManagerState,
+  SkyDataManagerStateChange,
   SkyDataViewConfig,
   SkyDataViewState
 } from './models';
 
+import {
+  Observable
+} from 'rxjs/Observable';
+
+import {
+  filter,
+  map
+} from 'rxjs/operators';
+
 @Injectable()
 export class SkyDataManagerService {
 
-  public activeViewId: BehaviorSubject<string> = new BehaviorSubject<string>(undefined);
+  public readonly activeViewId: BehaviorSubject<string> = new BehaviorSubject<string>(undefined);
 
-  public dataManagerConfig: BehaviorSubject<SkyDataManagerConfig> =
+  public readonly dataManagerConfig: BehaviorSubject<SkyDataManagerConfig> =
     new BehaviorSubject<SkyDataManagerConfig>(undefined);
 
-  public views: BehaviorSubject<SkyDataViewConfig[]> = new BehaviorSubject<SkyDataViewConfig[]>([]);
+  public readonly views = new BehaviorSubject<SkyDataViewConfig[]>([]);
 
-  public dataState: BehaviorSubject<SkyDataManagerState> =
-    new BehaviorSubject<SkyDataManagerState>(new SkyDataManagerState({source: 'defaultState'}));
+  public readonly dataStateChange: Observable<SkyDataManagerStateChange> =
+    new BehaviorSubject<SkyDataManagerStateChange>(new SkyDataManagerStateChange(new SkyDataManagerState({}), 'defaultState'));
+
+  public getCurrentDataState(): SkyDataManagerState {
+    const dataStateChangeObservable = this.dataStateChange as BehaviorSubject<SkyDataManagerStateChange>;
+    return dataStateChangeObservable.value && dataStateChangeObservable.value.dataState;
+  }
+
+  public getDataStateSubscription(source: string): Observable<SkyDataManagerState> {
+    // filter out events from the provided source and emit just the dataState
+    const dataStateObservable = this.dataStateChange.pipe(
+      filter(stateChange => source !== stateChange.source),
+      map(stateChange => stateChange.dataState)
+      );
+    return dataStateObservable;
+  }
+
+  public updateDataState(state: SkyDataManagerState, source: string): void {
+    const dataState = this.dataStateChange as BehaviorSubject<SkyDataManagerStateChange>;
+    const dataStateChange = new SkyDataManagerStateChange(state, source);
+
+    dataState.next(dataStateChange);
+  }
 
   public getViewById(viewId: string): SkyDataViewConfig {
     const currentViews: SkyDataViewConfig[] = this.views.value;
@@ -48,14 +79,14 @@ export class SkyDataManagerService {
     let activeViewId = this.activeViewId.value;
     this.activeViewId.next(activeViewId);
 
-    let dataState = this.dataState.getValue();
+    let dataState = this.getCurrentDataState();
     let currentViewState = dataState.getViewStateById(view.id);
 
     if (!currentViewState) {
       let newViewState = new SkyDataViewState({ viewId: view.id });
-      let newDataState = dataState.addOrUpdateView(view.id, newViewState, 'defaultState');
+      let newDataState = dataState.addOrUpdateView(view.id, newViewState);
 
-      this.dataState.next(newDataState);
+      this.updateDataState(newDataState, 'service');
     }
   }
 }

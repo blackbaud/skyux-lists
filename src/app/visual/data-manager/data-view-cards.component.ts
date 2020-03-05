@@ -47,7 +47,7 @@ export class DataViewCardsComponent implements OnInit {
   public ngOnInit(): void {
     this.displayedItems = this.items;
 
-    this.dataManagerService.dataState.subscribe(state => {
+    this.dataManagerService.getDataStateSubscription(this.viewId).subscribe(state => {
       this.dataState = state;
     });
   }
@@ -115,6 +115,6 @@ export class DataViewCardsComponent implements OnInit {
   }
 
   public searchBe() {
-    this.dataManagerService.dataState.next(this.dataState.setSearchText('be', this.viewId));
+    this.dataManagerService.updateDataState(this.dataState.setSearchText('be'), this.viewId);
   }
 }

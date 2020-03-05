@@ -24,7 +24,7 @@ export class DataViewRepeaterComponent implements OnInit {
   public set dataState(value: SkyDataManagerState) {
     this._dataState = value;
     this.updateData();
-    this.dataManagerService.dataState.next(value);
+    this.dataManagerService.updateDataState(value, this.viewId);
   }
 
   public viewId = 'repeaterView';
@@ -42,7 +42,7 @@ export class DataViewRepeaterComponent implements OnInit {
   public displayedItems: any[];
   public isActive: boolean;
 
-  private _dataState: SkyDataManagerState = new SkyDataManagerState({source: 'defaultState'});
+  private _dataState: SkyDataManagerState = new SkyDataManagerState({});
 
   constructor(private dataManagerService: SkyDataManagerService) {
   }
@@ -50,7 +50,7 @@ export class DataViewRepeaterComponent implements OnInit {
   public ngOnInit(): void {
     this.displayedItems = this.items;
 
-    this.dataManagerService.dataState.subscribe(state => {
+    this.dataManagerService.getDataStateSubscription(this.viewId).subscribe(state => {
       this._dataState = state;
       this.updateData();
     });
@@ -122,7 +122,7 @@ export class DataViewRepeaterComponent implements OnInit {
       }
     });
 
-    this.dataState = this.dataState.setSelectedIds(selectedIds, this.viewId);
+    this.dataState = this.dataState.setSelectedIds(selectedIds);
   }
 
   public clearAll(): void {
@@ -135,11 +135,10 @@ export class DataViewRepeaterComponent implements OnInit {
         selectedIds.splice(itemIndex, 1);
       }
     });
-    this.dataState = this.dataState.setSelectedIds(selectedIds, this.viewId);
+    this.dataState = this.dataState.setSelectedIds(selectedIds);
   }
 
   public onItemSelect(isSelected: boolean, item: any): void {
-    console.log('ugh');
     let selectedItems = this.dataState.selectedIds || [];
     if (isSelected) {
       selectedItems.push(item.id);
@@ -148,6 +147,6 @@ export class DataViewRepeaterComponent implements OnInit {
       selectedItems.splice(index, 1);
     }
 
-    this.dataState = this.dataState.setSelectedIds(selectedItems, this.viewId);
+    this.dataState = this.dataState.setSelectedIds(selectedItems);
   }
 }

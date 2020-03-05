@@ -74,7 +74,7 @@ export class SkyDataManagerToolbarComponent implements OnInit {
 
   public set dataState(value: SkyDataManagerState) {
     this._dataState = value;
-    this.dataManagerService.dataState.next(value);
+    this.dataManagerService.updateDataState(value, this._source);
   }
 
   public get views(): SkyDataViewConfig[] {
@@ -88,6 +88,8 @@ export class SkyDataManagerToolbarComponent implements OnInit {
 
   public onlyShowSelected: boolean;
 
+    // the source to provide for data state changes
+    private _source = 'toolbar';
   private _activeView: SkyDataViewConfig;
   private _dataManagerConfig: SkyDataManagerConfig;
   private _dataState: SkyDataManagerState;
@@ -111,7 +113,7 @@ export class SkyDataManagerToolbarComponent implements OnInit {
       this.views = views;
     });
 
-    this.dataManagerService.dataState.subscribe(dataState => {
+    this.dataManagerService.getDataStateSubscription(this._source).subscribe(dataState => {
       this._dataState = dataState;
       this.onlyShowSelected = dataState.onlyShowSelected;
       this.changeDetector.markForCheck();
@@ -123,7 +125,7 @@ export class SkyDataManagerToolbarComponent implements OnInit {
    }
 
    public sortSelected(sortOption: SkyDataManagerSortOption) {
-    this.dataState = this.dataState.setActiveSortOption(sortOption, 'toolbar');
+    this.dataState = this.dataState.setActiveSortOption(sortOption);
    }
 
   public onViewChange(viewId: string) {
@@ -131,7 +133,7 @@ export class SkyDataManagerToolbarComponent implements OnInit {
   }
 
   public searchApplied(text: string) {
-    this.dataState = this.dataState.setSearchText(text, 'toolbar');
+    this.dataState = this.dataState.setSearchText(text);
   }
 
   public filterButtonClicked(): void {
@@ -149,7 +151,7 @@ export class SkyDataManagerToolbarComponent implements OnInit {
 
       modalInstance.closed.subscribe((result: SkyModalCloseArgs) => {
         if (result.reason === 'save') {
-          this.dataState = this.dataState.setFilterData(result.data, 'toolbar');
+          this.dataState = this.dataState.setFilterData(result.data);
         }
       });
     }
@@ -173,7 +175,7 @@ export class SkyDataManagerToolbarComponent implements OnInit {
           result.data.map((col: SkyDataManagerColumnPickerOption) => col.id);
 
         const updatedViewState = currentViewState.setDisplayedColumnIds(displayedColumnIds);
-        this.dataState = this.dataState.addOrUpdateView(this.activeView.id, updatedViewState, 'toolbar');
+        this.dataState = this.dataState.addOrUpdateView(this.activeView.id, updatedViewState);
         }
     });
   }
@@ -187,6 +189,6 @@ export class SkyDataManagerToolbarComponent implements OnInit {
   }
 
   public onOnlyShowSelected(event: SkyCheckboxChange) {
-    this.dataState = this.dataState.setOnlyShowSelected(event.checked, 'toolbar');
+    this.dataState = this.dataState.setOnlyShowSelected(event.checked);
   }
 }
