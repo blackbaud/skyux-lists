@@ -19,6 +19,7 @@ import {
 } from '@skyux/indicators';
 
 import {
+  SkyBackToTopModule,
   SkyCardModule,
   SkyFluidGridModule,
   SkyInlineDeleteModule
@@ -65,6 +66,7 @@ import {
     AgGridModule,
     SkyAgGridModule,
     SkyAppLinkModule,
+    SkyBackToTopModule,
     SkyCardModule,
     SkyCheckboxModule,
     SkyDataManagerModule,
