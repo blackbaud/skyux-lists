@@ -25,7 +25,6 @@ import {
 
 import {
   SkyDataViewConfig,
-  SkyDataManagerColumnPickerOption,
   SkyDataManagerState,
   SkyDataManagerSortOption
 } from './models';
@@ -83,7 +82,6 @@ export class SkyAgGridDataManagerAdapterDirective implements AfterContentInit {
     this.currentAgGrid = agGrid;
 
     agGrid.gridReady.subscribe(() => {
-      this.setViewConfigColumnOptions();
       this.viewConfig.onSelectAllClick = this.selectAll.bind(this);
       this.viewConfig.onClearAllClick = this.clearAll.bind(this);
 
@@ -144,28 +142,6 @@ export class SkyAgGridDataManagerAdapterDirective implements AfterContentInit {
         this.viewConfig.id
         );
     });
-  }
-
-  private setViewConfigColumnOptions() {
-    const agGrid = this.currentAgGrid;
-
-    const columns = agGrid.columnApi.getAllColumns();
-
-    const columnOptions: SkyDataManagerColumnPickerOption[] = [];
-
-    for (const column of columns) {
-      const colId = column.getColId();
-      const colDef = column.getUserProvidedColDef();
-
-      columnOptions.push({
-        id: colId,
-        label: colDef.headerName,
-        description: colDef.refData && colDef.refData.description,
-        alwaysDisplayed: colDef.lockVisible
-      });
-
-      this.viewConfig.columnOptions = columnOptions;
-    }
   }
 
   private displayColumns(dataState: SkyDataManagerState): void {

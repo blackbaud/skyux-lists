@@ -66,15 +66,7 @@ export class SkyDataManagerColumnPickerModalComponent implements OnInit {
   ) { }
 
   public ngOnInit(): void {
-    this.columnData = this.context.columnOptions.map(columnOption => {
-      return {
-        alwaysDisplayed: columnOption.alwaysDisplayed,
-        id: columnOption.id,
-        label: columnOption.label,
-        description: columnOption.description,
-        isSelected: this.isSelected(columnOption.id)
-      };
-    });
+    this.columnData = this.formatColumnOptions();
 
     this.dataManagerService.getDataStateSubscription('toolbar').subscribe(state => {
       this.dataState = state;
@@ -122,5 +114,39 @@ export class SkyDataManagerColumnPickerModalComponent implements OnInit {
 
   public applyChanges(): void {
     this.instance.save(this.columnData.filter(col => col.isSelected || col.alwaysDisplayed));
+  }
+
+  private formatColumnOptions(): Column[] {
+    const allColumnOptions = this.context.columnOptions;
+    const visibleColumnIds = this.context.displayedColumnIds;
+    let formattedColumnOptions: Column[] = [];
+    let unselectedColumnOptions: Column[] = [];
+
+    for (let columnOption of allColumnOptions) {
+      // format the column with the properties the column picker needs
+      const colIndex = visibleColumnIds.indexOf(columnOption.id);
+      let formattedColumn: Column = {
+        alwaysDisplayed: columnOption.alwaysDisplayed,
+        id: columnOption.id,
+        label: columnOption.label,
+        description: columnOption.description,
+        isSelected: false
+      };
+
+      // if the column is currently displayed but it in that order in the column options,
+      // else add it to the list of unselected columns to be alphebetized
+      if (colIndex !== -1) {
+        formattedColumn.isSelected = true;
+        formattedColumnOptions[colIndex] = formattedColumn;
+      } else {
+        unselectedColumnOptions.push(formattedColumn);
+      }
+    }
+
+    // sort the columns that are not currently displayed and add them after the currently displayed options
+    unselectedColumnOptions.sort((col1, col2) => col1.label.localeCompare(col2.label));
+    formattedColumnOptions = formattedColumnOptions.concat(unselectedColumnOptions);
+
+    return formattedColumnOptions;
   }
 }

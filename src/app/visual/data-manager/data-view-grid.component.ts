@@ -78,7 +78,8 @@ export class DataViewGridComponent implements OnInit {
     columnOptions: [
       {
         id: 'selected',
-        alwaysDisplayed: true
+        alwaysDisplayed: true,
+        label: 'selected'
       },
       {
         id: 'name',
