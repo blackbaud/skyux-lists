@@ -125,7 +125,8 @@ export class SkyDataManagerToolbarComponent implements OnInit {
    }
 
    public sortSelected(sortOption: SkyDataManagerSortOption) {
-    this.dataState = this.dataState.setActiveSortOption(sortOption);
+    this.dataState.activeSortOption = sortOption;
+    this.dataManagerService.updateDataState(this.dataState, this._source);
    }
 
   public onViewChange(viewId: string) {
@@ -133,7 +134,8 @@ export class SkyDataManagerToolbarComponent implements OnInit {
   }
 
   public searchApplied(text: string) {
-    this.dataState = this.dataState.setSearchText(text);
+    this.dataState.searchText = text;
+    this.dataManagerService.updateDataState(this.dataState, this._source);
   }
 
   public filterButtonClicked(): void {
@@ -151,7 +153,8 @@ export class SkyDataManagerToolbarComponent implements OnInit {
 
       modalInstance.closed.subscribe((result: SkyModalCloseArgs) => {
         if (result.reason === 'save') {
-          this.dataState = this.dataState.setFilterData(result.data);
+          this.dataState.filterData = result.data;
+          this.dataManagerService.updateDataState(this.dataState, this._source);
         }
       });
     }
@@ -159,9 +162,9 @@ export class SkyDataManagerToolbarComponent implements OnInit {
 
   public openColumnPickerModal(): void {
     const context = new SkyDataManagerColumnPickerModalContext();
-    const currentViewState = this.dataState.getViewStateById(this.activeView.id);
+    const viewState = this.dataState.getViewStateById(this.activeView.id);
     context.columnOptions = this.activeView && this.activeView.columnOptions;
-    context.displayedColumnIds = currentViewState.displayedColumnIds;
+    context.displayedColumnIds = viewState.displayedColumnIds;
 
     const options: any = {
       providers: [{ provide: SkyDataManagerColumnPickerModalContext, useValue: context }]
@@ -171,11 +174,10 @@ export class SkyDataManagerToolbarComponent implements OnInit {
 
     modalInstance.closed.subscribe((result: SkyModalCloseArgs) => {
       if (result.reason === 'save') {
-        const displayedColumnIds =
-          result.data.map((col: SkyDataManagerColumnPickerOption) => col.id);
+        const displayedColumnIds = result.data.map((col: SkyDataManagerColumnPickerOption) => col.id);
 
-        const updatedViewState = currentViewState.setDisplayedColumnIds(displayedColumnIds);
-        this.dataState = this.dataState.addOrUpdateView(this.activeView.id, updatedViewState);
+        viewState.displayedColumnIds = displayedColumnIds;
+        this.dataState = this.dataState.addOrUpdateView(this.activeView.id, viewState);
         }
     });
   }
@@ -189,6 +191,7 @@ export class SkyDataManagerToolbarComponent implements OnInit {
   }
 
   public onOnlyShowSelected(event: SkyCheckboxChange) {
-    this.dataState = this.dataState.setOnlyShowSelected(event.checked);
+    this.dataState.onlyShowSelected = event.checked;
+    this.dataManagerService.updateDataState(this.dataState, this._source);
   }
 }

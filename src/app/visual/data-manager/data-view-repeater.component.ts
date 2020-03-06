@@ -122,7 +122,8 @@ export class DataViewRepeaterComponent implements OnInit {
       }
     });
 
-    this.dataState = this.dataState.setSelectedIds(selectedIds);
+    this.dataState.selectedIds = selectedIds;
+    this.dataManagerService.updateDataState(this.dataState, this.viewId);
   }
 
   public clearAll(): void {
@@ -135,7 +136,8 @@ export class DataViewRepeaterComponent implements OnInit {
         selectedIds.splice(itemIndex, 1);
       }
     });
-    this.dataState = this.dataState.setSelectedIds(selectedIds);
+    this.dataState.selectedIds = selectedIds;
+    this.dataManagerService.updateDataState(this.dataState, this.viewId);
   }
 
   public onItemSelect(isSelected: boolean, item: any): void {
@@ -147,6 +149,7 @@ export class DataViewRepeaterComponent implements OnInit {
       selectedItems.splice(index, 1);
     }
 
-    this.dataState = this.dataState.setSelectedIds(selectedItems);
+    this.dataState.selectedIds = selectedItems;
+    this.dataManagerService.updateDataState(this.dataState, this.viewId);
   }
 }

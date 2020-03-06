@@ -102,6 +102,7 @@ export class DataManagerVisualComponent {
   }
 
   public searchSo() {
-    this.dataManagerService.updateDataState(this.dataState.setSearchText('so'), 'toolbar');
+    this.dataState.searchText = 'so';
+    this.dataManagerService.updateDataState(this.dataState, 'toolbar');
   }
 }

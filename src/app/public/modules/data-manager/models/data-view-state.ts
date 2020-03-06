@@ -22,12 +22,4 @@ export class SkyDataViewState {
       additionalData: this.additionalData
     };
   }
-
-  public setDisplayedColumnIds(ids: string[]): SkyDataViewState {
-    return new SkyDataViewState({
-      viewId: this.viewId,
-      displayedColumnIds: ids,
-      additionalData: this.additionalData
-    });
-  }
 }

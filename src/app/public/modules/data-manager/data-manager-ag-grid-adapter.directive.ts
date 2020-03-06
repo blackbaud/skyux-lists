@@ -15,8 +15,7 @@ import {
 } from 'ag-grid-angular';
 
 import {
-  ColumnMovedEvent,
-  SortChangedEvent
+  ColumnMovedEvent
 } from 'ag-grid-community';
 
 import {
@@ -102,9 +101,8 @@ export class SkyAgGridDataManagerAdapterDirective implements AfterContentInit {
       if (event.source !== 'api') {
         const dataState = this.dataManagerSvc.getCurrentDataState();
 
-        const viewState = dataState
-          .getViewStateById(this.viewConfig.id)
-          .setDisplayedColumnIds(columnOrder);
+        const viewState = dataState.getViewStateById(this.viewConfig.id);
+        viewState.displayedColumnIds = columnOrder;
 
         this.dataManagerSvc.updateDataState(
           dataState.addOrUpdateView(this.viewConfig.id, viewState),
@@ -116,13 +114,11 @@ export class SkyAgGridDataManagerAdapterDirective implements AfterContentInit {
     agGrid.rowSelected.subscribe(() => {
       const selectedIds = agGrid.api.getSelectedNodes().map(row => row.data.id);
       const dataState = this.dataManagerSvc.getCurrentDataState();
-      this.dataManagerSvc.updateDataState(
-        dataState.setSelectedIds(selectedIds),
-        this.viewConfig.id
-      );
+      dataState.selectedIds = selectedIds;
+      this.dataManagerSvc.updateDataState(dataState, this.viewConfig.id);
     });
 
-    agGrid.sortChanged.subscribe((event: SortChangedEvent) => {
+    agGrid.sortChanged.subscribe(() => {
       const gridSortModel = agGrid.api.getSortModel();
       const dataState = this.dataManagerSvc.getCurrentDataState();
       let sortOption: SkyDataManagerSortOption;
@@ -137,10 +133,8 @@ export class SkyAgGridDataManagerAdapterDirective implements AfterContentInit {
             option.descending === (activeSortModel.sort === 'desc');
         });
       }
-      this.dataManagerSvc.updateDataState(
-        dataState.setActiveSortOption(sortOption),
-        this.viewConfig.id
-        );
+      dataState.activeSortOption = sortOption;
+      this.dataManagerSvc.updateDataState(dataState, this.viewConfig.id);
     });
   }
 

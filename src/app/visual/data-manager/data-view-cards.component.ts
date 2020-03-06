@@ -115,6 +115,7 @@ export class DataViewCardsComponent implements OnInit {
   }
 
   public searchBe() {
-    this.dataManagerService.updateDataState(this.dataState.setSearchText('be'), this.viewId);
+    this.dataState.searchText = 'be';
+    this.dataManagerService.updateDataState(this.dataState, this.viewId);
   }
 }
