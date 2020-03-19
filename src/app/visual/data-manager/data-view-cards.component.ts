@@ -1,4 +1,6 @@
 import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
   Input,
   OnInit
@@ -12,21 +14,15 @@ import {
 
 @Component({
   selector: 'data-view-cards',
-  templateUrl: './data-view-cards.component.html'
+  templateUrl: './data-view-cards.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DataViewCardsComponent implements OnInit {
   @Input()
   public items: any[];
 
-  public get dataState(): SkyDataManagerState {
-    return this._dataState;
-  }
-
-  public set dataState(state: SkyDataManagerState) {
-    this._dataState = state;
-    this.displayedItems = this.sortItems(this.filterItems(this.searchItems(this.items)));
-  }
-
+  public dataState: SkyDataManagerState;
+  public displayedItems: any[];
   public viewId = 'cardsView';
   public viewConfig: SkyDataViewConfig = {
     id: this.viewId,
@@ -38,17 +34,18 @@ export class DataViewCardsComponent implements OnInit {
     showSortButtonText: true
   };
 
-  private _dataState: SkyDataManagerState;
-
-  public displayedItems: any[];
-
-  constructor(private dataManagerService: SkyDataManagerService) {}
+  constructor(
+    private changeDetector: ChangeDetectorRef,
+    private dataManagerService: SkyDataManagerService
+    ) { }
 
   public ngOnInit(): void {
     this.displayedItems = this.items;
 
-    this.dataManagerService.getDataStateSubscription(this.viewId).subscribe(state => {
+    this.dataManagerService.getDataStateUpdates(this.viewId).subscribe(state => {
       this.dataState = state;
+      this.sortItems(this.filterItems(this.searchItems(this.items)));
+      this.changeDetector.detectChanges();
     });
   }
 

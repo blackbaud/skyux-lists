@@ -3,14 +3,13 @@ import {
   ChangeDetectionStrategy,
   Component,
   Input,
-  OnInit,
-  Output,
-  EventEmitter
+  OnInit
 } from '@angular/core';
 
 import {
   SkyDataManagerService
 } from './data-manager.service';
+
 import {
   SkyDataViewConfig
 } from './models/';
@@ -44,10 +43,6 @@ export class SkyDataViewComponent implements OnInit {
     this.changeDetector.markForCheck();
   }
 
-  @Output()
-  public isActiveChange: EventEmitter<boolean> =
-    new EventEmitter<boolean>(true);
-
   private _isActive = false;
   private _viewConfig: SkyDataViewConfig;
 
@@ -57,7 +52,7 @@ export class SkyDataViewComponent implements OnInit {
   ) { }
 
   public ngOnInit(): void {
-    this.dataManagerService.activeViewId.subscribe(activeViewId => {
+    this.dataManagerService.getActiveViewIdUpdates().subscribe(activeViewId => {
       this.isActive = this.viewConfig && this.viewConfig.id === activeViewId;
     });
   }

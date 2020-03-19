@@ -26,27 +26,25 @@ import {
 @Injectable()
 export class SkyDataManagerService {
 
-  public readonly activeViewId: BehaviorSubject<string> = new BehaviorSubject<string>(undefined);
+  private readonly activeViewId: BehaviorSubject<string> = new BehaviorSubject<string>(undefined);
 
-  public readonly dataManagerConfig: BehaviorSubject<SkyDataManagerConfig> =
-    new BehaviorSubject<SkyDataManagerConfig>(undefined);
+  private readonly dataManagerConfig = new BehaviorSubject<SkyDataManagerConfig>(undefined);
 
-  public readonly views = new BehaviorSubject<SkyDataViewConfig[]>([]);
+  private readonly views = new BehaviorSubject<SkyDataViewConfig[]>([]);
 
-  public readonly dataStateChange: Observable<SkyDataManagerStateChange> =
+  private readonly dataStateChange =
     new BehaviorSubject<SkyDataManagerStateChange>(new SkyDataManagerStateChange(new SkyDataManagerState({}), 'defaultState'));
 
   public getCurrentDataState(): SkyDataManagerState {
-    const dataStateChangeObservable = this.dataStateChange as BehaviorSubject<SkyDataManagerStateChange>;
-    return dataStateChangeObservable.value && dataStateChangeObservable.value.dataState;
+    return this.dataStateChange.value && this.dataStateChange.value.dataState;
   }
 
-  public getDataStateSubscription(source: string): Observable<SkyDataManagerState> {
+  public getDataStateUpdates(source: string): Observable<SkyDataManagerState> {
     // filter out events from the provided source and emit just the dataState
     const dataStateObservable = this.dataStateChange.pipe(
       filter(stateChange => source !== stateChange.source),
       map(stateChange => stateChange.dataState)
-      );
+    );
     return dataStateObservable;
   }
 
@@ -55,6 +53,30 @@ export class SkyDataManagerService {
     const dataStateChange = new SkyDataManagerStateChange(state, source);
 
     dataState.next(dataStateChange);
+  }
+
+  public getCurrentDataManagerConfig(): SkyDataManagerConfig {
+    return this.dataManagerConfig.value;
+  }
+
+  public getDataManagerConfigUpdates(): Observable<SkyDataManagerConfig> {
+    return this.dataManagerConfig;
+  }
+
+  public updateDataManagerConfig(value: SkyDataManagerConfig): void {
+    this.dataManagerConfig.next(value);
+  }
+
+  public getDataViewsUpdates(): Observable<SkyDataViewConfig[]> {
+    return this.views;
+  }
+
+  public getActiveViewIdUpdates(): Observable<string> {
+    return this.activeViewId;
+  }
+
+  public updateActiveViewId(id: string): void {
+    this.activeViewId.next(id);
   }
 
   public getViewById(viewId: string): SkyDataViewConfig {

@@ -1,4 +1,6 @@
 import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
   Input,
   OnInit
@@ -24,7 +26,8 @@ import {
 
 @Component({
   selector: 'data-view-grid',
-  templateUrl: './data-view-grid.component.html'
+  templateUrl: './data-view-grid.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DataViewGridComponent implements OnInit {
 
@@ -57,14 +60,7 @@ export class DataViewGridComponent implements OnInit {
     }
   ];
 
-  public get dataState(): SkyDataManagerState {
-    return this._dataState;
-  }
-  public set dataState(value: SkyDataManagerState) {
-    this._dataState = value;
-    this.dataManagerService.updateDataState(value, this.viewId);
-    this.updateData();
-  }
+  public dataState = new SkyDataManagerState({});
 
   public viewConfig: SkyDataViewConfig = {
     id: this.viewId,
@@ -100,10 +96,9 @@ export class DataViewGridComponent implements OnInit {
   public gridOptions: GridOptions;
   public isActive: boolean;
 
-  private _dataState: SkyDataManagerState = new SkyDataManagerState({});
-
   constructor(
     private agGridService: SkyAgGridService,
+    private changeDetector: ChangeDetectorRef,
     private dataManagerService: SkyDataManagerService
   ) {}
 
@@ -117,13 +112,14 @@ export class DataViewGridComponent implements OnInit {
         }
       });
 
-    this.dataManagerService.getDataStateSubscription(this.viewId).subscribe(state => {
-      this._dataState = state;
+    this.dataManagerService.getDataStateUpdates(this.viewId).subscribe(state => {
+      this.dataState = state;
       this.setInitialColumnOrder();
       this.updateData();
+      this.changeDetector.detectChanges();
     });
 
-    this.dataManagerService.activeViewId.subscribe(id => {
+    this.dataManagerService.getActiveViewIdUpdates().subscribe(id => {
         this.isActive = id === this.viewId;
     });
   }

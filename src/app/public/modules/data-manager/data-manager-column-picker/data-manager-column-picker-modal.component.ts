@@ -1,4 +1,5 @@
 import {
+  ChangeDetectionStrategy,
   Component,
   OnInit
 } from '@angular/core';
@@ -28,7 +29,8 @@ interface Column extends SkyDataManagerColumnPickerOption {
 @Component({
   selector: 'sky-data-manager-column-picker-modal',
   templateUrl: './data-manager-column-picker-modal.component.html',
-  providers: [SkyDataManagerService]
+  providers: [SkyDataManagerService],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SkyDataManagerColumnPickerModalComponent implements OnInit {
   public get dataState(): SkyDataManagerState {
@@ -68,7 +70,7 @@ export class SkyDataManagerColumnPickerModalComponent implements OnInit {
   public ngOnInit(): void {
     this.columnData = this.formatColumnOptions();
 
-    this.dataManagerService.getDataStateSubscription('toolbar').subscribe(state => {
+    this.dataManagerService.getDataStateUpdates('columnPicker').subscribe(state => {
       this.dataState = state;
     });
   }

@@ -102,24 +102,24 @@ export class SkyDataManagerToolbarComponent implements OnInit {
   ) { }
 
    public ngOnInit(): void {
-    this.dataManagerService.activeViewId.subscribe(activeViewId => {
+    this.dataManagerService.getActiveViewIdUpdates().subscribe(activeViewId => {
       if (activeViewId) {
         this.activeView = this.dataManagerService.getViewById(activeViewId);
         this.changeDetector.markForCheck();
       }
     });
 
-    this.dataManagerService.views.subscribe(views => {
+    this.dataManagerService.getDataViewsUpdates().subscribe(views => {
       this.views = views;
     });
 
-    this.dataManagerService.getDataStateSubscription(this._source).subscribe(dataState => {
+    this.dataManagerService.getDataStateUpdates(this._source).subscribe(dataState => {
       this._dataState = dataState;
       this.onlyShowSelected = dataState.onlyShowSelected;
       this.changeDetector.markForCheck();
     });
 
-    this.dataManagerService.dataManagerConfig.subscribe(config => {
+    this.dataManagerService.getDataManagerConfigUpdates().subscribe(config => {
       this.dataManagerConfig = config;
     });
    }
@@ -130,7 +130,7 @@ export class SkyDataManagerToolbarComponent implements OnInit {
    }
 
   public onViewChange(viewId: string) {
-    this.dataManagerService.activeViewId.next(viewId);
+    this.dataManagerService.updateActiveViewId(viewId);
   }
 
   public searchApplied(text: string) {

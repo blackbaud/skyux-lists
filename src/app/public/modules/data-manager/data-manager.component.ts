@@ -33,7 +33,7 @@ export class SkyDataManagerComponent implements OnDestroy, OnInit {
 
   @Input()
   public set activeViewId(value: string) {
-    this.dataManagerService.activeViewId.next(value);
+    this.dataManagerService.updateActiveViewId(value);
   }
 
   @Input()
@@ -66,7 +66,7 @@ export class SkyDataManagerComponent implements OnDestroy, OnInit {
     }
 
     if (this.settingsKey) {
-      this.dataManagerService.getDataStateSubscription(this._source)
+      this.dataManagerService.getDataStateUpdates(this._source)
         .takeUntil(this._ngUnsubscribe)
         .subscribe(state => {
           this.uiConfigService.setConfig(
@@ -84,7 +84,7 @@ export class SkyDataManagerComponent implements OnDestroy, OnInit {
         });
     }
 
-    this.dataManagerService.dataManagerConfig.next(this.dataManagerConfig);
+    this.dataManagerService.updateDataManagerConfig(this.dataManagerConfig);
   }
 
   public ngOnDestroy(): void {

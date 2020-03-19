@@ -1,14 +1,24 @@
 import {
+  ChangeDetectionStrategy,
   Component
 } from '@angular/core';
+
+import {
+  SkyUIConfigService
+} from '@skyux/core';
+
+import {
+  LocalStorageConfigService
+} from './local-storage-config.service';
+
+import {
+  SkyDataManagerFiltersModalDemoComponent
+} from './data-filter-modal.component';
 
 import {
   SkyDataManagerService,
   SkyDataManagerState
 } from '../../public';
-import { SkyUIConfigService } from '@skyux/core';
-import { LocalStorageConfigService } from './local-storage-config.service';
-import { SkyDataManagerFiltersModalDemoComponent } from './data-filter-modal.component';
 
 @Component({
   selector: 'data-manager-visual',
@@ -16,7 +26,8 @@ import { SkyDataManagerFiltersModalDemoComponent } from './data-filter-modal.com
   providers: [SkyDataManagerService, {
     provide: SkyUIConfigService,
     useClass: LocalStorageConfigService
-  }]
+  }],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DataManagerVisualComponent {
 
@@ -97,12 +108,14 @@ export class DataManagerVisualComponent {
     }
   ];
 
-  constructor(private dataManagerService: SkyDataManagerService) {
-    this.dataManagerService.activeViewId.subscribe(activeViewId => this.activeViewId = activeViewId);
+  constructor(
+    private dataManagerService: SkyDataManagerService
+  ) {
+    this.dataManagerService.getActiveViewIdUpdates().subscribe(activeViewId => this.activeViewId = activeViewId);
   }
 
   public searchSo() {
     this.dataState.searchText = 'so';
-    this.dataManagerService.updateDataState(this.dataState, 'toolbar');
+    this.dataManagerService.updateDataState(this.dataState, 'dataManager');
   }
 }

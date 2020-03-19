@@ -1,6 +1,7 @@
 import {
   AfterContentInit,
   Directive,
+  ChangeDetectorRef,
   ContentChildren,
   QueryList,
   Input
@@ -43,7 +44,9 @@ export class SkyAgGridDataManagerAdapterDirective implements AfterContentInit {
 
   private dataStateSub: Subscription;
 
-  constructor(private dataManagerSvc: SkyDataManagerService) { }
+  constructor(
+    private changeDetector: ChangeDetectorRef,
+    private dataManagerSvc: SkyDataManagerService) { }
 
   public ngAfterContentInit() {
     this.checkForAgGrid();
@@ -86,7 +89,7 @@ export class SkyAgGridDataManagerAdapterDirective implements AfterContentInit {
 
       this.displayColumns(this.dataManagerSvc.getCurrentDataState());
 
-      this.dataStateSub = this.dataManagerSvc.getDataStateSubscription(this.viewConfig.id).subscribe((dataState) => {
+      this.dataStateSub = this.dataManagerSvc.getDataStateUpdates(this.viewConfig.id).subscribe((dataState) => {
         this.displayColumns(dataState);
       });
 
@@ -116,6 +119,7 @@ export class SkyAgGridDataManagerAdapterDirective implements AfterContentInit {
       const dataState = this.dataManagerSvc.getCurrentDataState();
       dataState.selectedIds = selectedIds;
       this.dataManagerSvc.updateDataState(dataState, this.viewConfig.id);
+      this.changeDetector.markForCheck();
     });
 
     agGrid.sortChanged.subscribe(() => {
@@ -126,7 +130,7 @@ export class SkyAgGridDataManagerAdapterDirective implements AfterContentInit {
       if (gridSortModel.length) {
         const activeSortModel = gridSortModel[0];
         const activeSortColumn = agGrid.columnApi.getColumn(activeSortModel.colId);
-        const dataManagerConfig = this.dataManagerSvc.dataManagerConfig.value;
+        const dataManagerConfig = this.dataManagerSvc.getCurrentDataManagerConfig();
 
         sortOption = dataManagerConfig.sortOptions.find(option => {
           return option.propertyName === activeSortColumn.getColDef().field &&

@@ -1,4 +1,6 @@
 import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
   Input,
   OnInit
@@ -12,21 +14,16 @@ import {
 
 @Component({
   selector: 'data-view-repeater',
-  templateUrl: './data-view-repeater.component.html'
+  templateUrl: './data-view-repeater.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DataViewRepeaterComponent implements OnInit {
   @Input()
   public items: any[];
 
-  public get dataState(): SkyDataManagerState {
-    return this._dataState;
-  }
-  public set dataState(value: SkyDataManagerState) {
-    this._dataState = value;
-    this.updateData();
-    this.dataManagerService.updateDataState(value, this.viewId);
-  }
-
+  public dataState = new SkyDataManagerState({});
+  public displayedItems: any[];
+  public isActive: boolean;
   public viewId = 'repeaterView';
   public viewConfig: SkyDataViewConfig = {
     id: this.viewId,
@@ -39,23 +36,20 @@ export class DataViewRepeaterComponent implements OnInit {
     onSelectAllClick: this.selectAll.bind(this)
   };
 
-  public displayedItems: any[];
-  public isActive: boolean;
-
-  private _dataState: SkyDataManagerState = new SkyDataManagerState({});
-
-  constructor(private dataManagerService: SkyDataManagerService) {
-  }
+  constructor(
+    private changeDetector: ChangeDetectorRef,
+    private dataManagerService: SkyDataManagerService
+    ) { }
 
   public ngOnInit(): void {
     this.displayedItems = this.items;
 
-    this.dataManagerService.getDataStateSubscription(this.viewId).subscribe(state => {
-      this._dataState = state;
+    this.dataManagerService.getDataStateUpdates(this.viewId).subscribe(state => {
+      this.dataState = state;
       this.updateData();
     });
 
-    this.dataManagerService.activeViewId.subscribe(id => {
+    this.dataManagerService.getActiveViewIdUpdates().subscribe(id => {
       this.isActive = id === this.viewId;
     });
   }
@@ -70,6 +64,8 @@ export class DataViewRepeaterComponent implements OnInit {
     if (this.dataState.onlyShowSelected) {
       this.displayedItems = this.displayedItems.filter(item => item.selected);
     }
+
+    this.changeDetector.detectChanges();
   }
 
   public searchItems(items: any[]): any[] {
@@ -124,6 +120,7 @@ export class DataViewRepeaterComponent implements OnInit {
 
     this.dataState.selectedIds = selectedIds;
     this.dataManagerService.updateDataState(this.dataState, this.viewId);
+    this.changeDetector.markForCheck();
   }
 
   public clearAll(): void {
@@ -138,6 +135,7 @@ export class DataViewRepeaterComponent implements OnInit {
     });
     this.dataState.selectedIds = selectedIds;
     this.dataManagerService.updateDataState(this.dataState, this.viewId);
+    this.changeDetector.markForCheck();
   }
 
   public onItemSelect(isSelected: boolean, item: any): void {
