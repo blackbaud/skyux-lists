@@ -7,6 +7,7 @@ import {
 } from '@skyux/modals';
 
 import {
+  SkyDataManagerFilterData,
   SkyDataManagerFilterModalContext
 } from '../../public/modules/data-manager';
 
@@ -24,14 +25,18 @@ export class SkyDataManagerFiltersModalDemoComponent {
     public context: SkyDataManagerFilterModalContext,
     public instance: SkyModalInstance
   ) {
-      this.fruitType = this.context.filterData && this.context.filterData.type ?
-        this.context.filterData.type : 'any';
-      this.hideOrange = this.context.filterData && this.context.filterData.hideOrange ?
-        this.context.filterData.hideOrange : false;
+    if (this.context.filterData && this.context.filterData.filters) {
+      let filters = this.context.filterData.filters;
+      this.fruitType = filters.type || 'any';
+      this.hideOrange = filters.hideOrange || false;
     }
+  }
 
   public applyFilters() {
-    let result = {
+    let result: SkyDataManagerFilterData = {};
+
+    result.filtersApplied = this.fruitType !== 'any' || this.hideOrange;
+    result.filters = {
       type: this.fruitType,
       hideOrange: this.hideOrange
     };

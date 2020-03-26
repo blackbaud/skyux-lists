@@ -95,10 +95,11 @@ export class DataViewRepeaterComponent implements OnInit {
     let filteredItems = items;
     let filterData = this.dataState && this.dataState.filterData;
 
-    if (filterData) {
+    if (filterData && filterData.filters) {
+      let filters = filterData.filters;
       filteredItems = items.filter((item: any) => {
-        if (((filterData.hideOrange && item.color !== 'orange') || !filterData.hideOrange) &&
-            ((filterData.type !== 'any' && item.type === filterData.type) || (!filterData.type || filterData.type === 'any'))) {
+        if (((filters.hideOrange && item.color !== 'orange') || !filters.hideOrange) &&
+            ((filters.type !== 'any' && item.type === filters.type) || (!filters.type || filters.type === 'any'))) {
               return true;
             }
         return false;
@@ -140,11 +141,12 @@ export class DataViewRepeaterComponent implements OnInit {
 
   public onItemSelect(isSelected: boolean, item: any): void {
     let selectedItems = this.dataState.selectedIds || [];
-    if (isSelected) {
+    let itemIndex = selectedItems.indexOf(item.id);
+
+    if (isSelected && itemIndex === -1) {
       selectedItems.push(item.id);
-    } else {
-      let index = selectedItems.indexOf(item.id);
-      selectedItems.splice(index, 1);
+    } else if (!isSelected && itemIndex !== -1) {
+      selectedItems.splice(itemIndex, 1);
     }
 
     this.dataState.selectedIds = selectedItems;

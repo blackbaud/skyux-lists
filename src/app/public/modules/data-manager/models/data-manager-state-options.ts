@@ -1,5 +1,5 @@
 import {
-  SkyDataManagerEvent,
+  SkyDataManagerFilterData,
   SkyDataManagerSortOption,
   SkyDataViewStateOptions
 } from '.';
@@ -8,8 +8,7 @@ export interface SkyDataManagerStateOptions {
   activeSortOption?: SkyDataManagerSortOption;
   activeViewId?: string;
   additionalData?: any;
-  event?: SkyDataManagerEvent | string;
-  filterData?: any;
+  filterData?: SkyDataManagerFilterData;
   onlyShowSelected?: boolean;
   searchText?: string;
   selectedIds?: string[];

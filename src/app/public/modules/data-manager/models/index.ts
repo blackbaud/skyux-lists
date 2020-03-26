@@ -1,6 +1,6 @@
 export * from './data-manager-column-picker-option';
 export * from './data-manager-config';
-export * from './data-manager-event';
+export * from './data-manager-filter-data';
 export * from './data-manager-sort-option';
 export * from './data-manager-state';
 export * from './data-manager-state-change';

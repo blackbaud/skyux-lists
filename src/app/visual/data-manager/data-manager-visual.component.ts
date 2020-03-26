@@ -53,7 +53,10 @@ export class DataManagerVisualComponent {
 
   public dataState = new SkyDataManagerState({
     filterData: {
-      hideOrange: true
+      filtersApplied: true,
+      filters: {
+        hideOrange: true
+      }
     },
     views: [
       {
@@ -111,6 +114,7 @@ export class DataManagerVisualComponent {
   constructor(
     private dataManagerService: SkyDataManagerService
   ) {
+    this.dataManagerService.getDataStateUpdates('dataManager').subscribe(state => this.dataState = state);
     this.dataManagerService.getActiveViewIdUpdates().subscribe(activeViewId => this.activeViewId = activeViewId);
   }
 

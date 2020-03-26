@@ -135,7 +135,7 @@ export class SkyDataManagerColumnPickerModalComponent implements OnInit {
         isSelected: false
       };
 
-      // if the column is currently displayed but it in that order in the column options,
+      // if the column is currently displayed put it in that order in the column options,
       // else add it to the list of unselected columns to be alphebetized
       if (colIndex !== -1) {
         formattedColumn.isSelected = true;

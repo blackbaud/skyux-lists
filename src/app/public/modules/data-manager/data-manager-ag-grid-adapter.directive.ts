@@ -16,7 +16,7 @@ import {
 } from 'ag-grid-angular';
 
 import {
-  ColumnMovedEvent
+  ColumnMovedEvent, RowSelectedEvent
 } from 'ag-grid-community';
 
 import {
@@ -114,9 +114,18 @@ export class SkyAgGridDataManagerAdapterDirective implements AfterContentInit {
       }
     });
 
-    agGrid.rowSelected.subscribe(() => {
-      const selectedIds = agGrid.api.getSelectedNodes().map(row => row.data.id);
-      const dataState = this.dataManagerSvc.getCurrentDataState();
+    agGrid.rowSelected.subscribe((event: RowSelectedEvent) => {
+      const row = event.node;
+      let dataState = this.dataManagerSvc.getCurrentDataState();
+      let selectedIds = dataState.selectedIds;
+      const rowIndex = selectedIds.indexOf(row.data.id);
+
+      if (row.isSelected() && rowIndex === -1) {
+        selectedIds.push(row.data.id);
+      } else if (!row.isSelected() && rowIndex !== -1) {
+        selectedIds.splice(rowIndex, 1);
+      }
+
       dataState.selectedIds = selectedIds;
       this.dataManagerSvc.updateDataState(dataState, this.viewConfig.id);
       this.changeDetector.markForCheck();

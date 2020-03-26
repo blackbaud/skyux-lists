@@ -1,5 +1,5 @@
 import {
-  SkyDataManagerEvent,
+  SkyDataManagerFilterData,
   SkyDataManagerStateOptions,
   SkyDataManagerSortOption,
   SkyDataViewState,
@@ -10,8 +10,7 @@ export class SkyDataManagerState {
   public activeSortOption: SkyDataManagerSortOption;
   public activeViewId: string;
   public additionalData: any;
-  public event: SkyDataManagerEvent | string;
-  public filterData: any;
+  public filterData: SkyDataManagerFilterData;
   public onlyShowSelected: boolean;
   public searchText: string;
   public selectedIds: string[];
@@ -23,7 +22,6 @@ export class SkyDataManagerState {
 
       this.activeSortOption = data.activeSortOption;
       this.additionalData = data.additionalData;
-      this.event = data.event;
       this.filterData = data.filterData;
       this.onlyShowSelected = data.onlyShowSelected;
       this.selectedIds = data.selectedIds;
@@ -40,7 +38,6 @@ export class SkyDataManagerState {
     return {
       activeSortOption: this.activeSortOption,
       additionalData: this.additionalData,
-      event: this.event,
       filterData: this.filterData,
       onlyShowSelected: this.onlyShowSelected,
       searchText: this.searchText,
@@ -66,7 +63,6 @@ export class SkyDataManagerState {
       activeSortOption: this.activeSortOption,
       activeViewId: this.activeViewId,
       additionalData: this.additionalData,
-      event: SkyDataManagerEvent.ViewState,
       filterData: this.filterData,
       searchText: this.searchText,
       selectedIds: this.selectedIds,

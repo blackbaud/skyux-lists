@@ -198,10 +198,11 @@ export class DataViewGridComponent implements OnInit {
     let filteredItems = items;
     let filterData = this.dataState && this.dataState.filterData;
 
-    if (filterData) {
+    if (filterData && filterData.filters) {
+      let filters = filterData.filters;
       filteredItems = items.filter((item: any) => {
-        if (((filterData.hideOrange && item.color !== 'orange') || !filterData.hideOrange) &&
-            ((filterData.type !== 'any' && item.type === filterData.type) || (!filterData.type || filterData.type === 'any'))) {
+        if (((filters.hideOrange && item.color !== 'orange') || !filters.hideOrange) &&
+            ((filters.type !== 'any' && item.type === filters.type) || (!filters.type || filters.type === 'any'))) {
               return true;
             }
         return false;

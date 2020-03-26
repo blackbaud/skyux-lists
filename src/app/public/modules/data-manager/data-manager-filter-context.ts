@@ -1,3 +1,7 @@
+import {
+  SkyDataManagerFilterData
+} from './models';
+
 export class SkyDataManagerFilterModalContext {
-  public filterData: any;
+  public filterData: SkyDataManagerFilterData;
 }
