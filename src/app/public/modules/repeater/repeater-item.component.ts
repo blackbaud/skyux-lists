@@ -121,23 +121,6 @@ export class SkyRepeaterItemComponent implements OnDestroy, OnInit, AfterViewIni
   @Output()
   public isSelectedChange = new EventEmitter<boolean>();
 
-  public set childFocusIndex(value: number) {
-    if (value !== this._childFocusIndex) {
-      this._childFocusIndex = value;
-
-      const focusableChildren = this.adapterService.getFocusableChildren(this.itemRef);
-      if (focusableChildren.length > 0 && value !== undefined) {
-        this.adapterService.focusElement(focusableChildren[value]);
-      } else {
-        this.adapterService.focusElement(this.itemRef);
-      }
-    }
-  }
-
-  public get childFocusIndex(): number {
-    return this._childFocusIndex;
-  }
-
   public contentId: string = `sky-repeater-item-content-${++nextContentId}`;
 
   public hasItemContent: boolean = false;
@@ -181,9 +164,6 @@ export class SkyRepeaterItemComponent implements OnDestroy, OnInit, AfterViewIni
   @ContentChild(SkyInlineDeleteComponent)
   public inlineDelete: SkyInlineDeleteComponent;
 
-  @ViewChild('skyRepeaterItem', { read: ElementRef })
-  private itemRef: ElementRef;
-
   @ViewChild('grabHandle', { read: ElementRef })
   private grabHandle: ElementRef;
 
@@ -198,8 +178,6 @@ export class SkyRepeaterItemComponent implements OnDestroy, OnInit, AfterViewIni
   private reorderMovedText: string;
   private reorderStateDescription: string;
   private reorderSteps: number;
-
-  private _childFocusIndex: number;
 
   private _isCollapsible = true;
 
@@ -247,25 +225,9 @@ export class SkyRepeaterItemComponent implements OnDestroy, OnInit, AfterViewIni
           this.changeDetector.markForCheck();
         }
     });
-
-    // When service emits a focus change, set the tabIndex and browser focus.
-    this.repeaterService.focusedItemChange
-      .takeUntil(this.ngUnsubscribe)
-      .subscribe((item: SkyRepeaterItemComponent) => {
-        if (this === item) {
-          this.tabIndex = 0;
-
-          if (!this.itemRef.nativeElement.contains(document.activeElement)) {
-            this.adapterService.focusElement(this.itemRef);
-          }
-        } else {
-          this.tabIndex = -1;
-        }
-    });
   }
 
   public ngAfterViewInit(): void {
-    this.adapterService.setTabIndexOfFocusableElements(this.itemRef, -1);
     this.hasItemContent = this.repeaterItemContentComponents.length > 0;
     this.updateExpandOnContentChange();
   }
@@ -292,92 +254,8 @@ export class SkyRepeaterItemComponent implements OnDestroy, OnInit, AfterViewIni
     this.updateForExpanded(direction === 'up', true);
   }
 
-  public onFocus(): void {
-    this.childFocusIndex = undefined;
-  }
-
-  public onItemKeyDown(event: KeyboardEvent): void {
-    /* istanbul ignore else */
-    if (event.key) {
-      let focusableChildren: HTMLElement[];
-
-      /* tslint:disable-next-line:switch-default */
-      switch (event.key.toLowerCase()) {
-        case ' ':
-        case 'enter':
-          // Unlike the arrow keys, space/enter should never execute
-          // unless focused on the parent item element.
-          if (event.target === this.itemRef.nativeElement) {
-            if (this.selectable) {
-              this.isSelected = !this.isSelected;
-            }
-            this.repeaterService.activateItem(this);
-            event.preventDefault();
-          }
-          break;
-
-        case 'arrowup':
-        case 'up':
-          this.childFocusIndex = undefined;
-          this.repeaterService.focusPreviousListItem(this);
-          event.preventDefault();
-          event.stopPropagation();
-          break;
-
-        case 'arrowdown':
-        case 'down':
-          this.childFocusIndex = undefined;
-          this.repeaterService.focusNextListItem(this);
-          event.preventDefault();
-          event.stopPropagation();
-          break;
-
-        case 'arrowleft':
-        case 'left':
-          // Cycle backwards through interactive child elements.
-          // If user reaches the beginning, focus on parent item.
-          focusableChildren = this.adapterService.getFocusableChildren(this.itemRef);
-          /* istanbul ignore else */
-          if (focusableChildren.length > 0) {
-            if (this.childFocusIndex > 0) {
-              this.childFocusIndex--;
-            } else {
-              this.childFocusIndex = undefined;
-            }
-          }
-          event.stopPropagation();
-          event.preventDefault();
-          break;
-
-        case 'arrowright':
-        case 'right':
-          // Cyle forward through interactive child elements.
-          // If user reaches the end, do nothing.
-          focusableChildren = this.adapterService.getFocusableChildren(this.itemRef);
-          /* istanbul ignore else */
-          if (focusableChildren.length > 0) {
-            if (this.childFocusIndex < focusableChildren.length - 1) {
-              this.childFocusIndex++;
-            } else {
-              this.childFocusIndex = 0;
-            }
-          }
-          event.stopPropagation();
-          event.preventDefault();
-          break;
-      }
-    }
-  }
-
   public onRepeaterItemClick(event: MouseEvent): void {
     if (!this.inlineDelete) {
-      const focusableChildren = this.adapterService.getFocusableChildren(this.itemRef);
-      if (focusableChildren.indexOf(<HTMLElement> event.target) < 0) {
-        this.childFocusIndex = undefined;
-      } else {
-        this.childFocusIndex = focusableChildren.indexOf(<HTMLElement> event.target);
-      }
-      this.repeaterService.focusListItem(this);
       this.repeaterService.activateItem(this);
     }
   }

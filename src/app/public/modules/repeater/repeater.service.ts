@@ -23,8 +23,6 @@ export class SkyRepeaterService implements OnDestroy {
 
   public expandMode: string;
 
-  public focusedItemChange = new BehaviorSubject<SkyRepeaterItemComponent>(undefined);
-
   public itemCollapseStateChange = new EventEmitter<SkyRepeaterItemComponent>();
 
   public items: SkyRepeaterItemComponent[] = [];
@@ -84,24 +82,6 @@ export class SkyRepeaterService implements OnDestroy {
 
   public onItemCollapseStateChange(item: SkyRepeaterItemComponent): void {
     this.itemCollapseStateChange.emit(item);
-  }
-
-  public focusListItem(item: SkyRepeaterItemComponent): void {
-    this.focusedItemChange.next(item);
-  }
-
-  public focusNextListItem(item: SkyRepeaterItemComponent): void {
-    const focusedIndex = this.items.indexOf(item);
-    if (this.items.length - 1 > focusedIndex) {
-      this.focusedItemChange.next(this.items[focusedIndex + 1]);
-    }
-  }
-
-  public focusPreviousListItem(item: SkyRepeaterItemComponent): void {
-    const focusedIndex = this.items.indexOf(item);
-    if (focusedIndex > 0) {
-      this.focusedItemChange.next(this.items[focusedIndex - 1]);
-    }
   }
 
   public getItemIndex(item: SkyRepeaterItemComponent): number {
