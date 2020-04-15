@@ -69,15 +69,6 @@ export class SkyRepeaterService implements OnDestroy {
     if (indexOfDestroyedItem > -1) {
       this.items.splice(indexOfDestroyedItem, 1);
     }
-
-    // If the removed item had tabindex = 0, the re-assign tabindex 0 to other item.
-    if (item.tabIndex === 0) {
-      if (this.items[indexOfDestroyedItem]) {
-        this.items[indexOfDestroyedItem].tabIndex = 0;
-      } else if (this.items[indexOfDestroyedItem - 1]) {
-        this.items[indexOfDestroyedItem - 1].tabIndex = 0;
-      }
-    }
   }
 
   public onItemCollapseStateChange(item: SkyRepeaterItemComponent): void {
