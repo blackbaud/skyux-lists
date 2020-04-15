@@ -37,10 +37,6 @@ import {
 } from '@skyux/inline-form';
 
 import {
-  SkyInlineDeleteComponent
-} from '@skyux/layout/modules/inline-delete';
-
-import {
   Observable,
   Subject
 } from 'rxjs';
@@ -159,11 +155,17 @@ export class SkyRepeaterItemComponent implements OnDestroy, OnInit, AfterViewIni
   @ContentChild(SkyRepeaterItemContextMenuComponent, { read: ElementRef })
   public contextMenu: ElementRef;
 
-  @ContentChild(SkyInlineDeleteComponent)
-  public inlineDelete: SkyInlineDeleteComponent;
-
   @ViewChild('grabHandle', { read: ElementRef })
   private grabHandle: ElementRef;
+
+  @ViewChild('itemRef', { read: ElementRef })
+  private itemRef: ElementRef;
+
+  @ViewChild('itemContentRef', { read: ElementRef })
+  private itemContentRef: ElementRef;
+
+  @ViewChild('itemHeaderRef', { read: ElementRef })
+  private itemHeaderRef: ElementRef;
 
   @ContentChildren(SkyRepeaterItemContentComponent)
   private repeaterItemContentComponents: QueryList<SkyRepeaterItemContentComponent>;
@@ -253,7 +255,12 @@ export class SkyRepeaterItemComponent implements OnDestroy, OnInit, AfterViewIni
   }
 
   public onRepeaterItemClick(event: MouseEvent): void {
-    if (!this.inlineDelete) {
+    // Only activate item if clicking on the title, content, or parent item div.
+    // This will avoid accidental activations when clicking inside interactive elements like
+    // the expand/collapse chevron, dropdown, inline-delete, etc...
+    if (event.target === this.itemRef.nativeElement ||
+        this.itemContentRef.nativeElement.contains(event.target) ||
+        this.itemHeaderRef.nativeElement.contains(event.target)) {
       this.repeaterService.activateItem(this);
     }
   }
@@ -354,6 +361,29 @@ export class SkyRepeaterItemComponent implements OnDestroy, OnInit, AfterViewIni
     this.revertReorderSteps();
     this.reorderButtonLabel = this.reorderInstructions;
     this.reorderState = undefined;
+  }
+
+  public onItemKeyDown(event: KeyboardEvent): void {
+    /*istanbul ignore else */
+    if (event.key) {
+      switch (event.key.toLowerCase()) {
+        case ' ':
+        case 'enter':
+          // Space/enter should never execute unless focused on the parent item element.
+          if (event.target === this.itemRef.nativeElement) {
+            if (this.selectable) {
+              this.isSelected = !this.isSelected;
+            }
+            this.repeaterService.activateItem(this);
+            event.preventDefault();
+          }
+          break;
+
+        /* istanbul ignore next */
+        default:
+          break;
+      }
+    }
   }
 
   private slideForExpanded(animate: boolean): void {

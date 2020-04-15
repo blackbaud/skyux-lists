@@ -1,11 +1,14 @@
 <div
   class="sky-repeater-item sky-padding-even-default"
+  tabindex="0"
   [ngClass]="{
     'sky-repeater-item-active': isActive,
     'sky-repeater-item-collapsible': isCollapsible,
     'sky-repeater-item-selected': isSelected
   }"
   (click)="onRepeaterItemClick($event)"
+  (keydown)="onItemKeyDown($event)"
+  #itemRef
 >
   <ng-content
     select="sky-inline-delete"
@@ -26,7 +29,6 @@
     <ng-container *ngTemplateOutlet="skyRepeaterItemLeft"></ng-container>
     <ng-container *ngTemplateOutlet="skyRepeaterItemRight"></ng-container>
   </ng-container>
-
 </div>
 
 <ng-template
@@ -81,15 +83,16 @@
 >
   <div
     class="sky-repeater-item-right"
+    #itemHeaderRef
   >
     <header
-        class="sky-repeater-item-header"
-        [hidden]="titleEl.children.length === 0"
-        (click)="headerClick()"
+      class="sky-repeater-item-header"
+      [hidden]="titleRef.children.length === 0"
+      (click)="headerClick()"
     >
       <div
         class="sky-repeater-item-title sky-emphasized"
-        #titleEl
+        #titleRef
       >
         <ng-content
           select="sky-repeater-item-title"
@@ -101,11 +104,11 @@
         [attr.aria-label]="'skyux_repeater_item_reorder_top_label' | skyLibResources"
         (click)="moveToTop($event)"
       >
-      <sky-icon
-        icon="arrow-circle-up"
-      ></sky-icon>
-      {{ 'skyux_repeater_item_reorder_top' | skyLibResources }}
-    </button>
+        <sky-icon
+          icon="arrow-circle-up"
+        ></sky-icon>
+        {{ 'skyux_repeater_item_reorder_top' | skyLibResources }}
+      </button>
       <div *ngIf="isCollapsible"
         class="sky-repeater-item-chevron"
       >
@@ -129,7 +132,9 @@
     <div
       class="sky-repeater-item-content"
       [id]="contentId"
-      [@skyAnimationSlide]="slideDirection">
+      [@skyAnimationSlide]="slideDirection"
+      #itemContentRef
+    >
       <ng-content
         select="sky-repeater-item-content"
       ></ng-content>

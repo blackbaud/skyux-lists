@@ -108,6 +108,10 @@ describe('Repeater item component', () => {
     });
     fixture.detectChanges();
   }
+
+  function getItems(fixture: ComponentFixture<any>): HTMLElement[] {
+    return fixture.nativeElement.querySelectorAll('.sky-repeater-item');
+  }
   // #endregion
 
   beforeEach(() => {
@@ -207,20 +211,6 @@ describe('Repeater item component', () => {
       expect(fixture.nativeElement).toBeAccessible();
     });
   }));
-
-  describe('keyboard controls', () => {
-    let fixture: ComponentFixture<RepeaterTestComponent>;
-    let cmp: RepeaterTestComponent;
-
-    beforeEach(fakeAsync(() => {
-      fixture = TestBed.createComponent(RepeaterTestComponent);
-      cmp = fixture.componentInstance;
-      cmp.showContextMenu = true;
-      fixture.detectChanges();
-      tick(); // Allow repeater-item.component to set tabindexes & render context dropdown.
-      fixture.detectChanges();
-    }));
-  });
 
   it('should properly get an item\'s index from the service', fakeAsync(() => {
 
@@ -779,6 +769,56 @@ describe('Repeater item component', () => {
 
       flushDropdownTimer();
     }));
+
+    it('should select item with space and enter keys when selectable is set to true', fakeAsync(() => {
+      let fixture = TestBed.createComponent(RepeaterTestComponent);
+      let cmp: RepeaterTestComponent = fixture.componentInstance;
+      let el = fixture.nativeElement;
+
+      fixture.detectChanges();
+      tick();
+      cmp.selectable = true;
+      fixture.detectChanges();
+
+      const items = getRepeaterItems(el);
+
+      const isSelectedChangeSpy = spyOn(cmp, 'onIsSelectedChange').and.callThrough();
+
+      // Expect first item NOT to be selected.
+      expect(items[0]).not.toHaveCssClass('sky-repeater-item-selected');
+
+      // Focus on first repeater item and press enter key.
+      SkyAppTestUtility.fireDomEvent(items[0], 'focus');
+      SkyAppTestUtility.fireDomEvent(items[0], 'keydown', {
+        keyboardEventInit: {
+          key: 'Enter'
+        }
+      });
+      fixture.detectChanges();
+
+      // Expect first item to be selected.
+      expect(items[0]).toHaveCssClass('sky-repeater-item-selected');
+      // Expect the isSelectedChange event to have been called with 'true'.
+      expect(isSelectedChangeSpy).toHaveBeenCalledWith(true);
+      // Expect the isSelectedChange event to have occurred once.
+      expect(isSelectedChangeSpy).toHaveBeenCalledTimes(1);
+
+      isSelectedChangeSpy.calls.reset();
+      // Press space key.
+      SkyAppTestUtility.fireDomEvent(items[0], 'keydown', {
+        keyboardEventInit: {
+          key: ' '
+        }
+      });
+      fixture.detectChanges();
+
+      // Expect first item NOT to be selected.
+      expect(items[0]).not.toHaveCssClass('sky-repeater-item-selected');
+      // Expect the isSelectedChange event to have been called with 'false'.
+      expect(isSelectedChangeSpy).toHaveBeenCalledWith(false);
+      // Expect the event to have occurred twice.
+      expect(isSelectedChangeSpy).toHaveBeenCalledTimes(1);
+    }));
   });
 
   describe('with active index', () => {
@@ -914,6 +954,48 @@ describe('Repeater item component', () => {
       fixture.detectChanges();
 
       expect(emitterSpy).toHaveBeenCalledTimes(1);
+
+      flushDropdownTimer();
+    }));
+
+    it('should update active item on enter key if activeIndex has been set', fakeAsync(() => {
+      cmp.showRepeaterWithActiveIndex = true;
+      detectChangesAndTick(fixture);
+      const items = getItems(fixture);
+
+      // Focus on first repeater item and press enter key.
+      SkyAppTestUtility.fireDomEvent(items[0], 'focus');
+      SkyAppTestUtility.fireDomEvent(items[0], 'keydown', {
+        keyboardEventInit: {
+          key: 'Enter'
+        }
+      });
+      fixture.detectChanges();
+
+      const activeRepeaterItem = el.querySelectorAll('.sky-repeater-item-active');
+      expect(activeRepeaterItem.length).toEqual(1);
+      expect(items[0]).toHaveCssClass('sky-repeater-item-active');
+
+      flushDropdownTimer();
+    }));
+
+    it('should update active item on space key if activeIndex has been set', fakeAsync(() => {
+      cmp.showRepeaterWithActiveIndex = true;
+      detectChangesAndTick(fixture);
+      const items = getItems(fixture);
+
+      // Focus on first repeater item and press enter key.
+      SkyAppTestUtility.fireDomEvent(items[0], 'focus');
+      SkyAppTestUtility.fireDomEvent(items[0], 'keydown', {
+        keyboardEventInit: {
+          key: ' '
+        }
+      });
+      fixture.detectChanges();
+
+      const activeRepeaterItem = el.querySelectorAll('.sky-repeater-item-active');
+      expect(activeRepeaterItem.length).toEqual(1);
+      expect(items[0]).toHaveCssClass('sky-repeater-item-active');
 
       flushDropdownTimer();
     }));
