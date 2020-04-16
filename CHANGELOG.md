@@ -1,3 +1,7 @@
+# 4.0.0-rc.2 (2020-04-16)
+
+- Added all bug fixes and features from the `master` branch. [#156](https://github.com/blackbaud/skyux-lists/pull/156)
+
 # 4.0.0-rc.1 (2020-03-04)
 
 - Added all bug fixes and features from the `master` branch. [#129](https://github.com/blackbaud/skyux-lists/pull/129) [#131](https://github.com/blackbaud/skyux-lists/pull/131) [#137](https://github.com/blackbaud/skyux-lists/pull/137) [#141](https://github.com/blackbaud/skyux-lists/pull/141)
