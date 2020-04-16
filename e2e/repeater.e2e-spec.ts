@@ -104,9 +104,9 @@ describe('Repeater', () => {
     SkyHostBrowser.setWindowBreakpoint('lg');
     SkyHostBrowser.scrollTo('#screenshot-last-repeater-item');
     element.all(by.css('#screenshot-repeater-inline-delete .sky-dropdown-button')).get(0).click();
-    element(by.css('#screenshot-repeater-inline-delete #inline-delete-trigger-standard')).click();
+    element(by.css('#inline-delete-trigger-standard')).click();
     element.all(by.css('#screenshot-repeater-inline-delete .sky-dropdown-button')).get(1).click();
-    element(by.css('#screenshot-repeater-inline-delete #inline-delete-trigger-active')).click();
+    element(by.css('#inline-delete-trigger-active')).click();
     element(by.css('#screenshot-repeater-inline-delete')).click();
     expect('#screenshot-repeater-inline-delete').toMatchBaselineScreenshot(done, {
       screenshotName: 'repeater-inline-delete'
