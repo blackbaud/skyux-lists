@@ -54,6 +54,9 @@ export class SkyRepeaterComponent implements AfterContentInit, OnChanges, OnDest
   public activeIndex: number;
 
   @Input()
+  public ariaLabel: string;
+
+  @Input()
   public reorderable: boolean = false;
 
   @Input()
@@ -166,13 +169,6 @@ export class SkyRepeaterComponent implements AfterContentInit, OnChanges, OnDest
         item.reorderable = this.reorderable;
       });
     }, 0);
-
-    // Make the first item tabbable.
-    if (this.items.length > 0) {
-      setTimeout(() => {
-        this.items.first.tabIndex = 0;
-      });
-    }
   }
 
   public ngOnChanges(changes: SimpleChanges): void {
