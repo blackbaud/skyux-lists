@@ -1,3 +1,8 @@
+# 3.8.6 (2020-04-21)
+
+- Fixed the repeater component to accept normal keyboard interactions within an inline form. [#151](https://github.com/blackbaud/skyux-lists/pull/151)
+- Fixed the paging and repeater components to pass accessibility tests. [#155](https://github.com/blackbaud/skyux-lists/pull/155)
+
 # 4.0.0-rc.2 (2020-04-16)
 
 - Added all bug fixes and features from the `master` branch. [#156](https://github.com/blackbaud/skyux-lists/pull/156)
