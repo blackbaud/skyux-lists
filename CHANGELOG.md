@@ -1,3 +1,14 @@
+# 4.0.0 (2020-05-14)
+
+### New features
+
+- Added support for `@angular/core@^9`. [#124](https://github.com/blackbaud/skyux-lists/pull/124)
+- Updated the pipeline to transpile to the [Angular Package Format](https://docs.google.com/document/d/1CZC2rcpxffTDfRDs6p1cfbmKNLA6x5O-NtkJglDaBVs/preview). [#124](https://github.com/blackbaud/skyux-lists/pull/124)
+
+### Breaking changes
+
+- Dropped support for `rxjs@5`. Consumers can install `rxjs-compat@^6` to support older versions of `rxjs`. [#124](https://github.com/blackbaud/skyux-lists/pull/124)
+
 # 3.8.6 (2020-04-21)
 
 - Fixed the repeater component to accept normal keyboard interactions within an inline form. [#151](https://github.com/blackbaud/skyux-lists/pull/151)
