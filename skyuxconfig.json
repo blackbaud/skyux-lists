@@ -24,5 +24,10 @@
     "unit": {
       "browserSet": "paranoid"
     }
+  },
+  "host": {
+    "frameOptions": {
+      "none": true
+    }
   }
 }
