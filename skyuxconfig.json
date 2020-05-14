@@ -8,8 +8,13 @@
   ],
   "app": {
     "styles": [
-      "src/app/visual-styles.scss",
-      "@skyux/theme/css/sky.css"
+      "src/app/visual-styles.scss"
+    ]
+  },
+  "librarySettings": {
+    "whitelistedNonPeerDependencies": [
+      "dragula",
+      "ng2-dragula"
     ]
   },
   "testSettings": {
@@ -18,6 +23,11 @@
     },
     "unit": {
       "browserSet": "paranoid"
+    }
+  },
+  "host": {
+    "frameOptions": {
+      "none": true
     }
   }
 }
