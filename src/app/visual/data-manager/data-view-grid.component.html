@@ -2,10 +2,12 @@
   skyAgGridDataManager
   [viewConfig]="viewConfig"
 >
-  <ag-grid-angular
-    *ngIf="isActive && gridInitialized"
-    [gridOptions]="gridOptions"
-    [rowData]="displayedItems"
-  >
-  </ag-grid-angular>
+  <sky-ag-grid-wrapper>
+    <ag-grid-angular
+      *ngIf="isActive && gridInitialized"
+      [gridOptions]="gridOptions"
+      [rowData]="displayedItems"
+    >
+    </ag-grid-angular>
+  </sky-ag-grid-wrapper>
 </sky-data-view>

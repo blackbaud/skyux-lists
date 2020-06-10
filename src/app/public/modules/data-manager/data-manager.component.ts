@@ -33,6 +33,7 @@ export class SkyDataManagerComponent implements OnDestroy, OnInit {
 
   @Input()
   public set activeViewId(value: string) {
+    console.log(`update active view ${value}`);
     this.dataManagerService.updateActiveViewId(value);
   }
 

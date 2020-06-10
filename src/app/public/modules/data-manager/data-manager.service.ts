@@ -7,6 +7,10 @@ import {
 } from 'rxjs/BehaviorSubject';
 
 import {
+  ReplaySubject
+} from 'rxjs/ReplaySubject';
+
+import {
   SkyDataManagerConfig,
   SkyDataManagerState,
   SkyDataManagerStateChange,
@@ -26,7 +30,7 @@ import {
 @Injectable()
 export class SkyDataManagerService {
 
-  private readonly activeViewId: BehaviorSubject<string> = new BehaviorSubject<string>(undefined);
+  private readonly activeViewId: ReplaySubject<string> = new ReplaySubject<string>();
 
   private readonly dataManagerConfig = new BehaviorSubject<SkyDataManagerConfig>(undefined);
 
@@ -76,6 +80,7 @@ export class SkyDataManagerService {
   }
 
   public updateActiveViewId(id: string): void {
+    console.log('this is updating');
     this.activeViewId.next(id);
   }
 
@@ -87,6 +92,7 @@ export class SkyDataManagerService {
   }
 
   public registerOrUpdateView(view: SkyDataViewConfig): void {
+    console.log(`registering view ${view.id}`);
     let currentViews: SkyDataViewConfig[] = this.views.value;
     let existingViewIndex = currentViews.findIndex(currentView => currentView.id === view.id);
 
@@ -98,8 +104,9 @@ export class SkyDataManagerService {
 
     this.views.next(currentViews);
 
-    let activeViewId = this.activeViewId.value;
-    this.activeViewId.next(activeViewId);
+    this.activeViewId.take(1).subscribe(id => {
+      this.activeViewId.next(id);
+    });
 
     let dataState = this.getCurrentDataState();
     let currentViewState = dataState.getViewStateById(view.id);
