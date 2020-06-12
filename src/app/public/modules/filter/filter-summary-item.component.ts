@@ -13,24 +13,34 @@ import {
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SkyFilterSummaryItemComponent {
+
+  /**
+   * Indicates whether the filter summary item has a close button.
+   */
   @Input()
   public dismissible = true;
 
+  /**
+   * An event that is emitted when the summary item close button is clicked.
+   */
   @Output()
   public dismiss = new EventEmitter<void>();
 
+  /**
+   * An event that is emitted when the summary item is clicked.
+   */
   @Output()
   public itemClick = new EventEmitter<void>();
 
-  public onItemDismiss() {
+  public onItemDismiss(): void {
     this.dismiss.emit();
   }
 
-  public onItemClick() {
+  public onItemClick(): void {
     this.itemClick.emit();
   }
 
-  public onItemKeypress() {
+  public onItemKeypress(): void {
     this.itemClick.emit();
   }
 }
