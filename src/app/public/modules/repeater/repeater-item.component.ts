@@ -98,7 +98,7 @@ export class SkyRepeaterItemComponent implements OnDestroy, OnInit, AfterViewIni
   }
 
   public get isExpanded(): boolean {
-    return this._isExpanded || true;
+    return this._isExpanded;
   }
 
   /**
@@ -115,7 +115,7 @@ export class SkyRepeaterItemComponent implements OnDestroy, OnInit, AfterViewIni
   }
 
   public get isSelected(): boolean {
-    return this._isSelected || false;
+    return this._isSelected;
   }
 
   /**
@@ -237,9 +237,9 @@ export class SkyRepeaterItemComponent implements OnDestroy, OnInit, AfterViewIni
 
   private _isCollapsible = true;
 
-  private _isExpanded: boolean;
+  private _isExpanded = true;
 
-  private _isSelected: boolean;
+  private _isSelected = false;
 
   constructor(
     private repeaterService: SkyRepeaterService,
