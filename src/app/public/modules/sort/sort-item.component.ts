@@ -39,7 +39,7 @@ export class SkySortItemComponent implements OnInit, OnChanges, OnDestroy {
   public active: boolean;
 
   /**
-   * Emitted when a sort item is clicked.
+   * Fires when a sort item is selected.
    */
   @Output()
   public itemSelect: EventEmitter<any> = new EventEmitter();
