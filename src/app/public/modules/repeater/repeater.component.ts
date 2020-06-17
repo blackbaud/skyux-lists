@@ -41,6 +41,9 @@ import {
 
 let uniqueId = 0;
 
+/**
+ * Creates a container to display repeater items.
+ */
 @Component({
   selector: 'sky-repeater',
   styleUrls: ['./repeater.component.scss'],

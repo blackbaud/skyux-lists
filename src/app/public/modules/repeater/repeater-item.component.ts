@@ -64,7 +64,7 @@ import {
 let nextContentId: number = 0;
 
 /**
- * Creates individual repeater items.
+ * Creates an individual repeater item.
  */
 @Component({
   selector: 'sky-repeater-item',
@@ -76,14 +76,15 @@ export class SkyRepeaterItemComponent implements OnDestroy, OnInit, AfterViewIni
 
   /**
    * Specifies configuration options for the buttons to display on an inline form
-   * within the repeater. This property accepts a `SkyInlineFormConfig` object.
+   * within the repeater. This property accepts
+   * [a `SkyInlineFormConfig` object](https://developer.blackbaud.com/skyux/components/inline-form#skyinlineformconfig-properties).
    */
   @Input()
   public inlineFormConfig: SkyInlineFormConfig;
 
   /**
-   * Specifies a template to use to instantiate an inline form within the repeater.
-   * This property accepts [an Angular TemplateRef class](https://angular.io/api/core/TemplateRef).
+   * Specifies [an Angular `TemplateRef`](https://angular.io/api/core/TemplateRef) to use
+   * as a template to instantiate an inline form within the repeater.
    */
   @Input()
   public inlineFormTemplate: TemplateRef<any>;
@@ -103,7 +104,7 @@ export class SkyRepeaterItemComponent implements OnDestroy, OnInit, AfterViewIni
 
   /**
    * Indicates whether the repeater item's checkbox is selected.
-   * When users select the repeater item, the specified property on your model is updated accordingly. This property accepts boolean values.
+   * When users select the repeater item, the specified property on your model is updated accordingly.
    * @default false
    */
   @Input()
@@ -120,7 +121,7 @@ export class SkyRepeaterItemComponent implements OnDestroy, OnInit, AfterViewIni
 
   /**
    * Indicates whether users can change the order of the repeater item.
-   * The repeater component's reorderable property must also be set to `true`.
+   * The repeater component's `reorderable` property must also be set to `true`.
    */
   @Input()
   public reorderable: boolean = false;
@@ -140,7 +141,8 @@ export class SkyRepeaterItemComponent implements OnDestroy, OnInit, AfterViewIni
 
   /**
    * Specifies an object that the repeater component returns for this repeater item
-   * when the `orderChange` event fires. Required if you set the `reorderable` property to `true`.
+   * when the `orderChange` event fires. This is required
+   * if you set the `reorderable` property to `true`.
    */
   @Input()
   public tag: any;
@@ -159,7 +161,7 @@ export class SkyRepeaterItemComponent implements OnDestroy, OnInit, AfterViewIni
 
   /**
    * Fires when the repeater includes an inline form and users close it. This event emits
-   * [a SkyInlineFormCloseArgs type](https://developer.blackbaud.com/skyux/components/inline-form#skyinlineformcloseargs-properties).
+   * [a `SkyInlineFormCloseArgs` type](https://developer.blackbaud.com/skyux/components/inline-form#skyinlineformcloseargs-properties).
    */
   @Output()
   public inlineFormClose = new EventEmitter<SkyInlineFormCloseArgs>();

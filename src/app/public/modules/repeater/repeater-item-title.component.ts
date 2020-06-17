@@ -3,7 +3,7 @@ import {
 } from '@angular/core';
 
 /**
- * Displays a header inside the repeater items.
+ * Displays a header inside the repeater item.
  */
 @Component({
   selector: 'sky-repeater-item-title',

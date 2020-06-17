@@ -3,7 +3,8 @@ import {
 } from '@angular/core';
 
 /**
- * Wraps and styles a [skyux-dropdown](https://developer.blackbaud.com/skyux-popovers/docs/dropdown) component.
+ * Wraps and styles a
+ * [`skyux-dropdown` component](https://developer.blackbaud.com/skyux-popovers/docs/dropdown).
  */
 @Component({
   selector: 'sky-repeater-item-context-menu',
