@@ -49,7 +49,7 @@ export class SkyInfiniteScrollComponent implements OnDestroy {
   }
 
   /**
-   * Fires when scrolling triggers the need to load more data or when users click the button
+   * Fires when scrolling triggers the need to load more data or when users select the button
    * to load more data. This event only fires when the `enabled` property is set to `true`
    * and data is not already loading.
    */
