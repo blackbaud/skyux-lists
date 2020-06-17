@@ -17,7 +17,7 @@ import {
 export class SkyPagingComponent implements OnChanges {
 
   /**
-   * Specifies the page number of the currently displayed page. Page numbers start at 1 and increment.
+   * Specifies the page number of the current page. Page numbers start at 1 and increment.
    */
   @Input()
   public currentPage: number = 1;
@@ -41,10 +41,10 @@ export class SkyPagingComponent implements OnChanges {
   public pageSize: number = 10;
 
   /**
-   * Specifies a label for the pagination control to support
-   * [accessibility](https://developer.blackbaud.com/skyux/components/paging#accessibility).
-   * The label should be unique and descriptive to help users of assistive technology
-   * differentiate pagination controls when multiple paging components appear on a page.
+   * Specifies a label for the pagination control when an application includes
+   * multiple paging components on the same page. The label should be unique and descriptive
+   * to help users of assistive technology differentiate pagination controls
+   * and understand what each one does.
    * @default Pagination
    */
   @Input()
