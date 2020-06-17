@@ -30,7 +30,7 @@ let nextId = 0;
 export class SkySortComponent {
 
   /**
-   * Indicates whether to display a **Sort** label beside the sort icon on the sort button.
+   * Indicates whether to display a "Sort" label beside the icon on the sort button.
    */
   @Input()
   public showButtonText = false;
