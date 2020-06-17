@@ -43,9 +43,9 @@ export class SkyFilterButtonComponent {
   public ariaExpanded: boolean;
 
   /**
-   * Indicates whether to highlight the filter button to indicate that filters have been applied.
+   * Indicates whether to highlight the filter button to indicate that filters were applied.
    * We recommend setting this property to `true` when no indication of filtering is visible
-   * to users. For example, use this property when the filter summary is not displayed.
+   * to users. For example, set it to `true` if you do not display the filter summary.
    */
   @Input()
   public active = false;
@@ -57,13 +57,13 @@ export class SkyFilterButtonComponent {
   public disabled: boolean = false;
 
   /**
-   * Indicates whether to display text beside the filter icon on the filter button.
+   * Indicates whether to display text, "Filter", beside the filter icon on the filter button.
    */
   @Input()
   public showButtonText = false;
 
   /**
-   * An event that is emitted when the filter button is clicked.
+   * Fires when the filter button is selected.
    */
   @Output()
   public filterButtonClick: EventEmitter<any> = new EventEmitter();

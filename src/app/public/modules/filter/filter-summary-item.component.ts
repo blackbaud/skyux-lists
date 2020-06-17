@@ -6,6 +6,9 @@ import {
   Output
 } from '@angular/core';
 
+/**
+ * Specifies a filter that has been applied.
+ */
 @Component({
   selector: 'sky-filter-summary-item',
   styleUrls: ['./filter-summary-item.component.scss'],
@@ -21,13 +24,13 @@ export class SkyFilterSummaryItemComponent {
   public dismissible = true;
 
   /**
-   * An event that is emitted when the summary item close button is clicked.
+   * Fires when the summary item close button is selected.
    */
   @Output()
   public dismiss = new EventEmitter<void>();
 
   /**
-   * An event that is emitted when the summary item is clicked.
+   * Fires when the summary item is selected.
    */
   @Output()
   public itemClick = new EventEmitter<void>();
