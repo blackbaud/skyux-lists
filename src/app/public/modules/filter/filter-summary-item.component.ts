@@ -7,7 +7,7 @@ import {
 } from '@angular/core';
 
 /**
- * Specifies a filter that has been applied.
+ * Specifies a filter that was applied.
  */
 @Component({
   selector: 'sky-filter-summary-item',
