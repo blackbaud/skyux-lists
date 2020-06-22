@@ -80,7 +80,6 @@ export class SkyDataManagerService {
   }
 
   public updateActiveViewId(id: string): void {
-    console.log('this is updating');
     this.activeViewId.next(id);
   }
 
@@ -92,7 +91,6 @@ export class SkyDataManagerService {
   }
 
   public registerOrUpdateView(view: SkyDataViewConfig): void {
-    console.log(`registering view ${view.id}`);
     let currentViews: SkyDataViewConfig[] = this.views.value;
     let existingViewIndex = currentViews.findIndex(currentView => currentView.id === view.id);
 
