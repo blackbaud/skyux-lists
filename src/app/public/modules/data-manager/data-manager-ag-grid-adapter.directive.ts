@@ -16,7 +16,8 @@ import {
 } from 'ag-grid-angular';
 
 import {
-  ColumnMovedEvent, RowSelectedEvent
+  ColumnMovedEvent,
+  RowSelectedEvent
 } from 'ag-grid-community';
 
 import {
@@ -24,10 +25,16 @@ import {
 } from './data-manager.service';
 
 import {
-  SkyDataViewConfig,
-  SkyDataManagerState,
+  SkyDataViewConfig
+} from './models/data-view-config';
+
+import {
+  SkyDataManagerState
+} from './models/data-manager-state';
+
+import {
   SkyDataManagerSortOption
-} from './models';
+} from './models/data-manager-sort-option';
 
 @Directive({
   selector: '[skyAgGridDataManager]'
@@ -89,7 +96,7 @@ export class SkyAgGridDataManagerAdapterDirective implements AfterContentInit {
 
       this.displayColumns(this.dataManagerSvc.getCurrentDataState());
 
-      this.dataStateSub = this.dataManagerSvc.getDataStateUpdates(this.viewConfig.id).subscribe((dataState) => {
+      this.dataStateSub = this.dataManagerSvc.getDataStateUpdates(this.viewConfig.id).subscribe((dataState: SkyDataManagerState) => {
         this.displayColumns(dataState);
       });
 
@@ -141,7 +148,7 @@ export class SkyAgGridDataManagerAdapterDirective implements AfterContentInit {
         const activeSortColumn = agGrid.columnApi.getColumn(activeSortModel.colId);
         const dataManagerConfig = this.dataManagerSvc.getCurrentDataManagerConfig();
 
-        sortOption = dataManagerConfig.sortOptions.find(option => {
+        sortOption = dataManagerConfig.sortOptions.find((option: SkyDataManagerSortOption) => {
           return option.propertyName === activeSortColumn.getColDef().field &&
             option.descending === (activeSortModel.sort === 'desc');
         });

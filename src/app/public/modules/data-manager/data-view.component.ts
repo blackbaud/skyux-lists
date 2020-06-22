@@ -12,7 +12,7 @@ import {
 
 import {
   SkyDataViewConfig
-} from './models/';
+} from './models/data-view-config';
 
 @Component({
   selector: 'sky-data-view',

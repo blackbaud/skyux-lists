@@ -11,9 +11,11 @@ import {
 
 import {
   Subject
-} from 'rxjs/Subject';
+} from 'rxjs';
 
-import 'rxjs/add/operator/takeWhile';
+import {
+  takeUntil
+} from 'rxjs/operators';
 
 import {
   SkyInfiniteScrollDomAdapterService
@@ -29,9 +31,15 @@ import {
   ]
 })
 export class SkyInfiniteScrollComponent implements OnDestroy {
+
+  /**
+   * Indicates whether to make the infinite scroll component active when more data is available
+   * to load. By default, infinite scroll is inactive and does not call the load function.
+   * @default false
+   */
   @Input()
   public get enabled(): boolean {
-    return this._enabled;
+    return this._enabled || false;
   }
   public set enabled(value: boolean) {
     if (this._enabled !== value) {
@@ -40,13 +48,19 @@ export class SkyInfiniteScrollComponent implements OnDestroy {
     }
   }
 
+  /**
+   * Fires when scrolling triggers the need to load more data or when users select the button
+   * to load more data. This event only fires when the `enabled` property is set to `true`
+   * and data is not already loading.
+   */
   @Output()
   public scrollEnd = new EventEmitter<void>();
 
   public isWaiting = false;
 
   private ngUnsubscribe = new Subject<void>();
-  private _enabled = false;
+
+  private _enabled: boolean;
 
   constructor(
     private changeDetector: ChangeDetectorRef,
@@ -74,22 +88,20 @@ export class SkyInfiniteScrollComponent implements OnDestroy {
     if (this.enabled) {
       // The user has scrolled to the infinite scroll element.
       this.domAdapter.scrollTo(this.elementRef)
-        .takeUntil(this.ngUnsubscribe)
+        .pipe(takeUntil(this.ngUnsubscribe))
         .subscribe(() => {
           if (!this.isWaiting && this.enabled) {
             this.notifyScrollEnd();
           }
-      });
+        });
 
       // New items have been loaded into the parent element.
       this.domAdapter.parentChanges(this.elementRef)
-        .takeUntil(this.ngUnsubscribe)
+        .pipe(takeUntil(this.ngUnsubscribe))
         .subscribe(() => {
-          if (this.isWaiting) {
-            this.isWaiting = false;
-            this.changeDetector.markForCheck();
-          }
-      });
+          this.isWaiting = false;
+          this.changeDetector.markForCheck();
+        });
     } else {
       this.ngUnsubscribe.next();
     }

@@ -10,7 +10,14 @@
     "styles": [
       "src/app/visual-styles.scss",
       "@skyux/theme/css/sky.css",
-      "@skyux/ag-grid/css/sky-ag-grid.css"
+      "@skyux/ag-grid/css/sky-ag-grid.css",
+      "@skyux/docs-tools/css/docs-tools.css"
+    ]
+  },
+  "librarySettings": {
+    "whitelistedNonPeerDependencies": [
+      "dragula",
+      "ng2-dragula"
     ]
   },
   "testSettings": {
@@ -19,6 +26,11 @@
     },
     "unit": {
       "browserSet": "paranoid"
+    }
+  },
+  "host": {
+    "frameOptions": {
+      "none": true
     }
   }
 }

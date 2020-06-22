@@ -27,12 +27,24 @@ import {
 } from '../data-manager-column-picker/data-manager-column-picker-modal.component';
 
 import {
-  SkyDataManagerColumnPickerOption,
-  SkyDataManagerConfig,
-  SkyDataManagerSortOption,
-  SkyDataManagerState,
+  SkyDataManagerColumnPickerOption
+} from '../models/data-manager-column-picker-option';
+
+import {
+  SkyDataManagerConfig
+} from '../models/data-manager-config';
+
+import {
+  SkyDataManagerSortOption
+} from '../models/data-manager-sort-option';
+
+import {
+  SkyDataManagerState
+} from '../models/data-manager-state';
+
+import {
   SkyDataViewConfig
-} from '../models';
+} from '../models/data-view-config';
 
 import {
   SkyDataManagerFilterModalContext

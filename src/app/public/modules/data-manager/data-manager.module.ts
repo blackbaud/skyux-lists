@@ -42,15 +42,15 @@ import {
 
 import {
   SkyFilterModule
-} from '../filter';
+} from '../filter/filter.module';
 
 import {
   SkyRepeaterModule
-} from '../repeater';
+} from '../repeater/repeater.module';
 
 import {
   SkySortModule
-} from '../sort';
+} from '../sort/sort.module';
 
 import {
   SkyDataManagerColumnPickerModalComponent

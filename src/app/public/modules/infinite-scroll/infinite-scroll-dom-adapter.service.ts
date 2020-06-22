@@ -10,20 +10,25 @@ import {
 } from '@skyux/core';
 
 import {
-  Observable
-} from 'rxjs/Observable';
+  fromEvent as observableFromEvent,
+  Observable,
+  Subject
+} from 'rxjs';
 
 import {
-  Subject
-} from 'rxjs/Subject';
+  filter,
+  map,
+  takeUntil
+} from 'rxjs/operators';
 
-import 'rxjs/add/observable/fromEvent';
-
-import 'rxjs/add/operator/filter';
-
+/**
+ * @internal
+ */
 @Injectable()
 export class SkyInfiniteScrollDomAdapterService implements OnDestroy {
+
   private ngUnsubscribe = new Subject<void>();
+
   private observer: MutationObserver;
 
   private _parentChanges = new EventEmitter<void>();
@@ -56,15 +61,17 @@ export class SkyInfiniteScrollDomAdapterService implements OnDestroy {
   public scrollTo(elementRef: ElementRef): Observable<void> {
     const parent = this.findScrollableParent(elementRef.nativeElement);
 
-    return Observable
-      .fromEvent(parent, 'scroll')
-      .takeUntil(this.ngUnsubscribe)
-      .filter(() => {
-        return this.isElementScrolledInView(
-          elementRef.nativeElement,
-          parent
-        );
-    }).map(() => undefined); // Change to void return type
+    return observableFromEvent(parent, 'scroll')
+      .pipe(
+        takeUntil(this.ngUnsubscribe),
+        filter(() => {
+          return this.isElementScrolledInView(
+            elementRef.nativeElement,
+            parent
+          );
+        }),
+        map(() => undefined) // Change to void return type
+      );
   }
 
   private createObserver(element: any): void {

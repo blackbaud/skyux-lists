@@ -8,7 +8,12 @@ import {
 
 import {
   Subject
-} from 'rxjs/Subject';
+} from 'rxjs';
+
+import {
+  take,
+  takeUntil
+} from 'rxjs/operators';
 
 import {
   SkyUIConfigService
@@ -19,10 +24,16 @@ import {
 } from './data-manager.service';
 
 import {
-  SkyDataManagerConfig,
-  SkyDataManagerState,
+  SkyDataManagerConfig
+} from './models/data-manager-config';
+
+import {
+  SkyDataManagerState
+} from './models/data-manager-state';
+
+import {
   SkyDataManagerStateOptions
-} from './models';
+} from './models/data-manager-state-options';
 
 @Component({
   selector: 'sky-data-manager',
@@ -57,7 +68,7 @@ export class SkyDataManagerComponent implements OnDestroy, OnInit {
   public ngOnInit(): void {
     if (this.settingsKey) {
       this.uiConfigService.getConfig(this.settingsKey, this.defaultDataState.getStateOptions())
-        .take(1)
+        .pipe(take(1))
         .subscribe((config: SkyDataManagerStateOptions) => {
           this.dataManagerService.updateDataState(new SkyDataManagerState(config), this._source);
         });
@@ -67,13 +78,13 @@ export class SkyDataManagerComponent implements OnDestroy, OnInit {
 
     if (this.settingsKey) {
       this.dataManagerService.getDataStateUpdates(this._source)
-        .takeUntil(this._ngUnsubscribe)
-        .subscribe(state => {
+        .pipe(takeUntil(this._ngUnsubscribe))
+        .subscribe((state: SkyDataManagerState) => {
           this.uiConfigService.setConfig(
             this.settingsKey,
             state.getStateOptions()
           )
-            .takeUntil(this._ngUnsubscribe)
+            .pipe(takeUntil(this._ngUnsubscribe))
             .subscribe(
               () => { },
               (err) => {

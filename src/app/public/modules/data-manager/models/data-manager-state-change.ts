@@ -1,6 +1,6 @@
 import {
   SkyDataManagerState
-} from '.';
+} from './data-manager-state';
 
 export class SkyDataManagerStateChange {
   public dataState: SkyDataManagerState;

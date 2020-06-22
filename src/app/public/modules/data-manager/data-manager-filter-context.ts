@@ -1,6 +1,6 @@
 import {
   SkyDataManagerFilterData
-} from './models';
+} from './models/data-manager-filter-data';
 
 export class SkyDataManagerFilterModalContext {
   public filterData: SkyDataManagerFilterData;

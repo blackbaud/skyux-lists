@@ -3,24 +3,37 @@ import {
 } from '@angular/core';
 
 import {
-  BehaviorSubject
-} from 'rxjs/BehaviorSubject';
-
-import {
+  BehaviorSubject,
   ReplaySubject
-} from 'rxjs/ReplaySubject';
+} from 'rxjs';
 
 import {
-  SkyDataManagerConfig,
-  SkyDataManagerState,
-  SkyDataManagerStateChange,
-  SkyDataViewConfig,
+  take
+} from 'rxjs/operators';
+
+import {
+  SkyDataManagerConfig
+} from './models/data-manager-config';
+
+import {
+  SkyDataManagerState
+} from './models/data-manager-state';
+
+import {
+  SkyDataManagerStateChange
+} from './models/data-manager-state-change';
+
+import {
+  SkyDataViewConfig
+} from './models/data-view-config';
+
+import {
   SkyDataViewState
-} from './models';
+} from './models/data-view-state';
 
 import {
   Observable
-} from 'rxjs/Observable';
+} from 'rxjs';
 
 import {
   filter,
@@ -102,7 +115,7 @@ export class SkyDataManagerService {
 
     this.views.next(currentViews);
 
-    this.activeViewId.take(1).subscribe(id => {
+    this.activeViewId.pipe(take(1)).subscribe(id => {
       this.activeViewId.next(id);
     });
 

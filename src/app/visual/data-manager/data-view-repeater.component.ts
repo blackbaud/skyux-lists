@@ -10,7 +10,7 @@ import {
   SkyDataManagerState,
   SkyDataViewConfig,
   SkyDataManagerService
-} from '../../public/modules/data-manager/';
+} from '../../public/public_api';
 
 @Component({
   selector: 'data-view-repeater',

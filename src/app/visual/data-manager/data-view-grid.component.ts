@@ -22,7 +22,7 @@ import {
   SkyDataManagerState,
   SkyDataViewConfig,
   SkyDataManagerService
-} from '../../public/modules/data-manager/';
+} from '../../public/public_api';
 
 @Component({
   selector: 'data-view-grid',
@@ -138,8 +138,8 @@ export class DataViewGridComponent implements OnInit {
     let visibleColumns = viewState.displayedColumnIds;
 
     this.columnDefs.sort((col1, col2) => {
-        let col1Index = visibleColumns.findIndex(colId => colId === col1.colId);
-        let col2Index = visibleColumns.findIndex(colId => colId === col2.colId);
+        let col1Index = visibleColumns.findIndex((colId: string) => colId === col1.colId);
+        let col2Index = visibleColumns.findIndex((colId: string) => colId === col2.colId);
 
         if (col1Index === -1) {
           col1.hide = true;

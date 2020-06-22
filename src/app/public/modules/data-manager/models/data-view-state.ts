@@ -1,6 +1,6 @@
 import {
   SkyDataViewStateOptions
-} from '.';
+} from './data-view-state-options';
 
 export class SkyDataViewState {
   public displayedColumnIds: string[] = [];

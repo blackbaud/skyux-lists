@@ -37,15 +37,13 @@ import {
 } from '@skyux/inline-form';
 
 import {
-  SkyInlineDeleteComponent
-} from '@skyux/layout/modules/inline-delete';
-
-import {
-  Observable,
+  forkJoin as observableForkJoin,
   Subject
 } from 'rxjs';
 
-import 'rxjs/add/observable/forkJoin';
+import {
+  takeUntil
+} from 'rxjs/operators';
 
 import {
   SkyRepeaterAdapterService
@@ -65,6 +63,9 @@ import {
 
 let nextContentId: number = 0;
 
+/**
+ * Creates an individual repeater item.
+ */
 @Component({
   selector: 'sky-repeater-item',
   styleUrls: ['./repeater-item.component.scss'],
@@ -73,12 +74,25 @@ let nextContentId: number = 0;
 })
 export class SkyRepeaterItemComponent implements OnDestroy, OnInit, AfterViewInit {
 
+  /**
+   * Specifies configuration options for the buttons to display on an inline form
+   * within the repeater. This property accepts
+   * [a `SkyInlineFormConfig` object](https://developer.blackbaud.com/skyux/components/inline-form#skyinlineformconfig-properties).
+   */
   @Input()
   public inlineFormConfig: SkyInlineFormConfig;
 
+  /**
+   * Specifies [an Angular `TemplateRef`](https://angular.io/api/core/TemplateRef) to use
+   * as a template to instantiate an inline form within the repeater.
+   */
   @Input()
   public inlineFormTemplate: TemplateRef<any>;
 
+  /**
+   * Indicates whether the repeater item is expanded.
+   * @default true
+   */
   @Input()
   public set isExpanded(value: boolean) {
     this.updateForExpanded(value, true);
@@ -88,6 +102,11 @@ export class SkyRepeaterItemComponent implements OnDestroy, OnInit, AfterViewIni
     return this._isExpanded;
   }
 
+  /**
+   * Indicates whether the repeater item's checkbox is selected.
+   * When users select the repeater item, the specified property on your model is updated accordingly.
+   * @default false
+   */
   @Input()
   public set isSelected(value: boolean) {
     if (value !== this._isSelected) {
@@ -100,43 +119,61 @@ export class SkyRepeaterItemComponent implements OnDestroy, OnInit, AfterViewIni
     return this._isSelected;
   }
 
-  @Input()
-  public selectable: boolean = false;
-
+  /**
+   * Indicates whether users can change the order of the repeater item.
+   * The repeater component's `reorderable` property must also be set to `true`.
+   */
   @Input()
   public reorderable: boolean = false;
 
+  /**
+   * Indicates whether to display a checkbox in the left of the repeater item.
+   */
+  @Input()
+  public selectable: boolean = false;
+
+  /**
+   * Indicates whether to display an inline form within the repeater.
+   * Users can toggle between displaying and hiding the inline form.
+   */
   @Input()
   public showInlineForm: boolean = false;
 
+  /**
+   * Specifies an object that the repeater component returns for this repeater item
+   * when the `orderChange` event fires. This is required
+   * if you set the `reorderable` property to `true`.
+   */
+  @Input()
+  public tag: any;
+
+  /**
+   * Fires when users collapse the repeater item.
+   */
   @Output()
   public collapse = new EventEmitter<void>();
 
+  /**
+   * Fires when users expand the repeater item.
+   */
   @Output()
   public expand = new EventEmitter<void>();
 
+  /**
+   * Fires when the repeater includes an inline form and users close it. This event emits
+   * [a `SkyInlineFormCloseArgs` type](https://developer.blackbaud.com/skyux/components/inline-form#skyinlineformcloseargs-properties).
+   */
   @Output()
   public inlineFormClose = new EventEmitter<SkyInlineFormCloseArgs>();
 
+  /**
+   * Fires when users select or clear the checkbox for the repeater item.
+   */
   @Output()
   public isSelectedChange = new EventEmitter<boolean>();
 
-  public set childFocusIndex(value: number) {
-    if (value !== this._childFocusIndex) {
-      this._childFocusIndex = value;
-
-      const focusableChildren = this.adapterService.getFocusableChildren(this.itemRef);
-      if (focusableChildren.length > 0 && value !== undefined) {
-        this.adapterService.focusElement(focusableChildren[value]);
-      } else {
-        this.adapterService.focusElement(this.itemRef);
-      }
-    }
-  }
-
-  public get childFocusIndex(): number {
-    return this._childFocusIndex;
-  }
+  @ContentChild(SkyRepeaterItemContextMenuComponent, { read: ElementRef })
+  public contextMenu: ElementRef;
 
   public contentId: string = `sky-repeater-item-content-${++nextContentId}`;
 
@@ -161,45 +198,44 @@ export class SkyRepeaterItemComponent implements OnDestroy, OnInit, AfterViewIni
     return this._isCollapsible;
   }
 
-  public slideDirection: string;
   public keyboardReorderingEnabled: boolean = false;
+
   public reorderButtonLabel: string;
+
   public reorderState: string;
 
-  public tabIndex: number = -1;
-
-  /**
-   * Specifies an object that the repeater component returns for this repeater item when the `orderChange` event fires.
-   * Required if you set the `reorderable` property to `true`.
-   */
-  @Input()
-  public tag: any;
-
-  @ContentChild(SkyRepeaterItemContextMenuComponent, { read: ElementRef })
-  public contextMenu: ElementRef;
-
-  @ContentChild(SkyInlineDeleteComponent)
-  public inlineDelete: SkyInlineDeleteComponent;
-
-  @ViewChild('skyRepeaterItem', { read: ElementRef })
-  private itemRef: ElementRef;
+  public slideDirection: string;
 
   @ViewChild('grabHandle', { read: ElementRef })
   private grabHandle: ElementRef;
+
+  @ViewChild('itemContentRef', { read: ElementRef })
+  private itemContentRef: ElementRef;
+
+  @ViewChild('itemHeaderRef', { read: ElementRef })
+  private itemHeaderRef: ElementRef;
+
+  @ViewChild('itemRef', { read: ElementRef })
+  private itemRef: ElementRef;
 
   @ContentChildren(SkyRepeaterItemContentComponent)
   private repeaterItemContentComponents: QueryList<SkyRepeaterItemContentComponent>;
 
   private ngUnsubscribe = new Subject<void>();
-  private reorderCancelText: string;
-  private reorderCurrentIndex: number;
-  private reorderFinishText: string;
-  private reorderInstructions: string;
-  private reorderMovedText: string;
-  private reorderStateDescription: string;
-  private reorderSteps: number;
 
-  private _childFocusIndex: number;
+  private reorderCancelText: string;
+
+  private reorderCurrentIndex: number;
+
+  private reorderFinishText: string;
+
+  private reorderInstructions: string;
+
+  private reorderMovedText: string;
+
+  private reorderStateDescription: string;
+
+  private reorderSteps: number;
 
   private _isCollapsible = true;
 
@@ -218,7 +254,7 @@ export class SkyRepeaterItemComponent implements OnDestroy, OnInit, AfterViewIni
     this.slideForExpanded(false);
 
     // tslint:disable-next-line: deprecation
-    Observable.forkJoin(
+    observableForkJoin(
       this.resourceService.getString('skyux_repeater_item_reorder_cancel'),
       this.resourceService.getString('skyux_repeater_item_reorder_finish'),
       this.resourceService.getString('skyux_repeater_item_reorder_instructions'),
@@ -239,7 +275,7 @@ export class SkyRepeaterItemComponent implements OnDestroy, OnInit, AfterViewIni
   public ngOnInit(): void {
     this.repeaterService.registerItem(this);
     this.repeaterService.activeItemChange
-      .takeUntil(this.ngUnsubscribe)
+      .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe((item: SkyRepeaterItemComponent) => {
         const newIsActiveValue = this === item;
         if (newIsActiveValue !== this.isActive) {
@@ -247,25 +283,9 @@ export class SkyRepeaterItemComponent implements OnDestroy, OnInit, AfterViewIni
           this.changeDetector.markForCheck();
         }
     });
-
-    // When service emits a focus change, set the tabIndex and browser focus.
-    this.repeaterService.focusedItemChange
-      .takeUntil(this.ngUnsubscribe)
-      .subscribe((item: SkyRepeaterItemComponent) => {
-        if (this === item) {
-          this.tabIndex = 0;
-
-          if (!this.itemRef.nativeElement.contains(document.activeElement)) {
-            this.adapterService.focusElement(this.itemRef);
-          }
-        } else {
-          this.tabIndex = -1;
-        }
-    });
   }
 
   public ngAfterViewInit(): void {
-    this.adapterService.setTabIndexOfFocusableElements(this.itemRef, -1, true);
     this.hasItemContent = this.repeaterItemContentComponents.length > 0;
     this.updateExpandOnContentChange();
   }
@@ -292,99 +312,13 @@ export class SkyRepeaterItemComponent implements OnDestroy, OnInit, AfterViewIni
     this.updateForExpanded(direction === 'up', true);
   }
 
-  public onContextMenuKeydown(event: KeyboardEvent): void {
-    /*istanbul ignore else */
-    if (event.key) {
-      const reservedKeys = ['enter', ' ', 'arrowdown', 'arrowup'];
-      if (reservedKeys.indexOf(event.key.toLowerCase()) > -1) {
-        event.stopPropagation();
-      }
-    }
-  }
-
-  public onFocus(): void {
-    this.childFocusIndex = undefined;
-  }
-
-  public onItemKeyDown(event: KeyboardEvent): void {
-    /*istanbul ignore else */
-    if (event.key) {
-      switch (event.key.toLowerCase()) {
-        case ' ':
-        case 'enter':
-          // Unlike the arrow keys, space/enter should never execute
-          // unless focused on the parent item element.
-          if (event.target === this.itemRef.nativeElement) {
-            if (this.selectable) {
-              this.isSelected = !this.isSelected;
-            }
-            this.repeaterService.activateItem(this);
-            event.preventDefault();
-          }
-          break;
-
-        case 'arrowup':
-          this.childFocusIndex = undefined;
-          this.repeaterService.focusPreviousListItem(this);
-          event.preventDefault();
-          event.stopPropagation();
-          break;
-
-        case 'arrowdown':
-          this.childFocusIndex = undefined;
-          this.repeaterService.focusNextListItem(this);
-          event.preventDefault();
-          event.stopPropagation();
-          break;
-
-        case 'arrowleft': {
-          // Cycle backwards through interactive child elements.
-          // If user reaches the beginning, focus on parent item.
-          const focusableChildren = this.adapterService.getFocusableChildren(this.itemRef);
-          if (focusableChildren.length > 0) {
-            if (this.childFocusIndex > 0) {
-              this.childFocusIndex--;
-            } else if (this.childFocusIndex === 0) {
-              this.childFocusIndex = undefined;
-            }
-          }
-          event.stopPropagation();
-          event.preventDefault();
-          break;
-        }
-
-        case 'arrowright': {
-          // Cyle forward through interactive child elements.
-          // If user reaches the end, do nothing.
-          const focusableChildren = this.adapterService.getFocusableChildren(this.itemRef);
-          if (focusableChildren.length > 0) {
-            if (this.childFocusIndex < focusableChildren.length - 1) {
-              this.childFocusIndex++;
-            } else if (this.childFocusIndex === undefined) {
-              this.childFocusIndex = 0;
-            }
-          }
-          event.stopPropagation();
-          event.preventDefault();
-          break;
-        }
-
-        /* istanbul ignore next */
-        default:
-          break;
-      }
-    }
-  }
-
   public onRepeaterItemClick(event: MouseEvent): void {
-    if (!this.inlineDelete) {
-      const focusableChildren = this.adapterService.getFocusableChildren(this.itemRef);
-      if (focusableChildren.indexOf(<HTMLElement> event.target) < 0) {
-        this.childFocusIndex = undefined;
-      } else {
-        this.childFocusIndex = focusableChildren.indexOf(<HTMLElement> event.target);
-      }
-      this.repeaterService.focusListItem(this);
+    // Only activate item if clicking on the title, content, or parent item div.
+    // This will avoid accidental activations when clicking inside interactive elements like
+    // the expand/collapse chevron, dropdown, inline-delete, etc...
+    if (event.target === this.itemRef.nativeElement ||
+        this.itemContentRef.nativeElement.contains(event.target) ||
+        this.itemHeaderRef.nativeElement.contains(event.target)) {
       this.repeaterService.activateItem(this);
     }
   }
@@ -487,6 +421,29 @@ export class SkyRepeaterItemComponent implements OnDestroy, OnInit, AfterViewIni
     this.reorderState = undefined;
   }
 
+  public onItemKeyDown(event: KeyboardEvent): void {
+    /*istanbul ignore else */
+    if (event.key) {
+      switch (event.key.toLowerCase()) {
+        case ' ':
+        case 'enter':
+          // Space/enter should never execute unless focused on the parent item element.
+          if (event.target === this.itemRef.nativeElement) {
+            if (this.selectable) {
+              this.isSelected = !this.isSelected;
+            }
+            this.repeaterService.activateItem(this);
+            event.preventDefault();
+          }
+          break;
+
+        /* istanbul ignore next */
+        default:
+          break;
+      }
+    }
+  }
+
   private slideForExpanded(animate: boolean): void {
     this.slideDirection = this.isExpanded ? 'down' : 'up';
   }
@@ -530,7 +487,7 @@ export class SkyRepeaterItemComponent implements OnDestroy, OnInit, AfterViewIni
 
   private updateExpandOnContentChange(): void {
     this.repeaterItemContentComponents.changes
-      .takeUntil(this.ngUnsubscribe)
+      .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(() => {
         this.hasItemContent = this.repeaterItemContentComponents.length > 0;
         this.isCollapsible = this.hasItemContent && this.repeaterService.expandMode !== 'none';

@@ -17,10 +17,16 @@ import {
 } from '../data-manager.service';
 
 import {
-  SkyDataManagerColumnPickerOption,
-  SkyDataManagerState,
+  SkyDataManagerColumnPickerOption
+} from '../models/data-manager-column-picker-option';
+
+import {
+  SkyDataManagerState
+} from '../models/data-manager-state';
+
+import {
   SkyDataViewConfig
-} from '../models';
+} from '../models/data-view-config';
 
 interface Column extends SkyDataManagerColumnPickerOption {
   isSelected: boolean;

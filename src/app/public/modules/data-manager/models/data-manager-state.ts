@@ -1,10 +1,22 @@
 import {
-  SkyDataManagerFilterData,
-  SkyDataManagerStateOptions,
-  SkyDataManagerSortOption,
-  SkyDataViewState,
+  SkyDataManagerFilterData
+} from './data-manager-filter-data';
+
+import {
+  SkyDataManagerStateOptions
+} from './data-manager-state-options';
+
+import {
+  SkyDataManagerSortOption
+} from './data-manager-sort-option';
+
+import {
+  SkyDataViewState
+} from './data-view-state';
+
+import {
   SkyDataViewStateOptions
-} from '.';
+} from './data-view-state-options';
 
 export class SkyDataManagerState {
   public activeSortOption: SkyDataManagerSortOption;

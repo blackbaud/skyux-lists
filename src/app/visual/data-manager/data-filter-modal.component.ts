@@ -9,7 +9,7 @@ import {
 import {
   SkyDataManagerFilterData,
   SkyDataManagerFilterModalContext
-} from '../../public/modules/data-manager';
+} from '../../public/public_api';
 
 @Component({
   selector: 'sky-demo-filter-modal-form',
