@@ -11,8 +11,7 @@ import {
 } from '@angular/common';
 
 import {
-  SkyUIConfigService,
-  SkyViewkeeperModule
+  SkyUIConfigService
 } from '@skyux/core';
 
 import {
@@ -81,9 +80,6 @@ import {
 } from './data-view.component';
 
 @NgModule({
-  providers: [
-    SkyUIConfigService
-  ],
   declarations: [
     SkyDataManagerColumnPickerModalComponent,
     SkyDataManagerComponent,
@@ -105,8 +101,7 @@ import {
     SkyRepeaterModule,
     SkySearchModule,
     SkySortModule,
-    SkyToolbarModule,
-    SkyViewkeeperModule
+    SkyToolbarModule
   ],
   exports: [
     SkyDataManagerColumnPickerModalComponent,
@@ -116,9 +111,12 @@ import {
     SkyDataManagerSectionComponent,
     SkyDataManagerToolbarComponent,
     SkyDataViewComponent
-  ],
+    ],
   entryComponents: [
     SkyDataManagerColumnPickerModalComponent
+  ],
+  providers: [
+    SkyUIConfigService
   ]
 })
 export class SkyDataManagerModule { }

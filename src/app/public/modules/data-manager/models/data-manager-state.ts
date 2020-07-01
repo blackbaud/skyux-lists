@@ -29,17 +29,15 @@ export class SkyDataManagerState {
   public views: SkyDataViewState[] = [];
 
   constructor(data: SkyDataManagerStateOptions) {
-    if (data) {
-      let views = data.views && data.views.map(view => new SkyDataViewState(view));
+    let views = data.views && data.views.map(view => new SkyDataViewState(view));
 
-      this.activeSortOption = data.activeSortOption;
-      this.additionalData = data.additionalData;
-      this.filterData = data.filterData;
-      this.onlyShowSelected = data.onlyShowSelected;
-      this.selectedIds = data.selectedIds;
-      this.searchText = data.searchText;
-      this.views = views || [];
-    }
+    this.activeSortOption = data.activeSortOption;
+    this.additionalData = data.additionalData;
+    this.filterData = data.filterData;
+    this.onlyShowSelected = data.onlyShowSelected;
+    this.selectedIds = data.selectedIds;
+    this.searchText = data.searchText;
+    this.views = views || [];
   }
 
   public getStateOptions(): SkyDataManagerStateOptions {

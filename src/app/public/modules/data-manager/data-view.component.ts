@@ -3,8 +3,17 @@ import {
   ChangeDetectionStrategy,
   Component,
   Input,
+  OnDestroy,
   OnInit
 } from '@angular/core';
+
+import {
+  Subject
+} from 'rxjs';
+
+import {
+  takeUntil
+} from 'rxjs/operators';
 
 import {
   SkyDataManagerService
@@ -19,7 +28,7 @@ import {
   templateUrl: './data-view.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class SkyDataViewComponent implements OnInit {
+export class SkyDataViewComponent implements OnDestroy, OnInit {
 
   @Input()
   public get viewConfig(): SkyDataViewConfig {
@@ -44,6 +53,7 @@ export class SkyDataViewComponent implements OnInit {
   }
 
   private _isActive = false;
+  private _ngUnsubscribe = new Subject();
   private _viewConfig: SkyDataViewConfig;
 
   constructor(
@@ -52,8 +62,15 @@ export class SkyDataViewComponent implements OnInit {
   ) { }
 
   public ngOnInit(): void {
-    this.dataManagerService.getActiveViewIdUpdates().subscribe(activeViewId => {
-      this.isActive = this.viewConfig && this.viewConfig.id === activeViewId;
-    });
+    this.dataManagerService.getActiveViewIdUpdates()
+      .pipe(takeUntil(this._ngUnsubscribe))
+      .subscribe(activeViewId => {
+        this.isActive = this.viewConfig && this.viewConfig.id === activeViewId;
+      });
+  }
+
+  public ngOnDestroy(): void {
+    this._ngUnsubscribe.next();
+    this._ngUnsubscribe.complete();
   }
 }

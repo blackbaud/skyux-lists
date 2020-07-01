@@ -1,8 +1,17 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  OnDestroy,
   OnInit
 } from '@angular/core';
+
+import {
+  Subject
+} from 'rxjs';
+
+import {
+  takeUntil
+} from 'rxjs/operators';
 
 import {
   SkyModalInstance
@@ -38,7 +47,7 @@ interface Column extends SkyDataManagerColumnPickerOption {
   providers: [SkyDataManagerService],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class SkyDataManagerColumnPickerModalComponent implements OnInit {
+export class SkyDataManagerColumnPickerModalComponent implements OnDestroy, OnInit {
   public get dataState(): SkyDataManagerState {
     return this._dataState;
   }
@@ -66,6 +75,7 @@ export class SkyDataManagerColumnPickerModalComponent implements OnInit {
   };
 
   private _dataState: SkyDataManagerState;
+  private _ngUnsubscribe = new Subject();
 
   constructor(
     public context: SkyDataManagerColumnPickerModalContext,
@@ -76,7 +86,9 @@ export class SkyDataManagerColumnPickerModalComponent implements OnInit {
   public ngOnInit(): void {
     this.columnData = this.formatColumnOptions();
 
-    this.dataManagerService.getDataStateUpdates('columnPicker').subscribe(state => {
+    this.dataManagerService.getDataStateUpdates('columnPicker')
+    .pipe(takeUntil(this._ngUnsubscribe))
+    .subscribe(state => {
       this.dataState = state;
     });
   }
@@ -91,8 +103,8 @@ export class SkyDataManagerColumnPickerModalComponent implements OnInit {
 
         for (property in item) {
           if (item.hasOwnProperty(property) && (property === 'label' || property === 'description')) {
-            const propertyText = item[property].toLowerCase();
-            if (propertyText.indexOf(searchText) > -1) {
+            const propertyText = item[property] && item[property].toLowerCase();
+            if (propertyText && propertyText.indexOf(searchText) > -1) {
               return true;
             }
           }
@@ -122,6 +134,11 @@ export class SkyDataManagerColumnPickerModalComponent implements OnInit {
 
   public applyChanges(): void {
     this.instance.save(this.columnData.filter(col => col.isSelected || col.alwaysDisplayed));
+  }
+
+  public ngOnDestroy(): void {
+    this._ngUnsubscribe.next();
+    this._ngUnsubscribe.complete();
   }
 
   private formatColumnOptions(): Column[] {

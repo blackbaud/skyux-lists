@@ -98,7 +98,7 @@ export class SkyDataManagerService {
 
   public getViewById(viewId: string): SkyDataViewConfig {
     const currentViews: SkyDataViewConfig[] = this.views.value;
-    let viewConfig: SkyDataViewConfig = currentViews.find(view => view.id === viewId);
+    const viewConfig: SkyDataViewConfig = currentViews.find(view => view.id === viewId);
 
     return viewConfig;
   }

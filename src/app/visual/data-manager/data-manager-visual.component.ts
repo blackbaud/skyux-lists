@@ -31,14 +31,6 @@ import {
 })
 export class DataManagerVisualComponent {
 
-  // public get activeViewId(): string {
-  //   return this._activeViewId;
-  // }
-
-  // public set activeViewId(value: string) {
-  //   this._activeViewId = value;
-  // }
-
   public dataManagerConfig = {
     filterModalComponent: SkyDataManagerFiltersModalDemoComponent,
     sortOptions: [
@@ -57,7 +49,7 @@ export class DataManagerVisualComponent {
     ]
   };
 
-  public dataState = new SkyDataManagerState({
+  public defaultDataState = new SkyDataManagerState({
     filterData: {
       filtersApplied: true,
       filters: {
@@ -71,6 +63,8 @@ export class DataManagerVisualComponent {
       }
     ]
   });
+
+  public dataState: SkyDataManagerState;
 
   public items: any[] = [
     {
@@ -117,7 +111,7 @@ export class DataManagerVisualComponent {
     }
   ];
 
-  public activeViewId = 'gridView';
+  public activeViewId = 'repeaterView';
 
   constructor(
     private dataManagerService: SkyDataManagerService

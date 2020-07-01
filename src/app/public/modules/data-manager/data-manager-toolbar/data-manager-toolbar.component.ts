@@ -2,8 +2,17 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
+  OnDestroy,
   OnInit
 } from '@angular/core';
+
+import {
+  Subject
+} from 'rxjs';
+
+import {
+  takeUntil
+} from 'rxjs/operators';
 
 import {
   SkyCheckboxChange
@@ -55,7 +64,7 @@ import {
   templateUrl: './data-manager-toolbar.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class SkyDataManagerToolbarComponent implements OnInit {
+export class SkyDataManagerToolbarComponent implements OnDestroy, OnInit {
 
   public get activeSortOptionId(): string {
     const activeSortOption = this.dataState && this.dataState.activeSortOption;
@@ -105,6 +114,7 @@ export class SkyDataManagerToolbarComponent implements OnInit {
   private _activeView: SkyDataViewConfig;
   private _dataManagerConfig: SkyDataManagerConfig;
   private _dataState: SkyDataManagerState;
+  private _ngUnsubscribe = new Subject();
   private _views: SkyDataViewConfig[] = [];
 
   constructor(
@@ -114,26 +124,35 @@ export class SkyDataManagerToolbarComponent implements OnInit {
   ) { }
 
    public ngOnInit(): void {
-    this.dataManagerService.getActiveViewIdUpdates().subscribe(activeViewId => {
-      if (activeViewId) {
-        this.activeView = this.dataManagerService.getViewById(activeViewId);
+    this.dataManagerService.getActiveViewIdUpdates()
+      .pipe(takeUntil(this._ngUnsubscribe))
+      .subscribe(activeViewId => {
+        /* istanbul ignore else */
+        if (activeViewId) {
+          this.activeView = this.dataManagerService.getViewById(activeViewId);
+          this.changeDetector.markForCheck();
+        }
+      });
+
+    this.dataManagerService.getDataViewsUpdates()
+      .pipe(takeUntil(this._ngUnsubscribe))
+      .subscribe(views => {
+        this.views = views;
+      });
+
+    this.dataManagerService.getDataStateUpdates(this._source)
+      .pipe(takeUntil(this._ngUnsubscribe))
+      .subscribe(dataState => {
+        this._dataState = dataState;
+        this.onlyShowSelected = dataState.onlyShowSelected;
         this.changeDetector.markForCheck();
-      }
-    });
+      });
 
-    this.dataManagerService.getDataViewsUpdates().subscribe(views => {
-      this.views = views;
-    });
-
-    this.dataManagerService.getDataStateUpdates(this._source).subscribe(dataState => {
-      this._dataState = dataState;
-      this.onlyShowSelected = dataState.onlyShowSelected;
-      this.changeDetector.markForCheck();
-    });
-
-    this.dataManagerService.getDataManagerConfigUpdates().subscribe(config => {
-      this.dataManagerConfig = config;
-    });
+    this.dataManagerService.getDataManagerConfigUpdates()
+      .pipe(takeUntil(this._ngUnsubscribe))
+      .subscribe(config => {
+        this.dataManagerConfig = config;
+      });
    }
 
    public sortSelected(sortOption: SkyDataManagerSortOption) {
@@ -205,5 +224,10 @@ export class SkyDataManagerToolbarComponent implements OnInit {
   public onOnlyShowSelected(event: SkyCheckboxChange) {
     this.dataState.onlyShowSelected = event.checked;
     this.dataManagerService.updateDataState(this.dataState, this._source);
+  }
+
+  public ngOnDestroy(): void {
+    this._ngUnsubscribe.next();
+    this._ngUnsubscribe.complete();
   }
 }

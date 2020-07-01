@@ -7,12 +7,10 @@ export class SkyDataViewState {
   public viewId: string;
   public additionalData: any;
 
-  constructor(data?: SkyDataViewStateOptions) {
-    if (data) {
-      this.viewId = data.viewId;
-      this.displayedColumnIds = data.displayedColumnIds || [];
-      this.additionalData = data.additionalData;
-    }
+  constructor(data: SkyDataViewStateOptions) {
+    this.viewId = data.viewId;
+    this.displayedColumnIds = data.displayedColumnIds || [];
+    this.additionalData = data.additionalData;
   }
 
   public getViewStateOptions(): SkyDataViewStateOptions {

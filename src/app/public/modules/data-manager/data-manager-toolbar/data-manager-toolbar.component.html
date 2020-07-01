@@ -22,7 +22,7 @@
 
     <sky-toolbar-item *ngIf="activeView?.columnPickerEnabled">
       <button
-        class="sky-btn sky-btn-default"
+        class="sky-btn sky-btn-default sky-col-picker-btn"
         type="button"
         (click)="openColumnPickerModal()"
       >
@@ -77,7 +77,7 @@
   <sky-toolbar-section>
     <sky-toolbar-item>
       <button
-      class="sky-btn sky-btn-link"
+      class="sky-btn sky-btn-link sky-data-manager-select-all-btn"
       type="button"
       (click)="selectAll()"
       >
@@ -86,7 +86,7 @@
     </sky-toolbar-item>
     <sky-toolbar-item>
       <button
-        class="sky-btn sky-btn-link"
+        class="sky-btn sky-btn-link sky-data-manager-clear-all-btn"
         type="button"
         (click)="clearAll()"
       >

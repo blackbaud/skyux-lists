@@ -57,7 +57,7 @@ export class SkyDataManagerComponent implements OnDestroy, OnInit {
   public settingsKey: string;
 
   // the source to provide for data state changes
-  private _source = 'dataManger';
+  private _source = 'dataManager';
   private _ngUnsubscribe = new Subject();
 
   constructor(

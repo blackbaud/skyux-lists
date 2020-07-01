@@ -1,7 +1,12 @@
 import {
   ChangeDetectionStrategy,
-  Component
+  Component,
+  ViewChild
 } from '@angular/core';
+
+import {
+  DataViewRepeaterFixtureComponent
+} from './data-manager-repeater-view.component.fixture';
 
 import {
   SkyDataManagerService,
@@ -9,20 +14,16 @@ import {
 } from '../../../public_api';
 
 @Component({
-  selector: 'data-manager-visual',
-  templateUrl: './data-manager-visual.component.html',
-  providers: [SkyDataManagerService],
+  selector: 'data-manager-fixture',
+  templateUrl: './data-manager.component.fixture.html',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class DataManagerVisualComponent {
+export class DataManagerFixtureComponent {
 
-  // public get activeViewId(): string {
-  //   return this._activeViewId;
-  // }
+  @ViewChild(DataViewRepeaterFixtureComponent)
+  public repeaterView: DataViewRepeaterFixtureComponent;
 
-  // public set activeViewId(value: string) {
-  //   this._activeViewId = value;
-  // }
+  public activeViewId = 'repeaterView';
 
   public dataManagerConfig = {
     sortOptions: [
@@ -41,20 +42,7 @@ export class DataManagerVisualComponent {
     ]
   };
 
-  public dataState = new SkyDataManagerState({
-    filterData: {
-      filtersApplied: true,
-      filters: {
-        hideOrange: true
-      }
-    },
-    views: [
-      {
-        viewId: 'gridView',
-        displayedColumnIds: ['selected', 'name', 'description']
-      }
-    ]
-  });
+  public dataManagerSourceId = 'dataManagerFixture';
 
   public items: any[] = [
     {
@@ -101,12 +89,32 @@ export class DataManagerVisualComponent {
     }
   ];
 
-  public activeViewId = 'gridView';
+  public settingsKey: string = undefined;
+
+  public get dataState(): SkyDataManagerState {
+    return this._dataState;
+  }
+
+  public set dataState(value: SkyDataManagerState) {
+    this._dataState = value;
+    this.dataManagerService.updateDataState(value, this.dataManagerSourceId);
+  }
+
+  private _dataState: SkyDataManagerState = new SkyDataManagerState({
+    filterData: {
+      filtersApplied: true,
+      filters: {
+        hideOrange: true
+      }
+    }
+  });
 
   constructor(
     private dataManagerService: SkyDataManagerService
   ) {
-    this.dataManagerService.getDataStateUpdates('dataManager').subscribe(state => this.dataState = state);
+    this.dataManagerService.getDataStateUpdates(this.dataManagerSourceId).subscribe(state => {
+      this._dataState = state;
+    });
     this.dataManagerService.getActiveViewIdUpdates().subscribe(activeViewId => this.activeViewId = activeViewId);
   }
 
