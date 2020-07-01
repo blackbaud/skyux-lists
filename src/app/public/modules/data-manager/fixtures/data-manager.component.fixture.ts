@@ -118,7 +118,7 @@ export class DataManagerFixtureComponent {
     this.dataManagerService.getActiveViewIdUpdates().subscribe(activeViewId => this.activeViewId = activeViewId);
   }
 
-  public searchSo() {
+  public searchSo(): void {
     this.dataState.searchText = 'so';
     this.dataManagerService.updateDataState(this.dataState, 'dataManager');
   }

@@ -128,7 +128,7 @@ export class SkyDataManagerColumnPickerModalComponent implements OnDestroy, OnIn
     this.instance.cancel();
   }
 
-  public isSelected(id: string) {
+  public isSelected(id: string): boolean {
     return this.context.displayedColumnIds.findIndex(colId => colId === id) !== -1;
   }
 

@@ -38,15 +38,15 @@ class MockModalInstance {
 
   constructor() { }
 
-  public save(result: any) {
+  public save(result: any): void {
     this.saveResult = result;
   }
 
-  public cancel(result: any) {
+  public cancel(result: any): void {
     this.cancelResult = result;
   }
 
-  public close(result: any, reason: string) {
+  public close(result: any, reason: string): void {
     this.closeResult = result;
     this.closeReason = reason;
   }
@@ -55,8 +55,8 @@ class MockModalInstance {
 class MockModalHostService {
   constructor() {}
 
-  public getModalZIndex() {}
-  public onClose() {}
+  public getModalZIndex(): void {}
+  public onClose(): void {}
 
 }
 

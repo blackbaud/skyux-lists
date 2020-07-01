@@ -55,13 +55,13 @@ export class SkyAgGridDataManagerAdapterDirective implements AfterContentInit {
     private changeDetector: ChangeDetectorRef,
     private dataManagerSvc: SkyDataManagerService) { }
 
-  public ngAfterContentInit() {
+  public ngAfterContentInit(): void {
     this.checkForAgGrid();
 
     this.agGridList.changes.subscribe(() => this.checkForAgGrid());
   }
 
-  private checkForAgGrid() {
+  private checkForAgGrid(): void {
     const agGridCount = this.agGridList.length;
 
     if (agGridCount > 1) {
@@ -75,7 +75,7 @@ export class SkyAgGridDataManagerAdapterDirective implements AfterContentInit {
     }
   }
 
-  private unregisterAgGrid() {
+  private unregisterAgGrid(): void {
     this.currentAgGrid = undefined;
 
     if (this.dataStateSub) {
@@ -83,7 +83,7 @@ export class SkyAgGridDataManagerAdapterDirective implements AfterContentInit {
     }
   }
 
-  private registerAgGrid() {
+  private registerAgGrid(): void {
     this.unregisterAgGrid();
 
     const agGrid = this.agGridList.first;

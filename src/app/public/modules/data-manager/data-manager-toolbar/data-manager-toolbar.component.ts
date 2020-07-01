@@ -155,16 +155,16 @@ export class SkyDataManagerToolbarComponent implements OnDestroy, OnInit {
       });
    }
 
-   public sortSelected(sortOption: SkyDataManagerSortOption) {
+   public sortSelected(sortOption: SkyDataManagerSortOption): void {
     this.dataState.activeSortOption = sortOption;
     this.dataManagerService.updateDataState(this.dataState, this._source);
    }
 
-  public onViewChange(viewId: string) {
+  public onViewChange(viewId: string): void {
     this.dataManagerService.updateActiveViewId(viewId);
   }
 
-  public searchApplied(text: string) {
+  public searchApplied(text: string): void {
     this.dataState.searchText = text;
     this.dataManagerService.updateDataState(this.dataState, this._source);
   }
@@ -221,7 +221,7 @@ export class SkyDataManagerToolbarComponent implements OnDestroy, OnInit {
     this.activeView.onClearAllClick();
   }
 
-  public onOnlyShowSelected(event: SkyCheckboxChange) {
+  public onOnlyShowSelected(event: SkyCheckboxChange): void {
     this.dataState.onlyShowSelected = event.checked;
     this.dataManagerService.updateDataState(this.dataState, this._source);
   }

@@ -1,5 +1,6 @@
 import {
-  Injectable
+  Injectable,
+  OnDestroy
 } from '@angular/core';
 
 import {
@@ -41,7 +42,7 @@ import {
 } from 'rxjs/operators';
 
 @Injectable()
-export class SkyDataManagerService {
+export class SkyDataManagerService implements OnDestroy {
 
   private readonly activeViewId: ReplaySubject<string> = new ReplaySubject<string>();
 
@@ -128,5 +129,12 @@ export class SkyDataManagerService {
 
       this.updateDataState(newDataState, 'service');
     }
+  }
+
+  public ngOnDestroy(): void {
+    this.activeViewId.complete();
+    this.dataManagerConfig.complete();
+    this.views.complete();
+    this.dataStateChange.complete();
   }
 }

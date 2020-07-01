@@ -43,7 +43,7 @@ class MockModalService {
   public closeCallback: Function;
 
   constructor() { }
-  public open() {
+  public open(): any {
     return {
       closed: {
         subscribe: (callback: Function) => {
