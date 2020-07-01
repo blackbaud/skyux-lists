@@ -19,12 +19,12 @@ import {
 } from '../fixtures/data-manager.module.fixture';
 
 import {
-  SkyDataManagerColumnPickerModalComponent
-} from './data-manager-column-picker-modal.component';
+  SkyDataManagerColumnPickerComponent
+} from './data-manager-column-picker.component';
 
 import {
-  SkyDataManagerColumnPickerModalContext
-} from './data-manager-column-picker-modal-context';
+  SkyDataManagerColumnPickerContext
+} from './data-manager-column-picker-context';
 
 import {
   SkyDataManagerModule
@@ -66,7 +66,7 @@ class MockModalConfiguration {
   constructor() {}
 }
 
-describe('SkyDataManagerColumnPickerModalComponent', () => {
+describe('SkyDataManagerColumnPickerComponent', () => {
   const column1 = {
     id: '1',
     label: 'Column 1',
@@ -94,13 +94,13 @@ describe('SkyDataManagerColumnPickerModalComponent', () => {
 
   const columns = [ column1, column2, column3, column4 ];
 
-  const modalContext: SkyDataManagerColumnPickerModalContext = {
+  const modalContext: SkyDataManagerColumnPickerContext = {
     columnOptions: columns,
     displayedColumnIds: ['1', '2']
   };
 
-  let dataManagerColumnPickerFixture: ComponentFixture<SkyDataManagerColumnPickerModalComponent>;
-  let dataManagerColumnPickerComponent: SkyDataManagerColumnPickerModalComponent;
+  let dataManagerColumnPickerFixture: ComponentFixture<SkyDataManagerColumnPickerComponent>;
+  let dataManagerColumnPickerComponent: SkyDataManagerColumnPickerComponent;
   let dataManagerColumnPickerElement: HTMLElement;
   let modalInstance: MockModalInstance;
 
@@ -126,13 +126,13 @@ describe('SkyDataManagerColumnPickerModalComponent', () => {
           useValue: modalInstance
         },
         {
-          provide: SkyDataManagerColumnPickerModalContext,
+          provide: SkyDataManagerColumnPickerContext,
           useValue: modalContext
         }
       ]
     });
 
-    dataManagerColumnPickerFixture = TestBed.createComponent(SkyDataManagerColumnPickerModalComponent);
+    dataManagerColumnPickerFixture = TestBed.createComponent(SkyDataManagerColumnPickerComponent);
     dataManagerColumnPickerElement = dataManagerColumnPickerFixture.nativeElement;
     dataManagerColumnPickerComponent = dataManagerColumnPickerFixture.componentInstance;
 

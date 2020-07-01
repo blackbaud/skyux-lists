@@ -28,12 +28,12 @@ import {
 } from '../data-manager.service';
 
 import {
-  SkyDataManagerColumnPickerModalContext
-} from '../data-manager-column-picker/data-manager-column-picker-modal-context';
+  SkyDataManagerColumnPickerContext
+} from '../data-manager-column-picker/data-manager-column-picker-context';
 
 import {
-  SkyDataManagerColumnPickerModalComponent
-} from '../data-manager-column-picker/data-manager-column-picker-modal.component';
+  SkyDataManagerColumnPickerComponent
+} from '../data-manager-column-picker/data-manager-column-picker.component';
 
 import {
   SkyDataManagerColumnPickerOption
@@ -191,17 +191,17 @@ export class SkyDataManagerToolbarComponent implements OnDestroy, OnInit {
     }
   }
 
-  public openColumnPickerModal(): void {
-    const context = new SkyDataManagerColumnPickerModalContext();
+  public openColumnPicker(): void {
+    const context = new SkyDataManagerColumnPickerContext();
     const viewState = this.dataState.getViewStateById(this.activeView.id);
     context.columnOptions = this.activeView && this.activeView.columnOptions;
     context.displayedColumnIds = viewState.displayedColumnIds;
 
     const options: any = {
-      providers: [{ provide: SkyDataManagerColumnPickerModalContext, useValue: context }]
+      providers: [{ provide: SkyDataManagerColumnPickerContext, useValue: context }]
     };
 
-    const modalInstance = this.modalService.open(SkyDataManagerColumnPickerModalComponent, options);
+    const modalInstance = this.modalService.open(SkyDataManagerColumnPickerComponent, options);
 
     modalInstance.closed.subscribe((result: SkyModalCloseArgs) => {
       if (result.reason === 'save') {

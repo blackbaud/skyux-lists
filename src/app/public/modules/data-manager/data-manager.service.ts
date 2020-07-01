@@ -106,7 +106,7 @@ export class SkyDataManagerService implements OnDestroy {
 
   public registerOrUpdateView(view: SkyDataViewConfig): void {
     let currentViews: SkyDataViewConfig[] = this.views.value;
-    let existingViewIndex = currentViews.findIndex(currentView => currentView.id === view.id);
+    const existingViewIndex = currentViews.findIndex(currentView => currentView.id === view.id);
 
     if (existingViewIndex !== -1) {
       currentViews[existingViewIndex] = view;
@@ -120,12 +120,12 @@ export class SkyDataManagerService implements OnDestroy {
       this.activeViewId.next(id);
     });
 
-    let dataState = this.getCurrentDataState();
-    let currentViewState = dataState.getViewStateById(view.id);
+    const dataState = this.getCurrentDataState();
+    const currentViewState = dataState.getViewStateById(view.id);
 
     if (!currentViewState) {
-      let newViewState = new SkyDataViewState({ viewId: view.id });
-      let newDataState = dataState.addOrUpdateView(view.id, newViewState);
+      const newViewState = new SkyDataViewState({ viewId: view.id });
+      const newDataState = dataState.addOrUpdateView(view.id, newViewState);
 
       this.updateDataState(newDataState, 'service');
     }

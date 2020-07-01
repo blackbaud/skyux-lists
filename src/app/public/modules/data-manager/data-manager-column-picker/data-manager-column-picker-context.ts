@@ -2,7 +2,7 @@ import {
   SkyDataManagerColumnPickerOption
 } from '../models/data-manager-column-picker-option';
 
-export class SkyDataManagerColumnPickerModalContext {
+export class SkyDataManagerColumnPickerContext {
   public columnOptions: SkyDataManagerColumnPickerOption[];
   public displayedColumnIds: string[];
 }

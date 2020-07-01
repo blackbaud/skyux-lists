@@ -18,8 +18,8 @@ import {
 } from '@skyux/modals';
 
 import {
-  SkyDataManagerColumnPickerModalContext
-} from './data-manager-column-picker-modal-context';
+  SkyDataManagerColumnPickerContext
+} from './data-manager-column-picker-context';
 
 import {
   SkyDataManagerService
@@ -42,12 +42,12 @@ interface Column extends SkyDataManagerColumnPickerOption {
 }
 
 @Component({
-  selector: 'sky-data-manager-column-picker-modal',
-  templateUrl: './data-manager-column-picker-modal.component.html',
+  selector: 'sky-data-manager-column-picker',
+  templateUrl: './data-manager-column-picker.component.html',
   providers: [SkyDataManagerService],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class SkyDataManagerColumnPickerModalComponent implements OnDestroy, OnInit {
+export class SkyDataManagerColumnPickerComponent implements OnDestroy, OnInit {
   public get dataState(): SkyDataManagerState {
     return this._dataState;
   }
@@ -78,7 +78,7 @@ export class SkyDataManagerColumnPickerModalComponent implements OnDestroy, OnIn
   private _ngUnsubscribe = new Subject();
 
   constructor(
-    public context: SkyDataManagerColumnPickerModalContext,
+    public context: SkyDataManagerColumnPickerContext,
     public dataManagerService: SkyDataManagerService,
     public instance: SkyModalInstance
   ) { }

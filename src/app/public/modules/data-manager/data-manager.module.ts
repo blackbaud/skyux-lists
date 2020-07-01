@@ -52,8 +52,8 @@ import {
 } from '../sort/sort.module';
 
 import {
-  SkyDataManagerColumnPickerModalComponent
-} from './data-manager-column-picker/data-manager-column-picker-modal.component';
+  SkyDataManagerColumnPickerComponent
+} from './data-manager-column-picker/data-manager-column-picker.component';
 
 import {
   SkyDataManagerComponent
@@ -81,7 +81,7 @@ import {
 
 @NgModule({
   declarations: [
-    SkyDataManagerColumnPickerModalComponent,
+    SkyDataManagerColumnPickerComponent,
     SkyDataManagerComponent,
     SkyDataManagerToolbarLeftItemsComponent,
     SkyDataManagerToolbarRightItemsComponent,
@@ -104,7 +104,7 @@ import {
     SkyToolbarModule
   ],
   exports: [
-    SkyDataManagerColumnPickerModalComponent,
+    SkyDataManagerColumnPickerComponent,
     SkyDataManagerComponent,
     SkyDataManagerToolbarLeftItemsComponent,
     SkyDataManagerToolbarRightItemsComponent,
@@ -113,7 +113,7 @@ import {
     SkyDataViewComponent
     ],
   entryComponents: [
-    SkyDataManagerColumnPickerModalComponent
+    SkyDataManagerColumnPickerComponent
   ],
   providers: [
     SkyUIConfigService
