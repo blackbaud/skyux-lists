@@ -68,8 +68,8 @@ import {
 } from './data-manager-right-items/data-manager-right-items.component';
 
 import {
-  SkyDataManagerSectionComponent
-} from './data-manager-section/data-manager-section.component';
+  SkyDataManagerToolbarSectionComponent
+} from './data-manager-toolbar-section/data-manager-toolbar-section.component';
 
 import {
   SkyDataManagerToolbarComponent
@@ -85,7 +85,7 @@ import {
     SkyDataManagerComponent,
     SkyDataManagerLeftItemsComponent,
     SkyDataManagerRightItemsComponent,
-    SkyDataManagerSectionComponent,
+    SkyDataManagerToolbarSectionComponent,
     SkyDataManagerToolbarComponent,
     SkyDataViewComponent
   ],
@@ -108,7 +108,7 @@ import {
     SkyDataManagerComponent,
     SkyDataManagerLeftItemsComponent,
     SkyDataManagerRightItemsComponent,
-    SkyDataManagerSectionComponent,
+    SkyDataManagerToolbarSectionComponent,
     SkyDataManagerToolbarComponent,
     SkyDataViewComponent
     ],
