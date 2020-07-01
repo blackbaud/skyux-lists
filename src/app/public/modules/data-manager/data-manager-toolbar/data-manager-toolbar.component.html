@@ -37,7 +37,7 @@
       </button>
     </sky-toolbar-item>
 
-    <ng-content select="sky-data-manager-left-items"></ng-content>
+    <ng-content select="sky-data-manager-toolbar-left-items"></ng-content>
 
     <sky-toolbar-item *ngIf="activeView?.searchEnabled">
       <sky-search
@@ -51,7 +51,7 @@
     </sky-toolbar-item>
 
     <sky-toolbar-view-actions>
-      <ng-content select="sky-data-manager-right-items"></ng-content>
+      <ng-content select="sky-data-manager-toolbar-right-items"></ng-content>
       <div *ngIf="activeView && views && views.length > 1"
         class="sky-switch-icon-group"
       >

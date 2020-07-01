@@ -60,16 +60,16 @@ import {
 } from './data-manager.component';
 
 import {
-  SkyDataManagerLeftItemsComponent
-} from './data-manager-left-items/data-manager-left-items.component';
+  SkyDataManagerToolbarLeftItemsComponent
+} from './data-manager-toolbar/data-manager-toolbar-left-items/data-manager-toolbar-left-items.component';
 
 import {
-  SkyDataManagerRightItemsComponent
-} from './data-manager-right-items/data-manager-right-items.component';
+  SkyDataManagerToolbarRightItemsComponent
+} from './data-manager-toolbar/data-manager-toolbar-right-items/data-manager-toolbar-right-items.component';
 
 import {
   SkyDataManagerToolbarSectionComponent
-} from './data-manager-toolbar-section/data-manager-toolbar-section.component';
+} from './data-manager-toolbar/data-manager-toolbar-section/data-manager-toolbar-section.component';
 
 import {
   SkyDataManagerToolbarComponent
@@ -83,8 +83,8 @@ import {
   declarations: [
     SkyDataManagerColumnPickerModalComponent,
     SkyDataManagerComponent,
-    SkyDataManagerLeftItemsComponent,
-    SkyDataManagerRightItemsComponent,
+    SkyDataManagerToolbarLeftItemsComponent,
+    SkyDataManagerToolbarRightItemsComponent,
     SkyDataManagerToolbarSectionComponent,
     SkyDataManagerToolbarComponent,
     SkyDataViewComponent
@@ -106,8 +106,8 @@ import {
   exports: [
     SkyDataManagerColumnPickerModalComponent,
     SkyDataManagerComponent,
-    SkyDataManagerLeftItemsComponent,
-    SkyDataManagerRightItemsComponent,
+    SkyDataManagerToolbarLeftItemsComponent,
+    SkyDataManagerToolbarRightItemsComponent,
     SkyDataManagerToolbarSectionComponent,
     SkyDataManagerToolbarComponent,
     SkyDataViewComponent
