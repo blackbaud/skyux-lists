@@ -35,6 +35,10 @@ import {
   SkyDataManagerStateOptions
 } from './models/data-manager-state-options';
 
+/**
+ * The top-level data manager component that can be used to provide inital config and state data and
+ * specify a sticky settings key. The `SkyDataManagerService` should be provided at this level.
+ */
 @Component({
   selector: 'sky-data-manager',
   templateUrl: './data-manager.component.html',
@@ -42,17 +46,32 @@ import {
 })
 export class SkyDataManagerComponent implements OnDestroy, OnInit {
 
+  /**
+   * The ID of the initial active view.
+   * @required
+   */
   @Input()
   public set activeViewId(value: string) {
     this.dataManagerService.updateActiveViewId(value);
   }
 
+  /**
+   * The data manager configuration. See the SkyDataManagerConfig interface.
+   * @required
+   */
   @Input()
   public dataManagerConfig: SkyDataManagerConfig;
 
+  /**
+   * The data state used if no settings key is provided, or if no data state is saved in the SKY UI config service for the user.
+   */
   @Input()
   public defaultDataState: SkyDataManagerState = new SkyDataManagerState({});
 
+  /**
+   * The sticky settings key the current data state for each user is saved under in the SKY UI config service.
+   * @required
+   */
   @Input()
   public settingsKey: string;
 

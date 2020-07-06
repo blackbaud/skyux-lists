@@ -41,6 +41,14 @@ import {
   map
 } from 'rxjs/operators';
 
+/**
+ * The data manager service provides ways for data views, toolbar items, and more to stay up to date
+ * with the active view ID, data manager config, registered views and their configs, and data state.
+ * There are methods to get current values, update values, and get subscriptions to the changing values.<br/> <br/>
+ * This service should be provided component-level for each instance a data manager is used.
+ * It should not be provided at the module level or in `app-extras`. This allows multiple data
+ * managers to be used and self-contained.
+ */
 @Injectable()
 export class SkyDataManagerService implements OnDestroy {
 
@@ -57,18 +65,32 @@ export class SkyDataManagerService implements OnDestroy {
     return this.dataStateChange.value && this.dataStateChange.value.dataState;
   }
 
-  public getDataStateUpdates(source: string): Observable<SkyDataManagerState> {
+  /**
+   * Returns an observable that views and other data manager entities can subscribe to that excludes
+   * updates originating from the provided source. This allows subscribers to only respond to
+   * changes they did not create and helps prevent infinite loops of updates and responses.
+   * @param sourceId The ID of the entity subscribing to data state updates. This can be any value you choose,
+   * but should be unique within the data manager instance and should also be used when that entity updates the state.
+   */
+  public getDataStateUpdates(sourceId: string): Observable<SkyDataManagerState> {
     // filter out events from the provided source and emit just the dataState
     const dataStateObservable = this.dataStateChange.pipe(
-      filter(stateChange => source !== stateChange.source),
+      filter(stateChange => sourceId !== stateChange.source),
       map(stateChange => stateChange.dataState)
     );
     return dataStateObservable;
   }
 
-  public updateDataState(state: SkyDataManagerState, source: string): void {
+  /**
+   * Updates the data state and emits a new value to entities subscribed to data state changes.
+   * @param state The new state value. See the SkyDataManagerState interface.
+   * @param sourceId The ID of the entity updating the state. This can be any value you choose,
+   * but should be unique within the data manager instance and should also be used when that entity
+   * subscribes to state changes via `getDataStateUpdates`.
+   */
+  public updateDataState(state: SkyDataManagerState, sourceId: string): void {
     const dataState = this.dataStateChange as BehaviorSubject<SkyDataManagerStateChange>;
-    const dataStateChange = new SkyDataManagerStateChange(state, source);
+    const dataStateChange = new SkyDataManagerStateChange(state, sourceId);
 
     dataState.next(dataStateChange);
   }

@@ -42,7 +42,7 @@ import {
 export class SkyAgGridDataManagerAdapterDirective implements AfterContentInit {
 
   @Input()
-  public viewConfig: SkyDataViewConfig;
+  private viewConfig: SkyDataViewConfig;
 
   private currentAgGrid: AgGridAngular;
 

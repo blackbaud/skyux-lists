@@ -18,9 +18,11 @@ import {
   SkyDataViewStateOptions
 } from './data-view-state-options';
 
+/**
+ * Does this generate any documentation? REVISIT
+ */
 export class SkyDataManagerState {
   public activeSortOption: SkyDataManagerSortOption;
-  public activeViewId: string;
   public additionalData: any;
   public filterData: SkyDataManagerFilterData;
   public onlyShowSelected: boolean;
@@ -71,7 +73,6 @@ export class SkyDataManagerState {
 
     return new SkyDataManagerState({
       activeSortOption: this.activeSortOption,
-      activeViewId: this.activeViewId,
       additionalData: this.additionalData,
       filterData: this.filterData,
       searchText: this.searchText,

@@ -41,6 +41,9 @@ interface Column extends SkyDataManagerColumnPickerOption {
   isSelected: boolean;
 }
 
+/**
+ * @internal
+ */
 @Component({
   selector: 'sky-data-manager-column-picker',
   templateUrl: './data-manager-column-picker.component.html',

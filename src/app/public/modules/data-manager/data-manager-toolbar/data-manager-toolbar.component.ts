@@ -59,6 +59,11 @@ import {
   SkyDataManagerFilterModalContext
 } from '../data-manager-filter-context';
 
+/**
+ * Renders a `sky-toolbar` with the contents specified via the active view's `SkyDataViewConfig`
+ * and the `SkyDataManagerToolbarLeftItemsComponent`, `SkyDataManagerToolbarRightItemsComponent`,
+ * and `SkyDataManagerToolbarSectionComponent` wrappers.
+ */
 @Component({
   selector: 'sky-data-manager-toolbar',
   templateUrl: './data-manager-toolbar.component.html',
