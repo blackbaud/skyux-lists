@@ -11,7 +11,14 @@
       "src/app/visual-styles.scss",
       "@skyux/ag-grid/css/sky-ag-grid.css",
       "@skyux/docs-tools/css/docs-tools.css"
-    ]
+    ],
+    "theming": {
+      "supportedThemes": [
+        "default",
+        "modern"
+      ],
+      "theme": "default"
+    }
   },
   "librarySettings": {
     "whitelistedNonPeerDependencies": [
