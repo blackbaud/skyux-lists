@@ -5,10 +5,13 @@ import {
 
 import {
   BehaviorSubject,
+  Observable,
   ReplaySubject
 } from 'rxjs';
 
 import {
+  filter,
+  map,
   take
 } from 'rxjs/operators';
 
@@ -32,15 +35,6 @@ import {
   SkyDataViewState
 } from './models/data-view-state';
 
-import {
-  Observable
-} from 'rxjs';
-
-import {
-  filter,
-  map
-} from 'rxjs/operators';
-
 /**
  * The data manager service provides ways for data views, toolbar items, and more to stay up to date
  * with the active view ID, data manager config, registered views and their configs, and data state.
@@ -60,6 +54,13 @@ export class SkyDataManagerService implements OnDestroy {
 
   private readonly dataStateChange =
     new BehaviorSubject<SkyDataManagerStateChange>(new SkyDataManagerStateChange(new SkyDataManagerState({}), 'defaultState'));
+
+  public ngOnDestroy(): void {
+    this.activeViewId.complete();
+    this.dataManagerConfig.complete();
+    this.views.complete();
+    this.dataStateChange.complete();
+  }
 
   public getCurrentDataState(): SkyDataManagerState {
     return this.dataStateChange.value && this.dataStateChange.value.dataState;
@@ -151,12 +152,5 @@ export class SkyDataManagerService implements OnDestroy {
 
       this.updateDataState(newDataState, 'service');
     }
-  }
-
-  public ngOnDestroy(): void {
-    this.activeViewId.complete();
-    this.dataManagerConfig.complete();
-    this.views.complete();
-    this.dataStateChange.complete();
   }
 }

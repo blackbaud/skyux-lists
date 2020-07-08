@@ -1,15 +1,21 @@
 import {
   AfterContentInit,
-  Directive,
   ChangeDetectorRef,
   ContentChildren,
-  QueryList,
-  Input
+  Directive,
+  Input,
+  OnDestroy,
+  QueryList
 } from '@angular/core';
 
 import {
+  Subject,
   Subscription
 } from 'rxjs';
+
+import {
+  takeUntil
+} from 'rxjs/operators';
 
 import {
   AgGridAngular
@@ -39,17 +45,17 @@ import {
 @Directive({
   selector: '[skyAgGridDataManager]'
 })
-export class SkyAgGridDataManagerAdapterDirective implements AfterContentInit {
+export class SkyAgGridDataManagerAdapterDirective implements AfterContentInit, OnDestroy {
 
   @Input()
   private viewConfig: SkyDataViewConfig;
 
-  private currentAgGrid: AgGridAngular;
-
   @ContentChildren(AgGridAngular, { descendants: true })
   public agGridList: QueryList<AgGridAngular>;
 
+  private currentAgGrid: AgGridAngular;
   private dataStateSub: Subscription;
+  private _ngUnsubscribe = new Subject();
 
   constructor(
     private changeDetector: ChangeDetectorRef,
@@ -58,7 +64,14 @@ export class SkyAgGridDataManagerAdapterDirective implements AfterContentInit {
   public ngAfterContentInit(): void {
     this.checkForAgGrid();
 
-    this.agGridList.changes.subscribe(() => this.checkForAgGrid());
+    this.agGridList.changes
+    .pipe(takeUntil(this._ngUnsubscribe))
+    .subscribe(() => this.checkForAgGrid());
+  }
+
+  public ngOnDestroy() {
+    this._ngUnsubscribe.next();
+    this._ngUnsubscribe.complete();
   }
 
   private checkForAgGrid(): void {
@@ -90,20 +103,26 @@ export class SkyAgGridDataManagerAdapterDirective implements AfterContentInit {
 
     this.currentAgGrid = agGrid;
 
-    agGrid.gridReady.subscribe(() => {
+    agGrid.gridReady
+    .pipe(takeUntil(this._ngUnsubscribe))
+    .subscribe(() => {
       this.viewConfig.onSelectAllClick = this.selectAll.bind(this);
       this.viewConfig.onClearAllClick = this.clearAll.bind(this);
 
       this.displayColumns(this.dataManagerSvc.getCurrentDataState());
 
-      this.dataStateSub = this.dataManagerSvc.getDataStateUpdates(this.viewConfig.id).subscribe((dataState: SkyDataManagerState) => {
+      this.dataStateSub = this.dataManagerSvc.getDataStateUpdates(this.viewConfig.id)
+      .pipe(takeUntil(this._ngUnsubscribe))
+      .subscribe((dataState: SkyDataManagerState) => {
         this.displayColumns(dataState);
       });
 
       agGrid.api.sizeColumnsToFit();
     });
 
-    agGrid.columnMoved.subscribe((event: ColumnMovedEvent) => {
+    agGrid.columnMoved
+    .pipe(takeUntil(this._ngUnsubscribe))
+    .subscribe((event: ColumnMovedEvent) => {
       let columnOrder = agGrid.columnApi.getAllDisplayedVirtualColumns().map(
         col => col.getColDef().colId
       );
@@ -121,7 +140,9 @@ export class SkyAgGridDataManagerAdapterDirective implements AfterContentInit {
       }
     });
 
-    agGrid.rowSelected.subscribe((event: RowSelectedEvent) => {
+    agGrid.rowSelected
+    .pipe(takeUntil(this._ngUnsubscribe))
+    .subscribe((event: RowSelectedEvent) => {
       const row = event.node;
       let dataState = this.dataManagerSvc.getCurrentDataState();
       let selectedIds = dataState.selectedIds;
@@ -138,7 +159,9 @@ export class SkyAgGridDataManagerAdapterDirective implements AfterContentInit {
       this.changeDetector.markForCheck();
     });
 
-    agGrid.sortChanged.subscribe(() => {
+    agGrid.sortChanged
+    .pipe(takeUntil(this._ngUnsubscribe))
+    .subscribe(() => {
       const gridSortModel = agGrid.api.getSortModel();
       const dataState = this.dataManagerSvc.getCurrentDataState();
       let sortOption: SkyDataManagerSortOption;

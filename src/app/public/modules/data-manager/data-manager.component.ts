@@ -82,7 +82,7 @@ export class SkyDataManagerComponent implements OnDestroy, OnInit {
   constructor(
     private dataManagerService: SkyDataManagerService,
     private uiConfigService: SkyUIConfigService
-    ) { }
+  ) { }
 
   public ngOnInit(): void {
     if (this.settingsKey) {

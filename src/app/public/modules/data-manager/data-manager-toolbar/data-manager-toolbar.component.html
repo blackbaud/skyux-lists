@@ -14,7 +14,8 @@
         <sky-sort-item
           *ngFor="let item of dataManagerConfig?.sortOptions"
           [active]="activeSortOptionId && activeSortOptionId === item.id"
-          (itemSelect)="sortSelected(item)">
+          (itemSelect)="sortSelected(item)"
+        >
           {{item.label}}
         </sky-sort-item>
       </sky-sort>

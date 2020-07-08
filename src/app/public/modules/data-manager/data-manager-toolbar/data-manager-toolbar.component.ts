@@ -114,8 +114,8 @@ export class SkyDataManagerToolbarComponent implements OnDestroy, OnInit {
 
   public onlyShowSelected: boolean;
 
-    // the source to provide for data state changes
-    private _source = 'toolbar';
+  // the source to provide for data state changes
+  private _source = 'toolbar';
   private _activeView: SkyDataViewConfig;
   private _dataManagerConfig: SkyDataManagerConfig;
   private _dataState: SkyDataManagerState;
@@ -128,7 +128,7 @@ export class SkyDataManagerToolbarComponent implements OnDestroy, OnInit {
     private modalService: SkyModalService
   ) { }
 
-   public ngOnInit(): void {
+  public ngOnInit(): void {
     this.dataManagerService.getActiveViewIdUpdates()
       .pipe(takeUntil(this._ngUnsubscribe))
       .subscribe(activeViewId => {
@@ -158,12 +158,17 @@ export class SkyDataManagerToolbarComponent implements OnDestroy, OnInit {
       .subscribe(config => {
         this.dataManagerConfig = config;
       });
-   }
+  }
 
-   public sortSelected(sortOption: SkyDataManagerSortOption): void {
+  public ngOnDestroy(): void {
+    this._ngUnsubscribe.next();
+    this._ngUnsubscribe.complete();
+  }
+
+  public sortSelected(sortOption: SkyDataManagerSortOption): void {
     this.dataState.activeSortOption = sortOption;
     this.dataManagerService.updateDataState(this.dataState, this._source);
-   }
+  }
 
   public onViewChange(viewId: string): void {
     this.dataManagerService.updateActiveViewId(viewId);
@@ -229,10 +234,5 @@ export class SkyDataManagerToolbarComponent implements OnDestroy, OnInit {
   public onOnlyShowSelected(event: SkyCheckboxChange): void {
     this.dataState.onlyShowSelected = event.checked;
     this.dataManagerService.updateDataState(this.dataState, this._source);
-  }
-
-  public ngOnDestroy(): void {
-    this._ngUnsubscribe.next();
-    this._ngUnsubscribe.complete();
   }
 }

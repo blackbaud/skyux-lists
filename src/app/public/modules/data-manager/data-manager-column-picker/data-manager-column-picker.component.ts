@@ -96,6 +96,11 @@ export class SkyDataManagerColumnPickerComponent implements OnDestroy, OnInit {
     });
   }
 
+  public ngOnDestroy(): void {
+    this._ngUnsubscribe.next();
+    this._ngUnsubscribe.complete();
+  }
+
   public searchColumns(columns: Column[]): Column[] {
     let searchedColumns = columns;
     let searchText = this.dataState && this.dataState.searchText;
@@ -137,11 +142,6 @@ export class SkyDataManagerColumnPickerComponent implements OnDestroy, OnInit {
 
   public applyChanges(): void {
     this.instance.save(this.columnData.filter(col => col.isSelected || col.alwaysDisplayed));
-  }
-
-  public ngOnDestroy(): void {
-    this._ngUnsubscribe.next();
-    this._ngUnsubscribe.complete();
   }
 
   private formatColumnOptions(): Column[] {
