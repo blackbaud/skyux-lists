@@ -9,7 +9,12 @@ import {
 } from '@skyux-sdk/testing';
 
 import {
-  Observable
+  SkyUIConfigService
+} from '@skyux/core';
+
+import {
+  Observable,
+  Subject
 } from 'rxjs';
 
 import {
@@ -31,7 +36,9 @@ import {
 import {
   SkyDataManagerModule,
   SkyDataManagerService,
-  SkyDataManagerState
+  SkyDataManagerConfig,
+  SkyDataManagerState,
+  SkyInitDataManagerArgs
 } from '../../public_api';
 
 describe('SkyDataManagerService', () => {
@@ -39,6 +46,7 @@ describe('SkyDataManagerService', () => {
   let dataManagerComponent: DataManagerFixtureComponent;
   let dataManagerService: SkyDataManagerService;
   let initialDataState: SkyDataManagerState;
+  let uiConfigService: SkyUIConfigService;
 
   const sourceId = 'test';
 
@@ -58,9 +66,111 @@ describe('SkyDataManagerService', () => {
     dataManagerFixture = TestBed.createComponent(DataManagerFixtureComponent);
     dataManagerComponent = dataManagerFixture.componentInstance;
     dataManagerService = TestBed.inject(SkyDataManagerService);
-    initialDataState = dataManagerComponent.dataState;
+    uiConfigService = TestBed.inject(SkyUIConfigService);
 
     dataManagerFixture.detectChanges();
+    initialDataState = dataManagerComponent.dataState;
+  });
+
+  describe('initDataManager', () => {
+    let dataConfig: SkyDataManagerConfig;
+    let activeViewId: string;
+    let initArgs: SkyInitDataManagerArgs;
+
+    beforeEach(() => {
+      dataConfig = { additionalOptions: { data: 'test' } };
+      activeViewId = 'testViewId';
+
+      initArgs = {
+        activeViewId,
+        dataManagerConfig: dataConfig,
+        defaultDataState: initialDataState
+      };
+    });
+
+    it('should set the data manager to initialized and set the activeViewId, config, and state', () => {
+      spyOn(dataManagerService, 'updateActiveViewId');
+      spyOn(dataManagerService, 'updateDataManagerConfig');
+      spyOn(dataManagerService, 'updateDataState');
+      dataManagerService.isInitialized = false;
+
+      expect(dataManagerService.isInitialized).toBeFalse();
+
+      dataManagerService.initDataManager(initArgs);
+
+      expect(dataManagerService.updateActiveViewId).toHaveBeenCalledWith(activeViewId);
+      expect(dataManagerService.updateDataManagerConfig).toHaveBeenCalledWith(dataConfig);
+      expect(dataManagerService.updateDataState).toHaveBeenCalledWith(initialDataState, 'dataManagerServiceInit');
+      expect(dataManagerService.isInitialized).toBeTrue();
+    });
+
+    describe('with settings key provided', () => {
+      const key = 'key';
+      let uiConfigServiceGetObservable: Subject<any>;
+      let uiConfigServiceSetObservable: Subject<any>;
+
+      beforeEach(() => {
+        initArgs.settingsKey = key;
+        uiConfigServiceGetObservable = new Subject<any>();
+        uiConfigServiceSetObservable = new Subject<any>();
+      });
+
+      it('should request a data state from the ui config service', async(() => {
+        spyOn(uiConfigService, 'getConfig').and.returnValue(uiConfigServiceGetObservable);
+
+        dataManagerService.initDataManager(initArgs);
+
+        dataManagerFixture.whenStable().then(() => {
+          expect(uiConfigService.getConfig).toHaveBeenCalledWith(key, initialDataState.getStateOptions());
+        });
+      }));
+
+      it('should update the data state via the data manager service when the ui config service returns a data state', async(() => {
+        spyOn(uiConfigService, 'getConfig').and.returnValue(uiConfigServiceGetObservable);
+        spyOn(dataManagerService, 'updateDataState');
+
+        dataManagerService.initDataManager(initArgs);
+
+        dataManagerFixture.whenStable().then(() => {
+          uiConfigServiceGetObservable.next(initialDataState.getStateOptions());
+          expect(uiConfigService.getConfig).toHaveBeenCalledWith(key, initialDataState.getStateOptions());
+          expect(dataManagerService.updateDataState).toHaveBeenCalledWith(initialDataState, 'dataManagerServiceInit');
+        });
+      }));
+
+      it('should update the ui config service when the data state changes', async(() => {
+        const newDataState = new SkyDataManagerState({ searchText: 'test' });
+        spyOn(uiConfigService, 'getConfig').and.returnValue(uiConfigServiceGetObservable);
+
+        dataManagerService.initDataManager(initArgs);
+
+        dataManagerFixture.whenStable().then(() => {
+          spyOn(uiConfigService, 'setConfig').and.returnValue(uiConfigServiceSetObservable);
+          dataManagerService.updateDataState(newDataState, sourceId);
+
+          uiConfigServiceSetObservable.next('');
+          expect(uiConfigService.setConfig).toHaveBeenCalled();
+        });
+      }));
+
+      it('should log an error when unable to update the ui config service when the data state changes', async(() => {
+        const newDataState = new SkyDataManagerState({ searchText: 'test' });
+        const errorMessage = 'something went wrong';
+        spyOn(uiConfigService, 'getConfig').and.returnValue(uiConfigServiceGetObservable);
+
+        dataManagerService.initDataManager(initArgs);
+
+        dataManagerFixture.whenStable().then(() => {
+          spyOn(uiConfigService, 'setConfig').and.returnValue(uiConfigServiceSetObservable);
+          spyOn(console, 'warn');
+          dataManagerService.updateDataState(newDataState, sourceId);
+
+          uiConfigServiceSetObservable.error(errorMessage);
+          expect(uiConfigService.setConfig).toHaveBeenCalled();
+          expect(console.warn).toHaveBeenCalledWith(errorMessage);
+        });
+      }));
+    });
   });
 
   describe('dataState', () => {
@@ -184,6 +294,22 @@ describe('SkyDataManagerService', () => {
     });
   });
 
+  it('should create a new view config and view state when initDataView is called', async(() => {
+    dataManagerFixture.whenStable().then(() => {
+      const newView = { id: 'newView', name: 'newView' };
+      let viewState = dataManagerService.getCurrentDataState().getViewStateById(newView.id);
+
+      expect(dataManagerService.getViewById(newView.id)).toBeUndefined();
+      expect(viewState).toBeUndefined();
+
+      dataManagerService.initDataView(newView);
+      viewState = dataManagerService.getCurrentDataState().getViewStateById(newView.id);
+
+      expect(dataManagerService.getViewById(newView.id)).toEqual(newView);
+      expect(viewState).toBeDefined();
+    });
+  }));
+
   describe('views', () => {
     it('getViewById should return the SkyDataViewConfig with the given id', async(() => {
       dataManagerFixture.whenStable().then(() => {
@@ -194,15 +320,15 @@ describe('SkyDataManagerService', () => {
     }));
 
     describe('registerOrUpdateView', () => {
-      it('registers a new view config when it is not already registered', async(() => {
+      it('returns undefined when trying to update a view that it is not registered', async(() => {
         dataManagerFixture.whenStable().then(() => {
           const newView = { id: 'newView', name: 'newView' };
 
           expect(dataManagerService.getViewById(newView.id)).toBeUndefined();
 
-          dataManagerService.registerOrUpdateView(newView);
+          dataManagerService.updateViewConfig(newView);
 
-          expect(dataManagerService.getViewById(newView.id)).toEqual(newView);
+          expect(dataManagerService.getViewById(newView.id)).toBeUndefined();
         });
       }));
 
@@ -219,7 +345,7 @@ describe('SkyDataManagerService', () => {
           expect(registeredConfig).toEqual(repeaterViewConfig);
           expect(registeredConfig).not.toEqual(modifiedConfig);
 
-          dataManagerService.registerOrUpdateView(modifiedConfig);
+          dataManagerService.updateViewConfig(modifiedConfig);
           registeredConfig = dataManagerService.getViewById(repeaterViewConfig.id);
 
           expect(registeredConfig).not.toEqual(repeaterViewConfig);

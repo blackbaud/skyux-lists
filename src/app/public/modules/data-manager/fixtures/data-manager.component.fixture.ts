@@ -1,12 +1,17 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  OnInit,
   ViewChild
 } from '@angular/core';
 
 import {
   DataViewRepeaterFixtureComponent
 } from './data-manager-repeater-view.component.fixture';
+
+import {
+  SkyDataManagerComponent
+} from '../data-manager.component';
 
 import {
   SkyDataManagerService,
@@ -18,7 +23,10 @@ import {
   templateUrl: './data-manager.component.fixture.html',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class DataManagerFixtureComponent {
+export class DataManagerFixtureComponent implements OnInit {
+
+  @ViewChild(SkyDataManagerComponent)
+  public dataManagerComponent: SkyDataManagerComponent;
 
   @ViewChild(DataViewRepeaterFixtureComponent)
   public repeaterView: DataViewRepeaterFixtureComponent;
@@ -116,6 +124,14 @@ export class DataManagerFixtureComponent {
       this._dataState = state;
     });
     this.dataManagerService.getActiveViewIdUpdates().subscribe(activeViewId => this.activeViewId = activeViewId);
+  }
+
+  public ngOnInit(): void {
+    this.dataManagerService.initDataManager({
+      activeViewId: this.activeViewId,
+      dataManagerConfig: this.dataManagerConfig,
+      defaultDataState: this.dataState
+    });
   }
 
   public searchSo(): void {

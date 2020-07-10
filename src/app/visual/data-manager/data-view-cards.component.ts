@@ -42,6 +42,8 @@ export class DataViewCardsComponent implements OnInit {
   public ngOnInit(): void {
     this.displayedItems = this.items;
 
+    this.dataManagerService.initDataView(this.viewConfig);
+
     this.dataManagerService.getDataStateUpdates(this.viewId).subscribe(state => {
       this.dataState = state;
       this.displayedItems = this.sortItems(this.filterItems(this.searchItems(this.items)));

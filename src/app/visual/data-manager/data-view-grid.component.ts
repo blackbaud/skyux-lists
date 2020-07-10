@@ -104,6 +104,9 @@ export class DataViewGridComponent implements OnInit {
 
   public ngOnInit(): void {
     this.displayedItems = this.items;
+
+    this.dataManagerService.initDataView(this.viewConfig);
+
     this.gridOptions = this.agGridService.getGridOptions(
       {
         gridOptions: {

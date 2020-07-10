@@ -4,14 +4,12 @@
     {{'skyux_data_manager_column_picker_title' | skyLibResources}}
   </sky-modal-header>
   <sky-modal-content>
-    <sky-data-manager
-      activeViewId="columnPicker"
-    >
+    <sky-data-manager>
       <sky-data-manager-toolbar>
       </sky-data-manager-toolbar>
 
       <sky-data-view
-      [viewConfig]="viewConfig"
+      [viewId]="viewConfig.id"
       >
         <sky-repeater
           expandMode="none"

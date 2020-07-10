@@ -48,13 +48,14 @@ import {
 export class SkyAgGridDataManagerAdapterDirective implements AfterContentInit, OnDestroy {
 
   @Input()
-  private viewConfig: SkyDataViewConfig;
+  private viewId: string;
 
   @ContentChildren(AgGridAngular, { descendants: true })
   public agGridList: QueryList<AgGridAngular>;
 
   private currentAgGrid: AgGridAngular;
   private dataStateSub: Subscription;
+  private viewConfig: SkyDataViewConfig;
   private _ngUnsubscribe = new Subject();
 
   constructor(
@@ -62,6 +63,7 @@ export class SkyAgGridDataManagerAdapterDirective implements AfterContentInit, O
     private dataManagerSvc: SkyDataManagerService) { }
 
   public ngAfterContentInit(): void {
+    this.viewConfig = this.dataManagerSvc.getViewById(this.viewId);
     this.checkForAgGrid();
 
     this.agGridList.changes

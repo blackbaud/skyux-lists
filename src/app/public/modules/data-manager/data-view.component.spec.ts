@@ -48,13 +48,13 @@ describe('SkyDataViewComponent', () => {
   });
 
   it('should register its config with the data manager service on initialization', fakeAsync(() => {
-    spyOn(dataManagerService, 'registerOrUpdateView');
+    spyOn(dataManagerService, 'initDataView');
 
     dataViewFixture.detectChanges();
     tick();
     dataViewFixture.detectChanges();
 
-    expect(dataManagerService.registerOrUpdateView).toHaveBeenCalledWith(dataViewComponent.viewConfig);
+    expect(dataManagerService.initDataView).toHaveBeenCalledWith(dataViewComponent.viewConfig);
   }));
 
   it('should update its isActive property to true when the data manager service updates the activeViewId to the view\'s id', () => {

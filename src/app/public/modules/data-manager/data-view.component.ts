@@ -19,9 +19,9 @@ import {
   SkyDataManagerService
 } from './data-manager.service';
 
-import {
-  SkyDataViewConfig
-} from './models/data-view-config';
+// import {
+//   SkyDataViewConfig
+// } from './models/data-view-config';
 
 /**
  * A data view is rendered within a data manager component.
@@ -39,17 +39,20 @@ export class SkyDataViewComponent implements OnDestroy, OnInit {
    * The configuration for the view. See the `SkyDataViewConfig` interface.
    * @required
    */
-  @Input()
-  public get viewConfig(): SkyDataViewConfig {
-    return this._viewConfig;
-  }
+  // @Input()
+  // public get viewConfig(): SkyDataViewConfig {
+  //   return this._viewConfig;
+  // }
 
-  public set viewConfig(config: SkyDataViewConfig) {
-    this._viewConfig = config;
-    setTimeout(() => {
-      this.dataManagerService.registerOrUpdateView(this.viewConfig);
-    });
-  }
+  @Input()
+  public viewId: string;
+
+  // public set viewConfig(config: SkyDataViewConfig) {
+  //   this._viewConfig = config;
+  //   setTimeout(() => {
+  //     this.dataManagerService.registerOrUpdateView(this.viewConfig);
+  //   });
+  // }
 
   public get isActive(): boolean {
     return this._isActive;
@@ -62,7 +65,7 @@ export class SkyDataViewComponent implements OnDestroy, OnInit {
 
   public _isActive = false;
   private _ngUnsubscribe = new Subject();
-  private _viewConfig: SkyDataViewConfig;
+  // private _viewConfig: SkyDataViewConfig;
 
   constructor(
     private changeDetector: ChangeDetectorRef,
@@ -73,7 +76,7 @@ export class SkyDataViewComponent implements OnDestroy, OnInit {
     this.dataManagerService.getActiveViewIdUpdates()
       .pipe(takeUntil(this._ngUnsubscribe))
       .subscribe(activeViewId => {
-        this.isActive = this.viewConfig && this.viewConfig.id === activeViewId;
+        this.isActive = this.viewId === activeViewId;
       });
   }
 

@@ -6,6 +6,7 @@ export * from './modules/data-manager/models/data-manager-filter-data';
 export * from './modules/data-manager/models/data-manager-state';
 export * from './modules/data-manager/models/data-view-config';
 export * from './modules/data-manager/models/data-view-state';
+export * from './modules/data-manager/models/init-data-manager-args';
 
 export * from './modules/filter/filter.module';
 

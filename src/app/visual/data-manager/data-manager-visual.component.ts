@@ -1,6 +1,7 @@
 import {
   ChangeDetectionStrategy,
-  Component
+  Component,
+  OnInit
 } from '@angular/core';
 
 import {
@@ -29,7 +30,7 @@ import {
   }],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class DataManagerVisualComponent {
+export class DataManagerVisualComponent implements OnInit {
 
   public dataManagerConfig = {
     filterModalComponent: SkyDataManagerFiltersModalDemoComponent,
@@ -112,12 +113,24 @@ export class DataManagerVisualComponent {
   ];
 
   public activeViewId = 'repeaterView';
+  public settingsKey = 'test';
 
   constructor(
     private dataManagerService: SkyDataManagerService
   ) {
     this.dataManagerService.getDataStateUpdates('dataManager').subscribe(state => this.dataState = state);
     this.dataManagerService.getActiveViewIdUpdates().subscribe(activeViewId => this.activeViewId = activeViewId);
+  }
+
+  public ngOnInit(): void {
+    this.dataManagerService.initDataManager(
+      {
+        activeViewId: this.activeViewId,
+        dataManagerConfig: this.dataManagerConfig,
+        defaultDataState: this.defaultDataState,
+        settingsKey: this.settingsKey
+      }
+    );
   }
 
   public searchSo() {

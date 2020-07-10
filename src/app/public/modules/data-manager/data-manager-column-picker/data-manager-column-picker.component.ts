@@ -77,7 +77,7 @@ export class SkyDataManagerColumnPickerComponent implements OnDestroy, OnInit {
     onClearAllClick: this.clearAll.bind(this)
   };
 
-  private _dataState: SkyDataManagerState;
+  private _dataState = new SkyDataManagerState({});
   private _ngUnsubscribe = new Subject();
 
   constructor(
@@ -87,6 +87,13 @@ export class SkyDataManagerColumnPickerComponent implements OnDestroy, OnInit {
   ) { }
 
   public ngOnInit(): void {
+    this.dataManagerService.initDataManager({
+      activeViewId: this.viewConfig.id,
+      dataManagerConfig: {},
+      defaultDataState: this.dataState
+    });
+    this.dataManagerService.initDataView(this.viewConfig);
+
     this.columnData = this.formatColumnOptions();
 
     this.dataManagerService.getDataStateUpdates('columnPicker')

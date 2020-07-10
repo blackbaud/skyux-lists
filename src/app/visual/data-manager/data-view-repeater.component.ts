@@ -44,6 +44,8 @@ export class DataViewRepeaterComponent implements OnInit {
   public ngOnInit(): void {
     this.displayedItems = this.items;
 
+    this.dataManagerService.initDataView(this.viewConfig);
+
     this.dataManagerService.getDataStateUpdates(this.viewId).subscribe(state => {
       this.dataState = state;
       this.updateData();

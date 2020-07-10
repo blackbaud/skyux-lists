@@ -1,5 +1,5 @@
 <sky-data-view
-  [viewConfig]="viewConfig"
+  [viewId]="viewConfig.id"
 >
   <sky-repeater *ngIf="isActive" expandMode="none">
     <sky-repeater-item *ngFor="let item of displayedItems"
