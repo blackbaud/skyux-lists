@@ -60,6 +60,9 @@ import {
 @Injectable()
 export class SkyDataManagerService implements OnDestroy {
 
+  /**
+   * Indicates if the data manager has been initialized with configs and state.
+   */
   public isInitialized = false;
 
   private readonly activeViewId: ReplaySubject<string> = new ReplaySubject<string>();
@@ -87,6 +90,13 @@ export class SkyDataManagerService implements OnDestroy {
     this._ngUnsubscribe.complete();
   }
 
+  /**
+   * Initializes the data manager with the given settings and sets `isInitialized` to true.
+   * This must be called for the data manager to render.
+   * @param args The initial active view ID, data manager config, and state to use for the data manager.
+   * If a settings key is provided, it will check for a saved data state in the SKY UI config service before using the default data state
+   * and save any state changes to the service.
+   */
   public initDataManager(args: SkyInitDataManagerArgs): void {
     const defaultDataState = args.defaultDataState;
     const settingsKey = args.settingsKey;
@@ -126,6 +136,10 @@ export class SkyDataManagerService implements OnDestroy {
     this.isInitialized = true;
   }
 
+  /**
+   * Initializes a view within the data manager. This must be called for each view for the views to appear within the data manager.
+   * @param viewConfig The SkyDataViewConfig settings for the view being registered.
+   */
   public initDataView(viewConfig: SkyDataViewConfig): void {
     let currentViews: SkyDataViewConfig[] = this.views.value;
 
@@ -150,13 +164,16 @@ export class SkyDataManagerService implements OnDestroy {
     }
   }
 
+  /**
+   * Returns the current SkyDataManagerState.
+   */
   public getCurrentDataState(): SkyDataManagerState {
     return this.dataStateChange.value && this.dataStateChange.value.dataState;
   }
 
   /**
-   * Returns an observable that views and other data manager entities can subscribe to that excludes
-   * updates originating from the provided source. This allows subscribers to only respond to
+   * Returns an observable of data state changes that views and other data manager entities can subscribe to.
+   * It excludes updates originating from the provided source. This allows subscribers to only respond to
    * changes they did not create and helps prevent infinite loops of updates and responses.
    * @param sourceId The ID of the entity subscribing to data state updates. This can be any value you choose,
    * but should be unique within the data manager instance and should also be used when that entity updates the state.
@@ -172,7 +189,7 @@ export class SkyDataManagerService implements OnDestroy {
 
   /**
    * Updates the data state and emits a new value to entities subscribed to data state changes.
-   * @param state The new state value. See the SkyDataManagerState interface.
+   * @param state The new SkyDataManagerState value.
    * @param sourceId The ID of the entity updating the state. This can be any value you choose,
    * but should be unique within the data manager instance and should also be used when that entity
    * subscribes to state changes via `getDataStateUpdates`.
@@ -184,30 +201,54 @@ export class SkyDataManagerService implements OnDestroy {
     dataState.next(dataStateChange);
   }
 
+  /**
+   * Returns the current SkyDataManagerConfig.
+   */
   public getCurrentDataManagerConfig(): SkyDataManagerConfig {
     return this.dataManagerConfig.value;
   }
 
+  /**
+   * Returns an observable of data manager config changes that views and other data manager entities can subscribe to.
+   */
   public getDataManagerConfigUpdates(): Observable<SkyDataManagerConfig> {
     return this.dataManagerConfig;
   }
 
+  /**
+   * Updates the data manager config and emits a new value to entities subscribed to data config changes.
+   * @param value The new SkyDataManagerConfig value.
+   */
   public updateDataManagerConfig(value: SkyDataManagerConfig): void {
     this.dataManagerConfig.next(value);
   }
 
+  /**
+   * Returns an observable of data view config changes that views and other data manager entities can subscribe to.
+   */
   public getDataViewsUpdates(): Observable<SkyDataViewConfig[]> {
     return this.views;
   }
 
+  /**
+   * Returns an observable of the active view ID that views and other data manager entities can subscribe to.
+   */
   public getActiveViewIdUpdates(): Observable<string> {
     return this.activeViewId;
   }
 
+  /**
+   * Updates the active view ID. The data manager will change the displayed view.
+   * @param id The new active view ID.
+   */
   public updateActiveViewId(id: string): void {
     this.activeViewId.next(id);
   }
 
+  /**
+   * Returns the SkyDataViewConfig for the given view ID.
+   * @param viewId The ID of the view config to get.
+   */
   public getViewById(viewId: string): SkyDataViewConfig {
     const currentViews: SkyDataViewConfig[] = this.views.value;
     const viewConfig: SkyDataViewConfig = currentViews.find(view => view.id === viewId);
@@ -215,6 +256,10 @@ export class SkyDataManagerService implements OnDestroy {
     return viewConfig;
   }
 
+  /**
+   *
+   * @param view
+   */
   public updateViewConfig(view: SkyDataViewConfig): void {
     let currentViews: SkyDataViewConfig[] = this.views.value;
     const existingViewIndex = currentViews.findIndex(currentView => currentView.id === view.id);
