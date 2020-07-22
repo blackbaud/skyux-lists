@@ -10,14 +10,14 @@ import {
   SkyDataManagerState,
   SkyDataViewConfig,
   SkyDataManagerService
-} from '../../../../../public/public_api';
+} from '../../public/public_api';
 
 @Component({
-  selector: 'data-view-repeater-code-example',
+  selector: 'data-view-repeater-demo',
   templateUrl: './data-view-repeater.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class DataViewRepeaterCodeExampleComponent implements OnInit {
+export class DataViewRepeaterDemoComponent implements OnInit {
   @Input()
   public items: any[];
 

@@ -9,13 +9,13 @@ import {
 import {
   SkyDataManagerFilterData,
   SkyDataManagerFilterModalContext
-} from '../../../../../public/public_api';
+} from '../../public/public_api';
 
 @Component({
   selector: 'sky-demo-filter-modal-form',
   templateUrl: './data-filter-modal.component.html'
 })
-export class SkyDataManagerFiltersModalCodeExampleComponent {
+export class SkyDataManagerFiltersModalDemoComponent {
 
   public fruitType: string;
 

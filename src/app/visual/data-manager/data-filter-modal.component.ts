@@ -15,7 +15,7 @@ import {
   selector: 'sky-demo-filter-modal-form',
   templateUrl: './data-filter-modal.component.html'
 })
-export class SkyDataManagerFiltersModalDemoComponent {
+export class SkyDataManagerFiltersModalVisualComponent {
 
   public fruitType: string;
 

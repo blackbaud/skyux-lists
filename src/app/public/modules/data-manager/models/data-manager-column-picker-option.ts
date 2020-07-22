@@ -3,8 +3,8 @@
  */
 export interface SkyDataManagerColumnPickerOption {
   /**
-   * Indicates that a column is always visible and should not be listed as an option in the column picker,
-   * for example a context menu column.
+   * Indicates that a column is always visible and should not be listed as an option in the column picker
+   * but should be included in the grid, for example a context menu column.
    */
   alwaysDisplayed?: boolean;
   /**

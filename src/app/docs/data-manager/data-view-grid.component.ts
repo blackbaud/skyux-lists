@@ -22,14 +22,14 @@ import {
   SkyDataManagerState,
   SkyDataViewConfig,
   SkyDataManagerService
-} from '../../../../../public/public_api';
+} from '../../public/public_api';
 
 @Component({
-  selector: 'data-view-grid-code-example',
+  selector: 'data-view-grid-demo',
   templateUrl: './data-view-grid.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class DataViewGridCodeExampleComponent implements OnInit {
+export class DataViewGridDemoComponent implements OnInit {
 
   @Input()
   public items: any[];

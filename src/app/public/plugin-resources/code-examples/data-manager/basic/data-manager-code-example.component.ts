@@ -9,31 +9,26 @@ import {
 } from '@skyux/core';
 
 import {
-  LocalStorageConfigService
-} from './local-storage-config.service';
-
-import {
-  SkyDataManagerFiltersModalVisualComponent
+  SkyDataManagerFiltersModalCodeExampleComponent
 } from './data-filter-modal.component';
 
 import {
   SkyDataManagerService,
   SkyDataManagerState
-} from '../../public/public_api';
+} from '../../../../public_api';
 
 @Component({
-  selector: 'data-manager-visual',
-  templateUrl: './data-manager-visual.component.html',
+  selector: 'data-manager-code-example',
+  templateUrl: './data-manager-code-example.component.html',
   providers: [SkyDataManagerService, {
-    provide: SkyUIConfigService,
-    useClass: LocalStorageConfigService
+    provide: SkyUIConfigService
   }],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class DataManagerVisualComponent implements OnInit {
+export class DataManagerCodeExampleComponent implements OnInit {
 
   public dataManagerConfig = {
-    filterModalComponent: SkyDataManagerFiltersModalVisualComponent,
+    filterModalComponent: SkyDataManagerFiltersModalCodeExampleComponent,
     sortOptions: [
       {
         id: 'az',
@@ -113,7 +108,6 @@ export class DataManagerVisualComponent implements OnInit {
   ];
 
   public activeViewId = 'repeaterView';
-  public settingsKey = 'test';
 
   constructor(
     private dataManagerService: SkyDataManagerService
@@ -127,8 +121,7 @@ export class DataManagerVisualComponent implements OnInit {
       {
         activeViewId: this.activeViewId,
         dataManagerConfig: this.dataManagerConfig,
-        defaultDataState: this.defaultDataState,
-        settingsKey: this.settingsKey
+        defaultDataState: this.defaultDataState
       }
     );
   }

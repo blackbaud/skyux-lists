@@ -37,6 +37,9 @@ import {
   SkyDataViewConfig
 } from '../models/data-view-config';
 
+/**
+ * @internal
+ */
 interface Column extends SkyDataManagerColumnPickerOption {
   isSelected: boolean;
 }

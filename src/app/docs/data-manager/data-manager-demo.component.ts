@@ -15,7 +15,7 @@ import {
 import {
   SkyDataManagerService,
   SkyDataManagerState
-} from '../../../../public_api';
+} from '../../public/public_api';
 
 @Component({
   selector: 'data-manager-demo',

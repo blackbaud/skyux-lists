@@ -18,9 +18,6 @@ import {
   SkyDataViewStateOptions
 } from './data-view-state-options';
 
-/**
- * Does this generate any documentation? REVISIT
- */
 export class SkyDataManagerState {
   public activeSortOption: SkyDataManagerSortOption;
   public additionalData: any;

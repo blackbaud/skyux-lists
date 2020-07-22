@@ -257,8 +257,9 @@ export class SkyDataManagerService implements OnDestroy {
   }
 
   /**
-   *
-   * @param view
+   * Update the given view config. The registered view with the same ID is updated to the provided config,
+   * so all properties (changed or unchanged) should be included. If the view has not been initialized already no update will happen.
+   * @param view The new SkyDataViewConfig containing all properties.
    */
   public updateViewConfig(view: SkyDataViewConfig): void {
     let currentViews: SkyDataViewConfig[] = this.views.value;

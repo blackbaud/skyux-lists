@@ -10,14 +10,14 @@ import {
   SkyDataManagerState,
   SkyDataViewConfig,
   SkyDataManagerService
-} from '../../../../../public/public_api';
+} from '../../public/public_api';
 
 @Component({
-  selector: 'data-view-cards-code-example',
+  selector: 'data-view-cards-demo',
   templateUrl: './data-view-cards.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class DataViewCardsCodeExampleComponent implements OnInit {
+export class DataViewCardsDemoComponent implements OnInit {
   @Input()
   public items: any[];
 

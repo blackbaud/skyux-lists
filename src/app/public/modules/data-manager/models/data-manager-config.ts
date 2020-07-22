@@ -2,6 +2,10 @@ import {
   SkyDataManagerSortOption
 } from './data-manager-sort-option';
 
+/**
+ * The data manager config contains settings that apply to the data manager across all views, like
+ * the sort and filter settings.
+ */
 export interface SkyDataManagerConfig {
   /**
    * An untyped property that can be used to keep track of any config information relevant to a
