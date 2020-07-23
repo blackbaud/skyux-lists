@@ -2,7 +2,10 @@ import {
   SkyUIConfigService
 } from '@skyux/core';
 
-import { Observable, of } from 'rxjs';
+import {
+  Observable,
+  of
+} from 'rxjs';
 
 const SETTINGS_KEY_PREFIX = 'data-manager-test-';
 

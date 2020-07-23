@@ -3,6 +3,19 @@ import {
 } from '@angular/core';
 
 import {
+  AgGridModule
+} from 'ag-grid-angular';
+
+import {
+  SkyAgGridModule
+} from '@skyux/ag-grid';
+
+import {
+  SkyCardModule,
+  SkyToolbarModule
+} from '@skyux/layout';
+
+import {
   SkyModalModule
 } from '@skyux/modals';
 
@@ -14,13 +27,24 @@ import {
   SkyDataManagerFiltersModalCodeExampleComponent
 } from './data-filter-modal.component';
 
+import {
+  SkyDataManagerModule,
+  SkyRepeaterModule
+} from '../../../../public_api';
+
 @NgModule({
   declarations: [
     DataManagerCodeExampleComponent,
     SkyDataManagerFiltersModalCodeExampleComponent
   ],
   imports: [
-    SkyModalModule
+    AgGridModule,
+    SkyAgGridModule,
+    SkyCardModule,
+    SkyDataManagerModule,
+    SkyModalModule,
+    SkyRepeaterModule,
+    SkyToolbarModule
   ],
   exports: [
     DataManagerCodeExampleComponent

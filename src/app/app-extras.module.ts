@@ -56,10 +56,6 @@ import {
 } from './public/public_api';
 
 import {
-  SkyAgGridDataManagerAdapterDirective
-} from './public/modules/data-manager/data-manager-ag-grid-adapter.directive';
-
-import {
   SkyDataManagerFiltersModalDemoComponent
 } from './docs/data-manager/data-filter-modal.component';
 
@@ -68,9 +64,6 @@ import {
 } from './visual/data-manager/data-filter-modal.component';
 
 @NgModule({
-  declarations: [
-    SkyAgGridDataManagerAdapterDirective
-  ],
   exports: [
     AgGridModule,
     SkyAgGridModule,
@@ -90,8 +83,7 @@ import {
     SkyPagingModule,
     SkyRepeaterModule,
     SkySortModule,
-    SkyToolbarModule,
-    SkyAgGridDataManagerAdapterDirective
+    SkyToolbarModule
   ],
   entryComponents: [
     SkyDataManagerFiltersModalDemoComponent,
