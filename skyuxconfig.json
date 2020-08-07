@@ -33,6 +33,18 @@
       "browserSet": "paranoid"
     }
   },
+  "pipelineSettings": {
+    "vsts": {
+      "testSettings": {
+        "e2e": {
+          "browserSet": false
+        },
+        "unit": {
+          "browserSet": false
+        }
+      }
+    }
+  },
   "host": {
     "frameOptions": {
       "none": true
