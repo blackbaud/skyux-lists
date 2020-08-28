@@ -1,6 +1,6 @@
 # 4.3.0 (2020-08-28)
 
-- Added modern theme styles to the repeater component. [#182](https://github.com/blackbaud/skyux-lists/pull/182)
+- Added modern theme styles to the repeater component. [#194](https://github.com/blackbaud/skyux-lists/pull/194)
 
 # 4.2.0 (2020-07-07)
 
