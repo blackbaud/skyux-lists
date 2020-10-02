@@ -8,6 +8,7 @@ import {
 } from '@skyux/docs-tools';
 
 import {
+  SkyCheckboxModule,
   SkyInputBoxModule
 } from '@skyux/forms';
 
@@ -18,8 +19,13 @@ import {
 import {
   SkyBackToTopModule,
   SkyFluidGridModule,
-  SkyInlineDeleteModule
+  SkyInlineDeleteModule,
+  SkyToolbarModule
 } from '@skyux/layout';
+
+import {
+  SkyModalModule
+} from '@skyux/modals';
 
 import {
   SkyDropdownModule
@@ -30,6 +36,10 @@ import {
 } from '@skyux/router';
 
 import {
+  ModalFilterDemoModalComponent
+} from './docs/filter/demo/modal-filter-demo-modal.component';
+
+import {
   SkyFilterModule,
   SkyInfiniteScrollModule,
   SkyPagingModule,
@@ -38,9 +48,13 @@ import {
 } from './public/public_api';
 
 @NgModule({
+  entryComponents: [
+    ModalFilterDemoModalComponent,
+  ],
   exports: [
     SkyAppLinkModule,
     SkyBackToTopModule,
+    SkyCheckboxModule,
     SkyDocsToolsModule,
     SkyDropdownModule,
     SkyFilterModule,
@@ -49,9 +63,11 @@ import {
     SkyInfiniteScrollModule,
     SkyInlineDeleteModule,
     SkyInputBoxModule,
+    SkyModalModule,
     SkyPagingModule,
     SkyRepeaterModule,
-    SkySortModule
+    SkySortModule,
+    SkyToolbarModule
   ],
   providers: [
     {
