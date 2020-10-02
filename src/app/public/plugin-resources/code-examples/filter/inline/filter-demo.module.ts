@@ -15,13 +15,13 @@ import {
 } from '@skyux/forms';
 
 import {
+  SkyToolbarModule
+} from '@skyux/layout';
+
+import {
   SkyFilterModule,
   SkyRepeaterModule
 } from '@skyux/lists';
-
-import {
-  SkyToolbarModule
-} from '@skyux/layout';
 
 import {
   FilterDemoComponent
