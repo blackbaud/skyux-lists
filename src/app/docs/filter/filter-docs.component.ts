@@ -18,7 +18,7 @@ export class FilterDocsComponent {
   public demoSettings: any = {};
 
   public filterTypeChoices: SkyDocsDemoControlPanelRadioChoice[] = [
-    { value: 'modal', label: 'Modal Filter' },
+    { value: 'modal', label: 'Modal filter' },
     { value: 'inline', label: 'Inline filter' }
   ];
 
