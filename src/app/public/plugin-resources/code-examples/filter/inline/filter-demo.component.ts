@@ -21,31 +21,26 @@ export class FilterDemoComponent {
   public items: any[] = [
       {
           name: 'Orange',
-          description: 'A round, orange fruit.',
           type: 'citrus',
           color: 'orange'
       },
       {
           name: 'Mango',
-          description: 'Delicious in smoothies, but don\'t eat the skin.',
           type: 'other',
           color: 'orange'
       },
       {
           name: 'Lime',
-          description: 'A sour, green fruit used in many drinks.',
           type: 'citrus',
           color: 'green'
       },
       {
           name: 'Strawberry',
-          description: 'A red fruit that goes well with shortcake.',
           type: 'berry',
           color: 'red'
       },
       {
           name: 'Blueberry',
-          description: 'A small, blue fruit often found in muffins.',
           type: 'berry',
           color: 'blue'
       }
