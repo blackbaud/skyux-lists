@@ -12,7 +12,6 @@
     <sky-filter-summary>
       <sky-filter-summary-item *ngFor="let item of appliedFilters; let i = index"
         (dismiss)="onDismiss(i)"
-        (itemClick)="onFilterButtonClick()"
       >
         {{item.label}}
       </sky-filter-summary-item>
