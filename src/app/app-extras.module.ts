@@ -49,7 +49,7 @@ import {
 
 @NgModule({
   entryComponents: [
-    ModalFilterDemoModalComponent,
+    ModalFilterDemoModalComponent
   ],
   exports: [
     SkyAppLinkModule,
