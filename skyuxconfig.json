@@ -5,7 +5,7 @@
   "compileMode": "aot",
   "plugins": [
     "@skyux-sdk/builder-plugin-skyux",
-    "@blackbaud/skyux-build-code-block"
+    "@blackbaud/skyux-builder-plugin-code-block"
   ],
   "app": {
     "styles": [
