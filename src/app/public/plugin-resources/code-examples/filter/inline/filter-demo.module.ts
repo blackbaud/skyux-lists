@@ -11,6 +11,10 @@ import {
 } from '@angular/forms';
 
 import {
+  SkyIdModule
+} from '@skyux/core';
+
+import {
   SkyCheckboxModule
 } from '@skyux/forms';
 
@@ -32,6 +36,7 @@ import {
     CommonModule,
     FormsModule,
     SkyCheckboxModule,
+    SkyIdModule,
     SkyFilterModule,
     SkyRepeaterModule,
     SkyToolbarModule

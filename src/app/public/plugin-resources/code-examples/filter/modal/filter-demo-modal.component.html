@@ -3,13 +3,18 @@
     Food preferences
   </sky-modal-header>
   <sky-modal-content>
-    <label for="sky-demo-select-type">
+    <label
+      class="sky-control-label"
+      [for]="fruitInput.id"
+    >
       Fruit type
     </label>
     <select
       class="sky-form-control"
       id="sky-demo-select-type"
+      skyId
       [(ngModel)]="fruitType"
+      #fruitInput
     >
       <option value="any">
         Any fruit

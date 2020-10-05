@@ -19,32 +19,31 @@ export class FilterDemoComponent {
   public hideOrange: boolean = false;
 
   public items: any[] = [
-      {
-          name: 'Orange',
-          type: 'citrus',
-          color: 'orange'
-      },
-      {
-          name: 'Mango',
-          type: 'other',
-          color: 'orange'
-      },
-      {
-          name: 'Lime',
-          type: 'citrus',
-          color: 'green'
-      },
-      {
-          name: 'Strawberry',
-          type: 'berry',
-          color: 'red'
-      },
-      {
-          name: 'Blueberry',
-          type: 'berry',
-          color: 'blue'
-      }
-
+    {
+      name: 'Orange',
+      type: 'citrus',
+      color: 'orange'
+    },
+    {
+      name: 'Mango',
+      type: 'other',
+      color: 'orange'
+    },
+    {
+      name: 'Lime',
+      type: 'citrus',
+      color: 'green'
+    },
+    {
+      name: 'Strawberry',
+      type: 'berry',
+      color: 'red'
+    },
+    {
+      name: 'Blueberry',
+      type: 'berry',
+      color: 'blue'
+    }
   ];
 
   public showInlineFilters: boolean = false;

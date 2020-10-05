@@ -16,14 +16,16 @@
   <sky-filter-inline-item>
     <label
       class="sky-control-label sky-margin-inline-default"
-      for="sky-demo-select-type"
+      [for]="fruitInput.id"
     >
       Fruit type
     </label>
     <select
       id="sky-demo-select-type"
+      skyId
       [ngModel]="fruitType"
       (ngModelChange)="fruitTypeChange($event)"
+      #fruitInput
     >
       <option
         value="any"
