@@ -3,13 +3,12 @@ import {
 } from '@angular/core';
 
 import {
-<<<<<<< HEAD
   SkyCodeModule
 } from '@blackbaud/skyux-lib-code-block';
-=======
+
+import {
   SkyIdModule
 } from '@skyux/core';
->>>>>>> master
 
 import {
   SkyDocsToolsModule,
