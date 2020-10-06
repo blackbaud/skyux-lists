@@ -3,8 +3,13 @@ import {
 } from '@angular/core';
 
 import {
+<<<<<<< HEAD
   SkyCodeModule
 } from '@blackbaud/skyux-lib-code-block';
+=======
+  SkyIdModule
+} from '@skyux/core';
+>>>>>>> master
 
 import {
   SkyDocsToolsModule,
@@ -12,6 +17,7 @@ import {
 } from '@skyux/docs-tools';
 
 import {
+  SkyCheckboxModule,
   SkyInputBoxModule
 } from '@skyux/forms';
 
@@ -22,8 +28,13 @@ import {
 import {
   SkyBackToTopModule,
   SkyFluidGridModule,
-  SkyInlineDeleteModule
+  SkyInlineDeleteModule,
+  SkyToolbarModule
 } from '@skyux/layout';
+
+import {
+  SkyModalModule
+} from '@skyux/modals';
 
 import {
   SkyDropdownModule
@@ -34,6 +45,10 @@ import {
 } from '@skyux/router';
 
 import {
+  ModalFilterDemoModalComponent
+} from './docs/filter/demo/modal-filter-demo-modal.component';
+
+import {
   SkyFilterModule,
   SkyInfiniteScrollModule,
   SkyPagingModule,
@@ -42,21 +57,28 @@ import {
 } from './public/public_api';
 
 @NgModule({
+  entryComponents: [
+    ModalFilterDemoModalComponent
+  ],
   exports: [
     SkyAppLinkModule,
     SkyCodeModule,
     SkyBackToTopModule,
+    SkyCheckboxModule,
     SkyDocsToolsModule,
     SkyDropdownModule,
     SkyFilterModule,
     SkyFluidGridModule,
     SkyIconModule,
+    SkyIdModule,
     SkyInfiniteScrollModule,
     SkyInlineDeleteModule,
     SkyInputBoxModule,
+    SkyModalModule,
     SkyPagingModule,
     SkyRepeaterModule,
-    SkySortModule
+    SkySortModule,
+    SkyToolbarModule
   ],
   providers: [
     {
