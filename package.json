@@ -33,7 +33,6 @@
     "@skyux/popovers": "^4.0.0"
   },
   "dependencies": {
-    "@blackbaud/skyux-builder-plugin-code-block": "1.1.0",
     "dragula": "3.7.3",
     "ng2-dragula": "1.5.0"
   },
@@ -48,6 +47,7 @@
     "@angular/platform-browser-dynamic": "9.1.12",
     "@angular/router": "9.1.12",
     "@blackbaud/auth-client": "2.35.0",
+    "@blackbaud/skyux-builder-plugin-code-block": "1.1.0",
     "@blackbaud/skyux-lib-clipboard": "4.0.0",
     "@blackbaud/skyux-lib-code-block": "4.0.1",
     "@blackbaud/skyux-lib-media": "4.0.0",
