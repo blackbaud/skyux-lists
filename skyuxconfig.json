@@ -4,7 +4,8 @@
   "mode": "easy",
   "compileMode": "aot",
   "plugins": [
-    "@skyux-sdk/builder-plugin-skyux"
+    "@skyux-sdk/builder-plugin-skyux",
+    "@blackbaud/skyux-builder-plugin-code-block"
   ],
   "app": {
     "styles": [
