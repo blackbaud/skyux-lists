@@ -14,7 +14,10 @@ import {
 import {
   SkyPagingFixture
 } from './paging-fixture';
-import { SkyPagingPageLink } from './paging-page-link';
+
+import {
+  SkyPagingFixtureButton
+} from './paging-fixture-button';
 
 import {
   SkyPagingTestingModule
@@ -64,10 +67,10 @@ describe('Paging fixture', () => {
   }
 
   function verifyActivePageLink(
-    pages: SkyPagingPageLink[],
+    pages: SkyPagingFixtureButton[],
     expectedActivePageId: string | number
   ) {
-    pages.forEach((page: SkyPagingPageLink) => {
+    pages.forEach((page: SkyPagingFixtureButton) => {
       const shouldBeActive = page.id === expectedActivePageId.toString();
 
       expect(page.isActive).toBe(shouldBeActive);

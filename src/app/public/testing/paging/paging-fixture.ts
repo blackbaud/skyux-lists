@@ -15,8 +15,8 @@ import {
 } from '@skyux-sdk/testing';
 
 import {
-  SkyPagingPageLink
-} from './paging-page-link';
+  SkyPagingFixtureButton
+} from './paging-fixture-button';
 
 /**
  * Provides information for and interaction with a SKY UX paging component.
@@ -36,7 +36,7 @@ export class SkyPagingFixture {
   /**
    * Properties of the page links displayed in the paging component.
    */
-  public get pageLinks(): SkyPagingPageLink[] {
+  public get pageLinks(): SkyPagingFixtureButton[] {
     return this.pagingLinks.map((page: DebugElement) => {
       return {
         id: this.getPageId(page.nativeElement),
