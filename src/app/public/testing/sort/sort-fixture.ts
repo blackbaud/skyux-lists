@@ -143,9 +143,7 @@ export class SkySortFixture {
   }
 
   private getSortItems(): HTMLElement[] {
-    const resultNodes = document.querySelectorAll(
-      'sky-overlay .sky-sort-item'
-    );
+    const resultNodes = document.querySelectorAll('sky-overlay .sky-sort-item');
     return Array.prototype.slice.call(resultNodes);
   }
 
