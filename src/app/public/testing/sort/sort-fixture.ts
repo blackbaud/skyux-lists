@@ -28,22 +28,36 @@ import {
  * of a component, such as changing its DOM structure.
  */
 export class SkySortFixture {
-  private _debugEl: DebugElement;
+
+  /**
+   * The active sort menu item, if one exists. Menu items are only available when the menu dropdown
+   * is open. If the menu dropdown is closed, this property will be undefined.
+   */
+  public get activeMenuItem(): SkySortFixtureMenuItem {
+    return this.menuItems?.find(x => x.isActive);
+  }
 
   /**
    * The sort menu's properties.
    */
-  public get sortMenu(): SkySortFixtureMenu {
+  public get menu(): SkySortFixtureMenu {
     return {
       buttonText: SkyAppTestUtility.getText(this.getSortButtonTextSpan()),
-      isOpen: this.getDropdownMenuEl() !== undefined
+      isOpen: this.getDropdownMenuEl() !== null
     };
   }
 
   /**
-   * The sort menu items.
+   * The properties of each sort menu item. Menu items are only available when the menu dropdown
+   * is open. If the menu dropdown is closed, this property will be undefined.
    */
-  public get sortMenuItems(): SkySortFixtureMenuItem[] {
+  public get menuItems(): SkySortFixtureMenuItem[] {
+    // Return undefined when we can't determine what the options are.
+    // We do this to avoid any confusion with an empty set of options.
+    if (!this.menu.isOpen) {
+      return undefined;
+    }
+
     return this.getSortItems()
       .map((item: HTMLElement) => {
         const itemButton = item.querySelector('button');
@@ -54,6 +68,8 @@ export class SkySortFixture {
         };
       });
   }
+
+  private _debugEl: DebugElement;
 
   constructor(
     private fixture: ComponentFixture<any>,
@@ -67,28 +83,25 @@ export class SkySortFixture {
    * if a matching item is available.
    * @param menuItemText The text of the menu item to select.
    */
-  public async selectSortMenuItem(menuItemText: string): Promise<void> {
-    // try get the menu items, which tells us if the sky-overlay is already open or not
-    let menuItems = this.getSortItems();
+  public async selectMenuItem(menuItemText: string): Promise<void> {
 
-    // ==================================================================================================================
-    // TODO: does this return an empty array if nothing was found?
-    // ==================================================================================================================
-
-    // if we didn't find any items, open the menu and try again
-    if (!menuItems) {
-      await this.toggleSortMenu();
-      menuItems = this.getSortItems();
+    // make sure the sort menu is open
+    if (!this.menu.isOpen) {
+      await this.toggleMenu();
     }
 
     // find the requested menu item
-    const targetItem = menuItems.find((item: HTMLElement) => {
+    const items = this.getSortItems();
+    const targetItem = items.find((item: HTMLElement) => {
       return SkyAppTestUtility.getText(item) === menuItemText;
     });
 
     // if we found the item, select it
     if (targetItem) {
-      targetItem.click();
+      // we've got the '.sky-sort-item' div, but we want to click it's child button element
+      const targetButton = targetItem.querySelector('button');
+      targetButton.click();
+
       this.fixture.detectChanges();
       return this.fixture.whenStable();
     }
@@ -97,11 +110,14 @@ export class SkySortFixture {
   /**
    * Toggles the sort dropdown menu open or closed.
    */
-  public async toggleSortMenu(): Promise<void> {
+  public async toggleMenu(): Promise<void> {
     const menu = this.getDropdownButtonEl();
 
     if (menu !== undefined && !menu.disabled) {
       menu.click();
+
+      this.fixture.detectChanges();
+      await this.fixture.whenStable();
 
       this.fixture.detectChanges();
       return this.fixture.whenStable();
