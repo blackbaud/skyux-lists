@@ -79,6 +79,50 @@ export class SkySortFixture {
   }
 
   /**
+   * Closes the sort dropdown menu if it isn't closed already.
+   */
+  public async closeMenu(): Promise<void> {
+
+    // if the menu is already closed, do nothing
+    if (!this.menu.isOpen) {
+      return;
+    }
+
+    const menu = this.getDropdownButtonEl();
+    if (menu !== undefined && !menu.disabled) {
+      menu.click();
+
+      this.fixture.detectChanges();
+      await this.fixture.whenStable();
+
+      this.fixture.detectChanges();
+      return this.fixture.whenStable();
+    }
+  }
+
+  /**
+   * Opens the sort dropdown menu if it isn't open already.
+   */
+  public async openMenu(): Promise<void> {
+    // if the menu is already open, do nothing
+    if (this.menu.isOpen) {
+      return;
+    }
+
+    const menu = this.getDropdownButtonEl();
+
+    if (menu !== undefined && !menu.disabled) {
+      menu.click();
+
+      this.fixture.detectChanges();
+      await this.fixture.whenStable();
+
+      this.fixture.detectChanges();
+      return this.fixture.whenStable();
+    }
+  }
+
+  /**
    * Ensures the sort menu is open and selects the menu item with the specified text,
    * if a matching item is available.
    * @param menuItemText The text of the menu item to select.
@@ -87,7 +131,7 @@ export class SkySortFixture {
 
     // make sure the sort menu is open
     if (!this.menu.isOpen) {
-      await this.toggleMenu();
+      await this.openMenu();
     }
 
     // find the requested menu item
@@ -101,23 +145,6 @@ export class SkySortFixture {
       // we've got the '.sky-sort-item' div, but we want to click it's child button element
       const targetButton = targetItem.querySelector('button');
       targetButton.click();
-
-      this.fixture.detectChanges();
-      return this.fixture.whenStable();
-    }
-  }
-
-  /**
-   * Toggles the sort dropdown menu open or closed.
-   */
-  public async toggleMenu(): Promise<void> {
-    const menu = this.getDropdownButtonEl();
-
-    if (menu !== undefined && !menu.disabled) {
-      menu.click();
-
-      this.fixture.detectChanges();
-      await this.fixture.whenStable();
 
       this.fixture.detectChanges();
       return this.fixture.whenStable();
