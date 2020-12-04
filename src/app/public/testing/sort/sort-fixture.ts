@@ -59,10 +59,11 @@ export class SkySortFixture {
     }
 
     return this.getSortItems()
-      .map((item: HTMLElement) => {
+      .map((item: HTMLElement, i: number) => {
         const itemButton = item.querySelector('button');
 
         return {
+          index: i,
           isActive: item.classList.contains('sky-sort-item-selected'),
           text: SkyAppTestUtility.getText(itemButton)
         };
@@ -123,32 +124,24 @@ export class SkySortFixture {
   }
 
   /**
+   * Ensures the sort menu is open and selects the menu item with the specified index, if it exists.
+   * @param menuItemIndex The index of the menu item to select.
+   */
+  public async selectMenuItemByIndex(menuItemIndex: number): Promise<void> {
+    return this.selectMenuItem((_item: HTMLElement, index: number) => {
+      return index === menuItemIndex;
+    });
+  }
+
+  /**
    * Ensures the sort menu is open and selects the menu item with the specified text,
    * if a matching item is available.
    * @param menuItemText The text of the menu item to select.
    */
   public async selectMenuItemByText(menuItemText: string): Promise<void> {
-
-    // make sure the sort menu is open
-    if (!this.menu.isOpen) {
-      await this.openMenu();
-    }
-
-    // find the requested menu item
-    const items = this.getSortItems();
-    const targetItem = items.find((item: HTMLElement) => {
+    return this.selectMenuItem((item: HTMLElement, _index: number) => {
       return SkyAppTestUtility.getText(item) === menuItemText;
     });
-
-    // if we found the item, select it
-    if (targetItem) {
-      // we've got the '.sky-sort-item' div, but we want to click it's child button element
-      const targetButton = targetItem.querySelector('button');
-      targetButton.click();
-
-      this.fixture.detectChanges();
-      return this.fixture.whenStable();
-    }
   }
 
   //#region helpers
@@ -172,6 +165,37 @@ export class SkySortFixture {
   private getSortItems(): HTMLElement[] {
     const resultNodes = document.querySelectorAll('sky-overlay .sky-sort-item');
     return Array.prototype.slice.call(resultNodes);
+  }
+
+  /**
+   * Ensures the sort menu is open and selects the menu item via a selection predicate,
+   * if a matching item is available.
+   * @param selectionPredicate The menu item selector method to use.
+   */
+  private async selectMenuItem(
+    selectionPredicate: (item: HTMLElement, index: number) => boolean
+  ): Promise<void> {
+
+    // make sure the sort menu is open
+    if (!this.menu.isOpen) {
+      await this.openMenu();
+    }
+
+    // find the requested menu item using the selectionPredicate parameter
+    const items = this.getSortItems();
+    const targetItem = items.find(
+      (item: HTMLElement, index: number) => selectionPredicate(item, index)
+    );
+
+    // if we found the item, select it
+    if (targetItem) {
+      // we've got the '.sky-sort-item' div, but we want to click it's child button element
+      const targetButton = targetItem.querySelector('button');
+      targetButton.click();
+
+      this.fixture.detectChanges();
+      return this.fixture.whenStable();
+    }
   }
 
   //#endregion

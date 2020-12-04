@@ -192,81 +192,101 @@ describe('Sort fixture', () => {
 
   });
 
-  describe('Select menu item by text', () => {
+  describe('Select menu item', () => {
+    const parameters = [
+      {
+        selectMenuItem : async (item: SkySortFixtureMenuItem) => {
+          await sortFixture.selectMenuItemByText(item.text);
+        }
+      },
+      {
+        selectMenuItem : async (item: SkySortFixtureMenuItem) => {
+          await sortFixture.selectMenuItemByIndex(item.index);
+        }
+      }
+    ];
 
-    it('should select inactive item if available', async () => {
-      const sortItemsSpy = spyOn(fixture.componentInstance, 'sortItems');
-      const existingSelection = await lookupActiveMenuItem();
-      const newSelection = await lookupInactiveMenuItem();
-      expect(existingSelection.text).not.toEqual(newSelection.text);
+    parameters.forEach((parameter) => {
 
-      // select the inactive option
-      await sortFixture.openMenu();
-      await sortFixture.selectMenuItemByText(newSelection.text);
+      it('should select inactive item if available', async () => {
+        const sortItemsSpy = spyOn(fixture.componentInstance, 'sortItems');
+        const existingSelection = await lookupActiveMenuItem();
+        const newSelection = await lookupInactiveMenuItem();
+        expect(existingSelection.text).not.toEqual(newSelection.text);
 
-      // verify the new selection was made
-      const resultingSelection = await lookupActiveMenuItem();
-      expect(resultingSelection.text).toEqual(newSelection.text);
-      expect(sortItemsSpy).toHaveBeenCalledWith(
-        jasmine.objectContaining({
-          label: newSelection.text
-        })
-      );
-    });
+        // select the inactive option
+        await sortFixture.openMenu();
+        await parameter.selectMenuItem(newSelection);
 
-    it('should do nothing if item is already active', async () => {
-      const sortItemsSpy = spyOn(fixture.componentInstance, 'sortItems');
-      const existingSelection = await lookupActiveMenuItem();
+        // verify the new selection was made
+        const resultingSelection = await lookupActiveMenuItem();
+        expect(resultingSelection.text).toEqual(newSelection.text);
+        expect(sortItemsSpy).toHaveBeenCalledWith(
+          jasmine.objectContaining({
+            label: newSelection.text
+          })
+        );
+      });
 
-      // select the active option
-      await sortFixture.openMenu();
-      await sortFixture.selectMenuItemByText(existingSelection.text);
+      it('should do nothing if item is already active', async () => {
+        const sortItemsSpy = spyOn(fixture.componentInstance, 'sortItems');
+        const existingSelection = await lookupActiveMenuItem();
 
-      // verify nothing changed
-      const resultingSelection = await lookupActiveMenuItem();
-      expect(resultingSelection.text).toEqual(existingSelection.text);
-      expect(sortItemsSpy).toHaveBeenCalledWith(
-        jasmine.objectContaining({
-          label: existingSelection.text
-        })
-      );
-    });
+        // select the active option
+        await sortFixture.openMenu();
+        await parameter.selectMenuItem(existingSelection);
 
-    it('should do nothing if item is not available', async () => {
-      const sortItemsSpy = spyOn(fixture.componentInstance, 'sortItems');
-      const invalidOption = 'some-invalid-option';
-      const existingSelection = await lookupActiveMenuItem();
+        // verify nothing changed
+        const resultingSelection = await lookupActiveMenuItem();
+        expect(resultingSelection.text).toEqual(existingSelection.text);
+        expect(sortItemsSpy).toHaveBeenCalledWith(
+          jasmine.objectContaining({
+            label: existingSelection.text
+          })
+        );
+      });
 
-      // try to select an invalid option
-      await sortFixture.openMenu();
-      await sortFixture.selectMenuItemByText(invalidOption);
+      it('should do nothing if item is not available', async () => {
+        const sortItemsSpy = spyOn(fixture.componentInstance, 'sortItems');
+        const existingSelection = await lookupActiveMenuItem();
+        const invalidOption: SkySortFixtureMenuItem = {
+          index: -1,
+          isActive: false,
+          text: 'some-invalid-option'
+        };
 
-      // verify nothing changed
-      const resultingSelection = await lookupActiveMenuItem();
-      expect(resultingSelection.text).toEqual(existingSelection.text);
-      expect(sortItemsSpy).not.toHaveBeenCalled();
-    });
+        // try to select an invalid option
+        await sortFixture.openMenu();
+        await parameter.selectMenuItem(invalidOption);
 
-    it('should automatically open a menu for selection if it is closed', async () => {
-      const sortItemsSpy = spyOn(fixture.componentInstance, 'sortItems');
-      const existingSelection = await lookupActiveMenuItem();
-      const newSelection = await lookupInactiveMenuItem();
-      expect(existingSelection.text).not.toEqual(newSelection.text);
+        // verify nothing changed
+        const resultingSelection = await lookupActiveMenuItem();
+        expect(resultingSelection.text).toEqual(existingSelection.text);
+        expect(sortItemsSpy).not.toHaveBeenCalled();
+      });
 
-      // ensure the menu is closed for our test case
-      expect(sortFixture.menu.isOpen).toBeFalse();
+      it('should automatically open a menu for selection if it is closed', async () => {
+        const sortItemsSpy = spyOn(fixture.componentInstance, 'sortItems');
+        const existingSelection = await lookupActiveMenuItem();
+        const newSelection = await lookupInactiveMenuItem();
+        expect(existingSelection.text).not.toEqual(newSelection.text);
 
-      // select the inactive option
-      await sortFixture.selectMenuItemByText(newSelection.text);
+        // ensure the menu is closed for our test case
+        expect(sortFixture.menu.isOpen).toBeFalse();
 
-      // verify the new selection was made
-      const resultingSelection = await lookupActiveMenuItem();
-      expect(resultingSelection.text).toEqual(newSelection.text);
-      expect(sortItemsSpy).toHaveBeenCalledWith(
-        jasmine.objectContaining({
-          label: newSelection.text
-        })
-      );
+        // select the inactive option
+        await parameter.selectMenuItem(newSelection);
+
+        // verify the new selection was made
+        const resultingSelection = await lookupActiveMenuItem();
+        expect(resultingSelection.text).toEqual(newSelection.text);
+        expect(sortItemsSpy).toHaveBeenCalledWith(
+          jasmine.objectContaining({
+            label: newSelection.text
+          })
+        );
+      });
+
     });
 
   });
