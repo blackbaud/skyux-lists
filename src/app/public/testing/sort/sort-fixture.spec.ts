@@ -195,11 +195,13 @@ describe('Sort fixture', () => {
   describe('Select menu item', () => {
     const parameters = [
       {
+        selectLabel: 'by text',
         selectMenuItem : async (item: SkySortFixtureMenuItem) => {
           await sortFixture.selectMenuItemByText(item.text);
         }
       },
       {
+        selectLabel: 'by index',
         selectMenuItem : async (item: SkySortFixtureMenuItem) => {
           await sortFixture.selectMenuItemByIndex(item.index);
         }
@@ -208,7 +210,7 @@ describe('Sort fixture', () => {
 
     parameters.forEach((parameter) => {
 
-      it('should select inactive item if available', async () => {
+      it(`${parameter.selectLabel} should select inactive item if available`, async () => {
         const sortItemsSpy = spyOn(fixture.componentInstance, 'sortItems');
         const existingSelection = await lookupActiveMenuItem();
         const newSelection = await lookupInactiveMenuItem();
@@ -228,7 +230,7 @@ describe('Sort fixture', () => {
         );
       });
 
-      it('should do nothing if item is already active', async () => {
+      it(`${parameter.selectLabel} should do nothing if item is already active`, async () => {
         const sortItemsSpy = spyOn(fixture.componentInstance, 'sortItems');
         const existingSelection = await lookupActiveMenuItem();
 
@@ -246,7 +248,7 @@ describe('Sort fixture', () => {
         );
       });
 
-      it('should do nothing if item is not available', async () => {
+      it(`${parameter.selectLabel} should do nothing if item is not available`, async () => {
         const sortItemsSpy = spyOn(fixture.componentInstance, 'sortItems');
         const existingSelection = await lookupActiveMenuItem();
         const invalidOption: SkySortFixtureMenuItem = {
@@ -265,7 +267,7 @@ describe('Sort fixture', () => {
         expect(sortItemsSpy).not.toHaveBeenCalled();
       });
 
-      it('should automatically open a menu for selection if it is closed', async () => {
+      it(`${parameter.selectLabel} should automatically open a menu for selection`, async () => {
         const sortItemsSpy = spyOn(fixture.componentInstance, 'sortItems');
         const existingSelection = await lookupActiveMenuItem();
         const newSelection = await lookupInactiveMenuItem();
