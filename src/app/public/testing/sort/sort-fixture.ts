@@ -139,7 +139,7 @@ export class SkySortFixture {
    * @param menuItemText The text of the menu item to select.
    */
   public async selectMenuItemByText(menuItemText: string): Promise<void> {
-    return this.selectMenuItem((item: HTMLElement, _index: number) => {
+    return this.selectMenuItem((item: HTMLElement) => {
       return SkyAppTestUtility.getText(item) === menuItemText;
     });
   }
