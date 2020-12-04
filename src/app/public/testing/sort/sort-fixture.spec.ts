@@ -152,7 +152,7 @@ describe('Sort fixture', () => {
 
   });
 
-  describe('Select menu item', () => {
+  describe('Select menu item by text', () => {
 
     it('should select inactive item if available', async () => {
       const sortItemsSpy = spyOn(fixture.componentInstance, 'sortItems');
@@ -162,7 +162,7 @@ describe('Sort fixture', () => {
 
       // select the inactive option
       await sortFixture.toggleMenu();
-      await sortFixture.selectMenuItem(newSelection.text);
+      await sortFixture.selectMenuItemByText(newSelection.text);
 
       // verify the new selection was made
       const resultingSelection = await lookupActiveMenuItem();
@@ -180,7 +180,7 @@ describe('Sort fixture', () => {
 
       // select the active option
       await sortFixture.toggleMenu();
-      await sortFixture.selectMenuItem(existingSelection.text);
+      await sortFixture.selectMenuItemByText(existingSelection.text);
 
       // verify nothing changed
       const resultingSelection = await lookupActiveMenuItem();
@@ -199,7 +199,7 @@ describe('Sort fixture', () => {
 
       // try to select an invalid option
       await sortFixture.toggleMenu();
-      await sortFixture.selectMenuItem(invalidOption);
+      await sortFixture.selectMenuItemByText(invalidOption);
 
       // verify nothing changed
       const resultingSelection = await lookupActiveMenuItem();
@@ -217,7 +217,7 @@ describe('Sort fixture', () => {
       expect(sortFixture.menu.isOpen).toBeFalse();
 
       // select the inactive option
-      await sortFixture.selectMenuItem(newSelection.text);
+      await sortFixture.selectMenuItemByText(newSelection.text);
 
       // verify the new selection was made
       const resultingSelection = await lookupActiveMenuItem();

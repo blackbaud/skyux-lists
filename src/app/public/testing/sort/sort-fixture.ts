@@ -42,7 +42,7 @@ export class SkySortFixture {
    */
   public get menu(): SkySortFixtureMenu {
     return {
-      buttonText: SkyAppTestUtility.getText(this.getSortButtonTextSpan()),
+      buttonText: SkyAppTestUtility.getText(this.getSortButtonTextEl()),
       isOpen: this.getDropdownMenuEl() !== null
     };
   }
@@ -55,7 +55,7 @@ export class SkySortFixture {
     // Return undefined when we can't determine what the options are.
     // We do this to avoid any confusion with an empty set of options.
     if (!this.menu.isOpen) {
-      return undefined;
+      return;
     }
 
     return this.getSortItems()
@@ -83,7 +83,7 @@ export class SkySortFixture {
    * if a matching item is available.
    * @param menuItemText The text of the menu item to select.
    */
-  public async selectMenuItem(menuItemText: string): Promise<void> {
+  public async selectMenuItemByText(menuItemText: string): Promise<void> {
 
     // make sure the sort menu is open
     if (!this.menu.isOpen) {
@@ -136,7 +136,7 @@ export class SkySortFixture {
     return document.querySelector('sky-overlay .sky-dropdown-menu');
   }
 
-  private getSortButtonTextSpan(): HTMLElement {
+  private getSortButtonTextEl(): HTMLElement {
     return this._debugEl.query(
       By.css('.sky-sort-btn-text')
     )?.nativeElement as HTMLElement;
