@@ -1,6 +1,6 @@
 {
   "name": "@skyux/lists",
-  "version": "4.4.0",
+  "version": "4.5.0",
   "description": "SKY UX Lists",
   "scripts": {
     "build": "skyux build-public-library",
@@ -62,7 +62,7 @@
     "@skyux/config": "4.2.0",
     "@skyux/core": "4.3.1",
     "@skyux/docs-tools": "4.7.4",
-    "@skyux/forms": "4.13.4",
+    "@skyux/forms": "4.14.0",
     "@skyux/grids": "4.0.6",
     "@skyux/http": "4.1.0",
     "@skyux/i18n": "4.0.3",
