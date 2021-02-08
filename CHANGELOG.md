@@ -1,4 +1,4 @@
-# 4.5.1 (2021-02-05)
+# 4.5.1 (2021-02-08)
 
 - Fixed the paging component to have consistent button borders for modern theme. [#217](https://github.com/blackbaud/skyux-lists/pull/217)
 
