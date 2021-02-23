@@ -4,7 +4,7 @@ import {
 
 import {
   SkyInfiniteScrollModule
-} from '../../modules/infinite-scroll/infinite-scroll.module';
+} from '@skyux/lists';
 
 @NgModule({
   exports: [

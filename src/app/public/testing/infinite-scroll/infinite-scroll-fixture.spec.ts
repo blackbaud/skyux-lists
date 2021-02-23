@@ -1,4 +1,8 @@
 import {
+  Component
+} from '@angular/core';
+
+import {
   ComponentFixture,
   TestBed
 } from '@angular/core/testing';
@@ -14,8 +18,6 @@ import {
 import {
   SkyInfiniteScrollTestingModule
 } from './infinite-scroll-testing.module';
-
-import {Component} from '@angular/core';
 
 const DATA_SKY_ID = 'test-infinite-scroll';
 
@@ -38,9 +40,9 @@ const DATA_SKY_ID = 'test-infinite-scroll';
   `
 })
 class InfiniteScrollTestComponent {
-  private i: number = 1;
   public enabled = false;
   public items: string[] = [];
+  private i: number = 1;
   public loadMore() {
     for (let j = 1; j <= 10; j++) {
       this.items.push(`Item ${this.i++}`);
@@ -80,8 +82,8 @@ describe('Infinite scroll fixture component', () => {
   it('should hide button', () => {
     expect(testComponent.enabled).toBe(false);
     expect(testComponent.items.length).toBe(0);
-    expect(infiniteScrollFixture.isEnabled()).toBe(false);
-    expect(infiniteScrollFixture.isButtonAvailable()).toBe(false);
+    expect(infiniteScrollFixture.infiniteScrollIsEnabled).toBe(false);
+    expect(infiniteScrollFixture.loadMoreButtonIsVisible).toBe(false);
   });
 
   it('should display button', () => {
@@ -90,8 +92,8 @@ describe('Infinite scroll fixture component', () => {
     fixture.whenStable();
 
     // verify enabled
-    expect(infiniteScrollFixture.isEnabled()).toBe(true);
-    expect(infiniteScrollFixture.isButtonAvailable()).toBe(true);
+    expect(infiniteScrollFixture.infiniteScrollIsEnabled).toBe(true);
+    expect(infiniteScrollFixture.loadMoreButtonIsVisible).toBe(true);
   });
 
   it('should load more', () => {
@@ -125,7 +127,7 @@ describe('Infinite scroll fixture component', () => {
     fixture.whenStable();
 
     // button be gone
-    expect(infiniteScrollFixture.isButtonAvailable()).toBe(false);
+    expect(infiniteScrollFixture.loadMoreButtonIsVisible).toBe(false);
   });
 
 });

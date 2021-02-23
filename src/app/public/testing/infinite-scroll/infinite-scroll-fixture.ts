@@ -1,8 +1,14 @@
 import {
   DebugElement
 } from '@angular/core';
-import {ComponentFixture} from '@angular/core/testing';
-import {SkyAppTestUtility} from '@skyux-sdk/testing';
+
+import {
+  ComponentFixture
+} from '@angular/core/testing';
+
+import {
+  SkyAppTestUtility
+} from '@skyux-sdk/testing';
 
 /**
  * Provides information for and interaction with a SKY UX infinite scroll component.
@@ -22,20 +28,20 @@ export class SkyInfiniteScrollFixture {
     this.waitForComponentInitialization();
   }
 
-  public isEnabled(): boolean {
+  public get infiniteScrollIsEnabled(): boolean {
     return !!this.debugElement.componentInstance.enabled;
   }
 
-  public isButtonAvailable() {
+  public get loadMoreButtonIsVisible(): boolean {
     return this.debugElement.nativeElement.querySelector(this.skyBtnSelector) instanceof HTMLButtonElement;
   }
 
-  public clickLoadMoreButton() {
+  public clickLoadMoreButton(): void {
     const button = this.debugElement.nativeElement.querySelector(this.skyBtnSelector);
     if (button instanceof HTMLButtonElement) {
       return button.click();
     }
-    throw new DOMException('The "load more" button is not available.');
+    throw new Error('The "load more" button is not available.');
   }
 
   private async waitForComponentInitialization(): Promise<void> {
