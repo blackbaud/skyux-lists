@@ -17,7 +17,6 @@ import {
  */
 export class SkyInfiniteScrollFixture {
   private debugElement: DebugElement;
-  private skyBtnSelector = 'div.sky-infinite-scroll > button.sky-btn';
 
   constructor(
     private fixture: ComponentFixture<any>,
@@ -29,15 +28,18 @@ export class SkyInfiniteScrollFixture {
   }
 
   public get loadMoreButtonIsVisible(): boolean {
-    return this.debugElement.nativeElement.querySelector(this.skyBtnSelector) instanceof HTMLButtonElement;
+    return this.getButton() instanceof HTMLButtonElement;
   }
 
   public clickLoadMoreButton(): void {
-    const button = this.debugElement.nativeElement.querySelector(this.skyBtnSelector);
+    const button = this.getButton();
     if (button instanceof HTMLButtonElement) {
-      return button.click();
+      button.click();
     }
-    throw new Error('The "load more" button is not available.');
+  }
+
+  private getButton() {
+    return this.debugElement.nativeElement.querySelector('.sky-infinite-scroll .sky-btn');
   }
 
   private async waitForComponentInitialization(): Promise<void> {
