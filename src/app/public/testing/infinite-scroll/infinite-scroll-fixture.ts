@@ -28,10 +28,6 @@ export class SkyInfiniteScrollFixture {
     this.waitForComponentInitialization();
   }
 
-  public get infiniteScrollIsEnabled(): boolean {
-    return !!this.debugElement.componentInstance.enabled;
-  }
-
   public get loadMoreButtonIsVisible(): boolean {
     return this.debugElement.nativeElement.querySelector(this.skyBtnSelector) instanceof HTMLButtonElement;
   }

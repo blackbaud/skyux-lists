@@ -82,7 +82,6 @@ describe('Infinite scroll fixture component', () => {
   it('should hide button', () => {
     expect(testComponent.enabled).toBe(false);
     expect(testComponent.items.length).toBe(0);
-    expect(infiniteScrollFixture.infiniteScrollIsEnabled).toBe(false);
     expect(infiniteScrollFixture.loadMoreButtonIsVisible).toBe(false);
   });
 
@@ -92,7 +91,6 @@ describe('Infinite scroll fixture component', () => {
     fixture.whenStable();
 
     // verify enabled
-    expect(infiniteScrollFixture.infiniteScrollIsEnabled).toBe(true);
     expect(infiniteScrollFixture.loadMoreButtonIsVisible).toBe(true);
   });
 
