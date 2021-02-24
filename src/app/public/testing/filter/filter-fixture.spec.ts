@@ -1,0 +1,165 @@
+import {
+  Component
+} from '@angular/core';
+
+import {
+  ComponentFixture,
+  TestBed
+} from '@angular/core/testing';
+
+import {
+  expect
+} from '@skyux-sdk/testing';
+
+import {
+  SkyFilterTestingModule
+} from './filter-testing.module';
+
+import {
+  SkyFilterSummaryFixture
+} from './filter-summary-fixture';
+import {SkyFilterButtonFixture} from './filter-button-fixture';
+
+const DATA_SKY_ID_SUMMARY = 'test-filter-summary';
+const DATA_SKY_ID_BUTTON = 'test-filter-button';
+
+//#region Test component
+@Component({
+  selector: 'filter-fixture',
+  template: `
+    <sky-filter-button
+      data-sky-id="${DATA_SKY_ID_BUTTON}"
+      [disabled]="buttonIsDisabled"
+      [showButtonText]="true"
+      (filterButtonClick)="filterButtonClicked()"
+    >
+    </sky-filter-button>
+
+    <sky-filter-summary
+      data-sky-id="${DATA_SKY_ID_SUMMARY}"
+    >
+      <sky-filter-summary-item *ngFor="let item of appliedFilters; let i = index"
+                               (dismiss)="onDismiss(i)"
+      >
+        {{item}}
+      </sky-filter-summary-item>
+    </sky-filter-summary>
+  `
+})
+class FilterTestComponent {
+  public appliedFilters: string[] = [];
+  public buttonClicked: boolean = false;
+  public buttonIsDisabled: boolean = false;
+
+  public applyFilter(filter: string) {
+    this.appliedFilters.push(filter);
+  }
+
+  public onDismiss(index: number): void {
+    this.appliedFilters.splice(index, 1);
+  }
+
+  public filterButtonClicked() {
+    this.buttonClicked = true;
+  }
+}
+//#endregion Test component
+
+describe('Filter fixture', () => {
+  let fixture: ComponentFixture<FilterTestComponent>;
+  let testComponent: FilterTestComponent;
+  let filterSummaryFixture: SkyFilterSummaryFixture;
+  let filterButtonFixture: SkyFilterButtonFixture;
+
+  /**
+   * This configureTestingModule function imports SkyAppTestModule, which brings in all of
+   * the SKY UX modules and components in your application for testing convenience. If this has
+   * an adverse effect on your test performance, you can individually bring in each of your app
+   * components and the SKY UX modules that those components rely upon.
+   */
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      declarations: [FilterTestComponent],
+      imports: [SkyFilterTestingModule]
+    });
+
+    fixture = TestBed.createComponent(
+      FilterTestComponent
+    );
+    testComponent = fixture.componentInstance;
+    filterSummaryFixture = new SkyFilterSummaryFixture(fixture, DATA_SKY_ID_SUMMARY);
+    filterButtonFixture = new SkyFilterButtonFixture(fixture, DATA_SKY_ID_BUTTON);
+  });
+
+  describe('Summary items', () => {
+
+    it('should dismiss only filter item from summary', () => {
+
+      expect(testComponent.appliedFilters.length).toBe(0);
+      testComponent.applyFilter('example');
+      expect(testComponent.appliedFilters.length).toBeGreaterThan(0);
+
+      fixture.detectChanges();
+      filterSummaryFixture.dismissNthFilter(0);
+      fixture.detectChanges();
+      expect(testComponent.appliedFilters.length).toBe(0);
+
+    });
+
+    it('should dismiss nth filter item from summary', () => {
+
+      expect(testComponent.appliedFilters.length).toBe(0);
+      for (let i = 1; i <= 5; i++) {
+        testComponent.applyFilter(`example ${i}`);
+      }
+      expect(testComponent.appliedFilters.length).toBe(5);
+
+      fixture.detectChanges();
+      filterSummaryFixture.dismissNthFilter(3);
+      fixture.detectChanges();
+      expect(testComponent.appliedFilters.length).toBe(4);
+
+    });
+
+    it('should do nothing when dismissing non existent filter', () => {
+
+      expect(testComponent.appliedFilters.length).toBe(0);
+      for (let i = 1; i <= 3; i++) {
+        testComponent.applyFilter(`example ${i}`);
+      }
+      expect(testComponent.appliedFilters.length).toBe(3);
+
+      fixture.detectChanges();
+      filterSummaryFixture.dismissNthFilter(5);
+      fixture.detectChanges();
+      expect(testComponent.appliedFilters.length).toBe(3);
+
+    });
+
+  });
+
+  describe('Button', () => {
+
+    it('should click the button', () => {
+
+      expect(testComponent.buttonClicked).toBeFalse();
+      filterButtonFixture.clickFilterButton();
+      fixture.detectChanges();
+      expect(testComponent.buttonClicked).toBeTrue();
+
+    });
+
+    it('should do nothing when the button is not enabled', () => {
+
+      testComponent.buttonIsDisabled = true;
+      expect(testComponent.buttonClicked).toBeFalse();
+      fixture.detectChanges();
+      filterButtonFixture.clickFilterButton();
+      fixture.detectChanges();
+      expect(testComponent.buttonClicked).toBeFalse();
+
+    });
+
+  });
+
+});
