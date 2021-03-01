@@ -22,9 +22,7 @@ export class SkyFilterSummaryFixture {
     private fixture: ComponentFixture<any>,
     skyTestId: string
   ) {
-    this.debugElement = SkyAppTestUtility.getDebugElementByTestId(fixture, skyTestId, 'sky-filter-summary');
-
-    this.waitForComponentInitialization();
+    this.debugElement = SkyAppTestUtility.getDebugElementByTestId(this.fixture, skyTestId, 'sky-filter-summary');
   }
 
   public dismissNthFilter(index: number): void {
@@ -38,14 +36,5 @@ export class SkyFilterSummaryFixture {
         }
       }
     }
-  }
-
-  private async waitForComponentInitialization(): Promise<void> {
-    this.fixture.detectChanges();
-    await this.fixture.whenStable();
-    this.debugElement.nativeElement.classList.add('debug');
-
-    this.fixture.detectChanges();
-    return this.fixture.whenStable();
   }
 }

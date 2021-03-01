@@ -22,9 +22,7 @@ export class SkyFilterButtonFixture {
     private fixture: ComponentFixture<any>,
     skyTestId: string
   ) {
-    this.debugElement = SkyAppTestUtility.getDebugElementByTestId(fixture, skyTestId, 'sky-filter-button');
-
-    this.waitForComponentInitialization();
+    this.debugElement = SkyAppTestUtility.getDebugElementByTestId(this.fixture, skyTestId, 'sky-filter-button');
   }
 
   public clickFilterButton(): void {
@@ -32,13 +30,5 @@ export class SkyFilterButtonFixture {
     if (button instanceof HTMLButtonElement && !button.disabled) {
       button.click();
     }
-  }
-
-  private async waitForComponentInitialization(): Promise<void> {
-    this.fixture.detectChanges();
-    await this.fixture.whenStable();
-
-    this.fixture.detectChanges();
-    return this.fixture.whenStable();
   }
 }
