@@ -15,7 +15,7 @@ import {
  * By using the fixture API, a test insulates itself against updates to the internals
  * of a component, such as changing its DOM structure.
  */
-export class SkyFilterButtonFixture {
+export class SkyFilterFixtureButton {
   private debugElement: DebugElement;
 
   constructor(
@@ -25,10 +25,12 @@ export class SkyFilterButtonFixture {
     this.debugElement = SkyAppTestUtility.getDebugElementByTestId(this.fixture, skyTestId, 'sky-filter-button');
   }
 
-  public clickFilterButton(): void {
+  public async clickFilterButton(): Promise<any> {
     const button = this.debugElement.nativeElement.querySelector('.sky-filter-btn');
     if (button instanceof HTMLButtonElement && !button.disabled) {
       button.click();
     }
+    this.fixture.detectChanges();
+    return this.fixture.whenStable();
   }
 }

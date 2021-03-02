@@ -15,7 +15,7 @@ import {
  * By using the fixture API, a test insulates itself against updates to the internals
  * of a component, such as changing its DOM structure.
  */
-export class SkyFilterSummaryFixture {
+export class SkyFilterFixtureSummary {
   private debugElement: DebugElement;
 
   constructor(
@@ -25,7 +25,7 @@ export class SkyFilterSummaryFixture {
     this.debugElement = SkyAppTestUtility.getDebugElementByTestId(this.fixture, skyTestId, 'sky-filter-summary');
   }
 
-  public dismissNthFilter(index: number): void {
+  public async filterCloseClick(index: number): Promise<any> {
     const summaryItems = this.debugElement.nativeElement.querySelectorAll('sky-filter-summary-item');
     if (summaryItems.length > index) {
       const summaryItem = summaryItems[index];
@@ -33,8 +33,11 @@ export class SkyFilterSummaryFixture {
         const closeButton = summaryItem.querySelector('.sky-token-btn-close');
         if (closeButton instanceof HTMLElement) {
           closeButton.click();
+          this.fixture.detectChanges();
+          return this.fixture.whenStable();
         }
       }
     }
+    throw new Error(`Unable to click close for a filter index ${index}`);
   }
 }

@@ -16,9 +16,12 @@ import {
 } from './filter-testing.module';
 
 import {
-  SkyFilterSummaryFixture
-} from './filter-summary-fixture';
-import {SkyFilterButtonFixture} from './filter-button-fixture';
+  SkyFilterFixtureSummary
+} from './filter-fixture-summary';
+
+import {
+  SkyFilterFixtureButton
+} from './filter-fixture-button';
 
 const DATA_SKY_ID_SUMMARY = 'test-filter-summary';
 const DATA_SKY_ID_BUTTON = 'test-filter-button';
@@ -38,8 +41,9 @@ const DATA_SKY_ID_BUTTON = 'test-filter-button';
     <sky-filter-summary
       data-sky-id="${DATA_SKY_ID_SUMMARY}"
     >
-      <sky-filter-summary-item *ngFor="let item of appliedFilters; let i = index"
-                               (dismiss)="onDismiss(i)"
+      <sky-filter-summary-item
+        *ngFor="let item of appliedFilters; let i = index"
+        (dismiss)="onDismiss(i)"
       >
         {{item}}
       </sky-filter-summary-item>
@@ -68,8 +72,8 @@ class FilterTestComponent {
 describe('Filter fixture', () => {
   let fixture: ComponentFixture<FilterTestComponent>;
   let testComponent: FilterTestComponent;
-  let filterSummaryFixture: SkyFilterSummaryFixture;
-  let filterButtonFixture: SkyFilterButtonFixture;
+  let filterSummaryFixture: SkyFilterFixtureSummary;
+  let filterButtonFixture: SkyFilterFixtureButton;
 
   /**
    * This configureTestingModule function imports SkyAppTestModule, which brings in all of
@@ -82,84 +86,70 @@ describe('Filter fixture', () => {
       declarations: [FilterTestComponent],
       imports: [SkyFilterTestingModule]
     });
-
-    fixture = TestBed.createComponent(
-      FilterTestComponent
-    );
+    fixture = TestBed.createComponent(FilterTestComponent);
     testComponent = fixture.componentInstance;
-    filterSummaryFixture = new SkyFilterSummaryFixture(fixture, DATA_SKY_ID_SUMMARY);
-    filterButtonFixture = new SkyFilterButtonFixture(fixture, DATA_SKY_ID_BUTTON);
+    filterSummaryFixture = new SkyFilterFixtureSummary(fixture, DATA_SKY_ID_SUMMARY);
+    filterButtonFixture = new SkyFilterFixtureButton(fixture, DATA_SKY_ID_BUTTON);
   });
 
   describe('Summary items', () => {
-
     it('should dismiss only filter item from summary', () => {
-
       expect(testComponent.appliedFilters.length).toBe(0);
       testComponent.applyFilter('example');
       expect(testComponent.appliedFilters.length).toBeGreaterThan(0);
-
       fixture.detectChanges();
-      filterSummaryFixture.dismissNthFilter(0);
-      fixture.detectChanges();
-      expect(testComponent.appliedFilters.length).toBe(0);
-
+      return filterSummaryFixture.filterCloseClick(0).then(() => {
+        fixture.detectChanges();
+        expect(testComponent.appliedFilters.length).toBe(0);
+      });
     });
 
     it('should dismiss nth filter item from summary', () => {
-
       expect(testComponent.appliedFilters.length).toBe(0);
       for (let i = 1; i <= 5; i++) {
         testComponent.applyFilter(`example ${i}`);
       }
       expect(testComponent.appliedFilters.length).toBe(5);
-
       fixture.detectChanges();
-      filterSummaryFixture.dismissNthFilter(3);
-      fixture.detectChanges();
-      expect(testComponent.appliedFilters.length).toBe(4);
-
+      return filterSummaryFixture.filterCloseClick(3).then(() => {
+        fixture.detectChanges();
+        expect(testComponent.appliedFilters.length).toBe(4);
+      });
     });
 
-    it('should do nothing when dismissing non existent filter', () => {
-
+    it('should throw error when dismissing non existent filter', () => {
       expect(testComponent.appliedFilters.length).toBe(0);
       for (let i = 1; i <= 3; i++) {
         testComponent.applyFilter(`example ${i}`);
       }
       expect(testComponent.appliedFilters.length).toBe(3);
-
       fixture.detectChanges();
-      filterSummaryFixture.dismissNthFilter(5);
-      fixture.detectChanges();
-      expect(testComponent.appliedFilters.length).toBe(3);
-
+      return filterSummaryFixture.filterCloseClick(5).then(() => {
+        expect('Error').toBeTrue();
+      }).catch(e => {
+        expect(e).toBeInstanceOf(Error);
+        expect((e as Error).message)
+          .toBe('Unable to click close for a filter index 5');
+      });
     });
-
   });
 
   describe('Button', () => {
-
     it('should click the button', () => {
-
       expect(testComponent.buttonClicked).toBeFalse();
       filterButtonFixture.clickFilterButton();
       fixture.detectChanges();
       expect(testComponent.buttonClicked).toBeTrue();
-
     });
 
     it('should do nothing when the button is not enabled', () => {
-
       testComponent.buttonIsDisabled = true;
       expect(testComponent.buttonClicked).toBeFalse();
       fixture.detectChanges();
-      filterButtonFixture.clickFilterButton();
-      fixture.detectChanges();
-      expect(testComponent.buttonClicked).toBeFalse();
-
+      return filterButtonFixture.clickFilterButton().then(() => {
+        fixture.detectChanges();
+        expect(testComponent.buttonClicked).toBeFalse();
+      });
     });
-
   });
-
 });
