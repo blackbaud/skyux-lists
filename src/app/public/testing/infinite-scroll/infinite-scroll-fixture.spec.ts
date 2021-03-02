@@ -1,5 +1,6 @@
 import {
-  Component
+  Component,
+  ViewChild
 } from '@angular/core';
 
 import {
@@ -19,6 +20,10 @@ import {
   SkyInfiniteScrollTestingModule
 } from './infinite-scroll-testing.module';
 
+import {
+  SkyInfiniteScrollComponent
+} from '../../modules/infinite-scroll/infinite-scroll.component';
+
 const DATA_SKY_ID = 'test-infinite-scroll';
 
 //#region Test component
@@ -26,27 +31,33 @@ const DATA_SKY_ID = 'test-infinite-scroll';
   selector: 'infinite-scroll-fixture',
   template: `
     <div>
-      <button (click)="enabled = !enabled">{{ enabled ? 'Disallow' : 'Allow' }} more</button>
+      <button (click)="hasMore = !hasMore">{{ hasMore ? 'Disallow' : 'Allow' }} more</button>
     </div>
     <ul>
       <li *ngFor="let i of items">{{ i }}</li>
       <li *ngIf="items.length === 0"><em>(no items)</em></li>
     </ul>
     <sky-infinite-scroll
+      #infiniteScrollComponent
       data-sky-id="${DATA_SKY_ID}"
-      [enabled]="enabled"
+      [enabled]="hasMore"
       (scrollEnd)="loadMore()">
     </sky-infinite-scroll>
   `
 })
 class InfiniteScrollTestComponent {
-  public enabled = false;
+  public hasMore = false;
   public items: string[] = [];
+  @ViewChild('infiniteScrollComponent')
+  public infiniteScrollComponent: SkyInfiniteScrollComponent;
   private i: number = 1;
   public loadMore() {
-    for (let j = 1; j <= 10; j++) {
-      this.items.push(`Item ${this.i++}`);
-    }
+    return new Promise(() => {
+      for (let j = 1; j <= 10; j++) {
+        this.items.push(`Item ${this.i++}`);
+      }
+      this.infiniteScrollComponent.isWaiting = false;
+    });
   }
 }
 //#endregion Test component
@@ -80,52 +91,53 @@ describe('Infinite scroll fixture component', () => {
   });
 
   it('should hide button', () => {
-    expect(testComponent.enabled).toBe(false);
+    expect(testComponent.hasMore).toBe(false);
     expect(testComponent.items.length).toBe(0);
-    expect(infiniteScrollFixture.loadMoreButtonIsVisible).toBe(false);
+    expect(infiniteScrollFixture.loadMoreButtonIsVisible).toBeFalse();
   });
 
   it('should display button', () => {
-    testComponent.enabled = true;
+    testComponent.hasMore = true;
     fixture.detectChanges();
     fixture.whenStable();
-
     // verify enabled
-    expect(infiniteScrollFixture.loadMoreButtonIsVisible).toBe(true);
+    expect(infiniteScrollFixture.loadMoreButtonIsVisible).toBeTrue();
   });
 
   it('should load more', () => {
-    testComponent.enabled = true;
+    testComponent.hasMore = true;
     fixture.detectChanges();
     fixture.whenStable();
-
+    expect(infiniteScrollFixture.loadMoreButtonIsVisible).toBeTrue();
     // click once
     infiniteScrollFixture.clickLoadMoreButton();
     const length = testComponent.items.length;
     expect(length).toBeGreaterThan(0);
-
+    fixture.detectChanges();
+    fixture.whenStable();
+    expect(infiniteScrollFixture.loadMoreButtonIsVisible).toBeTrue();
     // click twice
     infiniteScrollFixture.clickLoadMoreButton();
     expect(testComponent.items.length).toBeGreaterThan(length);
   });
 
   it('should stop loading more', () => {
-    testComponent.enabled = true;
+    testComponent.hasMore = true;
     fixture.detectChanges();
     fixture.whenStable();
-
     // click once
     infiniteScrollFixture.clickLoadMoreButton();
-    const length = testComponent.items.length;
-    expect(length).toBeGreaterThan(0);
-
-    // set to not enabled
-    testComponent.enabled = true;
+    expect(testComponent.items.length).toBeGreaterThan(0);
     fixture.detectChanges();
     fixture.whenStable();
-
+    expect(infiniteScrollFixture.loadMoreButtonIsVisible).toBeTrue();
+    // set to not enabled
+    testComponent.hasMore = false;
+    fixture.detectChanges();
+    fixture.whenStable();
     // button be gone
-    expect(infiniteScrollFixture.loadMoreButtonIsVisible).toBe(false);
+    console.log(fixture.nativeElement.outerHTML);
+    expect(infiniteScrollFixture.loadMoreButtonIsVisible).toBeFalse();
   });
 
 });

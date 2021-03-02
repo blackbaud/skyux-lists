@@ -23,30 +23,22 @@ export class SkyInfiniteScrollFixture {
     skyTestId: string
   ) {
     this.debugElement = SkyAppTestUtility.getDebugElementByTestId(fixture, skyTestId, 'sky-infinite-scroll');
-
-    this.waitForComponentInitialization();
   }
 
   public get loadMoreButtonIsVisible(): boolean {
     return this.getButton() instanceof HTMLButtonElement;
   }
 
-  public clickLoadMoreButton(): void {
+  public async clickLoadMoreButton(): Promise<any> {
     const button = this.getButton();
     if (button instanceof HTMLButtonElement) {
       button.click();
     }
+    this.fixture.detectChanges();
+    return this.fixture.whenStable();
   }
 
   private getButton() {
     return this.debugElement.nativeElement.querySelector('.sky-infinite-scroll .sky-btn');
-  }
-
-  private async waitForComponentInitialization(): Promise<void> {
-    this.fixture.detectChanges();
-    await this.fixture.whenStable();
-
-    this.fixture.detectChanges();
-    return this.fixture.whenStable();
   }
 }
