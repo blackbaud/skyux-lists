@@ -25,12 +25,60 @@ export class SkyFilterFixtureButton {
     this.debugElement = SkyAppTestUtility.getDebugElementByTestId(this.fixture, skyTestId, 'sky-filter-button');
   }
 
+  /**
+   * Click the button to apply the filter.
+   */
   public async clickFilterButton(): Promise<any> {
-    const button = this.debugElement.nativeElement.querySelector('.sky-filter-btn');
+    const button = this.getButton();
     if (button instanceof HTMLButtonElement && !button.disabled) {
       button.click();
     }
     this.fixture.detectChanges();
     return this.fixture.whenStable();
+  }
+
+  /**
+   * Get the button text.
+   */
+  public get buttonText(): string {
+    const text = this.getButton()?.innerText;
+    return SkyFilterFixtureButton.normalizeText(text);
+  }
+
+  /**
+   * Get the button id.
+   */
+  public get id(): string {
+    return this.getButton()?.id;
+  }
+
+  /**
+   * Get the button ARIA label.
+   */
+  public get ariaLabel(): string {
+    const button = this.getButton();
+    if (button instanceof Element && button.hasAttribute('aria-label')) {
+      return SkyFilterFixtureButton.normalizeText(button.getAttribute('aria-label'));
+    }
+    return '';
+  }
+
+  /**
+   * Get the button ARIA title.
+   */
+  public get ariaTitle(): string {
+    const button = this.getButton();
+    if (button instanceof Element && button.hasAttribute('aria-title')) {
+      return SkyFilterFixtureButton.normalizeText(button.getAttribute('aria-title'));
+    }
+    return '';
+  }
+
+  private getButton(): HTMLButtonElement | null {
+    return this.debugElement.nativeElement.querySelector('.sky-filter-btn');
+  }
+
+  private static normalizeText(text: string): string {
+    return (text || '').replace(/\s+/, ' ').replace(/^ | $/g, '');
   }
 }

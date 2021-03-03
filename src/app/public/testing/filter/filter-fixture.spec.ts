@@ -151,5 +151,29 @@ describe('Filter fixture', () => {
         expect(testComponent.buttonClicked).toBeFalse();
       });
     });
+
+    it('should get the button aria label', async () => {
+      fixture.detectChanges();
+      await fixture.whenStable();
+      expect(filterButtonFixture.ariaLabel).toBe('Filter');
+    });
+
+    it('should get the button aria title', async () => {
+      fixture.detectChanges();
+      await fixture.whenStable();
+      expect(filterButtonFixture.ariaTitle).toBe('');
+    });
+
+    it('should get the button id', async () => {
+      fixture.detectChanges();
+      await fixture.whenStable();
+      expect(filterButtonFixture.id).toContain('sky-filter-button-');
+    });
+
+    it('should get the button text', async () => {
+      fixture.detectChanges();
+      await fixture.whenStable();
+      expect(filterButtonFixture.buttonText).toBe('Filter');
+    });
   });
 });
