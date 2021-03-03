@@ -93,63 +93,60 @@ describe('Filter fixture', () => {
   });
 
   describe('Summary items', () => {
-    it('should dismiss only filter item from summary', () => {
+    it('should dismiss only filter item from summary', async () => {
       expect(testComponent.appliedFilters.length).toBe(0);
       testComponent.applyFilter('example');
       expect(testComponent.appliedFilters.length).toBeGreaterThan(0);
       fixture.detectChanges();
-      return filterSummaryFixture.filterCloseClick(0).then(() => {
-        fixture.detectChanges();
-        expect(testComponent.appliedFilters.length).toBe(0);
-      });
+      await filterSummaryFixture.filterCloseClick(0);
+      fixture.detectChanges();
+      expect(testComponent.appliedFilters.length).toBe(0);
     });
 
-    it('should dismiss nth filter item from summary', () => {
+    it('should dismiss nth filter item from summary', async () => {
       expect(testComponent.appliedFilters.length).toBe(0);
       for (let i = 1; i <= 5; i++) {
         testComponent.applyFilter(`example ${i}`);
       }
       expect(testComponent.appliedFilters.length).toBe(5);
       fixture.detectChanges();
-      return filterSummaryFixture.filterCloseClick(3).then(() => {
-        fixture.detectChanges();
-        expect(testComponent.appliedFilters.length).toBe(4);
-      });
+      await filterSummaryFixture.filterCloseClick(3);
+      fixture.detectChanges();
+      expect(testComponent.appliedFilters.length).toBe(4);
     });
 
-    it('should throw error when dismissing non existent filter', () => {
+    it('should throw error when dismissing non existent filter', async () => {
       expect(testComponent.appliedFilters.length).toBe(0);
       for (let i = 1; i <= 3; i++) {
         testComponent.applyFilter(`example ${i}`);
       }
       expect(testComponent.appliedFilters.length).toBe(3);
       fixture.detectChanges();
-      return filterSummaryFixture.filterCloseClick(5).then(() => {
+      try {
+        await filterSummaryFixture.filterCloseClick(5);
         expect('Error').toBeTrue();
-      }).catch(e => {
+      } catch (e) {
         expect(e).toBeInstanceOf(Error);
-        expect((e as Error).message)
-          .toBe('Unable to click close for a filter index 5');
-      });
+        expect((e as Error).message).toBe('Unable to click close for a filter index 5');
+      }
     });
   });
 
   describe('Button', () => {
-    it('should click the button', () => {
+    it('should click the button', async () => {
       expect(testComponent.buttonClicked).toBeFalse();
       filterButtonFixture.clickFilterButton();
       fixture.detectChanges();
       expect(testComponent.buttonClicked).toBeTrue();
     });
 
-    it('should do nothing when the button is not enabled', () => {
+    it('should do nothing when the button is not enabled', async () => {
       testComponent.buttonIsDisabled = true;
       expect(testComponent.buttonClicked).toBeFalse();
       fixture.detectChanges();
-      return filterButtonFixture.clickFilterButton().then(() => {
-        fixture.detectChanges();
-        expect(testComponent.buttonClicked).toBeFalse();
-      });
+      await filterButtonFixture.clickFilterButton();
+      fixture.detectChanges();
+      expect(testComponent.buttonClicked).toBeFalse();
     });
 
     it('should get the button aria label', async () => {
