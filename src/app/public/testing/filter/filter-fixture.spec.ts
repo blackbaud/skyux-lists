@@ -55,7 +55,7 @@ class FilterTestComponent {
   public buttonClicked: boolean = false;
   public buttonIsDisabled: boolean = false;
 
-  public applyFilter(filter: string) {
+  public applyFilter(filter: string): void {
     this.appliedFilters.push(filter);
   }
 
@@ -63,7 +63,7 @@ class FilterTestComponent {
     this.appliedFilters.splice(index, 1);
   }
 
-  public filterButtonClicked() {
+  public filterButtonClicked(): void {
     this.buttonClicked = true;
   }
 }
