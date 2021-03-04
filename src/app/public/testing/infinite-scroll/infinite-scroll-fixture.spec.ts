@@ -37,7 +37,6 @@ const DATA_SKY_ID = 'test-infinite-scroll';
   `
 })
 class InfiniteScrollTestComponent {
-  public hasMore = false;
   public items: string[] = [];
   private i: number = 1;
   public loadMore() {
