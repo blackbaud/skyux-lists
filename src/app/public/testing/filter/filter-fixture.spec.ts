@@ -149,22 +149,22 @@ describe('Filter fixture', () => {
       expect(testComponent.buttonClicked).toBeFalse();
     });
 
-    it('should get the button aria label', async () => {
+    it('should get the button aria controls', async () => {
       fixture.detectChanges();
       await fixture.whenStable();
-      expect(filterButtonFixture.ariaLabel).toBe('Filter');
+      expect(filterButtonFixture.button.ariaControls).toBeFalsy();
     });
 
-    it('should get the button aria title', async () => {
+    it('should get the button aria expanded', async () => {
       fixture.detectChanges();
       await fixture.whenStable();
-      expect(filterButtonFixture.ariaTitle).toBe('');
+      expect(filterButtonFixture.button.ariaExpanded).toBeFalse();
     });
 
     it('should get the button id', async () => {
       fixture.detectChanges();
       await fixture.whenStable();
-      expect(filterButtonFixture.id).toContain('sky-filter-button-');
+      expect(filterButtonFixture.button.id).toContain('sky-filter-button-');
     });
 
     it('should get the button text', async () => {

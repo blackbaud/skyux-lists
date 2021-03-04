@@ -10,6 +10,10 @@ import {
   SkyAppTestUtility
 } from '@skyux-sdk/testing';
 
+import {
+  SkyListsFilterFixtureButton
+} from './lists-filter-fixture-button';
+
 /**
  * Provides information for and interaction with a SKY UX filter button component.
  * By using the fixture API, a test insulates itself against updates to the internals
@@ -29,7 +33,7 @@ export class SkyFilterFixtureButton {
    * Click the button to apply the filter.
    */
   public async clickFilterButton(): Promise<any> {
-    const button = this.getButton();
+    const button = this.getButtonElement();
     if (button instanceof HTMLButtonElement && !button.disabled) {
       button.click();
     }
@@ -37,44 +41,24 @@ export class SkyFilterFixtureButton {
     return this.fixture.whenStable();
   }
 
+  public get button(): SkyListsFilterFixtureButton {
+    const buttonElement = this.getButtonElement();
+    return {
+      ariaControls: buttonElement.getAttribute('aria-controls'),
+      ariaExpanded: !!buttonElement.getAttribute('aria-expanded'),
+      disabled: buttonElement.disabled,
+      id: buttonElement.id
+    };
+  }
   /**
    * Get the button text.
    */
   public get buttonText(): string {
-    const text = this.getButton()?.innerText;
+    const text = this.getButtonElement()?.innerText;
     return this.normalizeText(text);
   }
 
-  /**
-   * Get the button id.
-   */
-  public get id(): string {
-    return this.getButton()?.id;
-  }
-
-  /**
-   * Get the button ARIA label.
-   */
-  public get ariaLabel(): string {
-    const button = this.getButton();
-    if (button instanceof Element && button.hasAttribute('aria-label')) {
-      return this.normalizeText(button.getAttribute('aria-label'));
-    }
-    return '';
-  }
-
-  /**
-   * Get the button ARIA title.
-   */
-  public get ariaTitle(): string {
-    const button = this.getButton();
-    if (button instanceof Element && button.hasAttribute('aria-title')) {
-      return this.normalizeText(button.getAttribute('aria-title'));
-    }
-    return '';
-  }
-
-  private getButton(): HTMLButtonElement | null {
+  private getButtonElement(): HTMLButtonElement | null {
     return this.debugElement.nativeElement.querySelector('.sky-filter-btn');
   }
 
