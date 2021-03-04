@@ -42,7 +42,7 @@ export class SkyFilterFixtureButton {
    */
   public get buttonText(): string {
     const text = this.getButton()?.innerText;
-    return SkyFilterFixtureButton.normalizeText(text);
+    return this.normalizeText(text);
   }
 
   /**
@@ -58,7 +58,7 @@ export class SkyFilterFixtureButton {
   public get ariaLabel(): string {
     const button = this.getButton();
     if (button instanceof Element && button.hasAttribute('aria-label')) {
-      return SkyFilterFixtureButton.normalizeText(button.getAttribute('aria-label'));
+      return this.normalizeText(button.getAttribute('aria-label'));
     }
     return '';
   }
@@ -69,7 +69,7 @@ export class SkyFilterFixtureButton {
   public get ariaTitle(): string {
     const button = this.getButton();
     if (button instanceof Element && button.hasAttribute('aria-title')) {
-      return SkyFilterFixtureButton.normalizeText(button.getAttribute('aria-title'));
+      return this.normalizeText(button.getAttribute('aria-title'));
     }
     return '';
   }
@@ -78,7 +78,7 @@ export class SkyFilterFixtureButton {
     return this.debugElement.nativeElement.querySelector('.sky-filter-btn');
   }
 
-  private static normalizeText(text: string): string {
-    return (text || '').replace(/\s+/, ' ').replace(/^ | $/g, '');
+  private normalizeText(text: string): string {
+    return text.trim().replace(/\s+/g, ' ');
   }
 }
