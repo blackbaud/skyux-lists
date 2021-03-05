@@ -45,7 +45,7 @@ export class SkyFilterFixtureButton {
     const buttonElement = this.getButtonElement();
     return {
       ariaControls: buttonElement.getAttribute('aria-controls'),
-      ariaExpanded: !!buttonElement.getAttribute('aria-expanded'),
+      ariaExpanded: buttonElement.getAttribute('aria-expanded') === 'true',
       disabled: buttonElement.disabled,
       id: buttonElement.id
     };

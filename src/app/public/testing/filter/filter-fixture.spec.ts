@@ -34,6 +34,8 @@ const DATA_SKY_ID_BUTTON = 'test-filter-button';
       data-sky-id="${DATA_SKY_ID_BUTTON}"
       [disabled]="buttonIsDisabled"
       [showButtonText]="true"
+      [ariaControls]="ariaControls"
+      [ariaExpanded]="ariaExpanded"
       (filterButtonClick)="filterButtonClicked()"
     >
     </sky-filter-button>
@@ -54,6 +56,8 @@ class FilterTestComponent {
   public appliedFilters: string[] = [];
   public buttonClicked: boolean = false;
   public buttonIsDisabled: boolean = false;
+  public ariaExpanded: boolean = false;
+  public ariaControls: string;
 
   public applyFilter(filter: string): void {
     this.appliedFilters.push(filter);
@@ -150,15 +154,20 @@ describe('Filter fixture', () => {
     });
 
     it('should get the button aria controls', async () => {
+      fixture.componentInstance.ariaControls = 'some-value';
       fixture.detectChanges();
       await fixture.whenStable();
-      expect(filterButtonFixture.button.ariaControls).toBeFalsy();
+      expect(filterButtonFixture.button.ariaControls).toBe('some-value');
     });
 
     it('should get the button aria expanded', async () => {
       fixture.detectChanges();
       await fixture.whenStable();
       expect(filterButtonFixture.button.ariaExpanded).toBeFalse();
+      fixture.componentInstance.ariaExpanded = true;
+      fixture.detectChanges();
+      await fixture.whenStable();
+      expect(filterButtonFixture.button.ariaExpanded).toBeTrue();
     });
 
     it('should get the button id', async () => {
