@@ -1,7 +1,7 @@
-# 4.6.0 (2021-03-05)
+# 4.6.0 (2021-03-08)
 
-- Added a filter fixture. [#220](https://github.com/blackbaud/skyux-lists/pull/220)
-- Added an infinite scroll fixture. [#219](https://github.com/blackbaud/skyux-lists/pull/219)
+- Added a filter test fixture. [#220](https://github.com/blackbaud/skyux-lists/pull/220)
+- Added an infinite scroll test fixture. [#219](https://github.com/blackbaud/skyux-lists/pull/219)
 
 # 4.5.1 (2021-02-08)
 
