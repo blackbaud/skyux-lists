@@ -10,11 +10,14 @@
   [ngClass]="{'sky-filter-btn-active sky-rounded-corners': active}"
   (click)="filterButtonOnClick()"
 >
-  <sky-icon
+  <sky-icon *skyThemeIf="'default'"
     icon="filter"
     size="lg"
-  >
-</sky-icon>
+  ></sky-icon>
+  <sky-icon *skyThemeIf="'modern'"
+    icon="filter"
+    iconType="skyux"
+  ></sky-icon>
   <span
     *ngIf="showButtonText"
     class="sky-filter-btn-text"

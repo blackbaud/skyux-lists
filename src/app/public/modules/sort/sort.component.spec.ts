@@ -11,6 +11,10 @@ import {
 } from '@skyux-sdk/testing';
 
 import {
+  SkyThemeService
+} from '@skyux/theme';
+
+import {
   SortTestComponent
 } from './fixtures/sort.component.fixture';
 
@@ -29,6 +33,9 @@ describe('Sort component', () => {
       ],
       imports: [
         SkySortModule
+      ],
+      providers: [
+        SkyThemeService
       ]
     });
 

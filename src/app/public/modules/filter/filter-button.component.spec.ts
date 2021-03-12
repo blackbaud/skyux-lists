@@ -9,6 +9,11 @@ import {
 } from '@skyux-sdk/testing';
 
 import {
+  SkyThemeModule,
+  SkyThemeService
+} from '@skyux/theme';
+
+import {
   FilterButtonTestComponent
 } from './fixtures/filter-button.component.fixture';
 
@@ -27,7 +32,11 @@ describe('Filter button', () => {
         FilterButtonTestComponent
       ],
       imports: [
-        SkyFilterModule
+        SkyFilterModule,
+        SkyThemeModule
+      ],
+      providers: [
+        SkyThemeService
       ]
     });
 
@@ -92,4 +101,9 @@ describe('Filter button', () => {
       expect(fixture.nativeElement).toBeAccessible();
     });
   }));
+
+  it('should use modern icon when applicable', async () => {
+    fixture.detectChanges();
+    await fixture.whenStable();
+  });
 });

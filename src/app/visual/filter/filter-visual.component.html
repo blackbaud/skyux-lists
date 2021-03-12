@@ -1,3 +1,10 @@
+<sky-docs-demo-control-panel-theme
+  (themeSettingsChange)="themeSettingsChange($event)"
+></sky-docs-demo-control-panel-theme>
+
+<br/>
+
+<div [skyTheme]="themeSettings">
 <div
   class="app-screenshot"
   id="screenshot-filter-button"
@@ -55,4 +62,5 @@
       </div>
     </sky-filter-inline-item>
   </sky-filter-inline>
+</div>
 </div>

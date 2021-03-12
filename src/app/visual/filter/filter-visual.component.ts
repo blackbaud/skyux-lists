@@ -1,4 +1,11 @@
-import { Component } from '@angular/core';
+import {
+  Component
+} from '@angular/core';
+
+import {
+  SkyThemeService,
+  SkyThemeSettings
+} from '@skyux/theme';
 
 @Component({
   selector: 'filter-visual',
@@ -17,4 +24,15 @@ export class FilterVisualComponent {
       dismissible: true
     }
   ];
+  public themeSettings: SkyThemeSettings;
+
+  constructor(
+    public themeSvc: SkyThemeService
+  ) {
+  }
+
+  public themeSettingsChange(themeSettings: SkyThemeSettings): void {
+    this.themeSettings = themeSettings;
+    this.themeSvc.setTheme(themeSettings);
+  }
 }
