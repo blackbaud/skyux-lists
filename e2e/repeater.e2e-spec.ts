@@ -134,6 +134,14 @@ describe('Repeater', () => {
         screenshotName: getScreenshotName('repeater-inline-delete')
       });
     });
+
+    it('should match previous screenshot with items without titles', async (done) => {
+      await SkyHostBrowser.scrollTo('#screenshot-repeater-no-titles');
+
+      expect('#screenshot-repeater-no-titles').toMatchBaselineScreenshot(done, {
+        screenshotName: getScreenshotName('repeater-reorderable')
+      });
+    });
   }
 
   beforeEach(async () => {
