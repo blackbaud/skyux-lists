@@ -139,7 +139,7 @@ describe('Repeater', () => {
       await SkyHostBrowser.scrollTo('#screenshot-repeater-no-titles');
 
       expect('#screenshot-repeater-no-titles').toMatchBaselineScreenshot(done, {
-        screenshotName: getScreenshotName('repeater-reorderable')
+        screenshotName: getScreenshotName('repeater-no-titles')
       });
     });
   }
