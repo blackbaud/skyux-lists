@@ -114,7 +114,7 @@ describe('Repeater', () => {
     });
 
     it('should match previous repeater screenshot with an inline delete', async (done) => {
-      await SkyHostBrowser.scrollTo('#screenshot-last-repeater-item');
+      await SkyHostBrowser.scrollTo('#screenshot-repeater-inline-delete');
 
       await element.all(
         by.css('#screenshot-repeater-inline-delete .sky-dropdown-button')
