@@ -50,13 +50,16 @@ import {
 } from './fixtures/repeater-missing-tag.fixture';
 
 import {
+  NestedRepeaterTestComponent
+} from './fixtures/nested-repeater.component.fixture';
+
+import {
   SkyRepeaterComponent
 } from './repeater.component';
 
 import {
   SkyRepeaterService
 } from './repeater.service';
-import { NestedRepeaterTestComponent } from './fixtures/nested-repeater.component.fixture';
 
 describe('Repeater item component', () => {
   class MockLogService {
@@ -1461,7 +1464,7 @@ describe('Repeater item component', () => {
       tick();
     }));
 
-    it('should reorder without errors', fakeAsync(() => {
+    it('should reorder top-level repeater items', fakeAsync(() => {
       const selector = '.sky-repeater-item:not(.sky-repeater-item .sky-repeater-item)';
       let items = el.querySelectorAll(selector);
       const initialBottomRepeaterItem = items[items.length - 1];

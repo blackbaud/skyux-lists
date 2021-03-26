@@ -5,7 +5,7 @@
 <ng-container
   [@.disabled]="animationsDisabled"
 >
-  <!-- <div
+  <div
     class="app-screenshot sky-margin-stacked-default"
     id="screenshot-repeater"
   >
@@ -35,7 +35,7 @@
         </sky-repeater-item-content>
       </sky-repeater-item>
     </sky-repeater>
-  </div> -->
+  </div>
 
   <div
     class="app-screenshot sky-margin-stacked-default"
@@ -46,31 +46,19 @@
     </h3>
     <sky-repeater
       [(activeIndex)]="activeIndex"
-      [reorderable]="true"
-      (orderChange)="onOrderChange($event)"
     >
-      <sky-repeater-item *ngFor="let item of items; let i = index"
-        [tag]="item"
-      >
+      <sky-repeater-item *ngFor="let item of items; let i = index">
         <sky-repeater-item-title>
           {{ item.title }}
         </sky-repeater-item-title>
         <sky-repeater-item-content>
-          <sky-repeater
-            [expandMode]="'single'"
+          {{ item.note }}
+          <button
+            type="button"
+            (click)="deleteItem(i)"
           >
-            <sky-repeater-item
-              [isExpanded]="false"
-              [tag]="'fart popsicle'"
-            >
-              <sky-repeater-item-title>
-                INNER TITLE 1
-              </sky-repeater-item-title>
-              <sky-repeater-item-content>
-                INNER CONTENT 1
-              </sky-repeater-item-content>
-            </sky-repeater-item>
-          </sky-repeater>
+            Delete me
+          </button>
         </sky-repeater-item-content>
       </sky-repeater-item>
     </sky-repeater>
@@ -90,7 +78,7 @@
     <p>Active index: {{ activeIndex }}</p>
   </div>
 
-  <!-- <div
+  <div
     class="app-screenshot sky-margin-stacked-default"
     id="screenshot-repeater-collapsed"
   >
@@ -635,5 +623,5 @@
         </sky-repeater-item-content>
       </sky-repeater-item>
     </sky-repeater>
-  </div> -->
+  </div>
 </ng-container>
