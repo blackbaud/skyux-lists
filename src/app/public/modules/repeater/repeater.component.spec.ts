@@ -56,6 +56,7 @@ import {
 import {
   SkyRepeaterService
 } from './repeater.service';
+import { NestedRepeaterTestComponent } from './fixtures/nested-repeater.component.fixture';
 
 describe('Repeater item component', () => {
   class MockLogService {
@@ -1446,6 +1447,31 @@ describe('Repeater item component', () => {
 
       fixture.destroy();
       flush();
+    }));
+  });
+
+  describe('with nested repeater items', () => {
+    let fixture: ComponentFixture<NestedRepeaterTestComponent>;
+    let el: any;
+
+    beforeEach(fakeAsync(() => {
+      fixture = TestBed.createComponent(NestedRepeaterTestComponent);
+      el = fixture.nativeElement;
+      fixture.detectChanges();
+      tick();
+    }));
+
+    it('should reorder without errors', fakeAsync(() => {
+      const selector = '.sky-repeater-item:not(.sky-repeater-item .sky-repeater-item)';
+      let items = el.querySelectorAll(selector);
+      const initialBottomRepeaterItem = items[items.length - 1];
+      el.querySelectorAll('.sky-repeater-item-reorder-top')[1].click();
+      fixture.detectChanges();
+      tick();
+      fixture.detectChanges();
+
+      const topRepeaterItem = el.querySelectorAll(selector)[0];
+      expect(topRepeaterItem).toBe(initialBottomRepeaterItem);
     }));
   });
 });

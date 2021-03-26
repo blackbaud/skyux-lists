@@ -75,7 +75,11 @@ export class SkyRepeaterAdapterService {
     return newIndex;
   }
 
+  /**
+   * Returns an array of the immediate repeater item descendants. Excludes nested repeater items.
+   */
   private getRepeaterItemArray() {
-    return Array.from(this.host.nativeElement.querySelectorAll('sky-repeater-item'));
+    const selector = 'sky-repeater-item:not(sky-repeater sky-repeater sky-repeater-item)';
+    return Array.from(this.host.nativeElement.querySelectorAll(selector));
   }
 }
