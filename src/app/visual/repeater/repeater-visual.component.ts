@@ -54,6 +54,23 @@ export class RepeaterVisualComponent {
       title: '2018 Special event',
       note: 'Special event',
       fund: '2018 Special Events Fund'
+    },
+    {
+      title: '2019 Gala',
+      note: '2019 Gala for friends and family',
+      fund: 'General 2019 Fund'
+    },
+    {
+      id: 99,
+      title: '2019 Gala',
+      note: '2019 Gala for friends and family',
+      fund: 'General 2019 Fund'
+    },
+    {
+      id: 123,
+      title: '2019 Gala',
+      note: '2019 Gala for friends and family',
+      fund: 'General 2019 Fund'
     }
   ];
 
