@@ -32,10 +32,6 @@ export class SkyRepeaterAdapterService {
     this.host = hostRef;
   }
 
-  public addClass(element: ElementRef, className: string): void {
-    this.renderer2.addClass(element.nativeElement, className);
-  }
-
   public getRepeaterItemIndex(element: HTMLElement): number {
     return this.getRepeaterItemArray().indexOf(element);
   }

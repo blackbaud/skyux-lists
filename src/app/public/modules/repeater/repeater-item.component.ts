@@ -201,8 +201,6 @@ export class SkyRepeaterItemComponent implements OnDestroy, OnInit, AfterViewIni
     return this._isCollapsible;
   }
 
-  public id: number;
-
   public keyboardReorderingEnabled: boolean = false;
 
   public reorderButtonLabel: string;
@@ -284,7 +282,6 @@ export class SkyRepeaterItemComponent implements OnDestroy, OnInit, AfterViewIni
 
   public ngOnInit(): void {
     this.repeaterService.registerItem(this);
-    this.id = this.repeaterService.repeaterGroupId;
     this.repeaterService.activeItemChange
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe((item: SkyRepeaterItemComponent) => {
