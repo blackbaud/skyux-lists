@@ -1,7 +1,6 @@
 import {
   ElementRef,
-  Injectable,
-  Renderer2
+  Injectable
 } from '@angular/core';
 
 import {
@@ -16,7 +15,6 @@ export class SkyRepeaterAdapterService {
   private host: ElementRef;
 
   constructor(
-    private renderer2: Renderer2,
     private repeaterService: SkyRepeaterService
   ) { }
 
