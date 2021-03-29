@@ -24,7 +24,6 @@ export class FilterVisualComponent {
       dismissible: true
     }
   ];
-  public themeSettings: SkyThemeSettings;
 
   constructor(
     public themeSvc: SkyThemeService
@@ -32,7 +31,6 @@ export class FilterVisualComponent {
   }
 
   public themeSettingsChange(themeSettings: SkyThemeSettings): void {
-    this.themeSettings = themeSettings;
     this.themeSvc.setTheme(themeSettings);
   }
 }

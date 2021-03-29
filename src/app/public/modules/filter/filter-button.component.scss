@@ -4,9 +4,13 @@
    color: $sky-highlight-color-success;
    border: 2px solid $sky-highlight-color-success;
    padding: 5px 11px; /* offset the thicker border to avoid button size change */
+}
 
-  @include sky-theme-modern {
-    padding: initial;
+@include sky-theme-modern {
+  .sky-filter-btn-active, .sky-filter-btn-active:hover, .sky-filter-btn-active:focus {
+    border: none;
+    box-shadow: inset 0 0 0 1px $sky-highlight-color-success;
+    padding: 9px 21px;
   }
 }
 

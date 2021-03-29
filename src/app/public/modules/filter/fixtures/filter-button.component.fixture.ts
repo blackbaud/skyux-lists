@@ -3,7 +3,8 @@ import {
 } from '@angular/core';
 
 import {
-  SkyTheme, SkyThemeMode,
+  SkyTheme,
+  SkyThemeMode,
   SkyThemeSettings
 } from '@skyux/theme';
 
