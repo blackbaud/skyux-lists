@@ -1,6 +1,7 @@
 import {
   ElementRef,
-  Injectable
+  Injectable,
+  Renderer2
 } from '@angular/core';
 
 import {
@@ -15,6 +16,7 @@ export class SkyRepeaterAdapterService {
   private host: ElementRef;
 
   constructor(
+    private renderer2: Renderer2,
     private repeaterService: SkyRepeaterService
   ) { }
 
@@ -28,6 +30,10 @@ export class SkyRepeaterAdapterService {
 
   public setRepeaterHost(hostRef: ElementRef): void {
     this.host = hostRef;
+  }
+
+  public addClass(element: ElementRef, className: string): void {
+    this.renderer2.addClass(element.nativeElement, className);
   }
 
   public getRepeaterItemIndex(element: HTMLElement): number {
@@ -79,7 +85,7 @@ export class SkyRepeaterAdapterService {
    * Returns an array of the immediate repeater item descendants. Excludes nested repeater items.
    */
   private getRepeaterItemArray() {
-    const selector = 'sky-repeater-item:not(sky-repeater sky-repeater sky-repeater-item)';
-    return Array.from(this.host.nativeElement.querySelectorAll(selector));
+    const id = this.repeaterService.repeaterGroupId;
+    return Array.from(this.host.nativeElement.querySelectorAll('.sky-repeater-item-group-' + id));
   }
 }

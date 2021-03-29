@@ -6,6 +6,7 @@ import {
   ContentChildren,
   ElementRef,
   EventEmitter,
+  HostBinding,
   Input,
   OnDestroy,
   OnInit,
@@ -200,6 +201,8 @@ export class SkyRepeaterItemComponent implements OnDestroy, OnInit, AfterViewIni
     return this._isCollapsible;
   }
 
+  public id: number;
+
   public keyboardReorderingEnabled: boolean = false;
 
   public reorderButtonLabel: string;
@@ -207,6 +210,11 @@ export class SkyRepeaterItemComponent implements OnDestroy, OnInit, AfterViewIni
   public reorderState: string;
 
   public slideDirection: string;
+
+  @HostBinding('class')
+  get repeaterGroupClass(): string {
+    return 'sky-repeater-item-group-' + this.repeaterService.repeaterGroupId;
+  }
 
   @ViewChild('grabHandle', { read: ElementRef })
   private grabHandle: ElementRef;
@@ -276,6 +284,7 @@ export class SkyRepeaterItemComponent implements OnDestroy, OnInit, AfterViewIni
 
   public ngOnInit(): void {
     this.repeaterService.registerItem(this);
+    this.id = this.repeaterService.repeaterGroupId;
     this.repeaterService.activeItemChange
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe((item: SkyRepeaterItemComponent) => {

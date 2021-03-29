@@ -1465,7 +1465,8 @@ describe('Repeater item component', () => {
     }));
 
     it('should reorder top-level repeater items', fakeAsync(() => {
-      const selector = '.sky-repeater-item:not(.sky-repeater-item .sky-repeater-item)';
+      const service = TestBed.inject(SkyRepeaterService);
+      const selector = 'sky-repeater-item-group-' + service.repeaterGroupId;
       let items = el.querySelectorAll(selector);
       const initialBottomRepeaterItem = items[items.length - 1];
       el.querySelectorAll('.sky-repeater-item-reorder-top')[1].click();
