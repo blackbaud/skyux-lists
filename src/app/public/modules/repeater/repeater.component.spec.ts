@@ -1465,17 +1465,17 @@ describe('Repeater item component', () => {
     }));
 
     it('should reorder top-level repeater items', fakeAsync(() => {
-      const selector = 'sky-repeater-item:not(sky-repeater-item sky-repeater-item)';
-      let topLevelItems = el.querySelectorAll(selector);
-      const initialBottomRepeaterItem = topLevelItems[topLevelItems.length - 1];
+      let initialTopRepeaterItem = el.querySelector('sky-repeater-item[tag="top-item"]');
+      let initialBottomRepeaterItem = el.querySelector('sky-repeater-item[tag="bottom-item"]');
 
+      expect(initialTopRepeaterItem).toBeDefined();
       expect(initialBottomRepeaterItem).toBeDefined();
 
       el.querySelectorAll('.sky-repeater-item-reorder-top')[1].click();
       fixture.detectChanges();
       tick();
       fixture.detectChanges();
-      const topRepeaterItem = el.querySelectorAll(selector)[0];
+      const topRepeaterItem = el.querySelectorAll('sky-repeater-item')[0];
 
       expect(topRepeaterItem).toBe(initialBottomRepeaterItem);
     }));
