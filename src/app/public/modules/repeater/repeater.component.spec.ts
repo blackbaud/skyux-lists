@@ -1469,7 +1469,7 @@ describe('Repeater item component', () => {
       let topLevelItems = el.querySelectorAll(selector);
       const initialBottomRepeaterItem = topLevelItems[topLevelItems.length - 1];
 
-      expect(initialBottomRepeaterItem).not.toBeNull();
+      expect(initialBottomRepeaterItem).toBeDefined();
 
       el.querySelectorAll('.sky-repeater-item-reorder-top')[1].click();
       fixture.detectChanges();
