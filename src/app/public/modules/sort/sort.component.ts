@@ -17,7 +17,7 @@ import {
 
 import {
   SkyThemeService
-} from "@skyux/theme";
+} from '@skyux/theme';
 
 import {
   SkySortService
@@ -54,7 +54,7 @@ export class SkySortComponent implements OnInit {
   public ngOnInit(): void {
     this.themeSvc.settingsChange.subscribe(() => {
       this.changeDetector.markForCheck();
-    })
+    });
   }
 
   public dropdownClicked(): void {

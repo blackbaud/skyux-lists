@@ -10,7 +10,7 @@ import {
 
 import {
   SkyThemeService
-} from "@skyux/theme";
+} from '@skyux/theme';
 
 let nextId = 0;
 
@@ -85,7 +85,7 @@ export class SkyFilterButtonComponent implements OnInit {
   public ngOnInit(): void {
     this.themeSvc.settingsChange.subscribe(() => {
       this.changeDetector.markForCheck();
-    })
+    });
   }
 
   public filterButtonOnClick(): void {
