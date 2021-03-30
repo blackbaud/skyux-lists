@@ -1465,16 +1465,18 @@ describe('Repeater item component', () => {
     }));
 
     it('should reorder top-level repeater items', fakeAsync(() => {
-      const service = TestBed.inject(SkyRepeaterService);
-      const selector = 'sky-repeater-item-group-' + service.repeaterGroupId;
-      let items = el.querySelectorAll(selector);
-      const initialBottomRepeaterItem = items[items.length - 1];
+      const selector = '.sky-repeater-item-group-1';
+      let topLevelItems = el.querySelectorAll(selector);
+      const initialBottomRepeaterItem = topLevelItems[topLevelItems.length - 1];
+
+      expect(initialBottomRepeaterItem).not.toBeNull();
+
       el.querySelectorAll('.sky-repeater-item-reorder-top')[1].click();
       fixture.detectChanges();
       tick();
       fixture.detectChanges();
-
       const topRepeaterItem = el.querySelectorAll(selector)[0];
+
       expect(topRepeaterItem).toBe(initialBottomRepeaterItem);
     }));
   });
