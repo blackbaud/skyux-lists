@@ -72,13 +72,13 @@ export class SkyFilterButtonComponent implements OnInit {
    * Fires when the filter button is selected.
    */
   @Output()
-  public filterButtonClick: EventEmitter<any> = new EventEmitter();
+  public filterButtonClick = new EventEmitter();
 
   private _filterButtonId: string;
 
   constructor(
-    public themeSvc: SkyThemeService,
-    private changeDetector: ChangeDetectorRef
+    public themeSvc: SkyThemeService
+    , private changeDetector: ChangeDetectorRef
   ) {
   }
 

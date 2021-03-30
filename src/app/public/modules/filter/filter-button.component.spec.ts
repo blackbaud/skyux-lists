@@ -103,13 +103,10 @@ describe('Filter button', () => {
   }));
 
   it('should use modern icon when applicable', async () => {
-    fixture.detectChanges();
-    await fixture.whenStable();
     const defaultIcon = fixture.nativeElement.querySelector('sky-filter-button sky-icon i');
     expect(defaultIcon).toHaveCssClass('fa-filter');
     fixture.componentInstance.useModernTheme();
     fixture.detectChanges();
-    await fixture.whenStable();
     const modernIcon = fixture.nativeElement.querySelector('sky-filter-button sky-icon i');
     expect(modernIcon).toHaveCssClass('sky-i-filter');
   });
