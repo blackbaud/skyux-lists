@@ -64,6 +64,6 @@ export class SortVisualComponent {
   }
 
   public themeSettingsChange(themeSettings: SkyThemeSettings): void {
-    setTimeout(() => this.themeSvc.setTheme(themeSettings));
+    this.themeSvc.setTheme(themeSettings);
   }
 }
