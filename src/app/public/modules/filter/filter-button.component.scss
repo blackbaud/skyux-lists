@@ -1,4 +1,7 @@
+@import "~@skyux/theme/scss/variables";
 @import "~@skyux/theme/scss/mixins";
+@import "~@skyux/theme/scss/themes/modern/_compat/variables";
+@import "~@skyux/theme/scss/themes/modern/_compat/mixins";
 
 .sky-filter-btn-active, .sky-filter-btn-active:hover, .sky-filter-btn-active:focus   {
    color: $sky-highlight-color-success;
@@ -6,18 +9,30 @@
    padding: 5px 11px; /* offset the thicker border to avoid button size change */
 }
 
-@include sky-theme-modern {
-  .sky-filter-btn-active, .sky-filter-btn-active:hover, .sky-filter-btn-active:focus {
-    color: initial;
-    border: none;
-    padding: 9px 21px;
-    background-color: $sky-background-color-info-light;
-    box-shadow: inset 0 0 0 2px $sky-highlight-color-info;
-  }
+.sky-filter-btn-active:hover, .sky-filter-btn-active:focus   {
+  color: $sky-text-color-default;
 }
 
-.sky-filter-btn-active:hover, .sky-filter-btn-active:focus   {
-   color: $sky-text-color-default;
+.sky-theme-modern {
+  &.sky-filter-btn-active,
+  &.sky-filter-btn-active:hover,
+  &.sky-filter-btn-active:focus {
+    color: initial;
+    border: none;
+
+    @include sky-theme-modern-button-variant(
+      $sky-text-color-default,
+      $sky-background-color-info-light,
+      $sky-highlight-color-info,
+      $sky-highlight-color-info,
+      $sky-theme-modern-padding-button-standard
+    );
+  }
+
+  &.sky-filter-btn-active:hover,
+  &.sky-filter-btn-active:focus {
+    box-shadow: inset 0 0 0 2px $sky-highlight-color-info;
+  }
 }
 
 @include sky-host-responsive-container-xs-min() {
