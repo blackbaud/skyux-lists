@@ -12,6 +12,11 @@ import {
  */
 @Injectable()
 export class SkyRepeaterAdapterService {
+
+  private get repeaterItemGroupSelector(): string {
+    return '.sky-repeater-item-group-' + this.repeaterService.repeaterGroupId;
+  }
+
   private host: ElementRef;
 
   constructor(
@@ -67,7 +72,7 @@ export class SkyRepeaterAdapterService {
     const repeaterDiv: HTMLElement = this.host.nativeElement.querySelector('.sky-repeater');
 
     repeaterDiv.removeChild(element);
-    const nextSibling = repeaterDiv.querySelectorAll('sky-repeater-item')[newIndex];
+    const nextSibling = repeaterDiv.querySelectorAll(this.repeaterItemGroupSelector)[newIndex];
 
     repeaterDiv.insertBefore(element, nextSibling);
     this.repeaterService.reorderItem(oldIndex, newIndex);
@@ -79,7 +84,6 @@ export class SkyRepeaterAdapterService {
    * Returns an array of the immediate repeater item descendants. Excludes nested repeater items.
    */
   private getRepeaterItemArray() {
-    const id = this.repeaterService.repeaterGroupId;
-    return Array.from(this.host.nativeElement.querySelectorAll('.sky-repeater-item-group-' + id));
+    return Array.from(this.host.nativeElement.querySelectorAll(this.repeaterItemGroupSelector));
   }
 }
