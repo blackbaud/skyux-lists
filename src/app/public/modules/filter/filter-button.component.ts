@@ -77,13 +77,14 @@ export class SkyFilterButtonComponent implements OnInit {
   private _filterButtonId: string;
 
   constructor(
-    public themeSvc: SkyThemeService
-    , private changeDetector: ChangeDetectorRef
+    public themeSvc: SkyThemeService,
+    private changeDetector: ChangeDetectorRef
   ) {
   }
 
   public ngOnInit(): void {
     this.themeSvc.settingsChange.subscribe(() => {
+      // Push changes b/c SkyIconComponent uses ChangeDetectionStrategy.OnPush
       this.changeDetector.markForCheck();
     });
   }

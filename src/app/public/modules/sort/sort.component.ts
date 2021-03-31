@@ -53,6 +53,7 @@ export class SkySortComponent implements OnInit {
 
   public ngOnInit(): void {
     this.themeSvc.settingsChange.subscribe(() => {
+      // Push changes b/c SkyDropdownComponent uses ChangeDetectionStrategy.OnPush
       this.changeDetector.markForCheck();
     });
   }
