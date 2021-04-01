@@ -23,15 +23,10 @@
     @include sky-theme-modern-button-variant(
       $sky-text-color-default,
       $sky-background-color-info-light,
-      $sky-highlight-color-info,
-      $sky-highlight-color-info,
+      $sky-background-color-primary-dark,
+      $sky-background-color-primary-dark,
       $sky-theme-modern-padding-button-standard
     );
-  }
-
-  &.sky-filter-btn-active:hover,
-  &.sky-filter-btn-active:focus {
-    box-shadow: inset 0 0 0 2px $sky-highlight-color-info;
   }
 }
 
