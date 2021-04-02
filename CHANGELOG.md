@@ -1,6 +1,6 @@
-# 4.7.0 (2021-04-01)
+# 4.7.0 (2021-04-02)
 
-- Updated filter and sort buttons use modern theme icons. [#222](https://github.com/blackbaud/skyux-lists/pull/222)
+- Updated the filter and sort buttons to use modern theme icons. [#222](https://github.com/blackbaud/skyux-lists/pull/222)
 
 # 4.6.1 (2021-03-31)
 
