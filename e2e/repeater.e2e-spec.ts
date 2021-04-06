@@ -114,7 +114,7 @@ describe('Repeater', () => {
     });
 
     it('should match previous repeater screenshot with an inline delete', async (done) => {
-      await SkyHostBrowser.scrollTo('#screenshot-last-repeater-item');
+      await SkyHostBrowser.scrollTo('#screenshot-repeater-inline-delete');
 
       await element.all(
         by.css('#screenshot-repeater-inline-delete .sky-dropdown-button')
@@ -132,6 +132,14 @@ describe('Repeater', () => {
 
       expect('#screenshot-repeater-inline-delete').toMatchBaselineScreenshot(done, {
         screenshotName: getScreenshotName('repeater-inline-delete')
+      });
+    });
+
+    it('should match previous screenshot with items without titles', async (done) => {
+      await SkyHostBrowser.scrollTo('#screenshot-repeater-no-titles');
+
+      expect('#screenshot-repeater-no-titles').toMatchBaselineScreenshot(done, {
+        screenshotName: getScreenshotName('repeater-no-titles')
       });
     });
   }
