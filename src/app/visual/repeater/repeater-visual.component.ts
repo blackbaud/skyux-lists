@@ -89,6 +89,29 @@ export class RepeaterVisualComponent {
     }
   ];
 
+  public itemsForReorderableRepeaterWithAddButton = [
+    {
+      id: '1',
+      title: 'Title 1'
+    },
+    {
+      id: '2',
+      title: 'Title 2'
+    },
+    {
+      id: '3',
+      title: 'Title 3'
+    },
+    {
+      id: '4',
+      title: 'Title 4'
+    },
+    {
+      id: '5',
+      title: 'Title 5'
+    }
+  ];
+
   public showActiveInlineDelete: boolean = false;
 
   public showContent: boolean = false;
@@ -130,8 +153,21 @@ export class RepeaterVisualComponent {
     this.items.push(newItem);
   }
 
+  public addItemToReorderableRepeaterWithAddButton(): void {
+    this.itemsForReorderableRepeaterWithAddButton.push({
+      id: `${this.itemsForReorderableRepeaterWithAddButton.length + 1}`,
+      title: `Title ${this.itemsForReorderableRepeaterWithAddButton.length + 1}`
+    });
+    console.log(this.itemsForReorderableRepeaterWithAddButton);
+  }
+
   public onOrderChange(tags: any): void {
     console.log(tags);
+  }
+
+  public onOrderChangeForReorderableRepeaterWithAddButton(tags: any): void {
+    console.log(tags);
+    this.itemsForReorderableRepeaterWithAddButton = [...tags];
   }
 
   public getSelectedItems(): string[] {
