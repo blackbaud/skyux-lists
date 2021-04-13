@@ -1,3 +1,7 @@
+# 4.8.0 (2021-04-14)
+
+- Updated the code examples to demonstrate adding new items to the bottom of a repeater list. [#228](https://github.com/blackbaud/skyux-lists/pull/228)
+
 # 4.7.1 (2021-04-06)
 
 - Fixed the repeater item component to allow for items without a title in modern theme. [#223](https://github.com/blackbaud/skyux-lists/pull/223)
