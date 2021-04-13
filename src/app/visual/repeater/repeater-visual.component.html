@@ -685,15 +685,21 @@
       Repeater with "reordering" enabled and add button
     </h3>
     <sky-repeater
+      expandMode="none"
       [reorderable]="true"
       (orderChange)="onOrderChangeForReorderableRepeaterWithAddButton($event)"
     >
-      <sky-repeater-item *ngFor="let item of itemsForReorderableRepeaterWithAddButton"
-        [tag]="item"
+      <sky-repeater-item *ngFor="let control of itemsForReorderableRepeaterWithAddButton.controls"
+        [tag]="control"
       >
-        <sky-repeater-item-title>
-          {{ item.title }}
-        </sky-repeater-item-title>
+        <sky-repeater-item-content>
+          <input
+            type="text"
+            class="sky-form-control"
+            maxlength="20"
+            [formControl]="control"
+          >
+        </sky-repeater-item-content>
       </sky-repeater-item>
     </sky-repeater>
     <button

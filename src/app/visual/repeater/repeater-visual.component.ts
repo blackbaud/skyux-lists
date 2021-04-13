@@ -7,15 +7,21 @@ import {
 } from '@skyux/config';
 
 import {
-  SkyThemeService,
-  SkyThemeSettings
-} from '@skyux/theme';
+  FormArray,
+  FormControl,
+  Validators
+} from '@angular/forms';
 
 import {
   SkyInlineFormButtonLayout,
   SkyInlineFormCloseArgs,
   SkyInlineFormConfig
 } from '@skyux/inline-form';
+
+import {
+  SkyThemeService,
+  SkyThemeSettings
+} from '@skyux/theme';
 
 let nextItemId: number = 0;
 
@@ -89,28 +95,17 @@ export class RepeaterVisualComponent {
     }
   ];
 
-  public itemsForReorderableRepeaterWithAddButton = [
-    {
-      id: '1',
-      title: 'Title 1'
-    },
-    {
-      id: '2',
-      title: 'Title 2'
-    },
-    {
-      id: '3',
-      title: 'Title 3'
-    },
-    {
-      id: '4',
-      title: 'Title 4'
-    },
-    {
-      id: '5',
-      title: 'Title 5'
+  public get itemsForReorderableRepeaterWithAddButton(): FormArray {
+    if (typeof this._itemsForReorderableRepeaterWithAddButton === 'undefined') {
+      this._itemsForReorderableRepeaterWithAddButton = new FormArray(
+        Array.from(Array(5).keys())
+          .map(n => this.newItemForReorderableRepeaterWithAddButton(n + 1))
+      );
     }
-  ];
+    return this._itemsForReorderableRepeaterWithAddButton as FormArray;
+  }
+
+  public _itemsForReorderableRepeaterWithAddButton: FormArray | undefined;
 
   public showActiveInlineDelete: boolean = false;
 
@@ -154,20 +149,21 @@ export class RepeaterVisualComponent {
   }
 
   public addItemToReorderableRepeaterWithAddButton(): void {
-    this.itemsForReorderableRepeaterWithAddButton.push({
-      id: `${this.itemsForReorderableRepeaterWithAddButton.length + 1}`,
-      title: `Title ${this.itemsForReorderableRepeaterWithAddButton.length + 1}`
-    });
-    console.log(this.itemsForReorderableRepeaterWithAddButton);
+    this.itemsForReorderableRepeaterWithAddButton.push(
+      this.newItemForReorderableRepeaterWithAddButton(this._itemsForReorderableRepeaterWithAddButton.length + 1)
+    );
   }
 
   public onOrderChange(tags: any): void {
     console.log(tags);
   }
 
-  public onOrderChangeForReorderableRepeaterWithAddButton(tags: any): void {
+  public onOrderChangeForReorderableRepeaterWithAddButton(tags: FormControl[]): void {
     console.log(tags);
-    this.itemsForReorderableRepeaterWithAddButton = [...tags];
+    this.itemsForReorderableRepeaterWithAddButton.clear();
+    tags.forEach(formControl => {
+      this.itemsForReorderableRepeaterWithAddButton.push(formControl);
+    });
   }
 
   public getSelectedItems(): string[] {
@@ -223,5 +219,9 @@ export class RepeaterVisualComponent {
 
   public themeSettingsChange(themeSettings: SkyThemeSettings): void {
     this.themeSvc.setTheme(themeSettings);
+  }
+
+  private newItemForReorderableRepeaterWithAddButton(n: number): FormControl {
+    return new FormControl(`item ${n}`, [Validators.required, Validators.maxLength(20)]);
   }
 }
