@@ -45,6 +45,12 @@ describe('Filter', () => {
     });
   });
 
+  it('should match previous screenshot for filter summary when overflowing', (done) => {
+    expect('#screenshot-filter-summary-overflow').toMatchBaselineScreenshot(done, {
+      screenshotName: 'filter-summary-overflow'
+    });
+  });
+
   it('should match previous screenshot for filter inline', (done) => {
     expect('#screenshot-filter-inline').toMatchBaselineScreenshot(done, {
       screenshotName: 'filter-inline'
