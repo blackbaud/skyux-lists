@@ -17,3 +17,10 @@
   display: flex;
   flex-wrap: wrap;
 }
+
+@include sky-theme-modern() {
+  .sky-filter-summary-header {
+    margin: 0 $sky-margin 0 0;
+  }
+}
+
