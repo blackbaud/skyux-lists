@@ -13,39 +13,52 @@ describe('Filter', () => {
     SkyHostBrowser.setWindowBreakpoint('lg');
   });
 
-  it('should match previous screenshot for filter button', (done) => {
+  it('should match previous screenshot for filter button', async (done) => {
+    await SkyHostBrowser.scrollTo('#screenshot-filter-button');
     expect('#screenshot-filter-button .sky-btn').toMatchBaselineScreenshot(done, {
       screenshotName: 'filter-button'
     });
   });
 
-  it('should match the previous screenshot for filter button when text is shown', (done) => {
+  it('should match the previous screenshot for filter button when text is shown', async (done) => {
+    await SkyHostBrowser.scrollTo('#screenshot-filter-button-text');
     expect('#screenshot-filter-button-text .sky-btn').toMatchBaselineScreenshot(done, {
       screenshotName: 'filter-button-text'
     });
   });
 
-  it('should match the previous screenshot for filter button when text is on but the screen is small', (done) => {
+  it('should match the previous screenshot for filter button when text is on but the screen is small', async (done) => {
     SkyHostBrowser.setWindowBreakpoint('xs');
+    await SkyHostBrowser.scrollTo('#screenshot-filter-button-text');
     expect('#screenshot-filter-button-text .sky-btn').toMatchBaselineScreenshot(done, {
       screenshotName: 'filter-button-text-small'
     });
   });
 
-  it('should match previous screenshot for active filter button', (done) => {
+  it('should match previous screenshot for active filter button', async (done) => {
+    await SkyHostBrowser.scrollTo('#screenshot-filter-button');
     element(by.css('.sky-btn-default')).click();
     expect('#screenshot-filter-button').toMatchBaselineScreenshot(done, {
       screenshotName: 'filter-button-active'
     });
   });
 
-  it('should match previous screenshot for filter summary', (done) => {
+  it('should match previous screenshot for filter summary', async (done) => {
+    await SkyHostBrowser.scrollTo('#screenshot-filter-summary');
     expect('#screenshot-filter-summary').toMatchBaselineScreenshot(done, {
       screenshotName: 'filter-summary'
     });
   });
 
-  it('should match previous screenshot for filter inline', (done) => {
+  it('should match previous screenshot for filter summary when overflowing', async (done) => {
+    await SkyHostBrowser.scrollTo('#screenshot-filter-summary-overflow');
+    expect('#screenshot-filter-summary-overflow').toMatchBaselineScreenshot(done, {
+      screenshotName: 'filter-summary-overflow'
+    });
+  });
+
+  it('should match previous screenshot for filter inline', async (done) => {
+    await SkyHostBrowser.scrollTo('#screenshot-filter-inline');
     expect('#screenshot-filter-inline').toMatchBaselineScreenshot(done, {
       screenshotName: 'filter-inline'
     });
