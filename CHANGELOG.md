@@ -1,3 +1,7 @@
+# 5.0.0-alpha.0 (2021-05-24)
+
+- Removed `BrowserAnimationsModule` from the `imports` section of `SkyRepeaterModule` to support lazy-loading. Consumers of `SkyRepeaterModule` must now import `BrowserAnimationsModule` into their application's root module. [#237](https://github.com/blackbaud/skyux-lists/pull/237)
+
 # 4.7.2 (2021-05-07)
 
 - Fixed the filter summary component to properly wrap filters. [#233](https://github.com/blackbaud/skyux-lists/pull/233)

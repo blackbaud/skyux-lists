@@ -7,6 +7,10 @@ import {
 } from '@angular/core';
 
 import {
+  NoopAnimationsModule
+} from '@angular/platform-browser/animations';
+
+import {
   SkyDropdownModule
 } from '@skyux/popovers';
 
@@ -44,6 +48,7 @@ import {
   ],
   imports: [
     CommonModule,
+    NoopAnimationsModule,
     SkyDropdownModule,
     SkyRepeaterModule
   ],

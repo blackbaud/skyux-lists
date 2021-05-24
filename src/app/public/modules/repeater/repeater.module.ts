@@ -7,10 +7,6 @@ import {
 } from '@angular/core';
 
 import {
-  BrowserAnimationsModule
-} from '@angular/platform-browser/animations';
-
-import {
   SkyLogModule
 } from '@skyux/core';
 
@@ -64,7 +60,6 @@ import {
     SkyRepeaterItemTitleComponent
   ],
   imports: [
-    BrowserAnimationsModule,
     CommonModule,
     DragulaModule,
     SkyChevronModule,
