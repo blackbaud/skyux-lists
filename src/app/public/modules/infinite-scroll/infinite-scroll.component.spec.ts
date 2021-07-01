@@ -5,11 +5,17 @@ import {
 } from '@angular/core/testing';
 
 import {
+  Subject
+} from 'rxjs';
+
+import {
+  SkyAppWindowRef
+} from '@skyux/core';
+
+import {
   expect,
   SkyAppTestUtility
 } from '@skyux-sdk/testing';
-import { SkyAppWindowRef } from '@skyux/core';
-import { Subject } from 'rxjs';
 
 import {
   SkyInfiniteScrollFixturesModule
@@ -18,8 +24,14 @@ import {
 import {
   SkyInfiniteScrollTestComponent
 } from './fixtures/infinite-scroll.component.fixture';
-import { SkyInfiniteScrollDomAdapterService } from './infinite-scroll-dom-adapter.service';
-import { SkyInfiniteScrollComponent } from './infinite-scroll.component';
+
+import {
+  SkyInfiniteScrollDomAdapterService
+} from './infinite-scroll-dom-adapter.service';
+
+import {
+  SkyInfiniteScrollComponent
+} from './infinite-scroll.component';
 
 describe('Infinite scroll', () => {
   let fixture: ComponentFixture<SkyInfiniteScrollTestComponent>;
