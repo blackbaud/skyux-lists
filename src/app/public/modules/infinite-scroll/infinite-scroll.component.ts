@@ -54,7 +54,7 @@ export class SkyInfiniteScrollComponent implements OnDestroy {
    * property is not specified, the infinite scroll component watches the DOM for changes
    * and fires `scrollEnd` events when changes occur on its parent DOM element. Relying
    * on this default behavior could fire an excessive number of `scrollEnd` events
-   * if the DOM changes are unrelated to loading new data, so it is highly recommend that this
+   * if the DOM changes are not related to loading data, so we strongly recommend using this
    * property be used to explicitly set the infinite scroll's loading state.
    * @required
    */
