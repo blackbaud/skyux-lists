@@ -51,7 +51,7 @@ export class SkyInfiniteScrollComponent implements OnDestroy {
   /**
    * Indicates whether data is loading because of a `scrollEnd` event. Setting the property
    * to `true` disables new `scrollEnd` events from firing until it changes to `false`. If this
-   * property is not specified, the infinite scroll component will watch the DOM for changes
+   * property is not specified, the infinite scroll component watches the DOM for changes
    * and begin firing `scrollEnd` events when changes occur on its parent DOM element. Relying
    * on this behavior could cause the `scrollEnd` event to fire an excessive amount of times
    * if the DOM changes are unrelated to loading new data, so it is highly recommend that this
