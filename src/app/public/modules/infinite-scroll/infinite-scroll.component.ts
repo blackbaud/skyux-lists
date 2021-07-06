@@ -56,6 +56,7 @@ export class SkyInfiniteScrollComponent implements OnDestroy {
    * on this behavior could cause the `scrollEnd` event to fire an excessive amount of times
    * if the DOM changes are unrelated to loading new data, so it is highly recommend that this
    * property be used to explicitly set the infinite scroll's loading state.
+   * @required
    */
   @Input()
   public get loading(): boolean | undefined {
