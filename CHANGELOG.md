@@ -1,3 +1,7 @@
+# 4.8.0 (2021-07-06)
+
+- Added the `loading` input to the infinite scroll component to allow for setting the loading state explicitly. The default behavior watches for DOM updates which can cause an excessive number of `scrollEnd` events and lead to poor performance. [#238](https://github.com/blackbaud/skyux-lists/pull/238)
+
 # 5.0.0-alpha.0 (2021-05-24)
 
 - Removed `BrowserAnimationsModule` from the `imports` section of `SkyRepeaterModule` to support lazy-loading. Consumers of `SkyRepeaterModule` must now import `BrowserAnimationsModule` into their application's root module. [#237](https://github.com/blackbaud/skyux-lists/pull/237)
