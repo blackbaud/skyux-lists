@@ -16,7 +16,7 @@ import {
     SkyMediaQueryModule
   ],
   providers: [
-    SkyAppWindowRef,
+    SkyAppWindowRef
   ]
 })
 export class SkyListsForRootCompatModule {}

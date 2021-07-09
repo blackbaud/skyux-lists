@@ -58,9 +58,6 @@ import {
 } from './repeater.service';
 
 describe('Repeater item component', () => {
-  class MockLogService {
-    public warn(message: any) { }
-  }
 
   // #region helpers
   function flushDropdownTimer() {
