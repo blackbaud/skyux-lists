@@ -7,10 +7,6 @@ import {
 } from '@angular/core';
 
 import {
-  SkyMediaQueryModule
-} from '@skyux/core';
-
-import {
   SkyIconModule
 } from '@skyux/indicators';
 
@@ -19,8 +15,7 @@ import {
 } from '@skyux/popovers';
 
 import {
-  SkyThemeModule,
-  SkyThemeService
+  SkyThemeModule
 } from '@skyux/theme';
 
 import {
@@ -45,15 +40,11 @@ import {
     SkyDropdownModule,
     SkyIconModule,
     SkyListsResourcesModule,
-    SkyMediaQueryModule,
     SkyThemeModule
   ],
   exports: [
     SkySortComponent,
     SkySortItemComponent
-  ],
-  providers: [
-    SkyThemeService
   ]
 })
 export class SkySortModule { }

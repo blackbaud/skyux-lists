@@ -22,10 +22,6 @@ import {
 } from '@skyux/animations';
 
 import {
-  SkyLogService
-} from '@skyux/core';
-
-import {
   SkyCheckboxChange
 } from '@skyux/forms';
 
@@ -254,7 +250,6 @@ export class SkyRepeaterItemComponent implements OnDestroy, OnInit, AfterViewIni
   constructor(
     private repeaterService: SkyRepeaterService,
     private changeDetector: ChangeDetectorRef,
-    private logService: SkyLogService,
     private adapterService: SkyRepeaterAdapterService,
     private elementRef: ElementRef,
     private resourceService: SkyLibResourcesService
@@ -333,7 +328,7 @@ export class SkyRepeaterItemComponent implements OnDestroy, OnInit, AfterViewIni
 
   public updateForExpanded(value: boolean, animate: boolean): void {
     if (this.isCollapsible === false && value === false) {
-      this.logService.warn(
+      console.warn(
         `Setting isExpanded to false when the repeater item is not collapsible
         will have no effect.`
       );

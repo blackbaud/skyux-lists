@@ -48,6 +48,10 @@ import {
 } from './docs/filter/demo/modal-filter-demo-modal.component';
 
 import {
+  SkyListsForRootCompatModule
+} from './public/modules/shared/lists-for-root-compat.module';
+
+import {
   SkyFilterModule,
   SkyInfiniteScrollModule,
   SkyPagingModule,
@@ -56,6 +60,9 @@ import {
 } from './public/public_api';
 
 @NgModule({
+  imports: [
+    SkyListsForRootCompatModule
+  ],
   entryComponents: [
     ModalFilterDemoModalComponent
   ],
