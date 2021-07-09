@@ -1,5 +1,11 @@
+# 5.0.0-beta.1 (2021-07-07)
+
+- Added support for `5.0.0-beta.*` versions of SKY UX component libraries. [#241](https://github.com/blackbaud/skyux-lists/pull/241)
+
 # 5.0.0-beta.0 (2021-07-07)
 
+- Initial beta release.
+- Added support for `@angular/core@^12`. [#238](https://github.com/blackbaud/skyux-lists/pull/238)
 - Merged changes from 4.8.0. [#238](https://github.com/blackbaud/skyux-lists/pull/238)
 
 # 4.8.0 (2021-07-06)
