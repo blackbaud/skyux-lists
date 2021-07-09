@@ -11,8 +11,7 @@ import {
 } from '@skyux/indicators';
 
 import {
-  SkyThemeModule,
-  SkyThemeService
+  SkyThemeModule
 } from '@skyux/theme';
 
 import {
@@ -35,9 +34,6 @@ import {
     ],
   exports: [
     SkyPagingComponent
-  ],
-  providers: [
-    SkyThemeService
   ]
 })
 export class SkyPagingModule { }

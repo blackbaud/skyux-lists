@@ -18,10 +18,6 @@ import {
 } from '@skyux/inline-form';
 
 import {
-  SkyLogService
-} from '@skyux/core';
-
-import {
   DragulaService
 } from 'ng2-dragula';
 
@@ -62,9 +58,6 @@ import {
 } from './repeater.service';
 
 describe('Repeater item component', () => {
-  class MockLogService {
-    public warn(message: any) { }
-  }
 
   // #region helpers
   function flushDropdownTimer() {
@@ -554,38 +547,34 @@ describe('Repeater item component', () => {
   });
 
   describe('with expand mode of "none"', () => {
-    it(
-      'should not allow items to be collapsed',
-      fakeAsync(
-        inject([SkyLogService], (mockLogService: MockLogService) => {
-          let fixture = TestBed.createComponent(RepeaterTestComponent);
-          let cmp: RepeaterTestComponent = fixture.componentInstance;
+    it('should not allow items to be collapsed', fakeAsync(() => {
+      let fixture = TestBed.createComponent(RepeaterTestComponent);
+      let cmp: RepeaterTestComponent = fixture.componentInstance;
 
-          cmp.expandMode = 'none';
+      cmp.expandMode = 'none';
 
-          fixture.detectChanges();
-          tick();
+      fixture.detectChanges();
+      tick();
 
-          let item = cmp.repeater.items.first;
+      let item = cmp.repeater.items.first;
 
-          expect(item.isExpanded).toBe(true);
+      expect(item.isExpanded).toBe(true);
 
-          let warnSpy = spyOn(mockLogService, 'warn');
+      let warnSpy = spyOn(console, 'warn');
 
-          item.isExpanded = false;
+      item.isExpanded = false;
 
-          fixture.detectChanges();
-          tick();
+      fixture.detectChanges();
+      tick();
 
-          item = cmp.repeater.items.first;
+      item = cmp.repeater.items.first;
 
-          expect(warnSpy).toHaveBeenCalled();
+      expect(warnSpy).toHaveBeenCalled();
 
-          expect(item.isExpanded).toBe(true);
+      expect(item.isExpanded).toBe(true);
 
-          flushDropdownTimer();
-        })
-      ));
+      flushDropdownTimer();
+    }));
 
     it('should hide each item\'s chevron button', fakeAsync(() => {
       let fixture = TestBed.createComponent(RepeaterTestComponent);

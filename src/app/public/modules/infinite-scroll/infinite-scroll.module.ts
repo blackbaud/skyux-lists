@@ -7,10 +7,6 @@ import {
 } from '@angular/core';
 
 import {
-  SkyAppWindowRef
-} from '@skyux/core';
-
-import {
   SkyWaitModule
 } from '@skyux/indicators';
 
@@ -33,9 +29,6 @@ import {
   ],
   exports: [
     SkyInfiniteScrollComponent
-  ],
-  providers: [
-    SkyAppWindowRef
   ]
 })
 export class SkyInfiniteScrollModule { }

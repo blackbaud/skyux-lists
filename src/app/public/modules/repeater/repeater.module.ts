@@ -7,10 +7,6 @@ import {
 } from '@angular/core';
 
 import {
-  SkyLogModule
-} from '@skyux/core';
-
-import {
   SkyCheckboxModule
 } from '@skyux/forms';
 
@@ -66,8 +62,7 @@ import {
     SkyCheckboxModule,
     SkyIconModule,
     SkyInlineFormModule,
-    SkyListsResourcesModule,
-    SkyLogModule
+    SkyListsResourcesModule
   ],
   exports: [
     SkyRepeaterComponent,
