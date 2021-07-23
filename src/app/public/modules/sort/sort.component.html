@@ -23,11 +23,15 @@
       [ariaLabelledBy]="sortByHeadingId"
       (click)="dropdownClicked()">
       <div
-        class="sky-sort-menu-heading sky-subsection-heading"
+        class="sky-sort-menu-heading"
+        [skyThemeClass]= "{
+          'sky-subsection-heading': 'default',
+          'sky-font-heading-4': 'modern'
+        }"
         [id]="sortByHeadingId">
         {{ 'skyux_sort_menu_heading' | skyLibResources }}
       </div>
-      <div class="sky-sort-heading-divider">
+      <div *skyThemeIf="'default'" class="sky-sort-heading-divider">
       </div>
       <ng-content></ng-content>
     </sky-dropdown-menu>

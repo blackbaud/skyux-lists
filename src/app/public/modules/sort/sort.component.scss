@@ -40,3 +40,9 @@
     display: inline-block;
   }
 }
+
+@include sky-theme-modern {
+  .sky-sort-menu-heading {
+    margin: 0;
+  }
+}
