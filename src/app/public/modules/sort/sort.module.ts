@@ -44,7 +44,7 @@ import {
   declarations: [
     SkySortComponent,
     SkySortItemComponent,
-    SkySortMenuHeadingComponent,
+    SkySortMenuHeadingComponent
   ],
   imports: [
     CommonModule,
