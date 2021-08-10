@@ -4,7 +4,7 @@
 
 # 4.9.1 (2021-07-30)
 
-- This version is broken. Upgrade to 4.9.1.
+- This version is broken. Upgrade to 4.9.2.
 
 # 4.9.0 (2021-07-28)
 
