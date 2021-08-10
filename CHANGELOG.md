@@ -1,6 +1,6 @@
 # 4.9.2 (2021-08-10)
 
-- Reverted 4.9.1
+- Reverted 4.9.1 [#247](https://github.com/blackbaud/skyux-lists/pull/247)
 
 # 4.9.1 (2021-07-30)
 
