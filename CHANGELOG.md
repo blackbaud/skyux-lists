@@ -1,6 +1,10 @@
+# 4.9.2 (2021-08-10)
+
+- Reverted 4.9.1
+
 # 4.9.1 (2021-07-30)
 
-- Fixed the repeater component to not reset items which have been reordered when reorderability is toggled off. [#245](https://github.com/blackbaud/skyux-lists/pull/245)
+- This version is broken. Upgrade to 4.9.1.
 
 # 4.9.0 (2021-07-28)
 
