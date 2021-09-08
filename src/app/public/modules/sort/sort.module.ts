@@ -7,6 +7,10 @@ import {
 } from '@angular/core';
 
 import {
+  SkyIdModule
+} from '@skyux/core';
+
+import {
   SkyIconModule
 } from '@skyux/indicators';
 
@@ -27,18 +31,24 @@ import {
 } from './sort-item.component';
 
 import {
+  SkySortMenuHeadingComponent
+} from './sort-menu-heading.component';
+
+import {
   SkySortComponent
 } from './sort.component';
 
 @NgModule({
   declarations: [
     SkySortComponent,
-    SkySortItemComponent
+    SkySortItemComponent,
+    SkySortMenuHeadingComponent
   ],
   imports: [
     CommonModule,
     SkyDropdownModule,
     SkyIconModule,
+    SkyIdModule,
     SkyListsResourcesModule,
     SkyThemeModule
   ],

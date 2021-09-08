@@ -1,3 +1,15 @@
+# 4.9.2 (2021-08-10)
+
+- Reverted 4.9.1 [#247](https://github.com/blackbaud/skyux-lists/pull/247)
+
+# 4.9.1 (2021-07-30)
+
+- This version is broken. Upgrade to 4.9.2.
+
+# 4.9.0 (2021-07-28)
+
+- Added modern theme styles for the sort commponent. [#243](https://github.com/blackbaud/skyux-lists/pull/243)
+
 # 5.0.0-beta.1 (2021-07-07)
 
 - Added support for `5.0.0-beta.*` versions of SKY UX component libraries. [#241](https://github.com/blackbaud/skyux-lists/pull/241)
