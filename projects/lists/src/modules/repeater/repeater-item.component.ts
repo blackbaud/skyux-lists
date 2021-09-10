@@ -374,6 +374,7 @@ export class SkyRepeaterItemComponent implements OnDestroy, OnInit, AfterViewIni
           break;
 
         case 'escape':
+          /* istanbul ignore else */
           if (this.keyboardReorderingEnabled) {
             this.keyboardReorderingEnabled = false;
             this.revertReorderSteps();
@@ -394,6 +395,7 @@ export class SkyRepeaterItemComponent implements OnDestroy, OnInit, AfterViewIni
           break;
 
         case 'arrowdown':
+          /* istanbul ignore else */
           if (this.keyboardReorderingEnabled) {
             this.keyboardReorderDown();
             event.preventDefault();
@@ -404,6 +406,7 @@ export class SkyRepeaterItemComponent implements OnDestroy, OnInit, AfterViewIni
 
         case 'arrowleft':
         case 'arrowright':
+          /* istanbul ignore else */
           if (this.keyboardReorderingEnabled) {
             event.preventDefault();
             event.stopPropagation();
@@ -430,6 +433,8 @@ export class SkyRepeaterItemComponent implements OnDestroy, OnInit, AfterViewIni
       switch (event.key.toLowerCase()) {
         case ' ':
         case 'enter':
+          /* istanbul ignore else */
+          /* Sanity check */
           // Space/enter should never execute unless focused on the parent item element.
           if (event.target === this.itemRef.nativeElement) {
             if (this.selectable) {
@@ -493,7 +498,9 @@ export class SkyRepeaterItemComponent implements OnDestroy, OnInit, AfterViewIni
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(() => {
         this.hasItemContent = this.repeaterItemContentComponents.length > 0;
+        /* istanbul ignore next */
         this.isCollapsible = this.hasItemContent && this.repeaterService.expandMode !== 'none';
+        /* istanbul ignore else */
         if (this.repeaterService.expandMode === 'single') {
           this.repeaterService.onItemCollapseStateChange(this);
         }
