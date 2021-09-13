@@ -1,9 +1,33 @@
 {
-  "extends": "./node_modules/@skyux-sdk/builder/tsconfig",
+  "compileOnSave": false,
   "compilerOptions": {
-    "module": "commonjs"
+    "baseUrl": "./",
+    "outDir": "./dist/out-tsc",
+    "sourceMap": true,
+    "declaration": false,
+    "downlevelIteration": true,
+    "experimentalDecorators": true,
+    "paths": {
+      "lists": [
+        "dist/lists/lists",
+        "dist/lists"
+      ],
+      "@skyux/lists": [
+        "node_modules/@skyux/lists",
+        "dist/lists",
+        "projects/lists/src/public-api.ts"
+      ]
+    },
+    "moduleResolution": "node",
+    "importHelpers": true,
+    "target": "es2017",
+    "module": "es2020",
+    "lib": [
+      "es2018",
+      "dom"
+    ]
   },
-  "exclude": [
-    "node_modules"
-  ]
+  "angularCompilerOptions": {
+    "enableI18nLegacyMessageIdFormat": false
+  }
 }
