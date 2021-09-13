@@ -1,3 +1,7 @@
+# 5.0.0-beta.2 (2021-09-13)
+
+- Migrated to Angular CLI. [#248](https://github.com/blackbaud/skyux-lists/pull/248)
+
 # 4.9.2 (2021-08-10)
 
 - Reverted 4.9.1 [#247](https://github.com/blackbaud/skyux-lists/pull/247)
