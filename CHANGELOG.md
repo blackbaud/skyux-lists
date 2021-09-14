@@ -1,3 +1,7 @@
+# 5.0.0-beta.3 (2021-09-14)
+
+- Updated peer dependencies. [#250](https://github.com/blackbaud/skyux-lists/pull/250)
+
 # 5.0.0-beta.2 (2021-09-13)
 
 - Migrated to Angular CLI. [#248](https://github.com/blackbaud/skyux-lists/pull/248)
