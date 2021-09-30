@@ -3,7 +3,8 @@ import {
   ChangeDetectorRef,
   Component,
   Input,
-  OnInit
+  OnInit,
+  Optional
 } from '@angular/core';
 
 import {
@@ -42,13 +43,13 @@ export class SkySortComponent implements OnInit {
   public dropdownController = new Subject<SkyDropdownMessage>();
 
   constructor(
-    public themeSvc: SkyThemeService,
+    @Optional() public themeSvc: SkyThemeService,
     private changeDetector: ChangeDetectorRef
   ) {
   }
 
   public ngOnInit(): void {
-    this.themeSvc.settingsChange.subscribe(() => {
+    this.themeSvc?.settingsChange.subscribe(() => {
       // Push changes b/c SkyDropdownComponent uses ChangeDetectionStrategy.OnPush
       this.changeDetector.markForCheck();
     });
