@@ -5,6 +5,7 @@ import {
   EventEmitter,
   Input,
   OnInit,
+  Optional,
   Output
 } from '@angular/core';
 
@@ -79,13 +80,13 @@ export class SkyFilterButtonComponent implements OnInit {
   private _filterButtonId: string;
 
   constructor(
-    public themeSvc: SkyThemeService,
+    @Optional() public themeSvc: SkyThemeService,
     private changeDetector: ChangeDetectorRef
   ) {
   }
 
   public ngOnInit(): void {
-    this.themeSvc.settingsChange.subscribe(() => {
+    this.themeSvc?.settingsChange.subscribe(() => {
       // Push changes b/c SkyIconComponent uses ChangeDetectionStrategy.OnPush
       this.changeDetector.markForCheck();
     });
