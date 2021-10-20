@@ -13,8 +13,6 @@
         "dist/lists"
       ],
       "@skyux/lists": [
-        "node_modules/@skyux/lists",
-        "dist/lists",
         "projects/lists/src/public-api.ts"
       ]
     },
