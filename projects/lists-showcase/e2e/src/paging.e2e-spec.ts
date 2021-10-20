@@ -57,8 +57,8 @@ describe('Paging', () => {
     validateFirstPage(done);
   });
 
-  it('should display middle page selected', (done) => {
-    validateMiddlePage(done);
+  it('should display middle page selected', async (done) => {
+    await validateMiddlePage(done);
   });
 
   describe('when modern theme', () => {
@@ -70,8 +70,8 @@ describe('Paging', () => {
       validateFirstPage(done);
     });
 
-    it('should display middle page selected', (done) => {
-      validateMiddlePage(done);
+    it('should display middle page selected', async (done) => {
+      await validateMiddlePage(done);
     });
   });
 
@@ -84,8 +84,8 @@ describe('Paging', () => {
       validateFirstPage(done);
     });
 
-    it('should display middle page selected', (done) => {
-      validateMiddlePage(done);
+    it('should display middle page selected', async (done) => {
+      await validateMiddlePage(done);
     });
   });
 });
