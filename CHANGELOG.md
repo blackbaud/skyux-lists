@@ -1,3 +1,7 @@
+# 5.0.2 (2021-10-28)
+
+- Fixed the repeater component to not reset items which have been reordered when reorderability is toggled off. [#255](https://github.com/blackbaud/skyux-lists/pull/255)
+
 # 5.0.1 (2021-10-20)
 
 - Fixed an issue that caused some components to render improperly in the modern theme when loaded via a lazy-loaded module. [#253](https://github.com/blackbaud/skyux-lists/pull/253)
