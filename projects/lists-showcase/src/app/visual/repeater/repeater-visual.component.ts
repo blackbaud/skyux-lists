@@ -96,6 +96,8 @@ export class RepeaterVisualComponent {
 
   public _itemsForReorderableRepeaterWithAddButton: FormArray | undefined;
 
+  public reoderable: boolean = true;
+
   public showActiveInlineDelete: boolean = false;
 
   public showContent: boolean = false;

@@ -482,7 +482,7 @@
   </h3>
   <sky-repeater
     [expandMode]="'single'"
-    [reorderable]="true"
+    [reorderable]="reoderable"
     (orderChange)="onOrderChange($event)"
   >
     <sky-repeater-item
@@ -543,6 +543,12 @@
     </sky-repeater-item>
   </sky-repeater>
 </div>
+<button
+  type="button"
+  (click)="reoderable = !reoderable"
+>
+  Toggle item content
+</button>
 
 <div
   class="app-screenshot sky-margin-stacked-default"
