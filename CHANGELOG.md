@@ -1,4 +1,4 @@
-# 5.0.2 (2021-10-28)
+# 5.0.2 (2021-10-29)
 
 - Fixed the repeater component to maintain the order of repeater items when reorderability is toggled off. [#255](https://github.com/blackbaud/skyux-lists/pull/255)
 
