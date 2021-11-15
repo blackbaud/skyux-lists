@@ -1,6 +1,6 @@
 # 5.0.3 (2021-11-15)
 
-- Updated the repeater component to align context menu and checkbox with title. [#257](https://github.com/blackbaud/skyux-lists/pull/257)
+- Updated the repeater component to align the context menu and checkbox with the title. [#257](https://github.com/blackbaud/skyux-lists/pull/257)
 
 # 5.0.2 (2021-10-29)
 
