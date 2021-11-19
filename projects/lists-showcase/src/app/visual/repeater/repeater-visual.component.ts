@@ -1,28 +1,21 @@
-import {
-  Component
-} from '@angular/core';
+import { Component } from '@angular/core';
 
-import {
-  FormArray,
-  FormControl,
-  Validators
-} from '@angular/forms';
+import { FormArray, FormControl, Validators } from '@angular/forms';
 
 import {
   SkyInlineFormButtonLayout,
   SkyInlineFormCloseArgs,
-  SkyInlineFormConfig
+  SkyInlineFormConfig,
 } from '@skyux/inline-form';
 
 let nextItemId: number = 0;
 
 @Component({
-  selector: 'repeater-visual',
+  selector: 'app-repeater-visual',
   templateUrl: './repeater-visual.component.html',
-  styleUrls: ['./repeater-visual.component.scss']
+  styleUrls: ['./repeater-visual.component.scss'],
 })
 export class RepeaterVisualComponent {
-
   public activeIndex = 0;
 
   public activeInlineFormId: number;
@@ -33,8 +26,8 @@ export class RepeaterVisualComponent {
       { action: 'save', text: 'Save', styleType: 'primary' },
       { action: 'delete', text: 'Delete', styleType: 'default' },
       { action: 'reset', text: 'Reset', styleType: 'default' },
-      { action: 'cancel', text: 'Cancel', styleType: 'link' }
-    ]
+      { action: 'cancel', text: 'Cancel', styleType: 'link' },
+    ],
   };
 
   public items = [
@@ -42,31 +35,31 @@ export class RepeaterVisualComponent {
       id: 1,
       title: '2018 Gala',
       note: '2018 Gala for friends and family',
-      fund: 'General 2018 Fund'
+      fund: 'General 2018 Fund',
     },
     {
       id: 'foobar',
       title: '2018 Special event',
       note: 'Special event',
-      fund: '2018 Special Events Fund'
+      fund: '2018 Special Events Fund',
     },
     {
       title: '2019 Gala',
       note: '2019 Gala for friends and family',
-      fund: 'General 2019 Fund'
+      fund: 'General 2019 Fund',
     },
     {
       id: 99,
       title: '2019 Gala',
       note: '2019 Gala for friends and family',
-      fund: 'General 2019 Fund'
+      fund: 'General 2019 Fund',
     },
     {
       id: 123,
       title: '2019 Gala',
       note: '2019 Gala for friends and family',
-      fund: 'General 2019 Fund'
-    }
+      fund: 'General 2019 Fund',
+    },
   ];
 
   public itemsForSelectableRepeater = [
@@ -74,21 +67,22 @@ export class RepeaterVisualComponent {
       id: '1',
       title: 'Title 1',
       content: 'Content 1',
-      isSelected: false
+      isSelected: false,
     },
     {
       id: '2',
       title: 'Title 2',
       content: 'Content 2',
-      isSelected: false
-    }
+      isSelected: false,
+    },
   ];
 
   public get itemsForReorderableRepeaterWithAddButton(): FormArray {
     if (typeof this._itemsForReorderableRepeaterWithAddButton === 'undefined') {
       this._itemsForReorderableRepeaterWithAddButton = new FormArray(
-        Array.from(Array(5).keys())
-          .map(n => this.newItemForReorderableRepeaterWithAddButton(n + 1))
+        Array.from(Array(5).keys()).map((n) =>
+          this.newItemForReorderableRepeaterWithAddButton(n + 1)
+        )
       );
     }
     return this._itemsForReorderableRepeaterWithAddButton as FormArray;
@@ -119,7 +113,6 @@ export class RepeaterVisualComponent {
         }
       });
     }
-
   }
 
   public addItem(): void {
@@ -127,14 +120,16 @@ export class RepeaterVisualComponent {
       id: nextItemId++,
       title: 'New record ' + nextItemId,
       note: 'This is a new record',
-      fund: 'New fund'
+      fund: 'New fund',
     };
     this.items.push(newItem);
   }
 
   public addItemToReorderableRepeaterWithAddButton(): void {
     this.itemsForReorderableRepeaterWithAddButton.push(
-      this.newItemForReorderableRepeaterWithAddButton(this._itemsForReorderableRepeaterWithAddButton.length + 1)
+      this.newItemForReorderableRepeaterWithAddButton(
+        this._itemsForReorderableRepeaterWithAddButton.length + 1
+      )
     );
   }
 
@@ -142,18 +137,20 @@ export class RepeaterVisualComponent {
     console.log(tags);
   }
 
-  public onOrderChangeForReorderableRepeaterWithAddButton(tags: FormControl[]): void {
+  public onOrderChangeForReorderableRepeaterWithAddButton(
+    tags: FormControl[]
+  ): void {
     console.log(tags);
     this.itemsForReorderableRepeaterWithAddButton.clear();
-    tags.forEach(formControl => {
+    tags.forEach((formControl) => {
       this.itemsForReorderableRepeaterWithAddButton.push(formControl);
     });
   }
 
   public getSelectedItems(): string[] {
     const ids: string[] = this.itemsForSelectableRepeater
-      .filter(item => item.isSelected)
-      .map(item => item.id.toString());
+      .filter((item) => item.isSelected)
+      .map((item) => item.id.toString());
 
     return ids;
   }
@@ -202,6 +199,9 @@ export class RepeaterVisualComponent {
   }
 
   private newItemForReorderableRepeaterWithAddButton(n: number): FormControl {
-    return new FormControl(`item ${n}`, [Validators.required, Validators.maxLength(20)]);
+    return new FormControl(`item ${n}`, [
+      Validators.required,
+      Validators.maxLength(20),
+    ]);
   }
 }

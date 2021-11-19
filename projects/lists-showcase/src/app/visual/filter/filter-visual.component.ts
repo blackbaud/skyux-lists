@@ -1,10 +1,8 @@
-import {
-  Component
-} from '@angular/core';
+import { Component } from '@angular/core';
 
 @Component({
-  selector: 'filter-visual',
-  templateUrl: './filter-visual.component.html'
+  selector: 'app-filter-visual',
+  templateUrl: './filter-visual.component.html',
 })
 export class FilterVisualComponent {
   public filtersActive: boolean = false;
@@ -12,50 +10,50 @@ export class FilterVisualComponent {
   public appliedFilters: Array<any> = [
     {
       label: 'hide orange',
-      dismissible: false
+      dismissible: false,
     },
     {
       label: 'berry fruit type',
-      dismissible: true
-    }
+      dismissible: true,
+    },
   ];
 
   public lotsOfFilters: Array<any> = [
     {
       label: 'Really long filter 1',
-      dismissible: false
+      dismissible: false,
     },
     {
       label: 'Really long filter 2',
-      dismissible: true
+      dismissible: true,
     },
     {
       label: 'Really long filter 3',
-      dismissible: true
+      dismissible: true,
     },
     {
       label: 'Really long filter 4',
-      dismissible: true
+      dismissible: true,
     },
     {
       label: 'Really long filter 5',
-      dismissible: true
+      dismissible: true,
     },
     {
       label: 'Really long filter 6',
-      dismissible: true
+      dismissible: true,
     },
     {
       label: 'Really long filter 7',
-      dismissible: true
+      dismissible: true,
     },
     {
       label: 'Really long filter 8',
-      dismissible: true
+      dismissible: true,
     },
     {
       label: 'Really long filter 9',
-      dismissible: true
-    }
+      dismissible: true,
+    },
   ];
 }

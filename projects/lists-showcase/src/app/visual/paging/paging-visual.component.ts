@@ -1,9 +1,7 @@
-import {
-  Component
-} from '@angular/core';
+import { Component } from '@angular/core';
 
 @Component({
-  selector: 'paging-visual',
-  templateUrl: './paging-visual.component.html'
+  selector: 'app-paging-visual',
+  templateUrl: './paging-visual.component.html',
 })
 export class PagingVisualComponent {}
