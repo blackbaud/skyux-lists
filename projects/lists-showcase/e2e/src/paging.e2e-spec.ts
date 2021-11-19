@@ -1,12 +1,6 @@
-import {
-  expect,
-  SkyHostBrowser,
-  SkyVisualThemeSelector
-} from '@skyux-sdk/e2e';
+import { expect, SkyHostBrowser, SkyVisualThemeSelector } from '@skyux-sdk/e2e';
 
-import {
-  element, by
-} from 'protractor';
+import { element, by } from 'protractor';
 
 describe('Paging', () => {
   let currentTheme: string;
@@ -41,7 +35,7 @@ describe('Paging', () => {
 
   function validateFirstPage(done: DoneFn): void {
     expect('#screenshot-paging').toMatchBaselineScreenshot(done, {
-      screenshotName: getScreenshotName('paging-first')
+      screenshotName: getScreenshotName('paging-first'),
     });
   }
 
@@ -49,7 +43,7 @@ describe('Paging', () => {
     await element(by.css('button[sky-cmp-id="next"]')).click();
 
     expect('#screenshot-paging').toMatchBaselineScreenshot(done, {
-      screenshotName: getScreenshotName('paging-middle')
+      screenshotName: getScreenshotName('paging-middle'),
     });
   }
 

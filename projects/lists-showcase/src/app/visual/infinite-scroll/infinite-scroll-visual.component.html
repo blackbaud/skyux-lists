@@ -1,9 +1,5 @@
-<div
-  class="app-screenshot"
->
-  <h2>
-    Infinite scroll
-  </h2>
+<div class="app-screenshot">
+  <h2>Infinite scroll</h2>
   <button
     id="toggle-enabled"
     class="sky-btn"
@@ -40,54 +36,40 @@
 </div>
 
 <!-- Parent is window -->
-<div *ngIf="!showScrollableContainer"
+<div
+  *ngIf="!showScrollableContainer"
   class="app-screenshot"
   id="screenshot-infinite-scroll"
 >
   <sky-repeater skyBackToTop>
     <sky-repeater-item *ngFor="let item of items; let i = index">
-      <sky-repeater-item-title>
-        Title {{ item }}
-      </sky-repeater-item-title>
+      <sky-repeater-item-title> Title {{ item }} </sky-repeater-item-title>
       <sky-repeater-item-content>
         Content {{ item }}
       </sky-repeater-item-content>
     </sky-repeater-item>
   </sky-repeater>
-  <sky-infinite-scroll
-    [enabled]="enabled"
-    (scrollEnd)="loadMore()"
-  >
+  <sky-infinite-scroll [enabled]="enabled" (scrollEnd)="loadMore()">
   </sky-infinite-scroll>
-  <span
-    id="screenshot-window-bottom">
-  </span>
+  <span id="screenshot-window-bottom"> </span>
 </div>
 
 <!-- Parent is scrollable div -->
-<div *ngIf="showScrollableContainer"
+<div
+  *ngIf="showScrollableContainer"
   id="screenshot-infinite-scroll"
-  style="height: 300px; overflow-y: scroll; border: 3px solid black;"
+  style="height: 300px; overflow-y: scroll; border: 3px solid black"
 >
   <sky-repeater skyBackToTop>
     <sky-repeater-item *ngFor="let item of items">
-      <sky-repeater-item-title>
-        Title {{ item }}
-      </sky-repeater-item-title>
+      <sky-repeater-item-title> Title {{ item }} </sky-repeater-item-title>
       <sky-repeater-item-content>
         Content {{ item }}
       </sky-repeater-item-content>
     </sky-repeater-item>
   </sky-repeater>
-  <sky-infinite-scroll
-    [enabled]="enabled"
-    (scrollEnd)="loadMore()"
-  >
+  <sky-infinite-scroll [enabled]="enabled" (scrollEnd)="loadMore()">
   </sky-infinite-scroll>
 </div>
 
-<div
-  id="screenshot-window"
-  class="app-screenshot-window"
->
-</div>
+<div id="screenshot-window" class="app-screenshot-window"></div>

@@ -1,12 +1,6 @@
-import {
-  expect,
-  SkyHostBrowser,
-  SkyVisualThemeSelector
-} from '@skyux-sdk/e2e';
+import { expect, SkyHostBrowser, SkyVisualThemeSelector } from '@skyux-sdk/e2e';
 
-import {
-  element, by
-} from 'protractor';
+import { element, by } from 'protractor';
 
 describe('Sort', () => {
   let currentTheme: string;
@@ -36,7 +30,7 @@ describe('Sort', () => {
       await SkyHostBrowser.setWindowBreakpoint('lg');
       await SkyHostBrowser.scrollTo('#screenshot-sort-full');
       expect('#screenshot-sort-full').toMatchBaselineScreenshot(done, {
-        screenshotName: getScreenshotName('sort')
+        screenshotName: getScreenshotName('sort'),
       });
     });
 
@@ -45,7 +39,7 @@ describe('Sort', () => {
       await SkyHostBrowser.scrollTo('#screenshot-sort-full');
       await element(by.css('.sky-btn-default')).click();
       expect('#screenshot-sort-full').toMatchBaselineScreenshot(done, {
-        screenshotName: getScreenshotName('sort-open')
+        screenshotName: getScreenshotName('sort-open'),
       });
     });
 
@@ -53,7 +47,7 @@ describe('Sort', () => {
       await SkyHostBrowser.setWindowBreakpoint('lg');
       await SkyHostBrowser.scrollTo('#screenshot-sort-text');
       expect('#screenshot-sort-text').toMatchBaselineScreenshot(done, {
-        screenshotName: getScreenshotName('sort-text')
+        screenshotName: getScreenshotName('sort-text'),
       });
     });
 
@@ -61,7 +55,7 @@ describe('Sort', () => {
       await SkyHostBrowser.setWindowBreakpoint('xs');
       await SkyHostBrowser.scrollTo('#screenshot-sort-text');
       expect('#screenshot-sort-text').toMatchBaselineScreenshot(done, {
-        screenshotName: getScreenshotName('sort-text-small')
+        screenshotName: getScreenshotName('sort-text-small'),
       });
     });
   }
@@ -90,5 +84,4 @@ describe('Sort', () => {
 
     runTests();
   });
-
 });

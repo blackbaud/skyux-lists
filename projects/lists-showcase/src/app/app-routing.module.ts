@@ -7,33 +7,35 @@ import { RepeaterVisualComponent } from './visual/repeater/repeater-visual.compo
 import { SortVisualComponent } from './visual/sort/sort-visual.component';
 import { VisualComponent } from './visual/visual.component';
 
-const routes: Routes = [{
-  path: '',
-  component: VisualComponent
-},
-{
-  path: 'visual/filter',
-  component: FilterVisualComponent
-},
-{
-  path: 'visual/infinite-scroll',
-  component: InfiniteScrollVisualComponent
-},
-{
-  path: 'visual/paging',
-  component: PagingVisualComponent
-},
-{
-  path: 'visual/repeater',
-  component: RepeaterVisualComponent
-},
-{
-  path: 'visual/sort',
-  component: SortVisualComponent
-}];
+const routes: Routes = [
+  {
+    path: '',
+    component: VisualComponent,
+  },
+  {
+    path: 'visual/filter',
+    component: FilterVisualComponent,
+  },
+  {
+    path: 'visual/infinite-scroll',
+    component: InfiniteScrollVisualComponent,
+  },
+  {
+    path: 'visual/paging',
+    component: PagingVisualComponent,
+  },
+  {
+    path: 'visual/repeater',
+    component: RepeaterVisualComponent,
+  },
+  {
+    path: 'visual/sort',
+    component: SortVisualComponent,
+  },
+];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}

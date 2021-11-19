@@ -1,13 +1,6 @@
-import {
-  expect,
-  SkyHostBrowser,
-  SkyVisualThemeSelector
-} from '@skyux-sdk/e2e';
+import { expect, SkyHostBrowser, SkyVisualThemeSelector } from '@skyux-sdk/e2e';
 
-import {
-  by,
-  element
-} from 'protractor';
+import { by, element } from 'protractor';
 
 describe('Repeater', () => {
   let currentTheme: string;
@@ -37,23 +30,26 @@ describe('Repeater', () => {
       await SkyHostBrowser.scrollTo('#screenshot-repeater');
 
       expect('#screenshot-repeater').toMatchBaselineScreenshot(done, {
-        screenshotName: getScreenshotName('repeater')
+        screenshotName: getScreenshotName('repeater'),
       });
     });
 
     it('should match previous repeater screenshot when an item is active', async (done) => {
       await SkyHostBrowser.scrollTo('#screenshot-repeater-with-active-item');
 
-      expect('#screenshot-repeater-with-active-item').toMatchBaselineScreenshot(done, {
-        screenshotName: getScreenshotName('repeater-with-active-item')
-      });
+      expect('#screenshot-repeater-with-active-item').toMatchBaselineScreenshot(
+        done,
+        {
+          screenshotName: getScreenshotName('repeater-with-active-item'),
+        }
+      );
     });
 
     it('should match previous repeater screenshot when all are collapsed', async (done) => {
       await SkyHostBrowser.scrollTo('#screenshot-repeater-collapsed');
 
       expect('#screenshot-repeater-collapsed').toMatchBaselineScreenshot(done, {
-        screenshotName: getScreenshotName('repeater-collapsed')
+        screenshotName: getScreenshotName('repeater-collapsed'),
       });
     });
 
@@ -61,7 +57,7 @@ describe('Repeater', () => {
       await SkyHostBrowser.scrollTo('#screenshot-repeater-single');
 
       expect('#screenshot-repeater-single').toMatchBaselineScreenshot(done, {
-        screenshotName: getScreenshotName('repeater-single')
+        screenshotName: getScreenshotName('repeater-single'),
       });
     });
 
@@ -69,7 +65,7 @@ describe('Repeater', () => {
       await SkyHostBrowser.scrollTo('#screenshot-repeater-multiple');
 
       expect('#screenshot-repeater-multiple').toMatchBaselineScreenshot(done, {
-        screenshotName: getScreenshotName('repeater-multiple')
+        screenshotName: getScreenshotName('repeater-multiple'),
       });
     });
 
@@ -77,69 +73,85 @@ describe('Repeater', () => {
       await SkyHostBrowser.scrollTo('#screenshot-repeater-max-width');
 
       expect('#screenshot-repeater-max-width').toMatchBaselineScreenshot(done, {
-        screenshotName: getScreenshotName('repeater-max-width')
+        screenshotName: getScreenshotName('repeater-max-width'),
       });
     });
 
     it('should match previous repeater screenshot with a context menu', async (done) => {
       await SkyHostBrowser.scrollTo('#screenshot-repeater-context-menu');
 
-      expect('#screenshot-repeater-context-menu').toMatchBaselineScreenshot(done, {
-        screenshotName: getScreenshotName('repeater-context-menu')
-      });
+      expect('#screenshot-repeater-context-menu').toMatchBaselineScreenshot(
+        done,
+        {
+          screenshotName: getScreenshotName('repeater-context-menu'),
+        }
+      );
     });
 
     it('should match previous repeater screenshot when selectable', async (done) => {
       await SkyHostBrowser.scrollTo('#screenshot-repeater-selectable');
 
-      expect('#screenshot-repeater-selectable').toMatchBaselineScreenshot(done, {
-        screenshotName: getScreenshotName('repeater-selectable')
-      });
+      expect('#screenshot-repeater-selectable').toMatchBaselineScreenshot(
+        done,
+        {
+          screenshotName: getScreenshotName('repeater-selectable'),
+        }
+      );
     });
 
     it('should match previous repeater screenshot when selectable', async (done) => {
       await SkyHostBrowser.scrollTo('#screenshot-repeater-selectable-context');
 
-      expect('#screenshot-repeater-selectable-context').toMatchBaselineScreenshot(done, {
-        screenshotName: getScreenshotName('repeater-selectable-and-context')
+      expect(
+        '#screenshot-repeater-selectable-context'
+      ).toMatchBaselineScreenshot(done, {
+        screenshotName: getScreenshotName('repeater-selectable-and-context'),
       });
     });
 
     it('should match previous repeater screenshot when reorderable', async (done) => {
       await SkyHostBrowser.scrollTo('#screenshot-repeater-reorderable');
 
-      expect('#screenshot-repeater-reorderable').toMatchBaselineScreenshot(done, {
-        screenshotName: getScreenshotName('repeater-reorderable')
-      });
+      expect('#screenshot-repeater-reorderable').toMatchBaselineScreenshot(
+        done,
+        {
+          screenshotName: getScreenshotName('repeater-reorderable'),
+        }
+      );
     });
 
     it('should match previous repeater screenshot with an inline delete', async (done) => {
       await SkyHostBrowser.scrollTo('#screenshot-repeater-inline-delete');
 
-      await element.all(
-        by.css('#screenshot-repeater-inline-delete .sky-dropdown-button')
-      ).get(0).click();
+      await element
+        .all(by.css('#screenshot-repeater-inline-delete .sky-dropdown-button'))
+        .get(0)
+        .click();
 
       await element(by.css('#inline-delete-trigger-standard')).click();
 
-      await element.all(
-        by.css('#screenshot-repeater-inline-delete .sky-dropdown-button')
-      ).get(1).click();
+      await element
+        .all(by.css('#screenshot-repeater-inline-delete .sky-dropdown-button'))
+        .get(1)
+        .click();
 
       await element(by.css('#inline-delete-trigger-active')).click();
 
       await element(by.css('#screenshot-repeater-inline-delete')).click();
 
-      expect('#screenshot-repeater-inline-delete').toMatchBaselineScreenshot(done, {
-        screenshotName: getScreenshotName('repeater-inline-delete')
-      });
+      expect('#screenshot-repeater-inline-delete').toMatchBaselineScreenshot(
+        done,
+        {
+          screenshotName: getScreenshotName('repeater-inline-delete'),
+        }
+      );
     });
 
     it('should match previous screenshot with items without titles', async (done) => {
       await SkyHostBrowser.scrollTo('#screenshot-repeater-no-titles');
 
       expect('#screenshot-repeater-no-titles').toMatchBaselineScreenshot(done, {
-        screenshotName: getScreenshotName('repeater-no-titles')
+        screenshotName: getScreenshotName('repeater-no-titles'),
       });
     });
   }

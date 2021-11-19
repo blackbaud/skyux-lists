@@ -3,15 +3,19 @@ import { CommonModule } from '@angular/common';
 import { SkyE2eThemeSelectorModule } from '@skyux/e2e-client';
 import { SkyDropdownModule } from '@skyux/popovers';
 import { VisualComponent } from './visual.component';
-import { SkyFilterModule, SkyInfiniteScrollModule, SkyPagingModule, SkyRepeaterModule, SkySortModule } from 'projects/lists/src/public-api';
+import {
+  SkyFilterModule,
+  SkyInfiniteScrollModule,
+  SkyPagingModule,
+  SkyRepeaterModule,
+  SkySortModule,
+} from 'projects/lists/src/public-api';
 import { FilterVisualComponent } from './filter/filter-visual.component';
 import { InfiniteScrollVisualComponent } from './infinite-scroll/infinite-scroll-visual.component';
 import { PagingVisualComponent } from './paging/paging-visual.component';
 import { RepeaterVisualComponent } from './repeater/repeater-visual.component';
 import { SortVisualComponent } from './sort/sort-visual.component';
 import { RouterModule } from '@angular/router';
-
-
 
 @NgModule({
   declarations: [
@@ -20,7 +24,7 @@ import { RouterModule } from '@angular/router';
     PagingVisualComponent,
     RepeaterVisualComponent,
     SortVisualComponent,
-    VisualComponent
+    VisualComponent,
   ],
   imports: [
     CommonModule,
@@ -31,7 +35,7 @@ import { RouterModule } from '@angular/router';
     SkyInfiniteScrollModule,
     SkyPagingModule,
     SkyRepeaterModule,
-    SkySortModule
-  ]
+    SkySortModule,
+  ],
 })
-export class VisualModule { }
+export class VisualModule {}
