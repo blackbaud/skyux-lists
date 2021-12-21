@@ -1,6 +1,6 @@
 # 5.0.5 (2021-12-21)
 
-- Fix Stackblitz demo. []()
+- Fix Stackblitz demo. [#261](https://github.com/blackbaud/skyux-lists/pull/261)
 
 # 5.0.4 (2021-11-19)
 
