@@ -1632,13 +1632,13 @@ describe('Repeater item component', () => {
       expect(initialTopRepeaterItem).toBeDefined();
       expect(initialBottomRepeaterItem).toBeDefined();
 
-      // el.querySelectorAll('.sky-repeater-item-reorder-top')[1].click();
-      // fixture.detectChanges();
-      // tick();
-      // fixture.detectChanges();
-      // const topRepeaterItem = el.querySelectorAll('sky-repeater-item')[0];
+      el.querySelectorAll('.sky-repeater-item-reorder-top')[1].click();
+      fixture.detectChanges();
+      tick();
+      fixture.detectChanges();
+      const topRepeaterItem = el.querySelectorAll('sky-repeater-item')[0];
 
-      // expect(topRepeaterItem).toBe(initialBottomRepeaterItem);
+      expect(topRepeaterItem).toBe(initialBottomRepeaterItem);
     }));
   });
 });
