@@ -56,6 +56,14 @@ export class SkyRepeaterItemComponent
   implements OnDestroy, OnInit, AfterViewInit
 {
   /**
+   * Specifies an ARIA label for the repeater item and it's interactive controls.
+   * This sets the repeater item's `aria-label` attribute
+   * [to support accessibility](https://developer.blackbaud.com/skyux/learn/accessibility).
+   */
+  @Input()
+  public itemName: string;
+
+  /**
    * Specifies configuration options for the buttons to display on an inline form
    * within the repeater. This property accepts
    * [a `SkyInlineFormConfig` object](https://developer.blackbaud.com/skyux/components/inline-form#skyinlineformconfig-properties).
@@ -237,25 +245,6 @@ export class SkyRepeaterItemComponent
     private resourceService: SkyLibResourcesService
   ) {
     this.slideForExpanded(false);
-
-    // tslint:disable-next-line: deprecation
-    observableForkJoin(
-      this.resourceService.getString('skyux_repeater_item_reorder_cancel'),
-      this.resourceService.getString('skyux_repeater_item_reorder_finish'),
-      this.resourceService.getString(
-        'skyux_repeater_item_reorder_instructions'
-      ),
-      this.resourceService.getString('skyux_repeater_item_reorder_operation'),
-      this.resourceService.getString('skyux_repeater_item_reorder_moved')
-    ).subscribe((translatedStrings: string[]) => {
-      this.reorderCancelText = translatedStrings[0];
-      this.reorderFinishText = translatedStrings[1];
-      this.reorderStateDescription = translatedStrings[2];
-      this.reorderInstructions = translatedStrings[3];
-      this.reorderMovedText = translatedStrings[4];
-
-      this.reorderButtonLabel = this.reorderInstructions;
-    });
   }
 
   public ngOnInit(): void {
@@ -272,6 +261,7 @@ export class SkyRepeaterItemComponent
   }
 
   public ngAfterViewInit(): void {
+    this.getResourceStrings();
     this.hasItemContent = this.repeaterItemContentComponents.length > 0;
     this.updateExpandOnContentChange();
   }
@@ -508,5 +498,27 @@ export class SkyRepeaterItemComponent
           this.repeaterService.onItemCollapseStateChange(this);
         }
       });
+  }
+
+  private getResourceStrings(): void {
+    observableForkJoin([
+      this.resourceService.getString('skyux_repeater_item_reorder_cancel'),
+      this.resourceService.getString('skyux_repeater_item_reorder_finish'),
+      this.resourceService.getString(
+        'skyux_repeater_item_reorder_instructions'
+      ),
+      this.resourceService.getString('skyux_repeater_item_reorder_operation'),
+      this.resourceService.getString('skyux_repeater_item_reorder_moved'),
+    ]).subscribe((translatedStrings: string[]) => {
+      this.reorderCancelText = translatedStrings[0];
+      this.reorderFinishText = translatedStrings[1];
+      this.reorderStateDescription = translatedStrings[2];
+      this.reorderInstructions = translatedStrings[3];
+      this.reorderMovedText = translatedStrings[4];
+      this.reorderButtonLabel = this.reorderInstructions;
+
+      // Avoids a ExpressionChangedAfterItHasBeenCheckedError with nested repeaters.
+      this.changeDetector.detectChanges();
+    });
   }
 }
