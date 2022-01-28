@@ -172,6 +172,7 @@
   <sky-repeater [expandMode]="'single'">
     <sky-repeater-item
       *ngFor="let item of itemsForSelectableRepeater"
+      [itemName]="item.title"
       [isExpanded]="false"
       [selectable]="true"
       (collapse)="onCollapse()"
@@ -306,6 +307,7 @@
     (orderChange)="onOrderChange($event)"
   >
     <sky-repeater-item
+      itemName="Title 1"
       [isExpanded]="false"
       [selectable]="true"
       [tag]="'item1'"
@@ -324,7 +326,12 @@
       <sky-repeater-item-title> Title 1 </sky-repeater-item-title>
       <sky-repeater-item-content> Content 1 </sky-repeater-item-content>
     </sky-repeater-item>
-    <sky-repeater-item [isExpanded]="false" [selectable]="true" [tag]="'item2'">
+    <sky-repeater-item
+      itemName="Title 2"
+      [isExpanded]="false"
+      [selectable]="true"
+      [tag]="'item2'"
+    >
       <sky-repeater-item-context-menu>
         <sky-dropdown buttonType="context-menu">
           <sky-dropdown-menu>
