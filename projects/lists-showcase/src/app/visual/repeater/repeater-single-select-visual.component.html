@@ -2,7 +2,7 @@
 
 <p>paragraph <a href="#">foobar</a></p>
 
-<sky-repeater [expandMode]="'single'">
+<!-- <sky-repeater [expandMode]="'single'">
   <sky-repeater-item [isExpanded]="false">
     <sky-repeater-item-title> Title 1 </sky-repeater-item-title>
     <sky-repeater-item-content> Content 1 </sky-repeater-item-content>
@@ -17,9 +17,9 @@
     <sky-repeater-item-title> Title 3 </sky-repeater-item-title>
     <sky-repeater-item-content> Content </sky-repeater-item-content>
   </sky-repeater-item>
-</sky-repeater>
+</sky-repeater> -->
 
-<!-- <sky-repeater [expandMode]="'multiple'" [activeIndex]="activeIndex">
+<sky-repeater [expandMode]="'multiple'" [activeIndex]="activeIndex">
   <sky-repeater-item
     *ngFor="let item of items"
     [itemName]="item.title"
@@ -33,7 +33,7 @@
       {{ item.note }}
     </sky-repeater-item-content>
   </sky-repeater-item>
-</sky-repeater> -->
+</sky-repeater>
 
 <button type="button" (click)="addItem()">Add new item</button>
 

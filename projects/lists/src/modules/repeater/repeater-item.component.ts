@@ -103,25 +103,12 @@ export class SkyRepeaterItemComponent
    */
   @Input()
   public set isSelected(value: boolean) {
-    if (value !== this._isSelected) {
-      /* istanbul ignore else */
-      if (value !== this._isSelected) {
-        this._isSelected = value;
-
-        if (value) {
-          this.repeater.selectionModel.select(this);
-        } else {
-          this.repeater.selectionModel.deselect(this);
-        }
-
-        this.isSelectedChange.emit(this._isSelected);
-        this.changeDetector.markForCheck();
-      }
-    }
+    this.repeater.selectionModel.toggle(this);
+    this.isSelectedChange.emit(value);
+    this.changeDetector.markForCheck();
   }
 
   public get isSelected(): boolean {
-    // return this._isSelected;
     return this.repeater.selectionModel.isSelected(this);
   }
 
@@ -136,7 +123,17 @@ export class SkyRepeaterItemComponent
    * Indicates whether to display a checkbox in the left of the repeater item.
    */
   @Input()
-  public selectable: boolean = false;
+  public set selectable(value: boolean) {
+    /* istanbul ignore else */
+    if (value !== this._selectable) {
+      this._selectable = value;
+      this.repeater.checkSelectionMode();
+    }
+  }
+
+  public get selectable(): boolean {
+    return this._selectable;
+  }
 
   /**
    * Indicates whether to display an inline form within the repeater.
@@ -188,13 +185,11 @@ export class SkyRepeaterItemComponent
 
   public hasItemContent: boolean = false;
 
-  public isActive: boolean = false;
-
   public set isCollapsible(value: boolean) {
     if (this.isCollapsible !== value) {
       this._isCollapsible = value;
 
-      /*istanbul ignore else */
+      /* istanbul ignore else */
       if (!value) {
         this.updateForExpanded(true, false);
       }
@@ -252,7 +247,7 @@ export class SkyRepeaterItemComponent
 
   private _isExpanded = true;
 
-  private _isSelected = false;
+  private _selectable = false;
 
   constructor(
     private repeaterService: SkyRepeaterService,
@@ -286,16 +281,17 @@ export class SkyRepeaterItemComponent
   public ngOnInit(): void {
     this.repeaterService.registerItem(this);
 
+    // TODO: is this necessary?
     // Watch SelectionModel for any changes and remove items if appropriate.
-    this.repeater.selectionModel.changed
-      .pipe(takeUntil(this.ngUnsubscribe))
-      .subscribe((change) => {
-        const isRemoved = change.removed.indexOf(this) > -1;
-        if (isRemoved) {
-          this._isSelected = false;
-          this.changeDetector.markForCheck();
-        }
-      });
+    // this.repeater.selectionModel.changed
+    //   .pipe(takeUntil(this.ngUnsubscribe))
+    //   .subscribe((change) => {
+    //     const isRemoved = change.removed.indexOf(this) > -1;
+    //     if (isRemoved) {
+    //       this._isSelected = false;
+    //       this.changeDetector.markForCheck();
+    //     }
+    //   });
   }
 
   public ngAfterViewInit(): void {
@@ -327,7 +323,7 @@ export class SkyRepeaterItemComponent
 
   public onRepeaterItemClick(event: MouseEvent): void {
     /* istanbul ignore else */
-    if (this.selectable) {
+    if (this.repeater.selectionModel) {
       // Only activate item if clicking on the title, content, or parent item div.
       // This will avoid accidental activations when clicking inside interactive elements like
       // the expand/collapse chevron, dropdown, inline-delete, etc...
@@ -341,7 +337,6 @@ export class SkyRepeaterItemComponent
           !this.isSelected
         ) {
           this.toggleSelection();
-          // this.repeaterService.activateItem(this);
         }
       }
     }

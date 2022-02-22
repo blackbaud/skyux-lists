@@ -3,11 +3,11 @@
   role="option"
   tabindex="-1"
   [attr.aria-label]="itemName"
-  [attr.aria-selected]="isActive || (selectable ? isSelected : null)"
+  [attr.aria-selected]="selectable ? isSelected : null"
   [ngClass]="{
-    'sky-repeater-item-active': isActive,
+    'sky-repeater-item-active': isSelected && !repeater.multipleSelect,
     'sky-repeater-item-collapsible': isCollapsible,
-    'sky-repeater-item-selected': isSelected
+    'sky-repeater-item-selected': isSelected && repeater.multipleSelect
   }"
   (click)="onRepeaterItemClick($event)"
   #itemRef

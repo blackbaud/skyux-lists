@@ -20,7 +20,7 @@ import { DragulaService } from 'ng2-dragula';
 
 import { Subject } from 'rxjs';
 
-import { startWith, takeUntil } from 'rxjs/operators';
+import { takeUntil } from 'rxjs/operators';
 
 import { SkyRepeaterItemComponent } from './repeater-item.component';
 
@@ -54,7 +54,16 @@ export class SkyRepeaterComponent
    * to highlight a repeater item while users edit it. Only one item can be active at a time.
    */
   @Input()
-  public activeIndex: number;
+  public set activeIndex(value: number) {
+    /* istanbul ignore else */
+    if (value !== this._activeIndex) {
+      this._activeIndex = value;
+    }
+  }
+
+  public get activeIndex(): number {
+    return this._activeIndex;
+  }
 
   /**
    * Specifies an ARIA label for the repeater list.
@@ -136,13 +145,14 @@ export class SkyRepeaterComponent
   /**
    * @internal
    */
-  public get multipleSelectMode(): boolean {
-    return this._multipleSelectMode;
+  public get multipleSelect(): boolean {
+    return this._multipleSelect;
   }
-  public set multipleSelectMode(value: boolean) {
-    if (value !== this._multipleSelectMode) {
-      this._multipleSelectMode = value;
-      this.selectionModel = new SelectionModel(this._multipleSelectMode);
+  public set multipleSelect(value: boolean) {
+    /* istanbul ignore else */
+    if (value !== this._multipleSelect) {
+      this._multipleSelect = value;
+      this.selectionModel = new SelectionModel(this._multipleSelect);
     }
   }
 
@@ -150,14 +160,16 @@ export class SkyRepeaterComponent
    * @internal
    */
   public selectionModel = new SelectionModel<SkyRepeaterItemComponent>(
-    this.multipleSelectMode
+    this.multipleSelect
   );
 
   private ngUnsubscribe = new Subject<void>();
 
+  private _activeIndex: number;
+
   private _expandMode = 'none';
 
-  private _multipleSelectMode: boolean = true;
+  private _multipleSelect: boolean = true;
 
   constructor(
     private changeDetector: ChangeDetectorRef,
@@ -226,6 +238,7 @@ export class SkyRepeaterComponent
     });
 
     setTimeout(() => {
+      // Set up Angular CDK's focus monitor to implement tabbing/arrow keys for listbox pattern.
       this.focusMonitor
         .monitor(this.listboxRef)
         .pipe(takeUntil(this.ngUnsubscribe))
@@ -233,25 +246,21 @@ export class SkyRepeaterComponent
           if (origin === 'keyboard' || origin === 'program') {
             let toFocus = 0;
             for (let i = 0; i < this.items.length; i++) {
-              if (this.items.get(i)?.isActive) {
+              if (this.selectionModel.isSelected(this.items.get(i))) {
                 toFocus = i;
                 break;
               }
             }
-            console.log(toFocus);
             this.keyManager.setActiveItem(toFocus);
-
-            // TODO: should also support shift+tab to go backwards
           }
         });
-    });
 
-    // If activeIndex has been set on init, call service to activate the appropriate item.
-    setTimeout(() => {
+      // If activeIndex has been set on init, call service to activate the appropriate item.
       if (this.activeIndex || this.activeIndex === 0) {
         this.items.get(this.activeIndex).toggleSelection();
-        // this.repeaterService.activateItemByIndex(this.activeIndex);
       }
+
+      this.checkSelectionMode();
 
       if (this.reorderable && !this.everyItemHasTag()) {
         console.warn(
@@ -287,7 +296,8 @@ export class SkyRepeaterComponent
 
   public ngOnChanges(changes: SimpleChanges): void {
     if (changes['activeIndex']) {
-      this.multipleSelectMode = false;
+      this.multipleSelect = false;
+      this.checkSelectionMode();
       if (
         changes['activeIndex'].currentValue !==
         changes['activeIndex'].previousValue
@@ -329,6 +339,22 @@ export class SkyRepeaterComponent
         default:
           this.keyManager.onKeydown(event);
           break;
+      }
+    }
+  }
+
+  public checkSelectionMode(): void {
+    /* istanbul ignore else */
+    if (this.items) {
+      const selectableItems = this.items.some(
+        (item) => item.selectable === true
+      );
+
+      /* istanbul ignore else */
+      if (!this._multipleSelect && selectableItems) {
+        console.warn(
+          '`activeIndex` cannot be used in conjuction with selectable repeater items. For multi-select repeaters, use the `selectable` input. For single-select or "active" repeaters, use the `activeIndex` input.'
+        );
       }
     }
   }
@@ -471,7 +497,7 @@ export class SkyRepeaterComponent
       return false;
     }
 
-    return !this.multipleSelectMode || item?.selectable;
+    return !this.multipleSelect || item?.selectable;
     // return !!this.activeIndex || (item?.selectable &&
     // (this.multipleSelectMode || !item.isSelected))
   }
@@ -494,7 +520,6 @@ export class SkyRepeaterComponent
 
     setTimeout(() => {
       this.tabIndex = 0;
-      console.log('allowFocusEscape', this.tabIndex);
       this.changeDetector.markForCheck();
     });
   }
@@ -502,6 +527,5 @@ export class SkyRepeaterComponent
   /** Updates the tabindex based upon if the selection list is empty. */
   private updateTabIndex(): void {
     this.tabIndex = this.items.length === 0 ? -1 : 0;
-    console.log('updateTabIndex', this.tabIndex);
   }
 }
