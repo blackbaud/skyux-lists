@@ -1,15 +1,15 @@
 <div
   class="sky-repeater-item sky-padding-even-default"
   role="option"
+  tabindex="-1"
   [attr.aria-label]="itemName"
-  [attr.aria-selected]="selectable ? isSelected : null"
+  [attr.aria-selected]="isActive || (selectable ? isSelected : null)"
   [ngClass]="{
     'sky-repeater-item-active': isActive,
     'sky-repeater-item-collapsible': isCollapsible,
     'sky-repeater-item-selected': isSelected
   }"
   (click)="onRepeaterItemClick($event)"
-  (keydown)="onItemKeyDown($event)"
   #itemRef
 >
   <div #inlineDelete>
@@ -74,7 +74,8 @@
           ? ('skyux_repeater_item_checkbox_label' | skyLibResources: itemName)
           : ('skyux_repeater_item_checkbox_label_default' | skyLibResources)
       "
-      (change)="onCheckboxChange($event)"
+      [tabindex]="-1"
+      (change)="onCheckboxChange()"
     >
     </sky-checkbox>
     <div

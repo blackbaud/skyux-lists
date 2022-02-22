@@ -32,6 +32,8 @@ import { SkyRepeaterComponent } from './repeater.component';
 
 import { SkyRepeaterService } from './repeater.service';
 import { SkyRepeaterItemComponent } from './repeater-item.component';
+import { FocusKeyManager } from '@angular/cdk/a11y';
+import { By } from '@angular/platform-browser';
 
 describe('Repeater item component', () => {
   // #region helpers
@@ -44,6 +46,10 @@ describe('Repeater item component', () => {
     tick();
     fixture.detectChanges();
     tick();
+  }
+
+  function getRepeater(el: HTMLElement): HTMLElement {
+    return el.querySelector('.sky-repeater');
   }
 
   function getRepeaterItems(el: HTMLElement): NodeListOf<HTMLElement> {
@@ -72,6 +78,17 @@ describe('Repeater item component', () => {
     return el.querySelectorAll('.sky-repeater-item .sky-checkbox-input');
   }
 
+  function getAngularKeyManager(
+    fixture: ComponentFixture<any>
+  ): FocusKeyManager<any> {
+    const repeaterComponent = fixture.debugElement.query(
+      By.directive(SkyRepeaterComponent)
+    );
+    return repeaterComponent.componentInstance[
+      'keyManager'
+    ] as FocusKeyManager<SkyRepeaterItemComponent>;
+  }
+
   function reorderItemWithKey(
     fixture: ComponentFixture<any>,
     itemIndex: number,
@@ -97,10 +114,6 @@ describe('Repeater item component', () => {
       keyboardEventInit: { key: activationKey },
     });
     fixture.detectChanges();
-  }
-
-  function getItems(fixture: ComponentFixture<any>): HTMLElement[] {
-    return fixture.nativeElement.querySelectorAll('.sky-repeater-item');
   }
   // #endregion
 
@@ -273,6 +286,36 @@ describe('Repeater item component', () => {
     fixture.detectChanges();
 
     expect(getChrevronButtons(itemWithNoContent)[0]).not.toExist();
+  }));
+
+  it('should create element with role "listbox" and set tabindex to 0', fakeAsync(() => {
+    let fixture = TestBed.createComponent(RepeaterTestComponent);
+    fixture.componentInstance.selectable = true;
+    fixture.componentInstance.lastItemSelected = true;
+
+    fixture.detectChanges();
+    tick();
+
+    const repeaterEl = fixture.nativeElement.querySelector('.sky-repeater');
+
+    expect(repeaterEl.getAttribute('role')).toBe('listbox');
+    expect(repeaterEl.getAttribute('tabindex')).toBe('0');
+  }));
+
+  it('should create child elements with role "options" and set tabindex to -1', fakeAsync(() => {
+    let fixture = TestBed.createComponent(RepeaterTestComponent);
+    fixture.componentInstance.selectable = true;
+    fixture.componentInstance.lastItemSelected = true;
+
+    fixture.detectChanges();
+    tick();
+
+    const itemEls = getRepeaterItems(fixture.nativeElement);
+
+    for (let i = 0; i < itemEls.length; i++) {
+      expect(itemEls[i].getAttribute('role')).toBe('option');
+      expect(itemEls[i].getAttribute('tabindex')).toBe('-1');
+    }
   }));
 
   it('should be accessible', async () => {
@@ -858,6 +901,8 @@ describe('Repeater item component', () => {
       tick();
       cmp.selectable = true;
       fixture.detectChanges();
+      const keyManager = getAngularKeyManager(fixture);
+      const repeater = getRepeater(fixture.nativeElement);
 
       const items = getRepeaterItems(el);
 
@@ -870,8 +915,8 @@ describe('Repeater item component', () => {
       expect(items[0]).not.toHaveCssClass('sky-repeater-item-selected');
 
       // Focus on first repeater item and press enter key.
-      SkyAppTestUtility.fireDomEvent(items[0], 'focus');
-      SkyAppTestUtility.fireDomEvent(items[0], 'keydown', {
+      keyManager.setActiveItem(0);
+      SkyAppTestUtility.fireDomEvent(repeater, 'keydown', {
         keyboardEventInit: {
           key: 'Enter',
         },
@@ -1059,11 +1104,13 @@ describe('Repeater item component', () => {
     it('should update active item on enter key if activeIndex has been set', fakeAsync(() => {
       cmp.showRepeaterWithActiveIndex = true;
       detectChangesAndTick(fixture);
-      const items = getItems(fixture);
+      const keyManager = getAngularKeyManager(fixture);
+      const repeater = getRepeater(fixture.nativeElement);
+      const items = getRepeaterItems(fixture.nativeElement);
 
       // Focus on first repeater item and press enter key.
-      SkyAppTestUtility.fireDomEvent(items[0], 'focus');
-      SkyAppTestUtility.fireDomEvent(items[0], 'keydown', {
+      keyManager.setActiveItem(0);
+      SkyAppTestUtility.fireDomEvent(repeater, 'keydown', {
         keyboardEventInit: {
           key: 'Enter',
         },
@@ -1082,22 +1129,28 @@ describe('Repeater item component', () => {
     it('should update active item on space key if activeIndex has been set', fakeAsync(() => {
       cmp.showRepeaterWithActiveIndex = true;
       detectChangesAndTick(fixture);
-      const items = getItems(fixture);
+      const keyManager = getAngularKeyManager(fixture);
+      const repeater = getRepeater(fixture.nativeElement);
+      const items = getRepeaterItems(fixture.nativeElement);
+      const activeRepeaterItem = el.querySelectorAll(
+        '.sky-repeater-item-active'
+      );
+      expect(activeRepeaterItem.length).toEqual(0);
 
-      // Focus on first repeater item and press enter key.
-      SkyAppTestUtility.fireDomEvent(items[0], 'focus');
-      SkyAppTestUtility.fireDomEvent(items[0], 'keydown', {
+      // Focus on second repeater item and press enter key.
+      keyManager.setActiveItem(1);
+      SkyAppTestUtility.fireDomEvent(repeater, 'keydown', {
         keyboardEventInit: {
-          key: ' ',
+          key: 'ENTER',
         },
       });
       fixture.detectChanges();
 
-      const activeRepeaterItem = el.querySelectorAll(
+      const newActiveRepeaterItem = el.querySelectorAll(
         '.sky-repeater-item-active'
       );
-      expect(activeRepeaterItem.length).toEqual(1);
-      expect(items[0]).toHaveCssClass('sky-repeater-item-active');
+      expect(newActiveRepeaterItem.length).toEqual(1);
+      expect(items[1]).toHaveCssClass('sky-repeater-item-active');
 
       flushDropdownTimer();
     }));

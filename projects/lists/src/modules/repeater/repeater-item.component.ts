@@ -1,3 +1,4 @@
+import { FocusableOption } from '@angular/cdk/a11y';
 import {
   AfterViewInit,
   ChangeDetectorRef,
@@ -6,7 +7,9 @@ import {
   ContentChildren,
   ElementRef,
   EventEmitter,
+  forwardRef,
   HostBinding,
+  Inject,
   Input,
   OnDestroy,
   OnInit,
@@ -37,6 +40,7 @@ import { SkyRepeaterAdapterService } from './repeater-adapter.service';
 import { SkyRepeaterItemContentComponent } from './repeater-item-content.component';
 
 import { SkyRepeaterItemContextMenuComponent } from './repeater-item-context-menu.component';
+import { SkyRepeaterComponent } from './repeater.component';
 
 import { SkyRepeaterService } from './repeater.service';
 
@@ -53,7 +57,7 @@ let nextContentId: number = 0;
   encapsulation: ViewEncapsulation.None,
 })
 export class SkyRepeaterItemComponent
-  implements OnDestroy, OnInit, AfterViewInit
+  implements OnDestroy, OnInit, AfterViewInit, FocusableOption
 {
   /**
    * Specifies a human-readable name for the repeater item that is available for multiple purposes,
@@ -100,13 +104,25 @@ export class SkyRepeaterItemComponent
   @Input()
   public set isSelected(value: boolean) {
     if (value !== this._isSelected) {
-      this._isSelected = value;
-      this.isSelectedChange.emit(this._isSelected);
+      /* istanbul ignore else */
+      if (value !== this._isSelected) {
+        this._isSelected = value;
+
+        if (value) {
+          this.repeater.selectionModel.select(this);
+        } else {
+          this.repeater.selectionModel.deselect(this);
+        }
+
+        this.isSelectedChange.emit(this._isSelected);
+        this.changeDetector.markForCheck();
+      }
     }
   }
 
   public get isSelected(): boolean {
-    return this._isSelected;
+    // return this._isSelected;
+    return this.repeater.selectionModel.isSelected(this);
   }
 
   /**
@@ -165,6 +181,9 @@ export class SkyRepeaterItemComponent
   @ContentChild(SkyRepeaterItemContextMenuComponent, { read: ElementRef })
   public contextMenu: ElementRef;
 
+  @ViewChild('itemRef', { read: ElementRef })
+  public itemRef: ElementRef;
+
   public contentId: string = `sky-repeater-item-content-${++nextContentId}`;
 
   public hasItemContent: boolean = false;
@@ -210,9 +229,6 @@ export class SkyRepeaterItemComponent
   @ViewChild('itemHeaderRef', { read: ElementRef })
   private itemHeaderRef: ElementRef;
 
-  @ViewChild('itemRef', { read: ElementRef })
-  private itemRef: ElementRef;
-
   @ContentChildren(SkyRepeaterItemContentComponent)
   private repeaterItemContentComponents: QueryList<SkyRepeaterItemContentComponent>;
 
@@ -243,7 +259,9 @@ export class SkyRepeaterItemComponent
     private changeDetector: ChangeDetectorRef,
     private adapterService: SkyRepeaterAdapterService,
     private elementRef: ElementRef,
-    private resourceService: SkyLibResourcesService
+    private resourceService: SkyLibResourcesService,
+    @Inject(forwardRef(() => SkyRepeaterComponent))
+    public repeater: SkyRepeaterComponent
   ) {
     this.slideForExpanded(false);
 
@@ -267,12 +285,14 @@ export class SkyRepeaterItemComponent
 
   public ngOnInit(): void {
     this.repeaterService.registerItem(this);
-    this.repeaterService.activeItemChange
+
+    // Watch SelectionModel for any changes and remove items if appropriate.
+    this.repeater.selectionModel.changed
       .pipe(takeUntil(this.ngUnsubscribe))
-      .subscribe((item: SkyRepeaterItemComponent) => {
-        const newIsActiveValue = this === item;
-        if (newIsActiveValue !== this.isActive) {
-          this.isActive = newIsActiveValue;
+      .subscribe((change) => {
+        const isRemoved = change.removed.indexOf(this) > -1;
+        if (isRemoved) {
+          this._isSelected = false;
           this.changeDetector.markForCheck();
         }
       });
@@ -306,15 +326,24 @@ export class SkyRepeaterItemComponent
   }
 
   public onRepeaterItemClick(event: MouseEvent): void {
-    // Only activate item if clicking on the title, content, or parent item div.
-    // This will avoid accidental activations when clicking inside interactive elements like
-    // the expand/collapse chevron, dropdown, inline-delete, etc...
-    if (
-      event.target === this.itemRef.nativeElement ||
-      this.itemContentRef.nativeElement.contains(event.target) ||
-      this.itemHeaderRef.nativeElement.contains(event.target)
-    ) {
-      this.repeaterService.activateItem(this);
+    /* istanbul ignore else */
+    if (this.selectable) {
+      // Only activate item if clicking on the title, content, or parent item div.
+      // This will avoid accidental activations when clicking inside interactive elements like
+      // the expand/collapse chevron, dropdown, inline-delete, etc...
+      if (
+        event.target === this.itemRef.nativeElement ||
+        this.itemContentRef.nativeElement.contains(event.target) ||
+        this.itemHeaderRef.nativeElement.contains(event.target)
+      ) {
+        if (
+          this.repeater.selectionModel.isMultipleSelection() ||
+          !this.isSelected
+        ) {
+          this.toggleSelection();
+          // this.repeaterService.activateItem(this);
+        }
+      }
     }
   }
 
@@ -339,8 +368,8 @@ export class SkyRepeaterItemComponent
     }
   }
 
-  public onCheckboxChange(value: SkyCheckboxChange): void {
-    this.isSelected = value.checked;
+  public onCheckboxChange(): void {
+    this.toggleSelection();
   }
 
   public onInlineFormClose(inlineFormCloseArgs: SkyInlineFormCloseArgs): void {
@@ -420,29 +449,16 @@ export class SkyRepeaterItemComponent
     this.reorderState = undefined;
   }
 
-  public onItemKeyDown(event: KeyboardEvent): void {
-    /*istanbul ignore else */
-    if (event.key) {
-      switch (event.key.toLowerCase()) {
-        case ' ':
-        case 'enter':
-          /* istanbul ignore else */
-          /* Sanity check */
-          // Space/enter should never execute unless focused on the parent item element.
-          if (event.target === this.itemRef.nativeElement) {
-            if (this.selectable) {
-              this.isSelected = !this.isSelected;
-            }
-            this.repeaterService.activateItem(this);
-            event.preventDefault();
-          }
-          break;
+  /**
+   * Implemented as part of the `FocusableOption` directive.
+   */
+  public focus(): void {
+    this.itemRef.nativeElement.focus();
+  }
 
-        /* istanbul ignore next */
-        default:
-          break;
-      }
-    }
+  /** Toggles the selection state of the option. */
+  public toggleSelection(): void {
+    this.isSelected = !this.isSelected;
   }
 
   private slideForExpanded(animate: boolean): void {

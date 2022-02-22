@@ -1,10 +1,16 @@
-<ng-container #repeaterHost>
-  <div
-    class="sky-repeater"
-    role="listbox"
-    [attr.aria-label]="ariaLabel || ('skyux_repeater_label' | skyLibResources)"
-    [dragula]="dragulaGroupName"
-  >
-    <ng-content></ng-content>
-  </div>
-</ng-container>
+<div
+  class="sky-repeater"
+  role="listbox"
+  [attr.aria-label]="
+    ariaLabel || ('skyux_repeater_label_default' | skyLibResources)
+  "
+  [attr.aria-multiselectable]="
+    selectionModel.isMultipleSelection() ? true : null
+  "
+  [dragula]="dragulaGroupName"
+  [tabindex]="tabIndex"
+  (keydown)="onKeydown($event)"
+  #listboxRef
+>
+  <ng-content></ng-content>
+</div>

@@ -1,0 +1,40 @@
+<h1>demo</h1>
+
+<p>paragraph <a href="#">foobar</a></p>
+
+<sky-repeater [expandMode]="'single'">
+  <sky-repeater-item [isExpanded]="false">
+    <sky-repeater-item-title> Title 1 </sky-repeater-item-title>
+    <sky-repeater-item-content> Content 1 </sky-repeater-item-content>
+  </sky-repeater-item>
+  <sky-repeater-item [isExpanded]="false">
+    <sky-repeater-item-title> Title 2 </sky-repeater-item-title>
+    <sky-repeater-item-content> Content 2 </sky-repeater-item-content>
+    <sky-repeater-item-content> Content 2a </sky-repeater-item-content>
+    <sky-repeater-item-content> Content 2b </sky-repeater-item-content>
+  </sky-repeater-item>
+  <sky-repeater-item [isExpanded]="false">
+    <sky-repeater-item-title> Title 3 </sky-repeater-item-title>
+    <sky-repeater-item-content> Content </sky-repeater-item-content>
+  </sky-repeater-item>
+</sky-repeater>
+
+<!-- <sky-repeater [expandMode]="'multiple'" [activeIndex]="activeIndex">
+  <sky-repeater-item
+    *ngFor="let item of items"
+    [itemName]="item.title"
+    [isExpanded]="true"
+    (isSelectedChange)="onSelectedChange($event)"
+  >
+    <sky-repeater-item-title>
+      {{ item.title }}
+    </sky-repeater-item-title>
+    <sky-repeater-item-content>
+      {{ item.note }}
+    </sky-repeater-item-content>
+  </sky-repeater-item>
+</sky-repeater> -->
+
+<button type="button" (click)="addItem()">Add new item</button>
+
+<p>paragraph <a href="#">baz</a></p>

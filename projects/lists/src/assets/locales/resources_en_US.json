@@ -27,8 +27,8 @@
     "_description": "Text for the label for the previous button on the pagination component",
     "message": "Previous"
   },
-  "skyux_repeater_label": {
-    "_description": "Label for the listbox wrapper of the repeater component",
+  "skyux_repeater_label_default": {
+    "_description": "Generic label for the listbox wrapper of the repeater component. Used when a human-readable name is not provided.",
     "message": "List of items"
   },
   "skyux_repeater_item_expand": {
