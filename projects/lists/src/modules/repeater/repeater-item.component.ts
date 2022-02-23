@@ -1,4 +1,5 @@
 import { FocusableOption } from '@angular/cdk/a11y';
+import { coerceBooleanProperty } from '@angular/cdk/coercion';
 import {
   AfterViewInit,
   ChangeDetectorRef,
@@ -103,13 +104,21 @@ export class SkyRepeaterItemComponent
    */
   @Input()
   public set isSelected(value: boolean) {
-    this.repeater.selectionModel.toggle(this);
-    this.isSelectedChange.emit(value);
-    this.changeDetector.markForCheck();
+    const isSelected = coerceBooleanProperty(value);
+
+    /* istanbul ignore else */
+    if (isSelected !== this._isSelected) {
+      this.setSelected(isSelected);
+
+      // TODO: Report value change to CVA? https://github.com/angular/components/blob/24180d188f434d60ab1f6222a84b06dbc7695ac2/src/material/list/selection-list.ts#L616
+      // if (isSelected || this.repeater.selectionModel.isMultipleSelection()) {
+      //   // this.repeater._reportValueChange();
+      // }
+    }
   }
 
   public get isSelected(): boolean {
-    return this.repeater.selectionModel.isSelected(this);
+    return this.repeater.selectionModel?.isSelected(this);
   }
 
   /**
@@ -127,6 +136,9 @@ export class SkyRepeaterItemComponent
     /* istanbul ignore else */
     if (value !== this._selectable) {
       this._selectable = value;
+      if (value) {
+        this.repeater.initSelectionModel(true);
+      }
       this.repeater.checkSelectionMode();
     }
   }
@@ -247,6 +259,8 @@ export class SkyRepeaterItemComponent
 
   private _isExpanded = true;
 
+  private _isSelected = false;
+
   private _selectable = false;
 
   constructor(
@@ -332,12 +346,7 @@ export class SkyRepeaterItemComponent
         this.itemContentRef.nativeElement.contains(event.target) ||
         this.itemHeaderRef.nativeElement.contains(event.target)
       ) {
-        if (
-          this.repeater.selectionModel.isMultipleSelection() ||
-          !this.isSelected
-        ) {
-          this.toggleSelection();
-        }
+        this.toggleSelection();
       }
     }
   }
@@ -453,7 +462,7 @@ export class SkyRepeaterItemComponent
 
   /** Toggles the selection state of the option. */
   public toggleSelection(): void {
-    this.isSelected = !this.isSelected;
+    this.repeater.selectionModel.toggle(this);
   }
 
   private slideForExpanded(animate: boolean): void {
@@ -526,5 +535,29 @@ export class SkyRepeaterItemComponent
           this.repeaterService.onItemCollapseStateChange(this);
         }
       });
+  }
+
+  /**
+   * Sets the selected state of the option. Returns whether the value has changed.
+   */
+  private setSelected(selected: boolean): boolean {
+    /* istanbul ignore else */
+    if (this.repeater.selectionModel) {
+      if (selected === this._isSelected) {
+        return false;
+      }
+
+      this._isSelected = selected;
+
+      if (selected) {
+        this.repeater.selectionModel.select(this);
+      } else {
+        this.repeater.selectionModel.deselect(this);
+      }
+
+      this.isSelectedChange.emit(selected);
+      this.changeDetector.markForCheck();
+      return true;
+    }
   }
 }

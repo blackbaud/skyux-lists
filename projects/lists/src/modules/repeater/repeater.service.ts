@@ -13,10 +13,6 @@ export class SkyRepeaterService implements OnDestroy {
     undefined
   );
 
-  public activeItemIndexChange = new BehaviorSubject<number>(undefined);
-
-  // public enableActiveState = false;
-
   public expandMode: string;
 
   public itemCollapseStateChange = new EventEmitter<SkyRepeaterItemComponent>();
@@ -32,31 +28,6 @@ export class SkyRepeaterService implements OnDestroy {
     this.itemCollapseStateChange.complete();
     this.orderChange.complete();
   }
-
-  // public activateItem(item: SkyRepeaterItemComponent): void {
-  //   if (this.enableActiveState) {
-  //     /* istanbul ignore else */
-  //     if (item) {
-  //       const index = this.items.findIndex((i) => i === item);
-  //       this.activeItemIndexChange.next(index);
-  //       this.activeItemChange.next(item);
-  //     }
-  //   }
-  // }
-
-  // public activateItemByIndex(index: number): void {
-  //   /* istanbul ignore else */
-  //   if (this.enableActiveState) {
-  //     if (index === undefined) {
-  //       this.activeItemChange.next(undefined);
-  //     } else {
-  //       const activeItem = this.items[index];
-  //       if (activeItem) {
-  //         this.activeItemChange.next(activeItem);
-  //       }
-  //     }
-  //   }
-  // }
 
   public registerItem(item: SkyRepeaterItemComponent): void {
     this.items.push(item);

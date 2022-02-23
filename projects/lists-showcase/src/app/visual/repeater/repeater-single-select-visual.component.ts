@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
 
 let nextItemId = 0;
 
@@ -6,7 +7,7 @@ let nextItemId = 0;
   selector: 'app-repeater-single-select-visual',
   templateUrl: './repeater-single-select-visual.component.html',
 })
-export class RepeaterSingleSelectVisualComponent {
+export class RepeaterSingleSelectVisualComponent implements OnInit {
   public set activeIndex(value: number) {
     this._activeIndex = value;
     this.activeRecord = this.items[this._activeIndex];
@@ -18,6 +19,8 @@ export class RepeaterSingleSelectVisualComponent {
   public get activeIndex(): number {
     return this._activeIndex;
   }
+
+  public asyncData = new BehaviorSubject<any[]>([]);
 
   public items = [
     {
@@ -43,6 +46,12 @@ export class RepeaterSingleSelectVisualComponent {
 
   private _activeIndex;
   constructor() {}
+
+  public ngOnInit() {
+    setTimeout(() => {
+      this.asyncData.next(this.items);
+    }, 1000);
+  }
 
   public addItem(): void {
     const newItem = {

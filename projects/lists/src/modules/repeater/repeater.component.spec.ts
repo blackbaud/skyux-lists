@@ -288,7 +288,7 @@ describe('Repeater item component', () => {
     expect(getChrevronButtons(itemWithNoContent)[0]).not.toExist();
   }));
 
-  it('should create element with role "listbox" and set tabindex to 0', fakeAsync(() => {
+  it('should create element with role "listbox" and set tabindex to -1', fakeAsync(() => {
     let fixture = TestBed.createComponent(RepeaterTestComponent);
     fixture.componentInstance.selectable = true;
     fixture.componentInstance.lastItemSelected = true;
@@ -299,7 +299,7 @@ describe('Repeater item component', () => {
     const repeaterEl = fixture.nativeElement.querySelector('.sky-repeater');
 
     expect(repeaterEl.getAttribute('role')).toBe('listbox');
-    expect(repeaterEl.getAttribute('tabindex')).toBe('0');
+    expect(repeaterEl.getAttribute('tabindex')).toBe('-1');
   }));
 
   it('should create child elements with role "options" and set tabindex to -1', fakeAsync(() => {
@@ -501,6 +501,7 @@ describe('Repeater item component', () => {
       let fixture = TestBed.createComponent(RepeaterTestComponent);
       let cmp: RepeaterTestComponent = fixture.componentInstance;
       cmp.expandMode = 'single';
+      cmp.selectable = true;
       cmp.lastItemSelected = true;
 
       fixture.detectChanges();
@@ -652,6 +653,7 @@ describe('Repeater item component', () => {
       let fixture = TestBed.createComponent(RepeaterTestComponent);
       let cmp: RepeaterTestComponent = fixture.componentInstance;
       cmp.expandMode = 'multiple';
+      cmp.selectable = true;
       cmp.lastItemSelected = true;
 
       fixture.detectChanges();
@@ -792,6 +794,7 @@ describe('Repeater item component', () => {
       let fixture = TestBed.createComponent(RepeaterTestComponent);
       let cmp: RepeaterTestComponent = fixture.componentInstance;
       cmp.expandMode = 'none';
+      cmp.selectable = true;
       cmp.lastItemSelected = true;
 
       fixture.detectChanges();
@@ -916,7 +919,7 @@ describe('Repeater item component', () => {
 
       // Focus on first repeater item and press enter key.
       keyManager.setActiveItem(0);
-      SkyAppTestUtility.fireDomEvent(repeater, 'keydown', {
+      SkyAppTestUtility.fireDomEvent(items[0], 'keydown', {
         keyboardEventInit: {
           key: 'Enter',
         },
@@ -945,6 +948,8 @@ describe('Repeater item component', () => {
       expect(isSelectedChangeSpy).toHaveBeenCalledWith(false);
       // Expect the event to have occurred twice.
       expect(isSelectedChangeSpy).toHaveBeenCalledTimes(1);
+
+      flush();
     }));
   });
 
@@ -1105,12 +1110,11 @@ describe('Repeater item component', () => {
       cmp.showRepeaterWithActiveIndex = true;
       detectChangesAndTick(fixture);
       const keyManager = getAngularKeyManager(fixture);
-      const repeater = getRepeater(fixture.nativeElement);
       const items = getRepeaterItems(fixture.nativeElement);
 
       // Focus on first repeater item and press enter key.
       keyManager.setActiveItem(0);
-      SkyAppTestUtility.fireDomEvent(repeater, 'keydown', {
+      SkyAppTestUtility.fireDomEvent(items[0], 'keydown', {
         keyboardEventInit: {
           key: 'Enter',
         },
@@ -1130,7 +1134,6 @@ describe('Repeater item component', () => {
       cmp.showRepeaterWithActiveIndex = true;
       detectChangesAndTick(fixture);
       const keyManager = getAngularKeyManager(fixture);
-      const repeater = getRepeater(fixture.nativeElement);
       const items = getRepeaterItems(fixture.nativeElement);
       const activeRepeaterItem = el.querySelectorAll(
         '.sky-repeater-item-active'
@@ -1139,9 +1142,9 @@ describe('Repeater item component', () => {
 
       // Focus on second repeater item and press enter key.
       keyManager.setActiveItem(1);
-      SkyAppTestUtility.fireDomEvent(repeater, 'keydown', {
+      SkyAppTestUtility.fireDomEvent(items[1], 'keydown', {
         keyboardEventInit: {
-          key: 'ENTER',
+          key: 'Enter',
         },
       });
       fixture.detectChanges();
@@ -1396,6 +1399,7 @@ describe('Repeater item component', () => {
       const itemToTest = items[1];
       reorderItemWithKey(fixture, 1, 'up');
       expect(el.querySelectorAll('sky-repeater-item')[0]).toBe(itemToTest);
+      flush();
     }));
 
     it('should move an item up via keyboard controls using "Enter" to activate', fakeAsync(() => {
@@ -1404,6 +1408,7 @@ describe('Repeater item component', () => {
       reorderItemWithKey(fixture, 1, 'up', 'Enter');
 
       expect(el.querySelectorAll('sky-repeater-item')[0]).toBe(itemToTest);
+      flush();
     }));
 
     it('should move an item down via keyboard controls', fakeAsync(() => {
@@ -1412,6 +1417,7 @@ describe('Repeater item component', () => {
       reorderItemWithKey(fixture, 1, 'down');
 
       expect(el.querySelectorAll('sky-repeater-item')[2]).toBe(itemToTest);
+      flush();
     }));
 
     it('should not move an item down via keyboard controls if it is the last item', fakeAsync(() => {
@@ -1419,6 +1425,7 @@ describe('Repeater item component', () => {
       const itemToTest = items[2];
       reorderItemWithKey(fixture, 2, 'down');
       expect(el.querySelectorAll('sky-repeater-item')[2]).toBe(itemToTest);
+      flush();
     }));
 
     it('should not move an item when the left and right arrows are received keyboard controls', fakeAsync(() => {
@@ -1442,6 +1449,7 @@ describe('Repeater item component', () => {
       });
       fixture.detectChanges();
       expect(el.querySelectorAll('sky-repeater-item')[1]).toBe(itemToTest);
+      flush();
     }));
 
     it('should not move an item up via keyboard controls if the blur event is received', fakeAsync(() => {
@@ -1464,6 +1472,7 @@ describe('Repeater item component', () => {
       fixture.detectChanges();
       expect(el.querySelectorAll('sky-repeater-item')[0]).not.toBe(itemToTest);
       expect(el.querySelectorAll('sky-repeater-item')[1]).toBe(itemToTest);
+      flush();
     }));
 
     it('should turn off reordering when escape is hit', fakeAsync(() => {
@@ -1484,6 +1493,7 @@ describe('Repeater item component', () => {
       fixture.detectChanges();
       expect(el.querySelectorAll('sky-repeater-item')[0]).not.toBe(itemToTest);
       expect(el.querySelectorAll('sky-repeater-item')[1]).toBe(itemToTest);
+      flush();
     }));
 
     it('should revert any reordering up when escape is hit', fakeAsync(() => {
@@ -1504,6 +1514,7 @@ describe('Repeater item component', () => {
       fixture.detectChanges();
       expect(el.querySelectorAll('sky-repeater-item')[0]).not.toBe(itemToTest);
       expect(el.querySelectorAll('sky-repeater-item')[1]).toBe(itemToTest);
+      flush();
     }));
 
     it('should revert any reordering down when escape is hit', fakeAsync(() => {
@@ -1524,6 +1535,7 @@ describe('Repeater item component', () => {
       fixture.detectChanges();
       expect(el.querySelectorAll('sky-repeater-item')[2]).not.toBe(itemToTest);
       expect(el.querySelectorAll('sky-repeater-item')[1]).toBe(itemToTest);
+      flush();
     }));
 
     it('should emit tags when "move to top" is clicked', fakeAsync(() => {

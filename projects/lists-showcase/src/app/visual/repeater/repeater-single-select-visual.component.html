@@ -19,9 +19,9 @@
   </sky-repeater-item>
 </sky-repeater> -->
 
-<sky-repeater [expandMode]="'multiple'" [activeIndex]="activeIndex">
+<sky-repeater [expandMode]="'multiple'" [activeIndex]="1">
   <sky-repeater-item
-    *ngFor="let item of items"
+    *ngFor="let item of asyncData | async"
     [itemName]="item.title"
     [isExpanded]="true"
     (isSelectedChange)="onSelectedChange($event)"
