@@ -16,7 +16,6 @@ import { PagingVisualComponent } from './paging/paging-visual.component';
 import { RepeaterVisualComponent } from './repeater/repeater-visual.component';
 import { SortVisualComponent } from './sort/sort-visual.component';
 import { RouterModule } from '@angular/router';
-import { RepeaterSingleSelectVisualComponent } from './repeater/repeater-single-select-visual.component';
 
 @NgModule({
   declarations: [
@@ -24,7 +23,6 @@ import { RepeaterSingleSelectVisualComponent } from './repeater/repeater-single-
     InfiniteScrollVisualComponent,
     PagingVisualComponent,
     RepeaterVisualComponent,
-    RepeaterSingleSelectVisualComponent,
     SortVisualComponent,
     VisualComponent,
   ],
