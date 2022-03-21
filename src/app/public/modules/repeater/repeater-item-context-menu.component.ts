@@ -4,7 +4,7 @@ import {
 
 /**
  * Wraps and styles a
- * [`skyux-dropdown` component](https://developer.blackbaud.com/skyux-popovers/docs/dropdown).
+ * [`skyux-dropdown` component](https://developer.blackbaud.com/skyux-v4/components/dropdown).
  */
 @Component({
   selector: 'sky-repeater-item-context-menu',

@@ -56,7 +56,7 @@ export class SkyRepeaterComponent implements AfterContentInit, OnChanges, OnDest
   /**
    * Specifies the index of the repeater item to visually highlight as active.
    * For example, use this property in conjunction with the
-   * [split view component](https://developer.blackbaud.com/skyux/components/split-view)
+   * [split view component](https://developer.blackbaud.com/skyux-v4/components/split-view)
    * to highlight a repeater item while users edit it. Only one item can be active at a time.
    */
   @Input()
@@ -65,7 +65,7 @@ export class SkyRepeaterComponent implements AfterContentInit, OnChanges, OnDest
   /**
    * Specifies an ARIA label for the repeater list.
    * This sets the repeater list's `aria-label` attribute
-   * [to support accessibility](https://developer.blackbaud.com/skyux/learn/accessibility).
+   * [to support accessibility](https://developer.blackbaud.com/skyux-v4/learn/accessibility).
    * @default 'List of items'
    */
   @Input()
